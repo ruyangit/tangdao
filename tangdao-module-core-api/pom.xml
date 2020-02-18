@@ -16,7 +16,11 @@
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
-		
+		<dependency>
+			<groupId>com.tangdao</groupId>
+			<artifactId>tangdao-framework</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 </project>

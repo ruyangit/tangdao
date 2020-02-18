@@ -8,15 +8,15 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Tangdao Application Build</name>
+	<name>Tangdao Application</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<modules>
 		<module>tangdao-parent</module>
 		<module>tangdao-common/tangdao-common</module>
+		<module>tangdao-common/tangdao-framework</module>
 		<module>tangdao-common/tangdao-framework-dao</module>
 		<module>tangdao-common/tangdao-framework-redis</module>
-		<module>tangdao-common/tangdao-framework</module>
 		<module>tangdao-module-core-api</module>
 		<module>tangdao-module-test-api</module>
 		<module>tangdao-webapp-api</module>
