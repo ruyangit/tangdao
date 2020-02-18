@@ -11,8 +11,8 @@
 		<relativePath>../../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-framework-dao</artifactId>
-	<name>Tangdao Framework Dao</name>
+	<artifactId>tangdao-framework-model</artifactId>
+	<name>Tangdao Framework Model</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
@@ -20,6 +20,18 @@
 			<groupId>com.tangdao</groupId>
 			<artifactId>tangdao-framework</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+	        <groupId>com.baomidou</groupId>
+	        <artifactId>mybatis-plus-boot-starter</artifactId>
+	        <version>${mybatis-plus.version}</version>
+	    </dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 

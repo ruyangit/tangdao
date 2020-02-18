@@ -11,8 +11,8 @@
 		<relativePath>../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-webapp-api</artifactId>
-	<name>Tangdao Webapp Api</name>
+	<artifactId>tangdao-starter-web</artifactId>
+	<name>Tangdao Starter Web</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
