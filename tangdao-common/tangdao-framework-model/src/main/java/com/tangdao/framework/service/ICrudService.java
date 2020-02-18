@@ -4,5 +4,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface ICrudService<T> extends IService<T> {
 
-	
 }

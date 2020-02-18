@@ -1,1 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.tangdao.framework.autoconfigure.MybatisAutoConfiguration
