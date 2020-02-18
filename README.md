@@ -3,7 +3,7 @@
 #### 介绍
 项目重构中，原始代码的一些版权问题需要重构，望谅解。新代码采用前后端分离，服务模块化，敬请期待！
 
-[https://ruyangit.gitee.io/2020/tangdao/spa](初始化视图) 支持pc，pad，移动端效果。
+[视图](https://ruyangit.gitee.io/2020/tangdao/spa) 支持pc，pad，移动端效果。
 
 #### 软件架构
 软件架构说明
