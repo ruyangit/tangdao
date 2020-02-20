@@ -2,6 +2,7 @@ package com.tangdao.module.devtool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +22,8 @@ import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+
+import cn.hutool.core.collection.CollUtil;
 
 public class AutoCodeGenerator {
 
@@ -80,6 +83,8 @@ public class AutoCodeGenerator {
             @Override
             public void initMap() {
                 // to do nothing
+            	Map<String, Object> cfg = CollUtil.newHashMap();
+            	this.setMap(cfg);
             }
         };
 
@@ -138,6 +143,7 @@ public class AutoCodeGenerator {
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(scanner("表前缀") + "_");
+        
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
