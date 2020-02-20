@@ -1,6 +1,5 @@
 package ${package.Controller};
 
-
 import org.springframework.web.bind.annotation.RequestMapping;
 
 <#if restControllerStyle>
@@ -35,6 +34,6 @@ public class ${table.controllerName} extends ${superControllerClass} {
 <#else>
 public class ${table.controllerName} {
 </#if>
-
+	
 }
 </#if>

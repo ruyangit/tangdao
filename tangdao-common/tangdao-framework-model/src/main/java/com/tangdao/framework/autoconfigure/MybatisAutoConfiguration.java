@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.tangdao.framework.plugins.DataSqlParserHandler;
 
 /**
  *  mybatis 加载
@@ -26,5 +27,11 @@ public class MybatisAutoConfiguration {
 	@ConditionalOnMissingBean
 	public PaginationInterceptor paginationInterceptor() {
 		return new PaginationInterceptor();
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean
+	public DataSqlParserHandler dataSqlParserHandler() {
+		return new DataSqlParserHandler();
 	}
 }

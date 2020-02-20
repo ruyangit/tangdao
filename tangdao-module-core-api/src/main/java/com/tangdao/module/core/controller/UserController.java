@@ -16,7 +16,7 @@ import com.tangdao.module.core.model.domain.User;
 import com.tangdao.module.core.service.IUserService;
 
 @RestController
-@RequestMapping(value = "/api/{version}/users",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/{version}/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 	
 	@Autowired
