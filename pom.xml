@@ -19,6 +19,7 @@
 		<module>tangdao-common/tangdao-framework-redis</module>
 		<module>tangdao-module-core-api</module>
 		<module>tangdao-module-test-api</module>
+		<module>tangdao-module-devtool</module>
 		<module>tangdao-starter-web</module>
 	</modules>
 
