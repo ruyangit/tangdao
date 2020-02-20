@@ -52,12 +52,11 @@ public class AutoCodeGenerator {
         GlobalConfig gc = new GlobalConfig();
         String projectPath = System.getProperty("user.dir").replace("devtool", module)+"-api";
         gc.setOutputDir(projectPath + "/src/main/java");
-        System.out.println("输出地址：" + gc.getOutputDir());
         gc.setAuthor("ruyangit@gmail.com");
         gc.setOpen(false);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
 //        gc.setBaseResultMap(true);
-//        gc.setBaseColumnList(true);
+        gc.setBaseColumnList(true);
         gc.setDateType(DateType.ONLY_DATE);
         gc.setIdType(IdType.ASSIGN_ID);
         mpg.setGlobalConfig(gc);
@@ -117,23 +116,23 @@ public class AutoCodeGenerator {
 
         // 配置自定义输出模板
         //指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别
+        templateConfig.setXml("/templates/mapper.xml");
         templateConfig.setMapper("/templates/mapper.java");
         templateConfig.setController("/templates/controller.java");
 
-//        templateConfig.setXml(null);
         mpg.setTemplate(templateConfig);
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
+        // 公共父类
         strategy.setSuperEntityClass("com.tangdao.framework.model.entity.DataEntity");
         strategy.setSuperServiceClass("com.tangdao.framework.service.ICrudService");
         strategy.setSuperServiceImplClass("com.tangdao.framework.service.impl.CrudServiceImpl");
+        strategy.setSuperControllerClass("com.tangdao.framework.web.BaseController");
         strategy.setEntityLombokModel(false);
         strategy.setRestControllerStyle(true);
-        // 公共父类
-//        strategy.setSuperControllerClass("你自己的父类控制器,没有就不用设置!");
         // 写于父类中的公共字段
         strategy.setSuperEntityColumns("create_by","create_time","update_by","update_time","status","remarks");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
