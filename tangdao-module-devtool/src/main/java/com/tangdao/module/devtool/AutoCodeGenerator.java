@@ -138,7 +138,7 @@ public class AutoCodeGenerator {
         strategy.setSuperEntityColumns("create_by","create_time","update_by","update_time","status","remarks");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
-        strategy.setTablePrefix(scanner("删除前缀") + "_");
+        strategy.setTablePrefix(scanner("表前缀") + "_");
         mpg.setStrategy(strategy);
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.execute();
