@@ -1,0 +1,51 @@
+/**
+ * 
+ */
+package com.tangdao.framework.service;
+
+import java.util.List;
+
+/**
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyangit@gmail.com
+ * @since 2020年2月21日
+ */
+public interface ITreeService<T> extends ICrudService<T> {
+
+	/**
+	 * 树形结构数据排序
+	 * @param sourceList 源数据列表
+	 * @param targetList 目标数据列表
+	 * @param parentId   目标数据列表的顶级节点
+	 */
+	void convertTreeSort(List<T> sourceList, List<T> targetList, String parentId);
+
+	/**
+	 * 普通股集合组装为树形结构
+	 * @param sourceList 源数据列表
+	 * @param targetList 目标数据列表
+	 * @param parentId   目标数据列表的顶级节点
+	 */
+	void convertChildList(List<T> sourceList, List<T> targetList, String parentId);
+	
+	/**
+	 * 更新是否叶子字段
+	 * @param entity
+	 */
+	void updateTreeLeaf(T entity);
+
+	/**
+	 * 更新排序字段
+	 * @param entity
+	 */
+	void updateTreeSort(T entity);
+	
+	/**
+	 * 移除当前对象及子节点
+	 * @param entity
+	 */
+	boolean remove(T entity);
+}

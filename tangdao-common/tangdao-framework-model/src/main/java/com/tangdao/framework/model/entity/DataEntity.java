@@ -2,9 +2,16 @@ package com.tangdao.framework.model.entity;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
+import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import cn.hutool.core.util.ReflectUtil;
 
 public abstract class DataEntity extends BaseEntity {
 
@@ -51,6 +58,26 @@ public abstract class DataEntity extends BaseEntity {
 	protected String remarks;
 	
 	/**
+	 * 主键
+	 */
+	@TableField(exist = false)
+	protected String key;
+
+	/**
+	 * 对应属性
+	 */
+	@JsonIgnore
+	@TableField(exist = false)
+	protected String keyAttrName;
+
+	/**
+	 * 对应列名
+	 */
+	@JsonIgnore
+	@TableField(exist = false)
+	protected String keyColumnName;
+
+	/**
 	 * 正常
 	 */
 	public static final String STATUS_NORMAL = "0";
@@ -67,8 +94,22 @@ public abstract class DataEntity extends BaseEntity {
 	 */
 	public static final String STATUS_FREEZE = "3";
 
+	/**
+	 * 无参构造
+	 */
 	public DataEntity() {
 		
+	}
+	
+	/**
+	 * 主键构造
+	 * 
+	 * @param key
+	 */
+	public DataEntity(String key) {
+		if (key != null) {
+			this.setKey(key);
+		}
 	}
 
 	public String getCreateBy() {
@@ -128,6 +169,71 @@ public abstract class DataEntity extends BaseEntity {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	
+	/**
+	 * @return the keyAttrName
+	 */
+	public String getKeyAttrName() {
+		return keyAttrName;
+	}
+
+	/**
+	 * @param keyAttrName the keyAttrName to set
+	 */
+	public void setKeyAttrName(String keyAttrName) {
+		this.keyAttrName = keyAttrName;
+	}
+
+	/**
+	 * @return the keyColumnName
+	 */
+	public String getKeyColumnName() {
+		return keyColumnName;
+	}
+
+	/**
+	 * @param keyColumnName the keyColumnName to set
+	 */
+	public void setKeyColumnName(String keyColumnName) {
+		this.keyColumnName = keyColumnName;
+	}
+
+	/**
+	 * 获取主键
+	 * 
+	 * @return
+	 */
+	public String getKey() {
+		if (StringUtils.isNotBlank(this.key)) {
+			return this.key;
+		}
+		String value = null;
+		try {
+			TableInfo tableInfo = TableInfoHelper.getTableInfo(this.getClass());
+			if (tableInfo != null) {
+				value = (String)ReflectUtil.getFieldValue(this, tableInfo.getKeyProperty());
+			}
+			if (StringUtils.isNotBlank(value)) {
+				this.setKey(value);
+			}
+		} catch (Exception e) {}
+		return value;
+	}
+
+	/**
+	 * 主键信息
+	 * 
+	 * @param key
+	 */
+	public void setKey(String key) {
+		TableInfo tableInfo = TableInfoHelper.getTableInfo(this.getClass());
+		if (tableInfo != null) {
+			this.setKeyAttrName(tableInfo.getKeyProperty());
+			this.setKeyColumnName(tableInfo.getKeyColumn());
+			ReflectUtil.setFieldValue(this, this.keyAttrName, key);
+			this.key = key;
+		}
 	}
 	
 }
