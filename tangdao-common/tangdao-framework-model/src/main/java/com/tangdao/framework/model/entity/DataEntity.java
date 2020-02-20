@@ -13,25 +13,42 @@ public abstract class DataEntity extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	// 基础字段
+	/**
+	 * 创建人
+	 */
 	@TableField(fill = FieldFill.INSERT)
-	protected String createBy; // 新增人
+	protected String createBy;
 
+	/**
+	 * 创建时间
+	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(fill = FieldFill.INSERT)
-	protected Date createTime; // 新增时间
+	protected Date createTime;
 
+	/**
+	 * 更新人
+	 */
 	@TableField(fill = FieldFill.INSERT_UPDATE)
-	protected String updateBy; // 更新人
+	protected String updateBy;
 
+	/**
+	 * 更新时间
+	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(fill = FieldFill.INSERT_UPDATE)
-	protected Date updateTime; // 更新时间
+	protected Date updateTime;
 
+	/**
+	 * 状态
+	 */
 	@TableField(fill = FieldFill.INSERT)
-	protected String status; // 状态
+	protected String status;
 
-	protected String remarks; // 备注
+	/**
+	 * 备注
+	 */
+	protected String remarks;
 	
 	/**
 	 * 正常
@@ -49,7 +66,6 @@ public abstract class DataEntity extends BaseEntity {
 	 * 冻结
 	 */
 	public static final String STATUS_FREEZE = "3";
-	
 
 	public DataEntity() {
 		
