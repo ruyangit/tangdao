@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.framework.model;
+package com.tangdao.framework.persistence;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;

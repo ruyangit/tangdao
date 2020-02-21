@@ -1,4 +1,4 @@
-package com.tangdao.framework.model;
+package com.tangdao.framework.persistence;
 
 import java.util.Date;
 
@@ -55,7 +55,11 @@ public abstract class DataEntity extends BaseEntity<Model<?>> {
 	 * 无参构造
 	 */
 	public DataEntity() {
-		
+		super();
+	}
+	
+	public DataEntity(String pkValue) {
+		super(pkValue);
 	}
 
 	/**

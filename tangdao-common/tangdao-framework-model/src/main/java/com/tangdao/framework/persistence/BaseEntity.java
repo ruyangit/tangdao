@@ -1,4 +1,4 @@
-package com.tangdao.framework.model;
+package com.tangdao.framework.persistence;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,6 +43,22 @@ public abstract class BaseEntity <T extends Model<?>> extends Model<T> {
 	@JsonIgnore
 	@TableField(exist = false)
 	protected String pkColumnName;
+	
+	/**
+	 * 无参构造
+	 */
+	public BaseEntity() {
+		this(null);
+	}
+
+	/**
+	 * 主键构造
+	 * 
+	 * @param key
+	 */
+	public BaseEntity(String pkValue) {
+		this.setPkValue(pkValue);
+	}
 	
 	/**
 	 * @return the pkValue

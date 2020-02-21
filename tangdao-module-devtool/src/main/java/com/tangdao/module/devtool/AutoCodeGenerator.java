@@ -132,14 +132,14 @@ public class AutoCodeGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         // 公共父类
-        strategy.setSuperEntityClass("com.tangdao.framework.model.entity.DataEntity");
+        strategy.setSuperEntityClass("com.tangdao.framework.persistence.DataEntity");
         strategy.setSuperServiceClass("com.tangdao.framework.service.ICrudService");
         strategy.setSuperServiceImplClass("com.tangdao.framework.service.impl.CrudServiceImpl");
         strategy.setSuperControllerClass("com.tangdao.framework.web.BaseController");
         strategy.setEntityLombokModel(false);
         strategy.setRestControllerStyle(true);
         // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("create_by","create_time","update_by","update_time","status","remarks");
+        strategy.setSuperEntityColumns("create_by","create_time","update_by","update_time","status","remarks","parent_code","parent_codes","tree_sort","tree_names","tree_leaf","tree_level");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(scanner("表前缀") + "_");

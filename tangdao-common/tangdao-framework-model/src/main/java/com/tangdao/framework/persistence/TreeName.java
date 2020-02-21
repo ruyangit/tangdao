@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.framework.model;
+package com.tangdao.framework.persistence;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
