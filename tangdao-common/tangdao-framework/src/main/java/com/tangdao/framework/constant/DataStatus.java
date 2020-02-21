@@ -9,7 +9,7 @@ import com.tangdao.framework.protocol.IEnum;
 
 /**
  * <p>
- * TODO 描述
+ * TODO 数据状态
  * </p>
  *
  * @author ruyangit@gmail.com
