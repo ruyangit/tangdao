@@ -1,11 +1,11 @@
 /**
  * 
  */
-package com.tangdao.framework.context;
+package com.tangdao.framework.constant;
 
 import org.springframework.lang.Nullable;
 
-import com.tangdao.common.protocol.IEnum;
+import com.tangdao.framework.protocol.IEnum;
 
 /**
  * <p>

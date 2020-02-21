@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.tangdao.framework.context.DataStatus;
+import com.tangdao.framework.constant.DataStatus;
 
 /**
  *  填充信息抽象

@@ -1,4 +1,4 @@
-package com.tangdao.common.protocol;
+package com.tangdao.framework.protocol;
 
 /**
  * @ClassName: IEnum.java

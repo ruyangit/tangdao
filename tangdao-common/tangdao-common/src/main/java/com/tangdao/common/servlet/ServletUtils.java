@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.common.web;
+package com.tangdao.common.servlet;
 
 import java.util.Enumeration;
 import java.util.Iterator;

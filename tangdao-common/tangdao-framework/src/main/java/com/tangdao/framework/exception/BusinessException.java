@@ -1,6 +1,6 @@
-package com.tangdao.common.exception;
+package com.tangdao.framework.exception;
 
-import com.tangdao.common.protocol.IEnum;
+import com.tangdao.framework.protocol.IEnum;
 
 /**
  * @ClassName: BusinessException.java

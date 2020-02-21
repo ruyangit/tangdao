@@ -21,7 +21,7 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
 import com.baomidou.mybatisplus.extension.handlers.AbstractSqlParserHandler;
-import com.tangdao.common.web.ServletUtils;
+import com.tangdao.common.servlet.ServletUtils;
 
 /**
  * <p>
