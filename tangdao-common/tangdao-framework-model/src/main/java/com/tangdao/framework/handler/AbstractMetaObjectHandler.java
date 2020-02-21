@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.tangdao.framework.model.entity.DataEntity;
+import com.tangdao.framework.model.DataStatus;
 
 /**
  *  填充信息抽象
@@ -28,7 +28,7 @@ public abstract class AbstractMetaObjectHandler implements MetaObjectHandler{
 		Object createTime = getFieldValByName(CREATE_TIME, metaObject);
 
 		if (status == null || StringUtils.EMPTY.equals(status)) {
-			setFieldValByName(STATUS, DataEntity.STATUS_NORMAL, metaObject);
+			setFieldValByName(STATUS, DataStatus.NORMAL, metaObject);
 		}
 
 		if (createTime == null || updateTime == null) {

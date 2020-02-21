@@ -32,20 +32,16 @@ public interface ITreeService<T> extends ICrudService<T> {
 	void convertChildList(List<T> sourceList, List<T> targetList, String parentId);
 	
 	/**
-	 * 更新是否叶子字段
-	 * @param entity
-	 */
-	void updateTreeLeaf(T entity);
-
-	/**
 	 * 更新排序字段
 	 * @param entity
 	 */
-	void updateTreeSort(T entity);
+	boolean updateTreeSort(T entity);
 	
 	/**
-	 * 移除当前对象及子节点
+	 * 删除子节点
 	 * @param entity
+	 * @return
 	 */
-	boolean remove(T entity);
+	boolean deleteChild(T entity);
+	
 }

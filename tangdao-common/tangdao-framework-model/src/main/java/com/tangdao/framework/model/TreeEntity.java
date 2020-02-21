@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.framework.model.entity;
+package com.tangdao.framework.model;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tangdao.common.exception.ServiceException;
-import com.tangdao.framework.model.TreeName;
 
 import cn.hutool.core.util.ReflectUtil;
 
@@ -75,11 +74,6 @@ public class TreeEntity extends DataEntity {
     @TableField(exist = false)
 	protected List<Object> children;
     
-    /**
-	 * 根节点编码
-	 */
-	public static final String ROOT_CODE = "0";
-
 	/**
 	 * @return the parentCode
 	 */
@@ -179,14 +173,6 @@ public class TreeEntity extends DataEntity {
 	}
 
 	/**
-	 * isRoot eq 0
-	 * @return
-	 */
-	public boolean isRoot() {
-		return ROOT_CODE.equals(getParentCode());
-	}
-
-	/**
 	 * add node to chaild
 	 * @param node
 	 */
@@ -211,5 +197,18 @@ public class TreeEntity extends DataEntity {
 		}
 		return this.treeName_;
 	}
+	
+	/**
+	 * 判断是否根节点
+	 * @return
+	 */
+	public boolean isRoot() {
+		return ROOT_CODE.equals(getParentCode());
+	}
+	
+	/**
+	 * 根节点编码
+	 */
+    public static final String ROOT_CODE = "0";
 
 }
