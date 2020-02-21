@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.framework.model;
+package com.tangdao.framework.context;
 
 import org.springframework.lang.Nullable;
 
