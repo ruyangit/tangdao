@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.framework.handler;
+package com.tangdao.framework.persistence.handler;
 
 import java.util.Date;
 
