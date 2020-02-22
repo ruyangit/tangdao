@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.module.core.entity.Menu;
+import com.tangdao.module.core.model.domain.Menu;
 import com.tangdao.module.core.service.IMenuService;
 import com.tangdao.framework.web.BaseController;
 

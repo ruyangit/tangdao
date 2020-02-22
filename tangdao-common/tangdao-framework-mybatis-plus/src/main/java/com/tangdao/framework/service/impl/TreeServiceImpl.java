@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
-import com.tangdao.common.exception.ServiceException;
+import com.tangdao.framework.exception.ServiceException;
 import com.tangdao.framework.persistence.TreeEntity;
 import com.tangdao.framework.service.ITreeService;
 

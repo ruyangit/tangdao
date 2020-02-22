@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tangdao.common.exception.ServiceException;
+import com.tangdao.framework.exception.ServiceException;
 
 import cn.hutool.core.util.ReflectUtil;
 

@@ -1,7 +1,9 @@
-package com.tangdao.module.core.entity;
+package com.tangdao.module.core.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+
+import java.io.Serializable;
 import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.tangdao.framework.persistence.DataEntity;
@@ -99,6 +101,15 @@ public class User extends DataEntity {
      * 编号
      */
     private String tenantId;
+    
+    /**
+     * 主键值，ActiveRecord 模式这个必须有，否则 xxById 的方法都将失效！
+     * 即使使用 ActiveRecord 不会用到 RoleMapper，RoleMapper 这个接口也必须创建
+     */
+    @Override
+    public Serializable pkVal() {
+        return this.userId;
+    }
 
     public String getUserId() {
         return userId;

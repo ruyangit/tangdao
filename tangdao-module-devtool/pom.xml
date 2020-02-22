@@ -22,6 +22,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.tangdao</groupId>
+			<artifactId>tangdao-framework-mybatis-plus</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 		    <groupId>com.baomidou</groupId>
 		    <artifactId>mybatis-plus-generator</artifactId>
 		    <version>${mybatis-plus.version}</version>

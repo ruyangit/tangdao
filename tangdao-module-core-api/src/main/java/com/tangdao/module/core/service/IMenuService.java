@@ -1,7 +1,7 @@
 package com.tangdao.module.core.service;
 
 import com.tangdao.framework.service.ITreeService;
-import com.tangdao.module.core.entity.Menu;
+import com.tangdao.module.core.model.domain.Menu;
 
 /**
  * <p>
