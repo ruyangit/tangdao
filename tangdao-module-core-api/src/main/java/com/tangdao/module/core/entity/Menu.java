@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.framework.persistence.TreeEntity;
+import com.tangdao.framework.persistence.TreeName;
 
 /**
  * <p>
@@ -27,6 +28,7 @@ public class Menu extends TreeEntity {
     /**
      * 菜单名称
      */
+    @TreeName
     private String menuName;
 
     /**

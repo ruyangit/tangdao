@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.framework.constant.OpenApiCode;
-import com.tangdao.framework.protocol.Result;
 import com.tangdao.module.core.entity.Group;
 import com.tangdao.module.core.service.IGroupService;
 import com.tangdao.framework.web.BaseController;
@@ -67,7 +65,7 @@ public class GroupController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/group/{id}")
-	public Group get(String id) {
+	public Group getGroup(String id) {
 		return groupService.getById(id);
 	}
 
@@ -79,9 +77,8 @@ public class GroupController extends BaseController {
 	 */
 	@PostMapping("/group")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Result<Object> post(@RequestBody @Validated Group group) {
-		groupService.save(group);
-		return Result.render(OpenApiCode.TRUE, "新增成功");
+	public boolean save(@RequestBody @Validated Group group) {
+		return groupService.save(group);
 	}
 
 	/**
@@ -92,9 +89,8 @@ public class GroupController extends BaseController {
 	 * @return
 	 */
 	@PutMapping("/group")
-	public Result<Object> put(@RequestBody @Validated Group group) {
-		groupService.saveOrUpdate(group);
-		return Result.render(OpenApiCode.TRUE, "修改成功");
+	public boolean update(@RequestBody @Validated Group group) {
+		return groupService.saveOrUpdate(group);
 	}
 
 	/**
@@ -104,8 +100,7 @@ public class GroupController extends BaseController {
 	 * @return
 	 */
 	@DeleteMapping("/group/{id}")
-	public Result<Object> delete(@PathVariable("id") String id) {
-		groupService.removeById(id);
-		return Result.render(OpenApiCode.TRUE, "删除成功");
+	public boolean delete(@PathVariable("id") String id) {
+		return groupService.removeById(id);
 	}
 }

@@ -13,11 +13,6 @@ package com.tangdao.framework.constant;
  */
 public class OpenApiCode {
 
-	/**
-	 * 调用平台成功码
-	 */
-    public static final String SUCCESS = "0";
-    
     /**
      * 布尔 true
      */

@@ -20,7 +20,7 @@ public class CrudServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, 
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public Class<T> currentModelClass() {
+	protected Class<T> currentModelClass() {
 		return (Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 0);
 	}
 }

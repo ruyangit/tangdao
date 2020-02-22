@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.stereotype.Controller;
 </#if>
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.framework.constant.OpenApiCode;
-import com.tangdao.framework.protocol.Result;
 import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
 <#if superControllerClassPackage??>
@@ -84,7 +82,7 @@ public class ${table.controllerName} {
 	 * @return
 	 */
 	@GetMapping("/${table.entityPath}/{id}")
-	public ${entity} get(String id) {
+	public ${entity} get${entity}(String id) {
 		return ${table.entityPath}Service.getById(id);
 	}
 
@@ -96,9 +94,8 @@ public class ${table.controllerName} {
 	 */
 	@PostMapping("/${table.entityPath}")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Result<Object> post(@RequestBody @Validated ${entity} ${table.entityPath}) {
-		${table.entityPath}Service.save(${table.entityPath});
-		return Result.render(OpenApiCode.TRUE, "新增成功");
+	public boolean save(@RequestBody @Validated ${entity} ${table.entityPath}) {
+		return ${table.entityPath}Service.save(${table.entityPath});
 	}
 
 	/**
@@ -109,9 +106,8 @@ public class ${table.controllerName} {
 	 * @return
 	 */
 	@PutMapping("/${table.entityPath}")
-	public Result<Object> put(@RequestBody @Validated ${entity} ${table.entityPath}) {
-		${table.entityPath}Service.saveOrUpdate(${table.entityPath});
-		return Result.render(OpenApiCode.TRUE, "修改成功");
+	public boolean update(@RequestBody @Validated ${entity} ${table.entityPath}) {
+		return ${table.entityPath}Service.saveOrUpdate(${table.entityPath});
 	}
 
 	/**
@@ -121,9 +117,8 @@ public class ${table.controllerName} {
 	 * @return
 	 */
 	@DeleteMapping("/${table.entityPath}/{id}")
-	public Result<Object> delete(@PathVariable("id") String id) {
-		${table.entityPath}Service.removeById(id);
-		return Result.render(OpenApiCode.TRUE, "删除成功");
+	public boolean delete(@PathVariable("id") String id) {
+		return ${table.entityPath}Service.removeById(id);
 	}
 }
 </#if>

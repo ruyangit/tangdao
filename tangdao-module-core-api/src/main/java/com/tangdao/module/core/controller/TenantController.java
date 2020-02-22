@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.framework.constant.OpenApiCode;
-import com.tangdao.framework.protocol.Result;
 import com.tangdao.module.core.entity.Tenant;
 import com.tangdao.module.core.service.ITenantService;
 import com.tangdao.framework.web.BaseController;
@@ -67,7 +65,7 @@ public class TenantController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/tenant/{id}")
-	public Tenant get(String id) {
+	public Tenant getTenant(String id) {
 		return tenantService.getById(id);
 	}
 
@@ -79,9 +77,8 @@ public class TenantController extends BaseController {
 	 */
 	@PostMapping("/tenant")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Result<Object> post(@RequestBody @Validated Tenant tenant) {
-		tenantService.save(tenant);
-		return Result.render(OpenApiCode.TRUE, "新增成功");
+	public boolean save(@RequestBody @Validated Tenant tenant) {
+		return tenantService.save(tenant);
 	}
 
 	/**
@@ -92,9 +89,8 @@ public class TenantController extends BaseController {
 	 * @return
 	 */
 	@PutMapping("/tenant")
-	public Result<Object> put(@RequestBody @Validated Tenant tenant) {
-		tenantService.saveOrUpdate(tenant);
-		return Result.render(OpenApiCode.TRUE, "修改成功");
+	public boolean update(@RequestBody @Validated Tenant tenant) {
+		return tenantService.saveOrUpdate(tenant);
 	}
 
 	/**
@@ -104,8 +100,7 @@ public class TenantController extends BaseController {
 	 * @return
 	 */
 	@DeleteMapping("/tenant/{id}")
-	public Result<Object> delete(@PathVariable("id") String id) {
-		tenantService.removeById(id);
-		return Result.render(OpenApiCode.TRUE, "删除成功");
+	public boolean delete(@PathVariable("id") String id) {
+		return tenantService.removeById(id);
 	}
 }

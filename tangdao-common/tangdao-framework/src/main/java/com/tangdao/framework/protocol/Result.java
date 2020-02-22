@@ -3,9 +3,7 @@
  */
 package com.tangdao.framework.protocol;
 
-import java.io.Serializable;
-
-import com.tangdao.framework.constant.OpenApiCode;
+import java.util.LinkedHashMap;
 
 /**
  * <p>
@@ -16,152 +14,81 @@ import com.tangdao.framework.constant.OpenApiCode;
  * @since 2020年2月21日
  */
 
-public class Result<T> implements Serializable {
+public class Result extends LinkedHashMap<String, Object> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 	编码
-	 */
-	private String code = OpenApiCode.SUCCESS;
-
-	/**
-	 * 	消息信息
-	 */
-	private String message;
-
-	/**
-	 *	 消息描述
-	 */
-	private String message_description;
-
-	/**
-	 *	 结果数据
-	 */
-	private T data;
 	
-	/**
-	 *	是否成功
-	 */
-    private String success = OpenApiCode.FALSE;
+	private static final String MESSAGE = "message";
+
+    private static final String SUCCESS = "success";
+
+    private static final String DATA = "data";
+
+    private static final String REDIRECT = "redirect";
+
+    private static final String EMPTY = "";
+
+    public boolean isSuccess() {
+        return get(SUCCESS) != null && (Boolean) get(SUCCESS);
+    }
+
+    private Result() {
+    	super();
+    	this.put(SUCCESS, false);
+    }
     
-	/**
-	 * 
-	 */
-	public Result() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	/**
-	 * @param message
-	 * @param data
-	 * @param success
-	 */
-	public Result(String success, String message, T data) {
-		super();
-		this.message = message;
-		this.data = data;
-		this.success = success;
-	}
+    public String getMessage() {
+        if (get(MESSAGE) != null) {
+            return (String) get(MESSAGE);
+        }
+        return EMPTY;
+    }
 
-	/**
-	 * @param code
-	 * @param message
-	 * @param message_description
-	 * @param data
-	 * @param success
-	 */
-	public Result(String code, String message, String message_description, T data, String success) {
-		super();
-		this.code = code;
-		this.message = message;
-		this.message_description = message_description;
-		this.data = data;
-		this.success = success;
-	}
+    public Result success() {
+        this.put(SUCCESS, true);
+        return this;
+    }
 
-	/**
-	 * @return the code
-	 */
-	public String getCode() {
-		return code;
-	}
+    public Result success(String message) {
+        this.put(SUCCESS, true);
+        this.put(MESSAGE, message);
+        return this;
+    }
 
-	/**
-	 * @param code the code to set
-	 */
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public Result fail(String message) {
+        this.put(SUCCESS, false);
+        this.put(MESSAGE, message);
+        return this;
+    }
 
-	/**
-	 * @return the message
-	 */
-	public String getMessage() {
-		return message;
-	}
+    public Result redirect(String url) {
+        this.put(REDIRECT, url);
+        return this;
+    }
 
-	/**
-	 * @param message the message to set
-	 */
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public Result setData(Object data) {
+        return putData(DATA, data);
+    }
 
-	/**
-	 * @return the message_description
-	 */
-	public String getMessage_description() {
-		return message_description;
-	}
+    public Result putData(String key, Object data) {
+        this.put(key, data);
+        return this;
+    }
 
-	/**
-	 * @param message_description the message_description to set
-	 */
-	public void setMessage_description(String message_description) {
-		this.message_description = message_description;
-	}
+    public static Result createResult() {
+        Result result = new Result();
+        result.success();
+        return result;
+    }
 
-	/**
-	 * @return the data
-	 */
-	public T getData() {
-		return data;
-	}
+    public static Result createResult(Object data) {
+        Result result = new Result();
+        result.success();
+        result.setData(data);
+        return result;
+    }
 
-	/**
-	 * @param data the data to set
-	 */
-	public void setData(T data) {
-		this.data = data;
-	}
-
-	/**
-	 * @return the success
-	 */
-	public String getSuccess() {
-		return success;
-	}
-
-	/**
-	 * @param success the success to set
-	 */
-	public void setSuccess(String success) {
-		this.success = success;
-	}
-    
-	/**
-	 * 
-	 * @param <T>
-	 * @param success
-	 * @param message
-	 * @return
-	 */
-	public static <T> Result<T> render(String success, String message){
-		return new Result<T>(success, message, null);
-	}
 }

@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.framework.constant.OpenApiCode;
-import com.tangdao.framework.protocol.Result;
 import com.tangdao.module.core.entity.User;
 import com.tangdao.module.core.service.IUserService;
 import com.tangdao.framework.web.BaseController;
@@ -67,7 +65,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/user/{id}")
-	public User get(String id) {
+	public User getUser(String id) {
 		return userService.getById(id);
 	}
 
@@ -79,9 +77,8 @@ public class UserController extends BaseController {
 	 */
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Result<Object> post(@RequestBody @Validated User user) {
-		userService.save(user);
-		return Result.render(OpenApiCode.TRUE, "新增成功");
+	public boolean save(@RequestBody @Validated User user) {
+		return userService.save(user);
 	}
 
 	/**
@@ -92,9 +89,8 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@PutMapping("/user")
-	public Result<Object> put(@RequestBody @Validated User user) {
-		userService.saveOrUpdate(user);
-		return Result.render(OpenApiCode.TRUE, "修改成功");
+	public boolean update(@RequestBody @Validated User user) {
+		return userService.saveOrUpdate(user);
 	}
 
 	/**
@@ -104,8 +100,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@DeleteMapping("/user/{id}")
-	public Result<Object> delete(@PathVariable("id") String id) {
-		userService.removeById(id);
-		return Result.render(OpenApiCode.TRUE, "删除成功");
+	public boolean delete(@PathVariable("id") String id) {
+		return userService.removeById(id);
 	}
 }
