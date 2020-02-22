@@ -46,7 +46,7 @@ public class Result<T> implements Serializable {
 	/**
 	 *	是否成功
 	 */
-    private Boolean success = true;
+    private String success = OpenApiCode.FALSE;
     
 	/**
 	 * 
@@ -61,7 +61,7 @@ public class Result<T> implements Serializable {
 	 * @param data
 	 * @param success
 	 */
-	public Result(Boolean success, String message, T data) {
+	public Result(String success, String message, T data) {
 		super();
 		this.message = message;
 		this.data = data;
@@ -75,7 +75,7 @@ public class Result<T> implements Serializable {
 	 * @param data
 	 * @param success
 	 */
-	public Result(String code, String message, String message_description, T data, Boolean success) {
+	public Result(String code, String message, String message_description, T data, String success) {
 		super();
 		this.code = code;
 		this.message = message;
@@ -143,14 +143,14 @@ public class Result<T> implements Serializable {
 	/**
 	 * @return the success
 	 */
-	public Boolean getSuccess() {
+	public String getSuccess() {
 		return success;
 	}
 
 	/**
 	 * @param success the success to set
 	 */
-	public void setSuccess(Boolean success) {
+	public void setSuccess(String success) {
 		this.success = success;
 	}
     
@@ -161,7 +161,7 @@ public class Result<T> implements Serializable {
 	 * @param message
 	 * @return
 	 */
-	public static <T> Result<T> render(Boolean success, String message){
+	public static <T> Result<T> render(String success, String message){
 		return new Result<T>(success, message, null);
 	}
 }

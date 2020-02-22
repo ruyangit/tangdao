@@ -1,13 +1,29 @@
 package ${package.Controller};
 
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 <#if restControllerStyle>
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.http.MediaType;
 <#else>
 import org.springframework.stereotype.Controller;
 </#if>
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tangdao.framework.constant.OpenApiCode;
+import com.tangdao.framework.protocol.Result;
+import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
 <#if superControllerClassPackage??>
 import ${superControllerClassPackage};
@@ -26,7 +42,7 @@ import ${superControllerClassPackage};
 <#else>
 @Controller
 </#if>
-@RequestMapping(value = "/api/{version}<#if package.ModuleName??>/${package.ModuleName}</#if>/<#if controllerMappingHyphenStyle??>${controllerMappingHyphen}<#else>${table.entityPath}</#if>", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/{env}<#if package.ModuleName??>/${package.ModuleName}</#if>", produces = MediaType.APPLICATION_JSON_VALUE)
 <#if kotlin>
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
@@ -39,5 +55,75 @@ public class ${table.controllerName} {
 	@Autowired
 	private ${table.serviceName} ${table.entityPath}Service;
 	
+	/**
+	 * ${table.comment!}分页
+	 * 
+	 * @param page
+	 * @return
+	 */
+	@GetMapping("/${table.entityPath}")
+	public IPage<${entity}> page(IPage<${entity}> page) {
+		return ${table.entityPath}Service.page(page);
+	}
+
+	/**
+	 * ${table.comment!}列表
+	 * 
+	 * @param page
+	 * @return
+	 */
+	@GetMapping("/${table.entityPath}s")
+	public List<${entity}> list() {
+		return ${table.entityPath}Service.list();
+	}
+
+	/**
+	 * ${table.comment!}信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/${table.entityPath}/{id}")
+	public ${entity} get(String id) {
+		return ${table.entityPath}Service.getById(id);
+	}
+
+	/**
+	 * ${table.comment!}保存
+	 * 
+	 * @param ${table.entityPath}
+	 * @return
+	 */
+	@PostMapping("/${table.entityPath}")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Result<Object> post(@RequestBody @Validated ${entity} ${table.entityPath}) {
+		${table.entityPath}Service.save(${table.entityPath});
+		return Result.render(OpenApiCode.TRUE, "新增成功");
+	}
+
+	/**
+	 * ${table.comment!}修改
+	 * 
+	 * @param id
+	 * @param ${table.entityPath}
+	 * @return
+	 */
+	@PutMapping("/${table.entityPath}")
+	public Result<Object> put(@RequestBody @Validated ${entity} ${table.entityPath}) {
+		${table.entityPath}Service.saveOrUpdate(${table.entityPath});
+		return Result.render(OpenApiCode.TRUE, "修改成功");
+	}
+
+	/**
+	 * ${table.comment!}删除
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@DeleteMapping("/${table.entityPath}/{id}")
+	public Result<Object> delete(@PathVariable("id") String id) {
+		${table.entityPath}Service.removeById(id);
+		return Result.render(OpenApiCode.TRUE, "删除成功");
+	}
 }
 </#if>

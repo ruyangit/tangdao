@@ -58,10 +58,6 @@ public abstract class DataEntity extends BaseEntity<Model<?>> {
 		super();
 	}
 	
-	public DataEntity(String pkValue) {
-		super(pkValue);
-	}
-
 	/**
 	 * @return the createBy
 	 */

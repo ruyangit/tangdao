@@ -3,6 +3,7 @@
  */
 package com.tangdao.framework.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -42,6 +43,6 @@ public interface ITreeService<T> extends ICrudService<T> {
 	 * @param entity
 	 * @return
 	 */
-	boolean deleteChild(T entity);
+	boolean removeChildById(Serializable id);
 	
 }
