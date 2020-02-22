@@ -139,7 +139,7 @@ public class AutoCodeGenerator {
         strategy.setEntityLombokModel(false);
         strategy.setRestControllerStyle(true);
         // 写于父类中的公共字段
-        strategy.setSuperEntityColumns("create_by","create_time","update_by","update_time","status","remarks","parent_code","parent_codes","tree_sort","tree_names","tree_leaf","tree_level");
+        strategy.setSuperEntityColumns("create_by","create_time","update_by","update_time","status","remarks","parent_id","parent_ids","tree_sort","tree_names","tree_leaf","tree_level");
         strategy.setInclude(scanner("表名，多个英文逗号分割").split(","));
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setTablePrefix(scanner("表前缀") + "_");

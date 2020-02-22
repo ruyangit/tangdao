@@ -17,8 +17,10 @@
 		<module>tangdao-common/tangdao-framework</module>
 		<module>tangdao-common/tangdao-framework-model</module>
 		<module>tangdao-common/tangdao-framework-redis</module>
+		<module>tangdao-common/tangdao-framework-security</module>
 		<module>tangdao-module-core-api</module>
 		<module>tangdao-module-test-api</module>
+		<module>tangdao-module-oauth</module>
 		<module>tangdao-module-devtool</module>
 		<module>tangdao-starter-web</module>
 	</modules>

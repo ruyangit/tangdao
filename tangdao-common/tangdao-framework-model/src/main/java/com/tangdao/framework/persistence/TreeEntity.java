@@ -34,12 +34,12 @@ public class TreeEntity extends DataEntity {
 	/**
      * 父级编号
      */
-    private String parentCode;
+    private String parentId;
 
     /**
      * 所有父级编号
      */
-    private String parentCodes;
+    private String parentIds;
 
     /**
      * 本级排序号（升序）
@@ -74,32 +74,33 @@ public class TreeEntity extends DataEntity {
     @TableField(exist = false)
 	protected List<Object> children;
     
+
 	/**
-	 * @return the parentCode
+	 * @return the parentId
 	 */
-	public String getParentCode() {
-		return parentCode;
+	public String getParentId() {
+		return parentId;
 	}
 
 	/**
-	 * @param parentCode the parentCode to set
+	 * @param parentId the parentId to set
 	 */
-	public void setParentCode(String parentCode) {
-		this.parentCode = parentCode;
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 
 	/**
-	 * @return the parentCodes
+	 * @return the parentIds
 	 */
-	public String getParentCodes() {
-		return parentCodes;
+	public String getParentIds() {
+		return parentIds;
 	}
 
 	/**
-	 * @param parentCodes the parentCodes to set
+	 * @param parentIds the parentIds to set
 	 */
-	public void setParentCodes(String parentCodes) {
-		this.parentCodes = parentCodes;
+	public void setParentIds(String parentIds) {
+		this.parentIds = parentIds;
 	}
 
 	/**
@@ -203,12 +204,12 @@ public class TreeEntity extends DataEntity {
 	 * @return
 	 */
 	public boolean isRoot() {
-		return ROOT_CODE.equals(getParentCode());
+		return ROOT_ID.equals(getParentId());
 	}
 	
 	/**
 	 * 根节点编码
 	 */
-    public static final String ROOT_CODE = "0";
+    public static final String ROOT_ID = "0";
 
 }
