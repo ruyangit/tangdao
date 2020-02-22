@@ -11,8 +11,8 @@
 		<relativePath>../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-framework-security</artifactId>
-	<name>Tangdao Framework Security</name>
+	<artifactId>tangdao-framework-auth</artifactId>
+	<name>Tangdao Framework Auth</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
