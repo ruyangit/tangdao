@@ -34,17 +34,17 @@ public class TreeEntity extends DataEntity {
 	/**
      * 父级编号
      */
-    private String parentId;
+	protected String parentId;
 
     /**
      * 所有父级编号
      */
-    private String parentIds;
+	protected String parentIds;
 
     /**
      * 本级排序号（升序）
      */
-    private BigDecimal treeSort;
+	protected BigDecimal treeSort;
     
     /**
      * 节点名称
@@ -56,17 +56,17 @@ public class TreeEntity extends DataEntity {
     /**
      * 全节点名
      */
-    private String treeNames;
+    protected String treeNames;
 
     /**
      * 是否最末级
      */
-    private String treeLeaf;
+    protected String treeLeaf;
 
     /**
      * 层次级别
      */
-    private String treeLevel;
+    protected String treeLevel;
     
     /**
      * 子节点

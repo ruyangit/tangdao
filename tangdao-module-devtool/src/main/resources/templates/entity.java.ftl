@@ -146,6 +146,9 @@ public class ${entity} implements Serializable {
             ", ${field.propertyName}=" + ${field.propertyName} +
         </#if>
     </#list>
+    <#list table.commonFields as field><#--生成公共字段 -->
+    		", ${field.propertyName}=" + ${field.propertyName} +
+	</#list>
         "}";
     }
 </#if>

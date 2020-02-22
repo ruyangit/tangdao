@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tangdao.module.core.mapper.MenuMapper">
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        menu_id as "menuId",
+        menu_name as "menuName",
+        menu_type as "menuType",
+        menu_href as "menuHref",
+        menu_target as "menuTarget",
+        menu_icon as "menuIcon",
+        permission as "permission",
+        is_show as "isShow",
+		parent_id as "parentId",
+		parent_ids as "parentIds",
+		tree_sort as "treeSort",
+		tree_names as "treeNames",
+		status as "status",
+		create_by as "createBy",
+		create_time as "createTime",
+		update_by as "updateBy",
+		update_time as "updateTime",
+		remarks as "remarks",
+		tree_leaf as "treeLeaf",
+    	tree_level as "treeLevel"
+    </sql>
+
+</mapper>
