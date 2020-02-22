@@ -2,8 +2,8 @@ package com.tangdao.module.core.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.tangdao.module.core.entity.Group;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tangdao.module.core.model.domain.Group;
 
 /**
  * <p>

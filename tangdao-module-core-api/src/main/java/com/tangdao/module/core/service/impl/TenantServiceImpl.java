@@ -1,7 +1,7 @@
 package com.tangdao.module.core.service.impl;
 
-import com.tangdao.module.core.entity.Tenant;
 import com.tangdao.module.core.mapper.TenantMapper;
+import com.tangdao.module.core.model.domain.Tenant;
 import com.tangdao.module.core.service.ITenantService;
 import com.tangdao.framework.service.impl.CrudServiceImpl;
 import org.springframework.stereotype.Service;

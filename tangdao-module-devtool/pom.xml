@@ -23,7 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-framework-model</artifactId>
+			<artifactId>tangdao-framework-mybatis-plus</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

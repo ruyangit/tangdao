@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.framework.constant.OpenApiCode;
-import com.tangdao.framework.protocol.Result;
-import com.tangdao.module.core.entity.Menu;
+import com.tangdao.module.core.model.domain.Menu;
 import com.tangdao.module.core.service.IMenuService;
 import com.tangdao.framework.web.BaseController;
 
@@ -67,7 +65,7 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/menu/{id}")
-	public Menu get(String id) {
+	public Menu getMenu(String id) {
 		return menuService.getById(id);
 	}
 
@@ -79,9 +77,8 @@ public class MenuController extends BaseController {
 	 */
 	@PostMapping("/menu")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Result<Object> post(@RequestBody @Validated Menu menu) {
-		menuService.saveOrUpdate(menu);
-		return Result.render(OpenApiCode.TRUE, "新增成功");
+	public boolean save(@RequestBody @Validated Menu menu) {
+		return menuService.save(menu);
 	}
 
 	/**
@@ -92,9 +89,8 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@PutMapping("/menu")
-	public Result<Object> put(@RequestBody @Validated Menu menu) {
-		menuService.saveOrUpdate(menu);
-		return Result.render(OpenApiCode.TRUE, "修改成功");
+	public boolean update(@RequestBody @Validated Menu menu) {
+		return menuService.saveOrUpdate(menu);
 	}
 
 	/**
@@ -104,8 +100,7 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@DeleteMapping("/menu/{id}")
-	public Result<Object> delete(@PathVariable("id") String id) {
-		menuService.removeById(id);
-		return Result.render(OpenApiCode.TRUE, "删除成功");
+	public boolean delete(@PathVariable("id") String id) {
+		return menuService.removeById(id);
 	}
 }
