@@ -6,7 +6,6 @@ package com.tangdao.module.security;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,15 +24,13 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.util.StringUtils;
 
 import com.tangdao.module.security.token.CustomTokenEnhancer;
 
 /**
  * <p>
- * TODO 授权服务
+ * TODO 资源授权服务
  * </p>
  *
  * @author ruyangit@gmail.com
@@ -60,25 +57,28 @@ public class OAuth2AuthorizationConfig {
 			return new CustomTokenEnhancer();
 		}
 		
-		/**
-		 * 
-		 * @return
-		 */
-		@Bean
-	    public JwtAccessTokenConverter jwtAccessTokenConverter() {
-	        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-	        jwtAccessTokenConverter.setSigningKey("maracuja");
-	        return jwtAccessTokenConverter;
-	    }
+//		/**
+//		 * 
+//		 * @return
+//		 */
+//		@Bean
+//	    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+//	        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+//	        jwtAccessTokenConverter.setSigningKey("maracuja");
+//	        return jwtAccessTokenConverter;
+//	    }
+//		
+//		/**
+//		 * 
+//		 * @return
+//		 */
+//		@Bean
+//		public TokenStore tokenStore(){
+//			return new JwtTokenStore(jwtAccessTokenConverter());
+//		}
 		
-		/**
-		 * 
-		 * @return
-		 */
-		@Bean
-		public TokenStore tokenStore(){
-			return new JwtTokenStore(jwtAccessTokenConverter());
-		}
+		@Autowired(required = false)
+		private TokenStore inMemoryTokenStore;
 		
 		/**
 		 * 
@@ -104,10 +104,12 @@ public class OAuth2AuthorizationConfig {
 		@Override
 	    public void configure(final AuthorizationServerEndpointsConfigurer endpoints) {
 	    	TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-			tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhacer(), jwtAccessTokenConverter()));
+//			tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhacer(), jwtAccessTokenConverter()));
+			tokenEnhancerChain.setTokenEnhancers(Arrays.asList(tokenEnhacer()));
 	    	
 	    	endpoints
-	    			.tokenStore(tokenStore())
+//	    			.tokenStore(tokenStore())
+	    			.tokenStore(inMemoryTokenStore)
 	    			.tokenEnhancer(tokenEnhancerChain)
 	    			.reuseRefreshTokens(false)
 	                .userDetailsService(userDetailsService)
