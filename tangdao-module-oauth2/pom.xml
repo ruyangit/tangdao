@@ -11,8 +11,8 @@
 		<relativePath>../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-module-rbac-security</artifactId>
-	<name>Tangdao Module Rbac Security</name>
+	<artifactId>tangdao-module-oauth2</artifactId>
+	<name>Tangdao Module Oauth2</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>

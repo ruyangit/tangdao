@@ -42,7 +42,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-module-rbac-security</artifactId>
+			<artifactId>tangdao-module-oauth2</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
