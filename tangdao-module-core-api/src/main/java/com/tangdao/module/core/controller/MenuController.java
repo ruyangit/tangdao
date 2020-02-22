@@ -80,7 +80,7 @@ public class MenuController extends BaseController {
 	@PostMapping("/menu")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Result<Object> post(@RequestBody @Validated Menu menu) {
-		menuService.save(menu);
+		menuService.saveOrUpdate(menu);
 		return Result.render(OpenApiCode.TRUE, "新增成功");
 	}
 
