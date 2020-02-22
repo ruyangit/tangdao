@@ -8,11 +8,11 @@
 		<groupId>com.tangdao</groupId>
 		<artifactId>tangdao-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../tangdao-parent</relativePath>
+		<relativePath>../../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-framework-auth</artifactId>
-	<name>Tangdao Framework Auth</name>
+	<artifactId>tangdao-framework-cache-redis</artifactId>
+	<name>Tangdao Framework Cache Redis</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>

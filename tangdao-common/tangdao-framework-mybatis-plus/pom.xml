@@ -8,11 +8,11 @@
 		<groupId>com.tangdao</groupId>
 		<artifactId>tangdao-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../tangdao-parent</relativePath>
+		<relativePath>../../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-module-oauth</artifactId>
-	<name>Tangdao Module Oauth</name>
+	<artifactId>tangdao-framework-mybatis-plus</artifactId>
+	<name>Tangdao Framework Mybatis Plus</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
@@ -21,10 +21,17 @@
 			<artifactId>tangdao-framework</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
 		<dependency>
-			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-framework-model</artifactId>
-			<version>${project.version}</version>
+	        <groupId>com.baomidou</groupId>
+	        <artifactId>mybatis-plus-boot-starter</artifactId>
+	        <version>${mybatis-plus.version}</version>
+	    </dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 

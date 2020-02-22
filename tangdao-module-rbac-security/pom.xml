@@ -8,17 +8,22 @@
 		<groupId>com.tangdao</groupId>
 		<artifactId>tangdao-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../tangdao-parent</relativePath>
+		<relativePath>../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-framework-redis</artifactId>
-	<name>Tangdao Framework Redis</name>
+	<artifactId>tangdao-module-rbac-security</artifactId>
+	<name>Tangdao Module Rbac Security</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.tangdao</groupId>
 			<artifactId>tangdao-framework</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tangdao</groupId>
+			<artifactId>tangdao-framework-mybatis-plus</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
