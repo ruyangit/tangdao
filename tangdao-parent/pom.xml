@@ -78,6 +78,7 @@
 		<lettuce.version>5.1.8.RELEASE</lettuce.version>
 		<transmittable-thread-local.version>2.11.0</transmittable-thread-local.version>
 		 -->
+		 <jjwt.veersion>0.9.1</jjwt.veersion>
 
 		<!-- Db Driver 
 		<mysql.version>5.1.46</mysql.version>
@@ -93,7 +94,7 @@
 		
 		<!-- Hutool -->
 		<hutool.version>5.1.3</hutool.version>
-
+		
 	</properties>
 
 	<dependencies>
