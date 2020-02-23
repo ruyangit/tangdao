@@ -59,11 +59,9 @@ public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
-        ServerHttpResponse outputMessage = new ServletServerHttpResponse(response);
-        Result result = Result.createResult();
         String token = tokenUtils.getJwtFromRequest(request);
         if (StrUtil.isNotBlank(token)) {
+        	ServerHttpResponse outputMessage = new ServletServerHttpResponse(response);
         	try {
 	        	String username = tokenUtils.getUsernameFromJWT(token);
 	        	
@@ -73,6 +71,7 @@ public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
 	        	
 	        	SecurityContextHolder.getContext().setAuthentication(authentication);
         	} catch (Exception e) {
+        		Result result = Result.createResult();
         		result.fail(e.getMessage());
         		messageConverter.write(mapper.writeValueAsString(result), MediaType.APPLICATION_JSON, outputMessage);
         	} finally {
@@ -81,15 +80,6 @@ public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
         }
         
         filterChain.doFilter(request, response);
-//        else {
-//        	try {
-//        		result.fail(HttpStatus.UNAUTHORIZED.getReasonPhrase());
-//        		outputMessage.setStatusCode(HttpStatus.UNAUTHORIZED);
-//        		messageConverter.write(mapper.writeValueAsString(result), MediaType.APPLICATION_JSON, outputMessage);
-//        	}finally {
-//        		outputMessage.close();
-//        	}
-//        }
 	}
 
 }

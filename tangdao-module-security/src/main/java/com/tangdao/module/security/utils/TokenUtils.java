@@ -84,7 +84,7 @@ public class TokenUtils {
 
         String jwt = builder.compact();
         // 将生成的JWT保存至Redis
-//        stringRedisTemplate.opsForValue().set(Consts.REDIS_JWT_KEY_PREFIX + subject, jwt, ttl, TimeUnit.MILLISECONDS);
+//        stringRedisTemplate.opsForValue().set(Consts.REDIS_JWT_KEY_PREFIX + subject, jwt, ttl*1000 , TimeUnit.MILLISECONDS);
         return jwt;
     }
 
