@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -29,20 +31,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig {
 	
-//	public static final String[] DOCS_INFRA_API = {
-//            "/swagger-resources/**", 
-//            "//swagger-resources/configuration/**", 
-//            "/swagger-ui.html", 
-//            "/swagger-ui.html/**",
-//            "/v2/api-docs", 
-//            "/webjars/**", 
-//            "/actuator/**",
-//            "/**.html",
-//            "/configuration/**"};
-
 	@Configuration
 	@Order(1)
 	public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
@@ -64,13 +55,6 @@ public class WebSecurityConfig {
 	    	return super.authenticationManagerBean();
 	    }
 	    
-//	    @Override
-//	 	public void configure(WebSecurity web) {
-//	 		web.ignoring()
-//	 			.antMatchers(HttpMethod.GET, "/")
-//	 			.antMatchers(DOCS_INFRA_API);
-//	 	}
-	    
 	    @Override
 	    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 	        auth.authenticationProvider(daoAuthenticationProvider());
@@ -84,22 +68,22 @@ public class WebSecurityConfig {
 	    		.csrf().disable()
 	    		.formLogin().disable()
 	    		.httpBasic().disable()
-//	            .authorizeRequests()
 //	            	.antMatchers(WebSecurityConfig.DOCS_INFRA_API).permitAll()
 //	            	.antMatchers(HttpMethod.GET, "/auth/token").permitAll()
 	    		.antMatcher("/api/**")
 	    			.authorizeRequests()
-	            // RBAC 动态 url 认证
-	    			.anyRequest().access("@rbacAuthorityService.hasPermission(request, authentication)")
-//	            .anyRequest().access("hasRole('ROLE_SUPER')")
+	    			.antMatchers(HttpMethod.OPTIONS, "/api/**/auth/token").permitAll()
+//	    			.antMatchers("/manager/**").hasAnyRole("ROLE_ADMIN")
+	    			// RBAC 动态 url 认证
+	    			.anyRequest()
+	    				.access("@rbacAuthorityService.hasPermission(request, authentication)")
 	            .and()
 	            .logout().disable()
 	            .sessionManagement()
-	            	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	            	.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //	            .and()
 //	            .exceptionHandling()
 //	            	.authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler())
-	            ;
 	        // 添加自定义 JWT 过滤器
 	        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	    }

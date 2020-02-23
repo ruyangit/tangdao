@@ -29,6 +29,7 @@ public class RbacAuthorityService {
 	
 	
 	public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
+		System.out.println("hasPermission(request, authentication)");
 		if(authentication instanceof AnonymousAuthenticationToken) {
 			logger.warn("[AnonymousAuthenticationToken] ServletPath: {}", request.getServletPath());
 		}
