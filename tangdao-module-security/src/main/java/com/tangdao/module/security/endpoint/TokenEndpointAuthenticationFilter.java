@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -73,7 +74,10 @@ public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
         	} catch (Exception e) {
         		Result result = Result.createResult();
         		result.fail(e.getMessage());
+        		
+        		outputMessage.setStatusCode(HttpStatus.UNAUTHORIZED);
         		messageConverter.write(mapper.writeValueAsString(result), MediaType.APPLICATION_JSON, outputMessage);
+        		return;
         	} finally {
         		outputMessage.close();
         	}
