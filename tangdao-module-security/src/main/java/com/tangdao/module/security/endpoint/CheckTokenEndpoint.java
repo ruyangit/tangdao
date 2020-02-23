@@ -5,6 +5,7 @@ package com.tangdao.module.security.endpoint;
 
 import java.util.Map;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
+@RequestMapping(value = "/api/{env}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CheckTokenEndpoint extends AbstractEndpoint{
 
 	@RequestMapping(value = "/auth/check_token")

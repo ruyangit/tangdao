@@ -21,6 +21,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.tangdao.module.security.endpoint.TokenEndpointAuthenticationFilter;
+
 /**
  * <p>
  * TODO 基于 Rbac 权限控制
@@ -42,7 +44,7 @@ public class WebSecurityConfig {
 		private UserDetailsService userDetailsService;
 		
 		@Autowired
-		private JwtAuthenticationFilter jwtAuthenticationFilter;
+		private TokenEndpointAuthenticationFilter tokenEndpointAuthenticationFilter;
 		
 		@Bean
 	    public PasswordEncoder passwordEncoder() {
@@ -85,7 +87,7 @@ public class WebSecurityConfig {
 //	            .exceptionHandling()
 //	            	.authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler())
 	        // 添加自定义 JWT 过滤器
-	        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+	        http.addFilterBefore(tokenEndpointAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	    }
 
 	    @Bean

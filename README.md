@@ -1,39 +1,44 @@
-# tangdao
+# 基础权限后台管理模版（Tangdao）
+
+<p align="left">
+  <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html"><img alt="JDK" src="https://img.shields.io/badge/JDK-1.8.0_162-orange.svg"/></a>
+  <a href="https://docs.spring.io/spring-boot/docs/2.2.2.RELEASE/reference/html/"><img alt="Spring Boot" src="https://img.shields.io/badge/Spring Boot-2.2.2.RELEASE-brightgreen.svg"/></a>
+</p>
+
+<p align="left">
+  <a href="https://github.com/xkcoding/spring-boot-demo/stargazers"><img alt="star" src="https://gitee.com/ruyangit/tangdao/badge/star.svg?theme=dark"/></a>
+  <a href="https://github.com/xkcoding/spring-boot-demo/network/members"><img alt="star" src="https://gitee.com/ruyangit/tangdao/badge/fork.svg?theme=dark"/></a>
+</p>
+
 
 #### 介绍
-项目重构中，原始代码的一些版权问题需要重构，望谅解。新代码采用前后端分离，服务模块化，敬请期待！
+项目重构中。新代码采用前后端分离，服务模块化，敬请期待！
 
-[视图](https://ruyangit.gitee.io/2020/tangdao/spa) 支持pc，pad，移动端效果。
+[预览Demo](https://ruyangit.gitee.io/2020/tangdao/spa) 兼容 pc，pad，移动端
 
 #### 软件架构
-软件架构说明
 
+RBAC 权限管理
+
+用户组
+
+用户
+
+角色
+
+资源
 
 #### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```
+mvn clean package
+```
 
 #### 使用说明
+1、mysql5.7+
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+2、jdk1.8+
 
-#### 参与贡献
+3、maven3.6+
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+#### Todo
 
-
-#### 码云特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.module.security;
+package com.tangdao.module.security.endpoint;
 
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * @since 2020年2月23日
  */
 @Component
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

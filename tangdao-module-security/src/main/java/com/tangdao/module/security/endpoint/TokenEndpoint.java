@@ -6,6 +6,7 @@ package com.tangdao.module.security.endpoint;
 import java.security.Principal;
 import java.util.Map;
 
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -26,6 +27,7 @@ import com.tangdao.framework.protocol.Result;
  */
 
 @RestController
+@RequestMapping(value = "/api/{env}", produces = MediaType.APPLICATION_JSON_VALUE)
 public class TokenEndpoint extends AbstractEndpoint{
 
 	@RequestMapping(value = "/auth/token", method=RequestMethod.POST)
@@ -35,6 +37,8 @@ public class TokenEndpoint extends AbstractEndpoint{
 			throw new InsufficientAuthenticationException(
 					"There is no client authentication. Try adding an appropriate authentication filter.");
 		}
+		
+		
 		return null;
 	}
 }
