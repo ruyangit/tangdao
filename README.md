@@ -19,7 +19,7 @@
 
 #### 软件架构
 
-RBAC 权限管理
+<img alt="data_model" src="./data_model.png" width="100%" />
 
 用户组
 
