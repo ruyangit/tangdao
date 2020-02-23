@@ -82,7 +82,7 @@ public class WebSecurityConfig {
 //	            	.antMatchers(HttpMethod.GET, "/auth/token").permitAll()
 	    		.antMatcher("/api/**")
 	    			.authorizeRequests()
-	    			.antMatchers(HttpMethod.GET, "/api/**/auth/token").permitAll()
+	    			.antMatchers(HttpMethod.POST, "/api/**/auth/token").permitAll()
 //	    			.antMatchers("/manager/**").hasAnyRole("ROLE_ADMIN")
 	    			// RBAC 动态 url 认证
 	    			.anyRequest()

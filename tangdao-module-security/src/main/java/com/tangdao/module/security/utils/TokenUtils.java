@@ -8,10 +8,14 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import com.tangdao.module.security.exception.SecurityException;
+import com.tangdao.framework.constant.OpenApiCode.ResultStatus;
 import com.tangdao.module.security.service.UserPrincipal;
 
 import cn.hutool.core.date.DateUtil;
@@ -55,6 +59,11 @@ public class TokenUtils {
 	 * 30d
 	 */
     public static final int REFRESH_TOKEN_VALIDITY_SECONDS = 2592000;
+    
+    /**
+     * 
+     */
+    public Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
      * 创建JWT
@@ -119,25 +128,30 @@ public class TokenUtils {
 //            // 校验redis中的JWT是否存在
 //            Long expire = stringRedisTemplate.getExpire(redisKey, TimeUnit.MILLISECONDS);
 //            if (Objects.isNull(expire) || expire <= 0) {
-//                throw new SecurityException(Status.TOKEN_EXPIRED);
+//                throw new SecurityException(ResultStatus.TOKEN_EXPIRED);
 //            }
 //
 //            // 校验redis中的JWT是否与当前的一致，不一致则代表用户已注销/用户在不同设备登录，均代表JWT已过期
 //            String redisToken = stringRedisTemplate.opsForValue().get(redisKey);
 //            if (!StrUtil.equals(jwt, redisToken)) {
-//                throw new SecurityException(Status.TOKEN_OUT_OF_CTRL);
+//                throw new SecurityException(ResultStatus.TOKEN_OUT_OF_CTRL);
 //            }
             return claims;
         } catch (ExpiredJwtException e) {
-            throw new SecurityException("Token 已过期");
+        	logger.error("Token 已过期");
+            throw new SecurityException(ResultStatus.TOKEN_EXPIRED);
         } catch (UnsupportedJwtException e) {
-            throw new SecurityException("Token 不支持");
+        	logger.error("Token 不支持");
+            throw new SecurityException(ResultStatus.TOKEN_PARSE_ERROR);
         } catch (MalformedJwtException e) {
-            throw new SecurityException("Token 无效");
+        	logger.debug("Token 无效");
+            throw new SecurityException(ResultStatus.TOKEN_PARSE_ERROR);
         } catch (SignatureException e) {
-            throw new SecurityException("Token 签名无效");
+        	logger.debug("Token 签名无效");
+            throw new SecurityException(ResultStatus.TOKEN_PARSE_ERROR);
         } catch (IllegalArgumentException e) {
-            throw new SecurityException("Token 参数不存在");
+        	logger.error("Token 参数异常");
+            throw new SecurityException(ResultStatus.TOKEN_PARSE_ERROR);
         }
     }
 

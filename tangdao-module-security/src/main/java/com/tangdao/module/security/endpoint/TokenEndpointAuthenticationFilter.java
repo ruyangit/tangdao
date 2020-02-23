@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,8 +51,8 @@ public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
 
     private final ObjectMapper mapper;
     
-    public TokenEndpointAuthenticationFilter(ObjectMapper mapper) {
-        this.messageConverter = new StringHttpMessageConverter();
+    public TokenEndpointAuthenticationFilter(HttpMessageConverter<String> messageConverter, ObjectMapper mapper) {
+        this.messageConverter = messageConverter;
         this.mapper = mapper;
     }
 	
@@ -72,6 +71,7 @@ public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
 	        	
 	        	SecurityContextHolder.getContext().setAuthentication(authentication);
         	} catch (Exception e) {
+        		e.printStackTrace();
         		Result result = Result.createResult();
         		result.fail(e.getMessage());
         		

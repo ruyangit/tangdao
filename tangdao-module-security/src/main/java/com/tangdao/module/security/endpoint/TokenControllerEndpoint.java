@@ -44,7 +44,7 @@ public class TokenControllerEndpoint extends AbstractEndpoint{
 	@Autowired
 	private TokenUtils tokenUtils;
 
-	@RequestMapping(value = "/auth/token", method=RequestMethod.GET)
+	@RequestMapping(value = "/auth/token", method=RequestMethod.POST)
 	public Result postAccessToken(@RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
 
 		final String loginName = parameters.get("loginName");

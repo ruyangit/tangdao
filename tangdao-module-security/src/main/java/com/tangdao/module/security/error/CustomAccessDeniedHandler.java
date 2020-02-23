@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,14 +33,14 @@ import com.tangdao.framework.protocol.Result;
 @Component
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
-	private final HttpMessageConverter<String> messageConverter;
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
+    private final HttpMessageConverter<String> messageConverter;
 
     private final ObjectMapper mapper;
     
-    private Logger logger = LoggerFactory.getLogger(getClass());
-
-    public CustomAccessDeniedHandler(ObjectMapper mapper) {
-        this.messageConverter = new StringHttpMessageConverter();
+    public CustomAccessDeniedHandler(HttpMessageConverter<String> messageConverter, ObjectMapper mapper) {
+        this.messageConverter = messageConverter;
         this.mapper = mapper;
     }
 
