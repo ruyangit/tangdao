@@ -30,6 +30,13 @@ public class SecurityException extends ServiceException {
 	 * @param status
 	 */
 	public SecurityException(IEnum<?, ?> status) {
-		super(status.toString());
+		this(String.valueOf(status.reasonPhrase()));
+	}
+
+	/**
+	 * @param message
+	 */
+	public SecurityException(String message) {
+		super(message);
 	}
 }
