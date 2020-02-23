@@ -11,8 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.module.core.model.domain.User;
+import com.tangdao.common.servlet.ServletUtils;
+import com.tangdao.framework.model.UserVo;
+import com.tangdao.module.core.service.IRoleService;
 import com.tangdao.module.core.service.IUserService;
 
 /**
@@ -31,14 +32,19 @@ public class AuthenticationService implements UserDetailsService {
 	@Autowired
 	private IUserService userService;
 	
+	@Autowired
+	private IRoleService roleService;
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		try {
-			User user = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getLoginName, username));
-			if(null == user) {
+			final String tenantId = ServletUtils.getParameter("tenantId");
+			UserVo userVo = userService.getUserVo(username, tenantId);
+			if(null == userVo) {
 				throw new UsernameNotFoundException("User with username " + username + " not founded");
 			}
-			return new UserPrincipal(user);
+//			userVo.setRoles(roleService.findRoleVoList(userVo.getUserId()));
+			return new UserPrincipal(userVo);
 		} catch (UsernameNotFoundException e) {
 			log.error("Error Username not found method loadUserByUsername in class AuthenticationService: ", e);
 		} catch (Exception e) {

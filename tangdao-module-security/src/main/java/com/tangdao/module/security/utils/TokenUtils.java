@@ -3,7 +3,6 @@
  */
 package com.tangdao.module.security.utils;
 
-import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,11 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.tangdao.module.security.exception.SecurityException;
 import com.tangdao.framework.constant.OpenApiCode.ResultStatus;
+import com.tangdao.framework.model.UserVo;
+import com.tangdao.module.security.exception.SecurityException;
 import com.tangdao.module.security.service.UserPrincipal;
 
 import cn.hutool.core.date.DateUtil;
@@ -75,15 +74,14 @@ public class TokenUtils {
      * @param authorities 用户权限
      * @return JWT
      */
-    public String createJWT(Boolean rememberMe, String id, String subject, String tenantId, Collection<? extends GrantedAuthority> authorities) {
+    public String createJWT(Boolean rememberMe, UserVo userVo) {
         Date now = new Date();
         JwtBuilder builder = Jwts.builder()
-                .setId(id)
-                .setSubject(subject)
+                .setId(userVo.getUserId())
+                .setSubject(userVo.getLoginName())
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .claim("tenantId", tenantId)
-                .claim("authorities", authorities);
+                .claim("tenantId", userVo.getTenantId());
 
         // 设置过期时间
         int ttl = rememberMe ? REFRESH_TOKEN_VALIDITY_SECONDS : ACCESS_TOKEN_VALIDITY_SECONDS;
@@ -105,8 +103,7 @@ public class TokenUtils {
      * @return JWT
      */
     public String createJWT(Authentication authentication, Boolean rememberMe) {
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        return createJWT(rememberMe, userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getTenantId(), userPrincipal.getAuthorities());
+        return createJWT(rememberMe, ((UserPrincipal) authentication.getPrincipal()).getUserVo());
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.tangdao.module.core.service;
 
+import com.tangdao.framework.model.UserVo;
 import com.tangdao.framework.service.ICrudService;
 import com.tangdao.module.core.model.domain.User;
 
@@ -13,4 +14,11 @@ import com.tangdao.module.core.model.domain.User;
  */
 public interface IUserService extends ICrudService<User> {
 
+	/**
+	 * 根据用户账号获取用户信息
+	 * @param loginName
+	 * @param tenantId
+	 * @return
+	 */
+	public UserVo getUserVo(String loginName, String tenantId);
 }
