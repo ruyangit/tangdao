@@ -22,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.tangdao.module.security.endpoint.TokenEndpointAuthenticationFilter;
+import com.tangdao.module.security.error.CustomAccessDeniedHandler;
+import com.tangdao.module.security.error.CustomAuthenticationEntryPoint;
 
 /**
  * <p>
@@ -45,6 +47,12 @@ public class WebSecurityConfig {
 		
 		@Autowired
 		private TokenEndpointAuthenticationFilter tokenEndpointAuthenticationFilter;
+		
+		@Autowired
+		private CustomAccessDeniedHandler customAccessDeniedHandler;
+		
+		@Autowired
+		private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 		
 		@Bean
 	    public PasswordEncoder passwordEncoder() {
@@ -74,7 +82,7 @@ public class WebSecurityConfig {
 //	            	.antMatchers(HttpMethod.GET, "/auth/token").permitAll()
 	    		.antMatcher("/api/**")
 	    			.authorizeRequests()
-	    			.antMatchers(HttpMethod.OPTIONS, "/api/**/auth/token").permitAll()
+	    			.antMatchers(HttpMethod.GET, "/api/**/auth/token").permitAll()
 //	    			.antMatchers("/manager/**").hasAnyRole("ROLE_ADMIN")
 	    			// RBAC 动态 url 认证
 	    			.anyRequest()
@@ -82,10 +90,10 @@ public class WebSecurityConfig {
 	            .and()
 	            .logout().disable()
 	            .sessionManagement()
-	            	.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//	            .and()
-//	            .exceptionHandling()
-//	            	.authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(new CustomAccessDeniedHandler())
+	            	.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+	            .and()
+	            .exceptionHandling()
+	            	.authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler);
 	        // 添加自定义 JWT 过滤器
 	        http.addFilterBefore(tokenEndpointAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	    }

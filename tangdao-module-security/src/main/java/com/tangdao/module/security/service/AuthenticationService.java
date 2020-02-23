@@ -39,7 +39,6 @@ public class AuthenticationService implements UserDetailsService {
 				throw new UsernameNotFoundException("User with username " + username + " not founded");
 			}
 			return new UserPrincipal(user);
-			
 		} catch (UsernameNotFoundException e) {
 			log.error("Error Username not found method loadUserByUsername in class AuthenticationService: ", e);
 		} catch (Exception e) {

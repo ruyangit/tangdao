@@ -30,13 +30,15 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Seriali
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private String id;
 
 	private String username;
 
 	private String password;
 	
 	private String tenantId;
-
+	
 	private List<String> authorities;
 	
 	/**
@@ -83,6 +85,20 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Seriali
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	@Override
@@ -131,5 +147,7 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Seriali
 	public void setAuthorities(List<String> authorities) {
 		this.authorities = authorities;
 	}
+	
+	
 	
 }
