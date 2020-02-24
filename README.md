@@ -7,8 +7,8 @@
 </p>
 
 <p align="left">
-  <a href="https://github.com/xkcoding/spring-boot-demo/stargazers"><img alt="star" src="https://gitee.com/ruyangit/tangdao/badge/star.svg?theme=dark"/></a>
-  <a href="https://github.com/xkcoding/spring-boot-demo/network/members"><img alt="star" src="https://gitee.com/ruyangit/tangdao/badge/fork.svg?theme=dark"/></a>
+  <a href=“https://gitee.com/ruyangit/tangdao/stargazers"><img alt="star" src="https://gitee.com/ruyangit/tangdao/badge/star.svg?theme=dark"/></a>
+  <a href="https://gitee.com/ruyangit/tangdao/network/members"><img alt="star" src="https://gitee.com/ruyangit/tangdao/badge/fork.svg?theme=dark"/></a>
 </p>
 
 
