@@ -11,7 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -35,7 +34,6 @@ import com.tangdao.module.security.error.CustomAuthenticationEntryPoint;
  */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class WebSecurityConfig {
 	
 	@Configuration
@@ -78,15 +76,12 @@ public class WebSecurityConfig {
 	    		.csrf().disable()
 	    		.formLogin().disable()
 	    		.httpBasic().disable()
-//	            	.antMatchers(WebSecurityConfig.DOCS_INFRA_API).permitAll()
-//	            	.antMatchers(HttpMethod.GET, "/auth/token").permitAll()
 	    		.antMatcher("/api/**")
 	    			.authorizeRequests()
 	    			.antMatchers(HttpMethod.POST, "/api/**/auth/token").permitAll()
-//	    			.antMatchers("/manager/**").hasAnyRole("ROLE_ADMIN")
 	    			// RBAC 动态 url 认证
 	    			.anyRequest()
-	    				.access("@rbacAuthorityService.hasPermission(request, authentication)")
+	    				.access("@accessSecurityService.hasPermission(request, authentication)")
 	            .and()
 	            .logout().disable()
 	            .sessionManagement()

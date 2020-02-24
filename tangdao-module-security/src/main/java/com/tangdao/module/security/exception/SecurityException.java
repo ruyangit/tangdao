@@ -24,6 +24,8 @@ public class SecurityException extends ServiceException {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	IEnum<?, ?> status;
 
 	/**
 	 * 
@@ -31,6 +33,7 @@ public class SecurityException extends ServiceException {
 	 */
 	public SecurityException(IEnum<?, ?> status) {
 		this(String.valueOf(status.reasonPhrase()));
+		this.status = status;
 	}
 
 	/**
@@ -39,4 +42,12 @@ public class SecurityException extends ServiceException {
 	public SecurityException(String message) {
 		super(message);
 	}
+
+	/**
+	 * @return the status
+	 */
+	public IEnum<?, ?> getStatus() {
+		return status;
+	}
+	
 }

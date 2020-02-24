@@ -24,7 +24,7 @@ public class RoleServiceImpl extends CrudServiceImpl<RoleMapper, Role> implement
 	@Override
 	public List<RoleVo> findRoleVoList(String userId) {
 		// TODO Auto-generated method stub
-		return null;
+		return this.baseMapper.findRoleVoList(userId);
 	}
 
 }

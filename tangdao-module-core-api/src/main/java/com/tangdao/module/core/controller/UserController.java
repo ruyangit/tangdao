@@ -1,6 +1,5 @@
 package com.tangdao.module.core.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tangdao.framework.annotation.Authorize;
+import com.tangdao.framework.annotation.DataAccess;
+import com.tangdao.framework.web.BaseController;
 import com.tangdao.module.core.model.domain.User;
 import com.tangdao.module.core.service.IUserService;
-import com.tangdao.framework.web.BaseController;
 
 /**
  * <p>
@@ -35,15 +37,16 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private IUserService userService;
-	
+
 	/**
 	 * 用户表分页
 	 * 
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/user")
-	public IPage<User> page(IPage<User> page) {
+	@GetMapping("/users")
+	@Authorize(value = "core:user:view", dataAccess = @DataAccess)
+	public IPage<User> lists(IPage<User> page) {
 		return userService.page(page);
 	}
 
@@ -53,7 +56,8 @@ public class UserController extends BaseController {
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/users")
+	@GetMapping("/user")
+	@Authorize("core:user:view")
 	public List<User> list() {
 		return userService.list();
 	}
@@ -65,6 +69,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/user/{id}")
+	@Authorize(value = "core:user:view", role = "admin")
 	public User getUser(String id) {
 		return userService.getById(id);
 	}
@@ -77,6 +82,7 @@ public class UserController extends BaseController {
 	 */
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
+	@Authorize(value = "core:user:edit", user = "system")
 	public boolean save(@RequestBody @Validated User user) {
 		return userService.save(user);
 	}
@@ -89,6 +95,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@PutMapping("/user")
+	@Authorize("core:user:edit")
 	public boolean update(@RequestBody @Validated User user) {
 		return userService.saveOrUpdate(user);
 	}
@@ -100,6 +107,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@DeleteMapping("/user/{id}")
+	@Authorize("core:user:edit")
 	public boolean delete(@PathVariable("id") String id) {
 		return userService.removeById(id);
 	}

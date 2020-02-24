@@ -37,13 +37,13 @@ public class AuthenticationService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		final String tenantId = ServletUtils.getParameter("tenantId");
 		try {
-			final String tenantId = ServletUtils.getParameter("tenantId");
 			UserVo userVo = userService.getUserVo(username, tenantId);
 			if(null == userVo) {
 				throw new UsernameNotFoundException("User with username " + username + " not founded");
 			}
-//			userVo.setRoles(roleService.findRoleVoList(userVo.getUserId()));
+			userVo.setRoles(roleService.findRoleVoList(userVo.getUserId()));
 			return new UserPrincipal(userVo);
 		} catch (UsernameNotFoundException e) {
 			log.error("Error Username not found method loadUserByUsername in class AuthenticationService: ", e);

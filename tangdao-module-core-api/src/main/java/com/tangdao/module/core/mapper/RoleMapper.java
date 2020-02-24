@@ -1,8 +1,11 @@
 package com.tangdao.module.core.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tangdao.framework.model.RoleVo;
 import com.tangdao.module.core.model.domain.Role;
 
 /**
@@ -16,4 +19,5 @@ import com.tangdao.module.core.model.domain.Role;
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
+	public List<RoleVo> findRoleVoList(String userId);
 }

@@ -118,7 +118,9 @@ public class UserVo implements Serializable {
 	 * @param roles the roles to set
 	 */
 	public void setRoles(List<RoleVo> roles) {
-		this.roles = roles;
+		if(roles != null) {
+			this.roles = roles;
+		}
 	}
 
 	/**

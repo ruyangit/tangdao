@@ -4,6 +4,10 @@
 package com.tangdao.module.security.endpoint;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,12 +21,14 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.tangdao.module.security.exception.SecurityException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tangdao.framework.protocol.Result;
@@ -43,47 +49,52 @@ public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private TokenUtils tokenUtils;
-	
+
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	private final HttpMessageConverter<String> messageConverter;
 
-    private final ObjectMapper mapper;
-    
-    public TokenEndpointAuthenticationFilter(HttpMessageConverter<String> messageConverter, ObjectMapper mapper) {
-        this.messageConverter = messageConverter;
-        this.mapper = mapper;
-    }
-	
+	private final ObjectMapper mapper;
+
+	public TokenEndpointAuthenticationFilter(HttpMessageConverter<String> messageConverter, ObjectMapper mapper) {
+		this.messageConverter = messageConverter;
+		this.mapper = mapper;
+	}
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-        String token = tokenUtils.getJwtFromRequest(request);
-        if (StrUtil.isNotBlank(token)) {
-        	ServerHttpResponse outputMessage = new ServletServerHttpResponse(response);
-        	try {
-	        	String username = tokenUtils.getUsernameFromJWT(token);
-	        	
-	        	UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-	        	UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-	        	authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-	        	
-	        	SecurityContextHolder.getContext().setAuthentication(authentication);
-        	} catch (Exception e) {
-        		e.printStackTrace();
-        		Result result = Result.createResult();
-        		result.fail(e.getMessage());
-        		
-        		outputMessage.setStatusCode(HttpStatus.UNAUTHORIZED);
-        		messageConverter.write(mapper.writeValueAsString(result), MediaType.APPLICATION_JSON, outputMessage);
-        		return;
-        	} finally {
-        		outputMessage.close();
-        	}
-        }
-        
-        filterChain.doFilter(request, response);
+		String token = tokenUtils.getJwtFromRequest(request);
+		if (StrUtil.isNotBlank(token)) {
+			ServerHttpResponse outputMessage = new ServletServerHttpResponse(response);
+			try {
+				String username = tokenUtils.getUsernameFromJWT(token);
+
+				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+				
+				List<String> roles = new ArrayList<String>();
+				roles.add("admin");
+				Set<SimpleGrantedAuthority> collect = roles.stream()
+						.map(r -> new SimpleGrantedAuthority("ROLE_" + r.toUpperCase())).collect(Collectors.toSet());
+				collect.add(new SimpleGrantedAuthority("core:user:view"));
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						userDetails, null, collect);
+//						userDetails, null, userDetails.getAuthorities());
+				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			} catch (SecurityException e) {
+				outputMessage.setStatusCode(HttpStatus.UNAUTHORIZED);
+				messageConverter.write(mapper.writeValueAsString(Result.createResult(e.getStatus())),
+						MediaType.APPLICATION_JSON, outputMessage);
+				return;
+			} finally {
+				outputMessage.close();
+			}
+		}
+
+		filterChain.doFilter(request, response);
 	}
 
 }

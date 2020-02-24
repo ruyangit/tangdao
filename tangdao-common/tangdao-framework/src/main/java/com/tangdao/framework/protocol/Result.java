@@ -30,10 +30,8 @@ public class Result extends LinkedHashMap<String, Object> {
     private static final String REDIRECT = "redirect";
 
     private static final String EMPTY = "";
-
-    public boolean isSuccess() {
-        return get(SUCCESS) != null && (Boolean) get(SUCCESS);
-    }
+    
+    private static final String STATUS = "status";
 
     private Result() {
     	super();
@@ -88,6 +86,13 @@ public class Result extends LinkedHashMap<String, Object> {
         Result result = new Result();
         result.success();
         result.setData(data);
+        return result;
+    }
+    
+    public static Result createResult(IEnum<?, ?> status) {
+        Result result = new Result();
+        result.put(STATUS, status.value());
+        result.put(MESSAGE, status.reasonPhrase());
         return result;
     }
 
