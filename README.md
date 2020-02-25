@@ -24,19 +24,19 @@ Tangdao 是一个基于角色的授权（RBAC - Role-Based Authorization）系�
 
 #### 主要功能
 
-用户，用户组，角色，资源，权限策略，服务（TAM），设置。
+用户，用户组，角色，资源，权限策略，服务，设置。
 
 #### 术语
 
 | 名词 | 说明 |
 | --- | --- |
-| Domain | 用于控制和隔离资源 |
+| Domain | 用于控制和隔离资源的域 |
 | Resource | 系统定义唯一实体资源 |
-| Policy | 系统资源的配置 |
-| Role | 角色配置实际操作的实体资源 |
-| User | 认证的用户或机构账号 |
-| Service | 认证的服务身份 |
-| Action | 实际操作 |
+| Policy | 资源的策略配置 |
+| Role | 角色资源配置 |
+| User | 认证的用户或机构 |
+| Service | 认证的服务 |
+| Action | 操作 |
 | Assertion | 断言 域:实体:操作:资源（core:user:edit:/api/v1/core/user）|
 | Tenant | 租户控制访问资源的一些限制 |
 
