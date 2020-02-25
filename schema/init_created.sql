@@ -182,7 +182,7 @@ CREATE TABLE `sys_user` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `sys_user` VALUES ('admin', 'admin', '$2a$10$SBQgz0AC1VjHlEPIorlWNuB/eorm3PO50zpPhCDs1qnwmvq4IlzDO', '系统管理员', 'ruyangit@163.com', '15888888888', '', NULL, '/images/default.jpg', NULL, '172.28.220.60', '2019-05-29 17:56:23', NULL, NULL, '0', 'system', '2018-09-26 17:49:23', 'system', '2019-12-23 13:51:03', '客户方使用的系统管理员，用于一些常用的基础数据配置。', NULL, '', NULL);
-INSERT INTO `sys_user` VALUES ('user', 'user', '$2a$10$D7kzh.bqcmrKHWc/5.NoEeE4IKQJEudZgWeAy1kfFrP2J9xwCSGbO', '超级管理员', 'admin@aliyeye.com', '13800000000', '', '2', NULL, '', '192.168.113.1', '2020-01-20 09:11:50', NULL, NULL, '0', 'system', '2018-09-26 17:49:23', 'system', '2020-01-20 09:11:50', '开发者使用的最高级别管理员，主要用于开发和调试。', NULL, '', NULL);
+INSERT INTO `sys_user` VALUES ('system', 'system', '$2a$10$D7kzh.bqcmrKHWc/5.NoEeE4IKQJEudZgWeAy1kfFrP2J9xwCSGbO', '超级管理员', 'admin@aliyeye.com', '13800000000', '', '2', NULL, '', '192.168.113.1', '2020-01-20 09:11:50', NULL, NULL, '0', 'system', '2018-09-26 17:49:23', 'system', '2020-01-20 09:11:50', '开发者使用的最高级别管理员，主要用于开发和调试。', NULL, '', NULL);
 COMMIT;
 
 -- ----------------------------

@@ -16,7 +16,7 @@
 
 Tangdao 是一个基于角色的授权（RBAC - Role-Based Authorization）系统，用于提供和配置（集中授权）认证策略在服务运行时的访问权限。
 
-前端访问：[预览UI](https://ruyangit.gitee.io/2020/tangdao/spa)
+前端访问：[预览](https://ruyangit.gitee.io/2020/tangdao/spa)
 
 ## 架构
 
@@ -26,19 +26,11 @@ Tangdao 是一个基于角色的授权（RBAC - Role-Based Authorization）系�
 
 用户，用户组，角色，资源，权限策略，服务，设置。
 
-## 模块
+## 模块描述
 
-| 名词 | 说明 |
-| --- | --- |
-| Domain | 用于控制和隔离资源的域 |
-| Resource | 系统定义唯一实体资源 |
-| Policy | 资源的策略配置 |
-| Role | 角色资源配置 |
-| User | 认证的用户或机构 |
-| Service | 认证的服务 |
-| Action | 操作 |
-| Assertion | 断言 域:实体:操作:资源（core:user:edit:/api/v1/core/user）|
-| Tenant | 租户控制访问资源的一些限制 |
+| 模块 | 说明 | 版本 |
+| --- | --- | --- |
+| core-api | 基础功能 | 0.1.0 |
 
 ## 运行项目
 
