@@ -20,7 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.tangdao.module.security.endpoint.TokenEndpointAuthenticationFilter;
 import com.tangdao.module.security.error.CustomAccessDeniedHandler;
 import com.tangdao.module.security.error.CustomAuthenticationEntryPoint;
 
@@ -44,7 +43,7 @@ public class WebSecurityConfig {
 		private UserDetailsService userDetailsService;
 		
 		@Autowired
-		private TokenEndpointAuthenticationFilter tokenEndpointAuthenticationFilter;
+		private DynamicSecurityFilter dynamicSecurityFilter;
 		
 		@Autowired
 		private CustomAccessDeniedHandler customAccessDeniedHandler;
@@ -81,7 +80,7 @@ public class WebSecurityConfig {
 	    			.antMatchers(HttpMethod.POST, "/api/**/auth/token").permitAll()
 	    			// RBAC 动态 url 认证
 	    			.anyRequest()
-	    				.access("@accessSecurityService.hasPermission(request, authentication)")
+	    				.access("@dynamicAccessDecisionManager.hasPermission(request, authentication)")
 	            .and()
 	            .logout().disable()
 	            .sessionManagement()
@@ -90,7 +89,7 @@ public class WebSecurityConfig {
 	            .exceptionHandling()
 	            	.authenticationEntryPoint(customAuthenticationEntryPoint).accessDeniedHandler(customAccessDeniedHandler);
 	        // 添加自定义 JWT 过滤器
-	        http.addFilterBefore(tokenEndpointAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+	        http.addFilterBefore(dynamicSecurityFilter, UsernamePasswordAuthenticationFilter.class);
 	    }
 
 	    @Bean

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.module.security.endpoint;
+package com.tangdao.module.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 2020年2月23日
  */
 @Component
-public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
+public class DynamicSecurityFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private TokenUtils tokenUtils;
@@ -57,7 +57,7 @@ public class TokenEndpointAuthenticationFilter extends OncePerRequestFilter {
 
 	private final ObjectMapper mapper;
 
-	public TokenEndpointAuthenticationFilter(HttpMessageConverter<String> messageConverter, ObjectMapper mapper) {
+	public DynamicSecurityFilter(HttpMessageConverter<String> messageConverter, ObjectMapper mapper) {
 		this.messageConverter = messageConverter;
 		this.mapper = mapper;
 	}

@@ -1,13 +1,10 @@
 /**
  * 
  */
-package com.tangdao.module.security.service;
+package com.tangdao.module.security;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
@@ -24,8 +20,6 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import com.tangdao.framework.annotation.Authorize;
-
-import cn.hutool.core.collection.CollUtil;
 
 /**
  * <p>
@@ -36,7 +30,7 @@ import cn.hutool.core.collection.CollUtil;
  * @since 2020年2月23日
  */
 @Component
-public class AccessSecurityService {
+public class DynamicAccessDecisionManager {
 
 	/**
 	 * 日志服务
@@ -68,37 +62,13 @@ public class AccessSecurityService {
 		}
 
 		// 权限编码
-		Set<String> roles = new LinkedHashSet<>();
-		Set<String> permissions = new LinkedHashSet<>();
-		Set<String> users = new LinkedHashSet<>();
-		Authorize methodAuth = handlerMethod.getMethodAnnotation(Authorize.class);
-		Authorize classAuth = AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), Authorize.class);
-		if ((methodAuth == null || methodAuth.merge()) && classAuth != null) {
+		Authorize uthorize = handlerMethod.getMethodAnnotation(Authorize.class);
+		if (uthorize != null) {
 			// 跳过权限校验
-			if (classAuth.ignore()) {
+			if (uthorize.ignore()) {
 				return true;
 			}
-			roles.addAll(Arrays.asList(classAuth.role()));
-			permissions.addAll(Arrays.asList(classAuth.permission()));
-			users.addAll(Arrays.asList(classAuth.user()));
 		}
-		if (methodAuth != null) {
-			// 跳过权限校验
-			if (methodAuth.ignore()) {
-				return true;
-			}
-			roles.addAll(Arrays.asList(methodAuth.role()));
-			permissions.addAll(Arrays.asList(methodAuth.permission()));
-			users.addAll(Arrays.asList(methodAuth.user()));
-		}
-		
-		// 在这里与数据库或者缓存中的用户权限做认证
-		System.out.println(roles);
-		System.out.println(permissions);
-		System.out.println(users);
-		System.out.println(authentication.getAuthorities());
-		System.out.println(authentication.getName());
-		System.out.println(CollUtil.contains(users, authentication.getName()));
 		return false;
 	}
 

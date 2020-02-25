@@ -45,7 +45,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/users")
-	@Authorize(value = "core:user:view", dataAccess = @DataAccess)
+	@Authorize(value = "core:users", dataAccess = @DataAccess)
 	public IPage<User> lists(IPage<User> page) {
 		return userService.page(page);
 	}
@@ -57,7 +57,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/user")
-	@Authorize("core:user:view")
+	@Authorize("core:user:list")
 	public List<User> list() {
 		return userService.list();
 	}
@@ -69,7 +69,7 @@ public class UserController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/user/{id}")
-	@Authorize(value = "core:user:view", role = "admin")
+	@Authorize(value = "core:user:id/{id}")
 	public User getUser(String id) {
 		return userService.getById(id);
 	}
@@ -82,7 +82,7 @@ public class UserController extends BaseController {
 	 */
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
-	@Authorize(value = "core:user:edit", user = "system")
+	@Authorize(value = "core:user:created")
 	public boolean save(@RequestBody @Validated User user) {
 		return userService.save(user);
 	}

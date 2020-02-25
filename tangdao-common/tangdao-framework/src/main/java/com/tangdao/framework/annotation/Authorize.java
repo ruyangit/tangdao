@@ -20,13 +20,13 @@ import org.springframework.core.annotation.AliasFor;
  * @author ruyangit@gmail.com
  * @since 2020年2月24日
  */
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
 public @interface Authorize {
 	
-	@AliasFor("permission")
+	@AliasFor("action")
 	String[] value() default {};
 
 	/**
@@ -41,25 +41,11 @@ public @interface Authorize {
 	 * 
 	 * @return
 	 */
-	@AliasFor("value")
+	@AliasFor("action")
 	String[] permission() default {};
 
 	/**
-	 * 只允许访问的用户账号
-	 * 
-	 * @return
-	 */
-	String[] user() default {};
-
-	/**
-	 * 是否合并类注解和方法注解
-	 * 
-	 * @return
-	 */
-	boolean merge() default true;
-
-	/**
-	 * 是否忽略，忽略后不再进行权限控制
+	 * 是否忽略，忽略后不再进行权限控制 true 忽略
 	 * 
 	 * @return
 	 */
