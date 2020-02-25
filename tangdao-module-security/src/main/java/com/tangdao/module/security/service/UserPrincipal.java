@@ -5,11 +5,8 @@ package com.tangdao.module.security.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.tangdao.framework.model.UserVo;
@@ -44,13 +41,13 @@ public class UserPrincipal implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Set<SimpleGrantedAuthority> collect = userVo.getRoles().stream()
-				.map(r -> new SimpleGrantedAuthority("ROLE_" + r.getPermission().toUpperCase()))
-				.collect(Collectors.toSet());
-		
-		if (userVo.getAuthorities() != null) {
-			collect.addAll(userVo.getAuthorities().stream().map(r -> new SimpleGrantedAuthority(r)).collect(Collectors.toList()));
-		}
+//		Set<SimpleGrantedAuthority> collect = userVo.getRoles().stream()
+//				.map(r -> new SimpleGrantedAuthority("ROLE_" + r.getPermission().toUpperCase()))
+//				.collect(Collectors.toSet());
+//		
+//		if (userVo.getAuthorities() != null) {
+//			collect.addAll(userVo.getAuthorities().stream().map(r -> new SimpleGrantedAuthority(r)).collect(Collectors.toList()));
+//		}
 		return new ArrayList<GrantedAuthority>();
 	}
 

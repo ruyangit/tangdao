@@ -59,8 +59,8 @@ public class ${table.controllerName} {
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/${table.entityPath}")
-	public IPage<${entity}> page(IPage<${entity}> page) {
+	@GetMapping("/${table.entityPath}s")
+	public IPage<${entity}> lists(IPage<${entity}> page) {
 		return ${table.entityPath}Service.page(page);
 	}
 
@@ -70,7 +70,7 @@ public class ${table.controllerName} {
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/${table.entityPath}s")
+	@GetMapping("/${table.entityPath}")
 	public List<${entity}> list() {
 		return ${table.entityPath}Service.list();
 	}

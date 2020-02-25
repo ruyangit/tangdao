@@ -30,7 +30,6 @@ public class CustomTokenEnhancer implements TokenEnhancer {
 		
 		Map<String, Object> addInfo = new LinkedHashMap<String, Object>();
 		addInfo.put("login_name", principal.getUsername());
-		addInfo.put("tenant_id", principal.getTenantId());
 		
 		((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(addInfo);
 		return accessToken;

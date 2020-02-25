@@ -3,18 +3,13 @@
  */
 package com.tangdao.module.security.service;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.tangdao.module.core.model.domain.User;
+import com.tangdao.framework.model.UserVo;
 
 /**
  * <p>
@@ -24,41 +19,35 @@ import com.tangdao.module.core.model.domain.User;
  * @author ruyangit@gmail.com
  * @since 2020年2月22日
  */
-public class UserPrincipal implements UserDetails, CredentialsContainer, Serializable {
+public class UserPrincipal implements UserDetails {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private String username;
-
-	private String password;
 	
-	private String tenantId;
-
-	private List<String> authorities;
+	/**
+	 * 用户信息
+	 */
+	private UserVo userVo;
 	
 	/**
 	 * 
-	 * @param user
+	 * @param userVo
 	 */
-	public UserPrincipal(User user) {
-		this.setUsername(user.getLoginName());
-		this.setPassword(user.getPassword());
-		this.setTenantId(user.getTenantId());
-	}
-
-	@Override
-	public void eraseCredentials() {
-		this.password = null;
+	public UserPrincipal(UserVo userVo) {
+		this.userVo = userVo;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if (authorities != null) {
-			return authorities.stream().map(r -> new SimpleGrantedAuthority(r)).collect(Collectors.toList());
-		}
+//		Set<SimpleGrantedAuthority> collect = userVo.getRoles().stream()
+//				.map(r -> new SimpleGrantedAuthority("ROLE_" + r.getPermission().toUpperCase()))
+//				.collect(Collectors.toSet());
+//		
+//		if (userVo.getAuthorities() != null) {
+//			collect.addAll(userVo.getAuthorities().stream().map(r -> new SimpleGrantedAuthority(r)).collect(Collectors.toList()));
+//		}
 		return new ArrayList<GrantedAuthority>();
 	}
 
@@ -84,52 +73,24 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Seriali
 	public boolean isEnabled() {
 		return true;
 	}
-
+	
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return password;
+		return userVo.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return username;
+		return userVo.getLoginName();
 	}
 
 	/**
-	 * @param username the username to set
+	 * @return the userVo
 	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	/**
-	 * @return the tenantId
-	 */
-	public String getTenantId() {
-		return tenantId;
-	}
-
-	/**
-	 * @param tenantId the tenantId to set
-	 */
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
-	}
-
-	/**
-	 * @param authorities the authorities to set
-	 */
-	public void setAuthorities(List<String> authorities) {
-		this.authorities = authorities;
+	public UserVo getUserVo() {
+		return userVo;
 	}
 	
 }

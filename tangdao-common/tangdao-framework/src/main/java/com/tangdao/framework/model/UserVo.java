@@ -6,8 +6,6 @@ package com.tangdao.framework.model;
 import java.io.Serializable;
 import java.util.List;
 
-import cn.hutool.core.collection.CollUtil;
-
 /**
  * <p>
  * TODO 描述
@@ -32,8 +30,6 @@ public class UserVo implements Serializable {
 	private String tenantId;
 	
 	private String status;
-	
-	private List<RoleVo> roles = CollUtil.newArrayList();
 	
 	private List<String> authorities;
 
@@ -105,22 +101,6 @@ public class UserVo implements Serializable {
 	 */
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	/**
-	 * @return the roles
-	 */
-	public List<RoleVo> getRoles() {
-		return roles;
-	}
-
-	/**
-	 * @param roles the roles to set
-	 */
-	public void setRoles(List<RoleVo> roles) {
-		if(roles != null) {
-			this.roles = roles;
-		}
 	}
 
 	/**
