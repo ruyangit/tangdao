@@ -30,7 +30,7 @@ import com.tangdao.framework.annotation.Authorize;
  * @since 2020年2月23日
  */
 @Component
-public class DynamicAccessDecisionManager {
+public class DynamicAccessDecisionManager{
 
 	/**
 	 * 日志服务
@@ -60,16 +60,15 @@ public class DynamicAccessDecisionManager {
 			logger.error("请求资源不存在 {}", request.getServletPath());
 			return false;
 		}
-
+		
 		// 权限编码
-		Authorize uthorize = handlerMethod.getMethodAnnotation(Authorize.class);
-		if (uthorize != null) {
-			// 跳过权限校验
-			if (uthorize.ignore()) {
-				return true;
-			}
+		Authorize authorize = handlerMethod.getMethodAnnotation(Authorize.class);
+		if (authorize != null) {
+			
 		}
-		return false;
+		// core:user:list
+		// 拥有的用户权限，core:user:*
+		return true;
 	}
 
 	/**

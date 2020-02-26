@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.tangdao.framework.constant.OpenApiCode.ResultStatus;
-import com.tangdao.framework.model.UserVo;
+import com.tangdao.framework.entity.UserInfo;
 import com.tangdao.module.security.exception.SecurityException;
 import com.tangdao.module.security.service.UserPrincipal;
 
@@ -74,14 +74,15 @@ public class TokenUtils {
      * @param authorities 用户权限
      * @return JWT
      */
-    public String createJWT(Boolean rememberMe, UserVo userVo) {
+    public String createJWT(Boolean rememberMe, UserInfo user) {
         Date now = new Date();
         JwtBuilder builder = Jwts.builder()
-                .setId(userVo.getUserId())
-                .setSubject(userVo.getLoginName())
+                .setId(user.getId())
+                .setSubject(user.getUsername())
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .claim("tenantId", userVo.getTenantId());
+                .claim("roles", user.getRoles())
+                .claim("tenantId", user.getTenantId());
 
         // 设置过期时间
         int ttl = rememberMe ? REFRESH_TOKEN_VALIDITY_SECONDS : ACCESS_TOKEN_VALIDITY_SECONDS;
@@ -103,7 +104,7 @@ public class TokenUtils {
      * @return JWT
      */
     public String createJWT(Authentication authentication, Boolean rememberMe) {
-        return createJWT(rememberMe, ((UserPrincipal) authentication.getPrincipal()).getUserVo());
+        return createJWT(rememberMe, ((UserPrincipal) authentication.getPrincipal()).getUser());
     }
 
     /**

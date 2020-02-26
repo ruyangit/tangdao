@@ -3,6 +3,7 @@
  */
 package com.tangdao.module.security.endpoint;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tangdao.framework.protocol.Result;
 import com.tangdao.module.security.utils.TokenUtils;
 
 /**
@@ -30,13 +30,8 @@ import com.tangdao.module.security.utils.TokenUtils;
  */
 
 @RestController
-@RequestMapping(value = "/api/{env}", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class TokenControllerEndpoint extends AbstractEndpoint{
-	
-	/**
-	 * 
-	 */
-//	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
     private AuthenticationManager authenticationManager;
@@ -45,7 +40,7 @@ public class TokenControllerEndpoint extends AbstractEndpoint{
 	private TokenUtils tokenUtils;
 
 	@RequestMapping(value = "/auth/token", method=RequestMethod.POST)
-	public Result postAccessToken(@RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
+	public Map<String, Object> postAccessToken(@RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
 
 		final String loginName = parameters.get("loginName");
 		final String password = parameters.get("password");
@@ -58,7 +53,7 @@ public class TokenControllerEndpoint extends AbstractEndpoint{
         final String token = tokenUtils.createJWT(authentication, false);
         
         // Return the token
-        Result result = Result.createResult();
+        Map<String, Object> result = new LinkedHashMap<String, Object>();
         result.put("access_token", token);
         result.put("expires_in", TokenUtils.ACCESS_TOKEN_VALIDITY_SECONDS);
         result.put("token_type", TokenUtils.TOKEN_TYPE_BEARER);

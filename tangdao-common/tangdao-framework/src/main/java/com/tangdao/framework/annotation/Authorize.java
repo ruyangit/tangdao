@@ -41,15 +41,8 @@ public @interface Authorize {
 	 * 
 	 * @return
 	 */
-	@AliasFor("action")
-	String[] permission() default {};
-
-	/**
-	 * 是否忽略，忽略后不再进行权限控制 true 忽略
-	 * 
-	 * @return
-	 */
-	boolean ignore() default false;
+	@AliasFor("value")
+	String[] action() default {};
 
 	/**
 	 * 数据权限控制

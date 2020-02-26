@@ -3,17 +3,19 @@
  */
 package com.tangdao.module.security.service;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.tangdao.framework.model.UserVo;
+import com.tangdao.framework.entity.UserInfo;
 
 /**
  * <p>
- * TODO 描述
+ * TODO 用户授权信息
  * </p>
  *
  * @author ruyangit@gmail.com
@@ -29,26 +31,22 @@ public class UserPrincipal implements UserDetails {
 	/**
 	 * 用户信息
 	 */
-	private UserVo userVo;
+	private UserInfo user;
 	
 	/**
 	 * 
-	 * @param userVo
+	 * @param user
 	 */
-	public UserPrincipal(UserVo userVo) {
-		this.userVo = userVo;
+	public UserPrincipal(UserInfo user) {
+		this.user = user;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-//		Set<SimpleGrantedAuthority> collect = userVo.getRoles().stream()
-//				.map(r -> new SimpleGrantedAuthority("ROLE_" + r.getPermission().toUpperCase()))
-//				.collect(Collectors.toSet());
-//		
-//		if (userVo.getAuthorities() != null) {
-//			collect.addAll(userVo.getAuthorities().stream().map(r -> new SimpleGrantedAuthority(r)).collect(Collectors.toList()));
-//		}
-		return new ArrayList<GrantedAuthority>();
+		Set<SimpleGrantedAuthority> collect = user.getRoles().stream()
+				.map(r -> new SimpleGrantedAuthority("ROLE_" + r.getRoleCode().toUpperCase()))
+				.collect(Collectors.toSet());
+		return collect;
 	}
 
 	@Override
@@ -77,20 +75,28 @@ public class UserPrincipal implements UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return userVo.getPassword();
+		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return userVo.getLoginName();
+		return user.getUsername();
 	}
 
 	/**
-	 * @return the userVo
+	 * @return the user
 	 */
-	public UserVo getUserVo() {
-		return userVo;
+	public UserInfo getUser() {
+		return user;
 	}
-	
+
+	/**
+	 * @param user the user to set
+	 */
+	public UserPrincipal setUser(UserInfo user) {
+		this.user = user;
+		return this;
+	}
+
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -77,7 +76,7 @@ public class WebSecurityConfig {
 	    		.httpBasic().disable()
 	    		.antMatcher("/api/**")
 	    			.authorizeRequests()
-	    			.antMatchers(HttpMethod.POST, "/api/**/auth/token").permitAll()
+//	    			.antMatchers(HttpMethod.POST, "/auth/token").permitAll()
 	    			// RBAC 动态 url 认证
 	    			.anyRequest()
 	    				.access("@dynamicAccessDecisionManager.hasPermission(request, authentication)")

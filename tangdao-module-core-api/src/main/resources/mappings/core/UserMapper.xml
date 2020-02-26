@@ -19,7 +19,8 @@
         freeze_date as "freezeDate",
         freeze_cause as "freezeCause",
         mgr_type as "mgrType",
-        tenant_id as "tenantId",
+        domain_id as "domainId",
+        user_type as "userType",
 		status as "status",
 		create_by as "createBy",
 		create_time as "createTime",
@@ -28,4 +29,18 @@
     	remarks as "remarks"
     </sql>
 
+	<select id="listUserInfo" resultType="com.tangdao.framework.entity.UserInfo">
+		select 
+			user_id as "id",
+			login_name as "username",
+			password,
+			status,
+			0 as "tenantId"
+		from sys_user 
+		where login_name = #{username}
+		<if test="password!=null and password!=''">
+			and password = #{password}
+		</if>
+		order by create_time
+	</select>
 </mapper>

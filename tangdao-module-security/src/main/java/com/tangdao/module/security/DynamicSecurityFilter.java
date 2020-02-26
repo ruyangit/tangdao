@@ -77,7 +77,8 @@ public class DynamicSecurityFilter extends OncePerRequestFilter {
 				roles.add("admin");
 				Set<SimpleGrantedAuthority> collect = roles.stream()
 						.map(r -> new SimpleGrantedAuthority("ROLE_" + r.toUpperCase())).collect(Collectors.toSet());
-				collect.add(new SimpleGrantedAuthority("core:user:view"));
+				collect.add(new SimpleGrantedAuthority("core:user:*"));
+				collect.add(new SimpleGrantedAuthority("core:role:list"));
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, collect);
 //						userDetails, null, userDetails.getAuthorities());

@@ -14,6 +14,8 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.tangdao.common.mapper.JsonMapper;
+
 /**
  * <p>
  * TODO 描述
@@ -35,7 +37,7 @@ public class CoreWebMvcAutoConfigurer implements WebMvcConfigurer {
 		httpMessageConverters.getConverters().forEach(converter->{
 			converters.add(converter);
 		});
-		converters.add(new MappingJackson2HttpMessageConverter());
+		converters.add(new MappingJackson2HttpMessageConverter(JsonMapper.getInstance()));
 	}
 	
 }
