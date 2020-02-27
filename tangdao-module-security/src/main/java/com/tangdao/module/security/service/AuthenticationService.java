@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 
 import com.tangdao.common.servlet.ServletUtils;
 import com.tangdao.framework.context.UserContextAdapter;
-import com.tangdao.framework.entity.Policy;
-import com.tangdao.framework.entity.Tenant;
-import com.tangdao.framework.entity.UserInfo;
+import com.tangdao.framework.model.Policy;
+import com.tangdao.framework.model.Tenant;
+import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.core.mapper.UserMapper;
 
 import cn.hutool.core.util.StrUtil;
@@ -55,7 +55,7 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 		try {
 			UserInfo user = new UserInfo();
 			user.setUsername(username);
-				user.setTenantId(tenantId);
+			user.setTenantId(tenantId);
 			List<UserInfo> users = userMapper.listUserInfo(user);
 			if (null == users) {
 				throw new UsernameNotFoundException("User with username " + username + " not founded");

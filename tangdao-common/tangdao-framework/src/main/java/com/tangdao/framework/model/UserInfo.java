@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.framework.entity;
+package com.tangdao.framework.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class UserInfo implements Serializable {
 	
 	private String tenantId;
 
-	private List<RoleInfo> roles = new ArrayList<RoleInfo>(10);
+	private List<RoleInfo> roles = new ArrayList<RoleInfo>(1000);
 
 	/**
 	 * @return the id

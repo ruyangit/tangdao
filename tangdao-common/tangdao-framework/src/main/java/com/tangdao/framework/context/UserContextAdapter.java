@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 
-import com.tangdao.framework.entity.Policy;
-import com.tangdao.framework.entity.UserInfo;
+import com.tangdao.framework.model.Policy;
+import com.tangdao.framework.model.UserInfo;
 
 /**
  * <p>

@@ -29,7 +29,7 @@
     	remarks as "remarks"
     </sql>
 
-	<select id="listUserInfo" resultType="com.tangdao.framework.entity.UserInfo">
+	<select id="listUserInfo" resultType="com.tangdao.framework.model.UserInfo">
 		select 
 			user_id as "id",
 			login_name as "username",

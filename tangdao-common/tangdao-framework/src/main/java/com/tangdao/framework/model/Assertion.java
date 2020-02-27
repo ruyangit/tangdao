@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.framework.entity;
+package com.tangdao.framework.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

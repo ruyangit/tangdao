@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.tangdao.framework.constant.OpenApiCode.ResultStatus;
-import com.tangdao.framework.entity.UserInfo;
+import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.security.exception.SecurityException;
 import com.tangdao.module.security.service.UserPrincipal;
 

@@ -1,7 +1,10 @@
 package com.tangdao.module.core.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
+import com.tangdao.framework.model.RoleInfo;
 import com.tangdao.module.core.entity.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -16,4 +19,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
 
+	/**
+	 * 获取用户角色
+	 * @param role
+	 * @return
+	 */
+	List<RoleInfo> listRoleInfo(RoleInfo role);
 }

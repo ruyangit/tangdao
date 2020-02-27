@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.tangdao.framework.entity.UserInfo;
+import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.core.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
