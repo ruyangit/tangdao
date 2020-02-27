@@ -51,10 +51,4 @@ public @interface Authorize {
 	 */
 	DataAccess dataAccess() default @DataAccess(ignore = true);
 
-	/**
-	 * 权限访问日志
-	 * 
-	 * @return
-	 */
-	Log log() default @Log(ignore = true);
 }

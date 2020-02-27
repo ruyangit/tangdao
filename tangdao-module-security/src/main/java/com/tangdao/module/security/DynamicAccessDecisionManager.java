@@ -64,7 +64,8 @@ public class DynamicAccessDecisionManager{
 		// 权限编码
 		Authorize authorize = handlerMethod.getMethodAnnotation(Authorize.class);
 		if (authorize != null) {
-			
+			System.out.println(authorize.value());
+			return false;
 		}
 		// core:user:list
 		// 拥有的用户权限，core:user:*
