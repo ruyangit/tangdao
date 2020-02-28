@@ -16,7 +16,7 @@
 
 Tangdao 是一个基于角色的授权（RBAC - Role-Based Authorization）系统，用于提供和配置（集中授权）认证策略在服务运行时的访问权限。
 
-前端：[预览](https://ruyangit.gitee.io/2020/tangdao/spa)
+**前端：[预览](https://ruyangit.gitee.io/2020/tangdao/spa)**
 
 ## 架构
 
@@ -34,8 +34,106 @@ PBAC Policy-Based Authorization
 
 | 模块 | 说明 | 版本 |
 | --- | --- | --- |
-| core-api | 基础功能 | 0.2.2 |
+| framework-common | 工具包 | 0.2.2 |
+| framework | 基类 | 0.2.2 |
+| module-core-api | 基础数据服务 | 0.2.2 |
+| module-security | 访问控制核心 | 0.2.2 |
+| module-oauth2 | 授权及三方认证服务 | 0.0.1 |
+| module-devtool | 基础模型自动生成 | 0.0.1 |
 
+## 访问控制
+
+**策略元素**
+
+```
+Version:<string>
+Statement:[
+	{
+		Sid:<string>
+		Effect:<Allow|Deny>
+		Action:[...]
+		Resource:[...]
+		Condition:[
+			{
+				Bool,
+				StringEquals,
+				StringNotEquals,
+				.
+				.
+				.
+			}
+		]
+	}
+]
+```
+**操作（Action）**
+
+```
+所有的服务操作都是通过通配符匹配
+action:["*"] or action:["*:*"]
+
+// iam 服务下的所有操作
+action:["iam:*"]
+
+// iam 服务下的创建，更新用户操作，多个操作同时指定
+action:["iam:CreateUser","ima:UpdateUser"]
+
+```
+
+**判定规则**
+
+根据参数条件判断策略对象是否通过。该方法首先查找策略，对策略的资源操作条件的组合进行显示判断，其效力具有显示拒绝，如果存在这样的策略则拒绝优先。如果没有这样的策略，通过evaluate判断如果找到这样的策略，evaluate返回true，如果找不到匹配返回false。请在[Amazon](https://docs.aws.amazon.com/IAM/latest/UserGuide/accesspolicyluage_EvaluationLogic.html) 查找到更多的详细解释。
+
+**策略**
+
+
+```javascript
+[{
+  "Version": "2020-01-01",
+  "Statement": [{
+    "Sid": "Test1",
+    "Effect": "Allow",
+    "Action": [
+      "iam:CreateUser",
+      "iam:EnableUserStatus"
+    ],
+    "Resource": [
+      "core:iam:user/${aws:username}"
+    ]
+  }, {
+    "Sid": "Test2",
+    "Effect": "Allow",
+    "Action": [
+      "iam:DeleteUser"
+    ],
+    "Resource": [
+      "core:iam:user/${aws:username}"
+    ],
+    "Condition": {
+      "DateGreaterThan": {
+        "CurrentTime": "2020-01-30T01:01:01Z"
+      },
+      "Bool": {
+        "MultiFactorAuthPresent": true
+      },
+      "NumericLessThanEquals": {
+        "FailedLoginAttempts": 3
+      }
+    }
+  }]
+}, {
+  "Version": "2020-01-01",
+  "Statement": [{
+    "Sid": "Test3",
+    "Effect": "Allow",
+    "Action": [
+      "iam:ListUsers",
+      "iam:ListRoles"
+    ],
+    "Resource": ["*"]
+  }]
+}]
+```
 ## 运行项目
 
 ```
@@ -49,10 +147,10 @@ mvn springboot:run
 
 mvn package -f pom.xml -Dmaven.test.skip=true
 ```
+## 参考资料
 
-## 引用
 ```
-无
+整理中
 ```
 ## 贡献
 ```
