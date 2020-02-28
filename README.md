@@ -1,4 +1,4 @@
-# 综合管理系统（Tangdao）
+# 综合权限管理系统（Tangdao）
 
 <p align="left">
   <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html"><img alt="JDK" src="https://img.shields.io/badge/JDK-1.8.0_162-orange.svg"/></a>
@@ -34,26 +34,22 @@ PBAC Policy-Based Authorization
 
 | 模块 | 说明 | 版本 |
 | --- | --- | --- |
-| framework-common | 工具包 | 0.2.2 |
-| framework | 基类 | 0.2.2 |
 | module-core-api | 基础数据服务 | 0.2.2 |
 | module-security | 访问控制核心 | 0.2.2 |
-| module-oauth2 | 授权及三方认证服务 | 0.0.1 |
-| module-devtool | 基础模型自动生成 | 0.0.1 |
 
 ## 访问控制
 
 **策略元素**
 
-```
-Version:<string>
-Statement:[
+```javascript
+Version: <string>
+Statement: [
 	{
-		Sid:<string>
-		Effect:<Allow|Deny>
-		Action:[...]
-		Resource:[...]
-		Condition:[
+		Sid: <string>
+		Effect: <Allow|Deny>
+		Action: [...]
+		Resource: [...]
+		Condition: [
 			{
 				Bool,
 				StringEquals,
