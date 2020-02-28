@@ -3,11 +3,8 @@
  */
 package com.tangdao.framework.context;
 
-import java.util.List;
-
 import org.springframework.beans.factory.InitializingBean;
 
-import com.tangdao.framework.model.Policy;
 import com.tangdao.framework.model.UserInfo;
 
 /**
@@ -27,12 +24,6 @@ public abstract class UserContextAdapter implements UserContext, InitializingBea
 
 	@Override
 	public UserInfo getPrincipal() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Policy> listPolicies() {
 		// TODO Auto-generated method stub
 		return null;
 	}

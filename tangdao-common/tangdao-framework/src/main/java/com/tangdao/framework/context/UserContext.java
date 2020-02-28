@@ -3,9 +3,6 @@
  */
 package com.tangdao.framework.context;
 
-import java.util.List;
-
-import com.tangdao.framework.model.Policy;
 import com.tangdao.framework.model.UserInfo;
 
 /**
@@ -23,10 +20,4 @@ public interface UserContext {
 	 * @return
 	 */
 	public UserInfo getPrincipal();
-
-	/**
-	 * 获取授权策略
-	 * @return
-	 */
-	public List<Policy> listPolicies();
 }

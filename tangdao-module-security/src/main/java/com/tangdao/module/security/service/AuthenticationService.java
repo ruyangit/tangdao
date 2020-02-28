@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import com.tangdao.common.servlet.ServletUtils;
 import com.tangdao.framework.context.UserContextAdapter;
-import com.tangdao.framework.model.Policy;
 import com.tangdao.framework.model.Tenant;
 import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.core.mapper.UserMapper;
@@ -82,12 +81,6 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 			return ((UserPrincipal) principal).getUser();
 		}
 		return null;
-	}
-
-	@Override
-	public List<Policy> listPolicies() {
-		// TODO Auto-generated method stub
-		return super.listPolicies();
 	}
 
 }

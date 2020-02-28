@@ -4,7 +4,6 @@
 package com.tangdao.framework.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>
@@ -26,8 +25,6 @@ public class RoleInfo implements Serializable {
 	private String roleCode;
 	
 	private String roleName;
-	
-	private List<Policy> policies;
 	
 	private String userId;
 
@@ -58,21 +55,6 @@ public class RoleInfo implements Serializable {
 	 */
 	public RoleInfo setRoleCode(String roleCode) {
 		this.roleCode = roleCode;
-		return this;
-	}
-
-	/**
-	 * @return the policies
-	 */
-	public List<Policy> getPolicies() {
-		return policies;
-	}
-
-	/**
-	 * @param policies the policies to set
-	 */
-	public RoleInfo setPolicies(List<Policy> policies) {
-		this.policies = policies;
 		return this;
 	}
 
