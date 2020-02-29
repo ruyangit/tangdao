@@ -27,9 +27,11 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.databind.util.JSONPObject;
+
 /**
- * 简单封装Jackson，实现JSON String<->Java Object的Mapper.
- * 封装不同的输出风格, 使用不同的builder函数创建实例.
+ * 简单封装Jackson，实现JSON String<->Java Object的Mapper. 封装不同的输出风格,
+ * 使用不同的builder函数创建实例.
+ * 
  * @author ThinkGem
  * @version 2016-3-2
  */
@@ -45,7 +47,7 @@ public class JsonMapper extends ObjectMapper {
 	private static final class JsonMapperHolder {
 		private static final JsonMapper INSTANCE = new JsonMapper();
 	}
-	
+
 	public JsonMapper() {
 		// Spring ObjectMapper 初始化配置，支持 @JsonView
 		new Jackson2ObjectMapperBuilder().configure(this);
@@ -59,24 +61,23 @@ public class JsonMapper extends ObjectMapper {
 		this.setTimeZone(TimeZone.getTimeZone("GMT+08:00"));
 		// 设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
 		this.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        // 遇到空值处理为空串
-		this.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>(){
+		// 遇到空值处理为空串
+		this.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>() {
 			@Override
-			public void serialize(Object value, JsonGenerator jgen,
-					SerializerProvider provider) throws IOException, JsonProcessingException {
+			public void serialize(Object value, JsonGenerator jgen, SerializerProvider provider)
+					throws IOException, JsonProcessingException {
 				jgen.writeString(StringUtils.EMPTY);
 			}
-        });
-		
-		 /**
-         * 序列换成json时,将所有的long变成string
-         * 因为js中得数字类型不能包含所有的java long值
-         */
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-        this.registerModule(simpleModule);
-		
+		});
+
+		/**
+		 * 序列换成json时,将所有的long变成string 因为js中得数字类型不能包含所有的java long值
+		 */
+		SimpleModule simpleModule = new SimpleModule();
+		simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+		simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+		this.registerModule(simpleModule);
+
 //		// 统一默认Date类型转换格式。如果设置，Bean中的@JsonFormat将失效
 //		final String dataFormat = Global.getProperty("json.mapper.dataFormat");
 //		if (StringUtils.isNotBlank(dataFormat)){
@@ -102,11 +103,9 @@ public class JsonMapper extends ObjectMapper {
 //			}
 //        }));
 	}
-	
+
 	/**
-	 * Object可以是POJO，也可以是Collection或数组。
-	 * 如果对象为Null, 返回"null".
-	 * 如果集合为空集合, 返回"[]".
+	 * Object可以是POJO，也可以是Collection或数组。 如果对象为Null, 返回"null". 如果集合为空集合, 返回"[]".
 	 */
 	public String toJsonString(Object object) {
 		try {
@@ -123,12 +122,12 @@ public class JsonMapper extends ObjectMapper {
 	public String toJsonpString(String functionName, Object object) {
 		return toJsonString(new JSONPObject(functionName, object));
 	}
-	
+
 	/**
-	 * 反序列化POJO或简单Collection如List<String>.
-	 * 如果JSON字符串为Null或"null"字符串, 返回Null.
-	 * 如果JSON字符串为"[]", 返回空集合.
-	 * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String,JavaType)
+	 * 反序列化POJO或简单Collection如List<String>. 如果JSON字符串为Null或"null"字符串, 返回Null.
+	 * 如果JSON字符串为"[]", 返回空集合. 如需反序列化复杂Collection如List<MyBean>,
+	 * 请使用fromJson(String,JavaType)
+	 * 
 	 * @see #fromJson(String, JavaType)
 	 */
 	public <T> T fromJsonString(String jsonString, Class<T> clazz) {
@@ -145,6 +144,7 @@ public class JsonMapper extends ObjectMapper {
 
 	/**
 	 * 反序列化复杂Collection如List<Bean>, 先使用函数createCollectionType构造类型,然后调用本函数.
+	 * 
 	 * @see #createCollectionType(Class, Class...)
 	 */
 	@SuppressWarnings("unchecked")
@@ -161,8 +161,8 @@ public class JsonMapper extends ObjectMapper {
 	}
 
 	/**
-	 * 构造泛型的Collection Type如:
-	 * ArrayList<MyBean>, 则调用constructCollectionType(ArrayList.class,MyBean.class)
+	 * 构造泛型的Collection Type如: ArrayList<MyBean>,
+	 * 则调用constructCollectionType(ArrayList.class,MyBean.class)
 	 * HashMap<String,MyBean>, 则调用(HashMap.class,String.class, MyBean.class)
 	 */
 	public JavaType createCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
@@ -183,8 +183,7 @@ public class JsonMapper extends ObjectMapper {
 	}
 
 	/**
-	 * 设定是否使用Enum的toString函数来读写Enum,
-	 * 为False实时使用Enum的name()函数来读写Enum, 默认为False.
+	 * 设定是否使用Enum的toString函数来读写Enum, 为False实时使用Enum的name()函数来读写Enum, 默认为False.
 	 * 注意本函数一定要在Mapper创建后, 所有的读写动作之前调用.
 	 */
 	public JsonMapper enableEnumUseToString() {
@@ -210,38 +209,38 @@ public class JsonMapper extends ObjectMapper {
 	/**
 	 * 对象转换为JSON字符串
 	 */
-	public static String toJson(Object object){
+	public static String toJson(Object object) {
 		return JsonMapper.getInstance().toJsonString(object);
 	}
-	
+
 	/**
 	 * 对象转换为JSONP字符串
 	 */
-	public static String toJsonp(String functionName, Object object){
+	public static String toJsonp(String functionName, Object object) {
 		return JsonMapper.getInstance().toJsonpString(functionName, object);
 	}
-	
+
 	/**
 	 * JSON字符串转换为对象
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T fromJson(String jsonString, Class<?> clazz){
+	public static <T> T fromJson(String jsonString, Class<?> clazz) {
 		return (T) JsonMapper.getInstance().fromJsonString(jsonString, clazz);
 	}
-	
+
 	/**
 	 * JSON字符串转换为 List<Map<String, Object>>
 	 */
-	public static List<Map<String, Object>> fromJsonForMapList(String jsonString){
-		List<Map<String, Object>> result = new ArrayList<Map<String,Object>>();
-		if (StringUtils.startsWith(jsonString, "{")){
+	public static List<Map<String, Object>> fromJsonForMapList(String jsonString) {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		if (StringUtils.startsWith(jsonString, "{")) {
 			Map<String, Object> map = fromJson(jsonString, Map.class);
-			if (map != null){
+			if (map != null) {
 				result.add(map);
 			}
-		}else if (StringUtils.startsWith(jsonString, "[")){
+		} else if (StringUtils.startsWith(jsonString, "[")) {
 			List<Map<String, Object>> list = fromJson(jsonString, List.class);
-			if (list != null){
+			if (list != null) {
 				result = list;
 			}
 		}

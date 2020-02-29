@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +24,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.Sets;
 import com.tangdao.common.mapper.JsonMapper;
 import com.tangdao.common.utils.StringUtils;
 import com.tangdao.framework.annotation.Authorize;
@@ -32,8 +32,7 @@ import com.tangdao.module.security.model.Assertion;
 import com.tangdao.module.security.model.AssertionEffect;
 import com.tangdao.module.security.model.Request;
 import com.tangdao.module.security.model.condition.Condition;
-import com.tangdao.module.security.model.condition.ConditionHolder;
-import com.tangdao.module.security.model.condition.IpAddressCondition;
+import com.tangdao.module.security.model.condition.ConditionProcessHolder;
 import com.tangdao.module.security.service.UserPrincipal;
 
 import cn.hutool.core.collection.CollUtil;
@@ -60,9 +59,9 @@ public class DynamicAccessDecisionManager {
 	 */
 	@Autowired
 	private RequestMappingHandlerMapping mapping;
-	
+
 	@Autowired
-	private ConditionHolder conditionHolder;
+	private ConditionProcessHolder conditionProcessHolder;
 
 	/**
 	 * rbac pbac 权限校验
@@ -97,24 +96,23 @@ public class DynamicAccessDecisionManager {
 		action.add("core:user:List*");
 		List<String> resource = new ArrayList<String>();
 		resource.add("*");
-		
+
 		Assertion assertion = new Assertion();
 		assertion.setEffect(AssertionEffect.ALLOW);
 		assertion.setAction(JsonMapper.toJson(action));
 		assertion.setResource(JsonMapper.toJson(resource));
-		
-		
-		//如果有条件，则是强制判断
-		Map<String, Condition> conditions = new HashMap<String, Condition>();
-		
-		Condition reqs = new IpAddressCondition();
+
+		// 如果有条件，则是强制判断
+		Map<String, Map<String, Object>> conditions = new HashMap<String, Map<String, Object>>();
+
+		Map<String, Object> reqs = new HashMap<String, Object>();
 		List<String> ipAddress = new ArrayList<String>();
-		ipAddress.add("127.0.0.1");
+		ipAddress.add("192.168.0.0/16");
 		ipAddress.add("192.168.56.1");
 		reqs.put("iam:SourceIp", ipAddress);
-		
+
 		conditions.put("IpAddress", reqs);
-		
+
 		assertion.setCondition(JsonMapper.toJson(conditions));
 
 		// role
@@ -132,13 +130,13 @@ public class DynamicAccessDecisionManager {
 		if (principal != null && principal instanceof UserPrincipal) {
 			req.setPrincipal(((UserPrincipal) principal));
 		}
-		
-		//req context
-		req.addContext("iam:SourceIp", "127.0.0.1");
+
+		// req context
+		req.addContext("iam:SourceIp", "192.168.0.10");
 		req.addContext("Username", "system");
 
 		if (AssertionMatch(assertion, req)) {
-			
+
 			return true;
 		}
 
@@ -147,6 +145,7 @@ public class DynamicAccessDecisionManager {
 
 	/**
 	 * 断言
+	 * 
 	 * @param assertion
 	 * @param request
 	 * @return
@@ -174,8 +173,10 @@ public class DynamicAccessDecisionManager {
 			return false;
 		}
 		
-		evaluateCondition(assertion.getCondition(), request);
-		
+		if (null != assertion.getCondition() && !(matchResult = this.evaluateCondition(assertion.getCondition(), request))) {
+			return false;
+		}
+
 		logger.debug("AssertionMatch: -> " + matchResult + " (effect: " + assertion.getEffect() + ")");
 		return matchResult;
 	}
@@ -183,7 +184,7 @@ public class DynamicAccessDecisionManager {
 	// Validate Authorize role
 	private boolean matchPrincipal(String role, Request request) {
 		try {
-			if(StrUtil.isBlank(role)) {
+			if (StrUtil.isBlank(role)) {
 				return true;
 			}
 			List<String> expressions = JsonMapper.fromJson(role, List.class);
@@ -216,31 +217,62 @@ public class DynamicAccessDecisionManager {
 		}
 		return false;
 	}
-	
+
 	// Validate Condition
+	@SuppressWarnings("unchecked")
 	private boolean evaluateCondition(String condition, Request request) {
-		if(StrUtil.isEmpty(condition)) {
+		if (StrUtil.isEmpty(condition)) {
 			return true;
 		}
-		System.out.println(condition);
+		// 条件集合
 		Map<String, Map<String, Object>> conditions = JsonMapper.fromJson(condition, Map.class);
-		for(Map.Entry<String, Map<String, Object>> entry : conditions.entrySet()) {
-            String key = entry.getKey();
-//            entry.getValue().entrySet().stream().an
-            System.out.println(key);
-//            System.out.println(value);
-//            Condition cond= conditionHolder.findCondition(key);
-            
-            
-//            cond.putAll(entry.getValue());
-//            System.out.println(cond.fullfills(key, request));
-//            Condition condi = entry.getValue();
-//            System.out.println(condi);
-//            if(!condi.fullfills(key, request)){
-//                return false;
-//            }
-        }
-        return true;
+
+		// 每一项操作符 and
+		return conditions.entrySet().stream().allMatch(item -> {
+			String key = item.getKey(); // 条件操作符
+
+			// 子条件操作 ifexists 上下文中没有获取的键值的情况 返回 true
+			// 子条件操作 for any 有一项生效 返回true
+			// 子条件操作 for all 所有项生效 返回true
+			// 获取键值数据
+			if (key.startsWith(Condition.FOR_ANY_VALUE_PREFIX) || key.startsWith(Condition.FOR_ALL_VALUES_PREFIX)) {
+				key = key.split(":")[0];
+			} else if (key.endsWith(Condition.IF_EXISTS_SUFFIX)) {
+				key = key.substring(0, (key.length() - Condition.IF_EXISTS_SUFFIX.length() - 1));
+			}
+
+			// process
+			Condition process = conditionProcessHolder.getCondition(key);
+			if (null == process) {
+				return false;
+			}
+
+			// 每一个 键 and
+			return item.getValue().entrySet().stream().allMatch(e -> {
+				Set<String> keys = Sets.newHashSet();
+				Set<String> values = Sets.newHashSet();
+				// 从上下文中获取
+				Object obj = request.getContext().get(e.getKey());
+				if (null == obj) {
+					return false;
+				}
+				if (obj instanceof List) {
+					((List<String>) obj).stream().forEach(r -> keys.add(r));
+				} else {
+					keys.add(String.valueOf(obj));
+				}
+				if (e.getValue() instanceof List) {
+					((List<String>) e.getValue()).stream().forEach(r -> values.add(r));
+				} else {
+					values.add(String.valueOf(e.getValue()));
+				}
+				boolean isExists = item.getKey().endsWith(Condition.IF_EXISTS_SUFFIX);
+				if (item.getKey().startsWith(Condition.FOR_ALL_VALUES_PREFIX)) {
+					return process.evaluateForAllValue(keys, values, isExists);
+				}
+				return process.evaluateForAnyValue(keys, values, isExists);
+			});
+		});
 	}
 
 	// Validate StringLike

@@ -1,0 +1,134 @@
+/**
+ * 
+ */
+package com.tangdao.module.security.key;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.tangdao.framework.exception.ServiceException;
+
+/**
+ * <p>
+ * TODO RFC4632 IPv4 CIDR
+ * </p>
+ *
+ * @author ruyangit@gmail.com
+ * @since 2020年2月29日
+ */
+public class Cidr {
+
+	private static final Logger LOG = LoggerFactory.getLogger(Cidr.class);
+
+	private static final Pattern CIDR_PATTERN = Pattern
+			.compile("(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})(?:/(\\d{1,2}))?");
+
+	private static final int PREFIX_32 = 0xFFFFFFFF;
+
+	private int prefix;
+	private int mask;
+
+	public Cidr(int prefix, int mask) {
+		this.prefix = prefix;
+		this.mask = mask;
+	}
+
+	public int getPrefix() {
+		return this.prefix;
+	}
+
+	public int getMask() {
+		return this.mask;
+	}
+
+	public boolean matchIp(String ip) {
+		try {
+			Cidr ipCidr = valueOf(ip);
+			if (ipCidr.getMask() != PREFIX_32) {
+				throw new ServiceException();
+			}
+			return (ipCidr.getPrefix() & this.mask) == this.prefix;
+		} catch (ServiceException e) {
+			// Input ip address is invalid.
+			LOG.error("Input IP address to match is invalid: " + ip, e);
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		int bits = this.prefix;
+		final int lsb8 = 0xFF;
+		sb.append((bits >> 24) & lsb8).append('.');
+		sb.append((bits >> 16) & lsb8).append('.');
+		sb.append((bits >> 8) & lsb8).append('.');
+		sb.append(bits & lsb8);
+		if (this.mask != PREFIX_32) {
+			int count = 0;
+			int maskBits = this.mask;
+			while (maskBits != 0) {
+				count++;
+				maskBits <<= 1;
+			}
+			sb.append('/').append(count);
+		}
+		return sb.toString();
+	}
+
+	public static Cidr valueOf(String cidr) throws ServiceException {
+		if (cidr == null || "".equals(cidr)) {
+			throw new ServiceException("Empty CIDR");
+		}
+		Matcher matcher = CIDR_PATTERN.matcher(cidr);
+		if (!matcher.matches()) {
+			throw new ServiceException("Syntax error in input CIDR: " + cidr);
+		}
+		try {
+			int prefix = 0;
+			for (int i = 1; i < 5; i++) {
+				int component = Integer.parseInt(matcher.group(i));
+				if (component > 255) {
+					throw new ServiceException("Component value larger than 255: " + cidr);
+				}
+				prefix = (prefix << 8) + component;
+			}
+			int mask = 0;
+			if (matcher.group(5) != null) {
+				mask = Integer.parseInt(matcher.group(5));
+				if (mask > 32) {
+					throw new ServiceException("Prefix length larger than 32: " + cidr);
+				}
+				if (mask == 0) {
+					mask = PREFIX_32;
+				} else {
+					mask = (1 << (32 - mask)) - 1;
+				}
+			}
+			if ((prefix & mask) != 0) {
+				throw new ServiceException("Address and prefix length do not match: " + cidr);
+			}
+			return new Cidr(prefix, ~mask);
+		} catch (NumberFormatException e) {
+			// Impossible
+			throw new ServiceException("Impossible number format error: " + cidr);
+		}
+	}
+
+	// Tests
+	public static void main(String[] args) throws Exception {
+		String ip = "192.168.0.0/16";
+		System.out.println(ip + "->" + Cidr.valueOf(ip).toString());
+		ip = "192.168.1.0/32";
+		System.out.println(ip + "->" + Cidr.valueOf(ip).toString());
+		ip = "0.0.0.0/0";
+		System.out.println(ip + "->" + Cidr.valueOf(ip).toString());
+		System.out.println(Cidr.valueOf("192.168.0.0/16").matchIp("192.168.0.100")); // true
+		System.out.println(Cidr.valueOf("192.168.0.0/16").matchIp("192.169.0.1")); // false
+		System.out.println(Cidr.valueOf("0.0.0.0/0").matchIp("192.168.0.1")); // true
+		System.out.println(Cidr.valueOf("192.168.0.1/32").matchIp("192.168.0.1")); // true
+	}
+}

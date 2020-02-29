@@ -17,17 +17,17 @@ import org.springframework.stereotype.Component;
  * @since 2020年2月28日
  */
 @Component
-public class ConditionHolder {
+public class ConditionProcessHolder {
 
 	private final Map<String, Condition> conditions;
 
 	@Autowired
-	public ConditionHolder(Map<String, Condition> conditions) {
+	public ConditionProcessHolder(Map<String, Condition> conditions) {
 		this.conditions = conditions;
 	}
 
-	public Condition findCondition(String name) {
-		return conditions.get(name);
+	public Condition getCondition(String name) {
+		name = name.substring(0, 1).toLowerCase() + name.substring(1);
+		return conditions.get(name + Condition.BEAN_SUFFIX);
 	}
-
 }

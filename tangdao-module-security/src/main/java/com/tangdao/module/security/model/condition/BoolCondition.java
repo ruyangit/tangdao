@@ -3,7 +3,7 @@
  */
 package com.tangdao.module.security.model.condition;
 
-import com.tangdao.module.security.model.Request;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>
@@ -13,12 +13,12 @@ import com.tangdao.module.security.model.Request;
  * @author ruyangit@gmail.com
  * @since 2020年2月27日
  */
+@Component
 public class BoolCondition extends Condition {
 
 	@Override
-	public Boolean fullfills(String conditionKey, Request request) {
+	public boolean evaluate(String key, String value) {
 		// TODO Auto-generated method stub
-		return null;
+		return key != null && Boolean.valueOf(key) == Boolean.valueOf(value);
 	}
-
 }

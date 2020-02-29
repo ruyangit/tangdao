@@ -5,8 +5,7 @@ package com.tangdao.module.security.model.condition;
 
 import org.springframework.stereotype.Component;
 
-import com.google.common.collect.Lists;
-import com.tangdao.module.security.model.Request;
+import com.tangdao.module.security.key.Cidr;
 
 /**
  * <p>
@@ -14,28 +13,19 @@ import com.tangdao.module.security.model.Request;
  * </p>
  *
  * @author ruyangit@gmail.com
- * @since 2020年2月27日
+ * @since 2020年2月29日
  */
-@Component("IpAddress")
+@Component
 public class IpAddressCondition extends Condition {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	@Override
-	public Boolean fullfills(String conditionKey, Request request) {
+	public boolean evaluate(String key, String value) {
 		// TODO Auto-generated method stub
-		return this.entrySet().stream().anyMatch(item ->v(item.getValue(), request.getContext().get(item.getKey())));
-	}
-	
-	private boolean v(Object q, Object q2) {
-		
-//		CollectionUtil.contains(, q2);
-		
-		System.out.println(q);
-		System.out.println(q2);
-		return false;
+		try {
+			return key != null && Cidr.valueOf(value).matchIp(key);
+		} catch (RuntimeException e) {
+			return false;
+		}
 	}
 
 }
