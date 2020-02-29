@@ -133,9 +133,9 @@ public class DynamicAccessDecisionManager {
 		Map<String, Map<String, Object>> conditions2 = new HashMap<String, Map<String, Object>>();
 		
 		Map<String, Object> reqs2 = new HashMap<String, Object>();
-		reqs2.put("iam:Username", "true");
+		reqs2.put("iam:Username", "system");
 
-		conditions2.put("Bool", reqs2);
+		conditions2.put("StringEquals", reqs2);
 		assertion2.setCondition(JsonMapper.toJson(conditions2));
 		
 		// 模拟策略配置结束
@@ -152,7 +152,7 @@ public class DynamicAccessDecisionManager {
 
 		// req context
 		req.addContext("iam:SourceIp", "192.168.0.10");
-		req.addContext("iam:Username", "true");
+//		req.addContext("iam:Username", "true");
 		
 		
 		List<Assertion> assertions = new ArrayList<Assertion>();
