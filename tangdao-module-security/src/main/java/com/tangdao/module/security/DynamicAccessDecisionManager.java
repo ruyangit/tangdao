@@ -23,6 +23,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.tangdao.common.mapper.JsonMapper;
 import com.tangdao.common.utils.StringUtils;
 import com.tangdao.framework.annotation.Authorize;
@@ -101,6 +103,8 @@ public class DynamicAccessDecisionManager {
 		assertion.setAction(JsonMapper.toJson(action));
 		assertion.setResource(JsonMapper.toJson(resource));
 		
+		
+		//如果有条件，则是强制判断
 		Map<String, Condition> conditions = new HashMap<String, Condition>();
 		
 		Condition reqs = new IpAddressCondition();
@@ -110,6 +114,7 @@ public class DynamicAccessDecisionManager {
 		reqs.put("iam:SourceIp", ipAddress);
 		
 		conditions.put("IpAddress", reqs);
+		
 		assertion.setCondition(JsonMapper.toJson(conditions));
 
 		// role
@@ -121,7 +126,7 @@ public class DynamicAccessDecisionManager {
 		// 请求的资源匹配的条件
 		Request req = new Request();
 		req.setAction("core:user:ListUser");
-		req.setResource("");
+		req.setResource("*");
 
 		Object principal = authentication.getPrincipal();
 		if (principal != null && principal instanceof UserPrincipal) {
@@ -129,10 +134,8 @@ public class DynamicAccessDecisionManager {
 		}
 		
 		//req context
-		Map<String, Object> m = new HashMap<String, Object>();
-		m.put("IpAddress", "127.0.0.1");
-		m.put("Username", "system");
-		req.addContext("req", m);
+		req.addContext("iam:SourceIp", "127.0.0.1");
+		req.addContext("Username", "system");
 
 		if (AssertionMatch(assertion, req)) {
 			
@@ -223,9 +226,14 @@ public class DynamicAccessDecisionManager {
 		Map<String, Map<String, Object>> conditions = JsonMapper.fromJson(condition, Map.class);
 		for(Map.Entry<String, Map<String, Object>> entry : conditions.entrySet()) {
             String key = entry.getKey();
-            Condition cond= conditionHolder.findCondition(key);
-            cond.putAll(entry.getValue());
-            System.out.println(cond.fullfills(key, request));
+//            entry.getValue().entrySet().stream().an
+            System.out.println(key);
+//            System.out.println(value);
+//            Condition cond= conditionHolder.findCondition(key);
+            
+            
+//            cond.putAll(entry.getValue());
+//            System.out.println(cond.fullfills(key, request));
 //            Condition condi = entry.getValue();
 //            System.out.println(condi);
 //            if(!condi.fullfills(key, request)){
