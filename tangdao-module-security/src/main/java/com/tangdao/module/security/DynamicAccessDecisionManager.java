@@ -227,7 +227,7 @@ public class DynamicAccessDecisionManager {
 		// 条件集合
 		Map<String, Map<String, Object>> conditions = JsonMapper.fromJson(condition, Map.class);
 
-		// 每一项操作符 and
+		// 每一个 操作符 and
 		return conditions.entrySet().stream().allMatch(item -> {
 			String key = item.getKey(); // 条件操作符
 
