@@ -35,7 +35,7 @@ PBAC Policy-Based Authorization
 | 模块 | 说明 | 版本 |
 | --- | --- | --- |
 | module-core-api | 基础数据服务 | 0.2.2 |
-| module-security | 访问控制核心 | 0.2.2 |
+| module-security | 访问控制核心 | 0.2.6 |
 
 ## 访问控制
 
