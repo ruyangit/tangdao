@@ -92,7 +92,7 @@ public class DynamicAccessDecisionManager {
 		if (authorize == null) {
 			return true;
 		}
-
+		
 		// 模拟策略配置开始
 		List<String> action = new ArrayList<String>();
 //		action.add("*");

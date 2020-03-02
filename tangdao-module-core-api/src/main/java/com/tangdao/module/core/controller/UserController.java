@@ -16,15 +16,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.module.core.entity.User;
-import com.tangdao.module.core.service.IUserService;
 import com.tangdao.framework.annotation.Authorize;
 import com.tangdao.framework.web.BaseController;
+import com.tangdao.module.core.entity.User;
+import com.tangdao.module.core.service.IUserService;
 
 /**
  * <p>
- * 用户表 前端控制器
+ * 用户资源
  * </p>
  *
  * @author ruyangit@gmail.com
@@ -38,7 +39,7 @@ public class UserController extends BaseController {
 	private IUserService userService;
 	
 	/**
-	 * 用户表分页
+	 * 用户分页
 	 * 
 	 * @param page
 	 * @return
@@ -50,7 +51,7 @@ public class UserController extends BaseController {
 	}
 
 	/**
-	 * 用户表列表
+	 * 用户列表
 	 * 
 	 * @param page
 	 * @return
@@ -62,19 +63,7 @@ public class UserController extends BaseController {
 	}
 
 	/**
-	 * 用户表信息
-	 * 
-	 * @param id
-	 * @return
-	 */
-	@GetMapping("/user/{id}")
-	@Authorize("core:user:GetUser")
-	public User getUser(String id) {
-		return userService.getById(id);
-	}
-
-	/**
-	 * 用户表保存
+	 * 用户保存
 	 * 
 	 * @param user
 	 * @return
@@ -85,22 +74,34 @@ public class UserController extends BaseController {
 	public boolean save(@RequestBody @Validated User user) {
 		return userService.save(user);
 	}
+	
+	/**
+	 * 用户信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/user/{id}")
+	@Authorize("core:user:GetUser")
+	public User getUser(@PathVariable("id") String id) {
+		return userService.getById(id);
+	}
 
 	/**
-	 * 用户表修改
+	 * 用户修改
 	 * 
 	 * @param id
 	 * @param user
 	 * @return
 	 */
-	@PutMapping("/user")
+	@PutMapping("/user/{id}")
 	@Authorize("core:user:UpdateUser")
-	public boolean update(@RequestBody @Validated User user) {
-		return userService.saveOrUpdate(user);
+	public boolean update(@PathVariable("id") String id, @RequestBody @Validated User user) {
+		return userService.updateById(user);
 	}
 
 	/**
-	 * 用户表删除
+	 * 用户删除
 	 * 
 	 * @param id
 	 * @return

@@ -77,7 +77,7 @@ public class WebSecurityConfig {
 	    		.antMatcher("/api/**")
 	    			.authorizeRequests()
 //	    			.antMatchers(HttpMethod.POST, "/auth/token").permitAll()
-	    			// RBAC 动态 url 认证
+	    			// RBAC PBAC 动态认证
 	    			.anyRequest()
 	    				.access("@dynamicAccessDecisionManager.hasPermission(request, authentication)")
 	            .and()

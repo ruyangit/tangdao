@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.security.utils.TokenUtils;
 
 /**
@@ -39,14 +40,17 @@ public class TokenControllerEndpoint extends AbstractEndpoint{
 	@Autowired
 	private TokenUtils tokenUtils;
 
+	/**
+	 * Todo Get token
+	 * @param user
+	 * @return
+	 * @throws HttpRequestMethodNotSupportedException
+	 */
 	@RequestMapping(value = "/auth/token", method=RequestMethod.POST)
-	public Map<String, Object> postAccessToken(@RequestParam Map<String, String> parameters) throws HttpRequestMethodNotSupportedException {
-
-		final String loginName = parameters.get("loginName");
-		final String password = parameters.get("password");
-		
+	public Map<String, Object> postAccessToken(@RequestParam UserInfo user) throws HttpRequestMethodNotSupportedException {
+		//授权认证
 		final Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(loginName, password)
+            new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
