@@ -13,9 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tangdao.framework.model.UserInfo;
@@ -47,7 +47,7 @@ public class TokenControllerEndpoint extends AbstractEndpoint{
 	 * @throws HttpRequestMethodNotSupportedException
 	 */
 	@RequestMapping(value = "/auth/token", method=RequestMethod.POST)
-	public Map<String, Object> postAccessToken(@RequestParam UserInfo user) throws HttpRequestMethodNotSupportedException {
+	public Map<String, Object> postAccessToken(@RequestBody UserInfo user) throws HttpRequestMethodNotSupportedException {
 		//授权认证
 		final Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())

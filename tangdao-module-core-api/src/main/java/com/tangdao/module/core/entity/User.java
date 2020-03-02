@@ -1,9 +1,11 @@
 package com.tangdao.module.core.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.IdType;
 import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tangdao.framework.persistence.DataEntity;
 
 /**
@@ -33,6 +35,7 @@ public class User extends DataEntity {
     /**
      * 登录密码
      */
+    @JsonIgnore
     private String password;
 
     /**
