@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.tangdao.framework.constant.OpenApiCode.ResultStatus;
 import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.security.exception.SecurityException;
-import com.tangdao.module.security.service.UserPrincipal;
+import com.tangdao.module.security.model.UserPrincipal;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;

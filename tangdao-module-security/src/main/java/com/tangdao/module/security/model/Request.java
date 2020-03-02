@@ -5,8 +5,6 @@ package com.tangdao.module.security.model;
 
 import java.util.Properties;
 
-import com.tangdao.module.security.service.UserPrincipal;
-
 /**
  * <p>
  * TODO 描述

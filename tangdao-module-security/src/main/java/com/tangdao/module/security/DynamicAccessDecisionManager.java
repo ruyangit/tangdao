@@ -31,9 +31,9 @@ import com.tangdao.framework.annotation.Authorize;
 import com.tangdao.module.security.model.Assertion;
 import com.tangdao.module.security.model.AssertionEffect;
 import com.tangdao.module.security.model.Request;
+import com.tangdao.module.security.model.UserPrincipal;
 import com.tangdao.module.security.model.condition.Condition;
 import com.tangdao.module.security.model.condition.ConditionProcessHolder;
-import com.tangdao.module.security.service.UserPrincipal;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
