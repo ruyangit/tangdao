@@ -23,7 +23,7 @@ public abstract class UserContextAdapter implements UserContext, InitializingBea
 	}
 
 	@Override
-	public UserInfo getPrincipal() {
+	public UserInfo getUserInfo() {
 		// TODO Auto-generated method stub
 		return null;
 	}

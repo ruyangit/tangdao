@@ -21,7 +21,7 @@ public interface UserMapper extends BaseMapper<User> {
 
 	/**
 	 * 查询用户信息列表
-	 * @param user {username:'必填',password:'可选'}
+	 * @param user {loginName:'必填',password:'可选'}
 	 * @return
 	 */
 	public List<UserInfo> listUserInfo(UserInfo user);

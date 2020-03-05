@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -74,9 +75,10 @@ public class WebSecurityConfig {
 	    		.csrf().disable()
 	    		.formLogin().disable()
 	    		.httpBasic().disable()
-	    		.antMatcher("/api/**")
+	    		.antMatcher("/**")
 	    			.authorizeRequests()
-//	    			.antMatchers(HttpMethod.POST, "/auth/token").permitAll()
+	    			.antMatchers(HttpMethod.POST, "/login/token").permitAll()
+	    			.antMatchers("/expose/**").permitAll()
 	    			// RBAC PBAC 动态认证
 	    			.anyRequest()
 	    				.access("@dynamicAccessDecisionManager.hasPermission(request, authentication)")

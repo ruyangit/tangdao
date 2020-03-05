@@ -40,7 +40,7 @@ import ${superControllerClassPackage};
 <#else>
 @Controller
 </#if>
-@RequestMapping(value = "/api/{env}<#if package.ModuleName??>/${package.ModuleName}</#if>", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/{env}<#if package.ModuleName??>/${package.ModuleName}</#if>", produces = MediaType.APPLICATION_JSON_VALUE)
 <#if kotlin>
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>

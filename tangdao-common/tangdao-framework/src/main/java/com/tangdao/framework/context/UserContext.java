@@ -19,5 +19,5 @@ public interface UserContext {
 	 * 获取用户信息
 	 * @return
 	 */
-	public UserInfo getPrincipal();
+	public UserInfo getUserInfo();
 }

@@ -3,6 +3,7 @@
  */
 package com.tangdao.module.security;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 	private UserMapper userMapper;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String loginName) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 		String tenantId = ServletUtils.getParameter("tenantId");
 		if (StrUtil.isEmpty(tenantId)) {
@@ -54,14 +55,17 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 		}
 		try {
 			UserInfo user = new UserInfo();
-			user.setUsername(username);
+			user.setLoginName(loginName);
 			user.setTenantId(tenantId);
 			List<UserInfo> users = userMapper.listUserInfo(user);
 			if (null == users) {
-				throw new UsernameNotFoundException("User with username " + username + " not founded");
+				throw new UsernameNotFoundException("User with loginName " + loginName + " not founded");
 			}
-			return new UserPrincipal(
-					users.stream().collect(Collectors.toMap(UserInfo::getTenantId, Function.identity())).get(tenantId));
+			user = users.stream().collect(Collectors.toMap(UserInfo::getTenantId, Function.identity())).get(tenantId);
+			List<String> roles = new ArrayList<String>();
+			roles.add("admin");
+			user.setRoles(roles);
+			return new UserPrincipal(user);
 		} catch (UsernameNotFoundException e) {
 			logger.error("Error Username not found method loadUserByUsername in class AuthenticationService: ", e);
 		} catch (Exception e) {
@@ -71,7 +75,7 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 	}
 
 	@Override
-	public UserInfo getPrincipal() {
+	public UserInfo getUserInfo() {
 		// TODO Auto-generated method stub
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {

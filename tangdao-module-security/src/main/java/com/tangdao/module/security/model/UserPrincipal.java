@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tangdao.framework.model.UserInfo;
 
 /**
@@ -44,7 +45,7 @@ public class UserPrincipal implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<SimpleGrantedAuthority> collect = user.getRoles().stream()
-				.map(r -> new SimpleGrantedAuthority("ROLE_" + r.getRoleCode().toUpperCase()))
+				.map(r -> new SimpleGrantedAuthority("ROLE_" + r.toUpperCase()))
 				.collect(Collectors.toSet());
 		return collect;
 	}
@@ -73,6 +74,7 @@ public class UserPrincipal implements UserDetails {
 	}
 	
 	@Override
+	@JsonIgnore
 	public String getPassword() {
 		// TODO Auto-generated method stub
 		return user.getPassword();
@@ -81,7 +83,7 @@ public class UserPrincipal implements UserDetails {
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return user.getUsername();
+		return user.getLoginName();
 	}
 
 	/**
@@ -98,5 +100,5 @@ public class UserPrincipal implements UserDetails {
 		this.user = user;
 		return this;
 	}
-
+	
 }

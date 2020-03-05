@@ -77,8 +77,8 @@ public class TokenUtils {
     public String createJWT(Boolean rememberMe, UserInfo user) {
         Date now = new Date();
         JwtBuilder builder = Jwts.builder()
-                .setId(user.getId())
-                .setSubject(user.getUsername())
+                .setId(user.getUserId())
+                .setSubject(user.getLoginName())
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .claim("roles", user.getRoles())

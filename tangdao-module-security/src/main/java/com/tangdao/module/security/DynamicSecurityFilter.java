@@ -4,10 +4,6 @@
 package com.tangdao.module.security;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -21,17 +17,16 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.tangdao.module.security.exception.SecurityException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tangdao.framework.protocol.Result;
+import com.tangdao.module.security.exception.SecurityException;
 import com.tangdao.module.security.utils.TokenUtils;
 
 import cn.hutool.core.util.StrUtil;
@@ -70,17 +65,10 @@ public class DynamicSecurityFilter extends OncePerRequestFilter {
 			ServerHttpResponse outputMessage = new ServletServerHttpResponse(response);
 			try {
 				String username = tokenUtils.getUsernameFromJWT(token);
-
 				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				
-				List<String> roles = new ArrayList<String>();
-				roles.add("admin");
-				Set<SimpleGrantedAuthority> collect = roles.stream()
-						.map(r -> new SimpleGrantedAuthority("ROLE_" + r.toUpperCase())).collect(Collectors.toSet());
-				collect.add(new SimpleGrantedAuthority("core:user:*"));
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-						userDetails, null, collect);
-//						userDetails, null, userDetails.getAuthorities());
+						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
 				SecurityContextHolder.getContext().setAuthentication(authentication);

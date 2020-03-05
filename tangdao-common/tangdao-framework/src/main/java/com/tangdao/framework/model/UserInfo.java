@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * <p>
  * TODO 用户
@@ -22,9 +24,9 @@ public class UserInfo implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String id;
+	private String userId;
 	
-	private String username;
+	private String loginName;
 	
 	private String password;
 	
@@ -32,39 +34,40 @@ public class UserInfo implements Serializable {
 	
 	private String tenantId;
 
-	private List<RoleInfo> roles = new ArrayList<RoleInfo>(1000);
+	private List<String> roles = new ArrayList<String>(1000);
 
 	/**
-	 * @return the id
+	 * @return the userId
 	 */
-	public String getId() {
-		return id;
+	public String getUserId() {
+		return userId;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param userId the userId to set
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	/**
-	 * @return the username
+	 * @return the loginName
 	 */
-	public String getUsername() {
-		return username;
+	public String getLoginName() {
+		return loginName;
 	}
 
 	/**
-	 * @param username the username to set
+	 * @param loginName the loginName to set
 	 */
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
 	}
 
 	/**
 	 * @return the password
 	 */
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
@@ -107,14 +110,14 @@ public class UserInfo implements Serializable {
 	/**
 	 * @return the roles
 	 */
-	public List<RoleInfo> getRoles() {
+	public List<String> getRoles() {
 		return roles;
 	}
 
 	/**
 	 * @param roles the roles to set
 	 */
-	public void setRoles(List<RoleInfo> roles) {
+	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
 	

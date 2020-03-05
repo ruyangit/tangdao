@@ -33,6 +33,17 @@ public class ServletUtils {
 	/**
 	 * 获得请求参数值
 	 */
+	public static String getHeader(String name) {
+		HttpServletRequest request = getRequest();
+		if (request == null){
+			return null;
+		}
+		return request.getHeader(name);
+	}
+	
+	/**
+	 * 获得请求参数值
+	 */
 	public static String getParameter(String name) {
 		HttpServletRequest request = getRequest();
 		if (request == null){
