@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import com.tangdao.common.servlet.ServletUtils;
 import com.tangdao.framework.context.UserContextAdapter;
+import com.tangdao.framework.exception.ServiceException;
 import com.tangdao.framework.model.Tenant;
 import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.core.mapper.UserMapper;
@@ -58,20 +59,20 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 			user.setLoginName(loginName);
 			user.setTenantId(tenantId);
 			List<UserInfo> users = userMapper.listUserInfo(user);
-			if (null == users) {
+			user = users.stream().collect(Collectors.toMap(UserInfo::getTenantId, Function.identity())).get(tenantId);
+			if (null == user) {
 				throw new UsernameNotFoundException("User with loginName " + loginName + " not founded");
 			}
-			user = users.stream().collect(Collectors.toMap(UserInfo::getTenantId, Function.identity())).get(tenantId);
 			List<String> roles = new ArrayList<String>();
 			roles.add("admin");
 			user.setRoles(roles);
 			return new UserPrincipal(user);
 		} catch (UsernameNotFoundException e) {
 			logger.error("Error Username not found method loadUserByUsername in class AuthenticationService: ", e);
+			throw new UsernameNotFoundException("用户登录账号不存在");
 		} catch (Exception e) {
-			logger.error("Error method loadUserByUsername in class AuthenticationService: ", e);
+			throw new ServiceException("Error method loadUserByUsername in class AuthenticationService: ", e);
 		}
-		return null;
 	}
 
 	@Override

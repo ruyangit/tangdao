@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
@@ -77,13 +78,14 @@ public class DynamicAccessDecisionManager {
 	 * @return
 	 */
 	public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-		if (authentication == null || !authentication.isAuthenticated()) {
-			logger.error("请求认证失败");
+		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+			logger.error("认证失败");
 			return false;
 		}
+		
 		HandlerMethod handlerMethod = getHandlerMethod(request);
 		if (handlerMethod == null) {
-			logger.error("请求资源不存在 {}", request.getServletPath());
+			logger.error("资源不存在 {}", request.getServletPath());
 			return false;
 		}
 

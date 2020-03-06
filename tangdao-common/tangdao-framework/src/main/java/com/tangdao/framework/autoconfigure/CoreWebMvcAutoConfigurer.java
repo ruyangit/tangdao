@@ -29,15 +29,14 @@ public class CoreWebMvcAutoConfigurer implements WebMvcConfigurer {
 
 	@Autowired
 	private HttpMessageConverters httpMessageConverters;
-	
+
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 		StringHttpMessageConverter stringConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
 		converters.add(stringConverter);
-		httpMessageConverters.getConverters().forEach(converter->{
+		httpMessageConverters.getConverters().forEach(converter -> {
 			converters.add(converter);
 		});
 		converters.add(new MappingJackson2HttpMessageConverter(JsonMapper.getInstance()));
 	}
-	
 }

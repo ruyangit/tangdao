@@ -4,6 +4,7 @@
 package com.tangdao.module.security.endpoint;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.security.AuthenticationService;
 import com.tangdao.module.security.utils.TokenUtils;
 
@@ -76,7 +76,9 @@ public class TokenControllerEndpoint extends AbstractEndpoint{
 	 * @return
 	 */
 	@RequestMapping(value = "/{env}/user", method=RequestMethod.GET)
-	public UserInfo userPrincipal(Principal principal) {
-		return authenticationService.getUserInfo();
+	public Map<String, Object> userPrincipal(Principal principal) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("user", authenticationService.getUserInfo());
+		return data;
 	}
 }
