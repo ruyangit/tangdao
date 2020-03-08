@@ -10,8 +10,12 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>
@@ -21,6 +25,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author ruyang@gmail.com
  * @since 2020年3月6日
  */
+@Component
+@WebFilter
+@Order(Integer.MIN_VALUE)
 public class CorsFilter implements Filter {
 
 	@Override
@@ -32,18 +39,17 @@ public class CorsFilter implements Filter {
 
 	private void handle(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		System.out.println("CorsFilter_" + request.getMethod());
 		response.setHeader("Access-Control-Allow-Origin", "*");// * or origin as u prefer
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Methods", "*");
 		response.setHeader("Access-Control-Max-Age", "3600");
-		response.setHeader("Access-Control-Allow-Headers",
-				"Origin, X-Requested-With, Content-Type, Accept, Accept-Encoding, Accept-Language, Host, Referer, Connection, User-Agent, Authorization");
+		response.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Accept-Encoding, Accept-Language, Host, Referer, Connection, User-Agent, Authorization");
 
 		if (request.getMethod().equals("OPTIONS")) {
 			response.setStatus(HttpServletResponse.SC_OK);
+		}else {
+			chain.doFilter(request, response);
 		}
-		chain.doFilter(request, response);
 	}
 
 }

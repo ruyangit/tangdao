@@ -19,7 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.tangdao.module.security.error.CustomAccessDeniedHandler;
@@ -76,10 +75,8 @@ public class WebSecurityConfig {
 
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
-			http
-					// 开启跨域
-					.cors().and().csrf().disable().authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/login/token").permitAll().antMatchers("/expose/**").permitAll()
+			http.cors().disable().csrf().disable().authorizeRequests().antMatchers(HttpMethod.POST, "/login/token")
+					.permitAll().antMatchers("/expose/**").permitAll()
 					// RBAC PBAC 动态认证
 					.anyRequest().access("@dynamicAccessDecisionManager.hasPermission(request, authentication)").and()
 					.logout().disable().exceptionHandling().authenticationEntryPoint(customAuthenticationEntryPoint)
@@ -91,8 +88,6 @@ public class WebSecurityConfig {
 
 			http.headers().frameOptions().disable().cacheControl();
 
-			// 添加自定义 Cors 过滤器
-			http.addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class);
 			// 添加自定义 JWT 过滤器
 			http.addFilterBefore(dynamicSecurityFilter, UsernamePasswordAuthenticationFilter.class);
 		}

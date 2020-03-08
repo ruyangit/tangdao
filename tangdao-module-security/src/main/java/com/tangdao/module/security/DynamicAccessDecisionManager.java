@@ -55,11 +55,10 @@ public class DynamicAccessDecisionManager {
 	 * 日志服务
 	 */
 	private Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	enum AccessStatus {
-        ALLOWED,
-        DENIED
-    }
+		ALLOWED, DENIED
+	}
 
 	/**
 	 * 地址服务
@@ -78,11 +77,11 @@ public class DynamicAccessDecisionManager {
 	 * @return
 	 */
 	public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
-		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-			logger.error("认证失败");
+		if (authentication instanceof AnonymousAuthenticationToken) {
+			logger.error("匿名访问");
 			return false;
 		}
-		
+
 		HandlerMethod handlerMethod = getHandlerMethod(request);
 		if (handlerMethod == null) {
 			logger.error("资源不存在 {}", request.getServletPath());
@@ -94,7 +93,7 @@ public class DynamicAccessDecisionManager {
 		if (authorize == null) {
 			return true;
 		}
-		
+
 		// 模拟策略配置开始
 		List<String> action = new ArrayList<String>();
 //		action.add("*");
@@ -127,19 +126,19 @@ public class DynamicAccessDecisionManager {
 		if (CollUtil.isNotEmpty(Arrays.asList(authorize.role()))) {
 			assertion.setRole(JsonMapper.toJson(authorize.role()));
 		}
-		
+
 		Assertion assertion2 = new Assertion();
 		BeanUtil.copyProperties(assertion, assertion2);
 		assertion2.setEffect(AssertionEffect.DENY);
-		
+
 		Map<String, Map<String, Object>> conditions2 = new HashMap<String, Map<String, Object>>();
-		
+
 		Map<String, Object> reqs2 = new HashMap<String, Object>();
 		reqs2.put("iam:Username", "system");
 
 		conditions2.put("StringEquals", reqs2);
 		assertion2.setCondition(JsonMapper.toJson(conditions2));
-		
+
 		// 模拟策略配置结束
 
 		// 请求的资源匹配的条件
@@ -155,31 +154,30 @@ public class DynamicAccessDecisionManager {
 		// req context
 		req.addContext("iam:SourceIp", "192.168.0.10");
 //		req.addContext("iam:Username", "true");
-		
-		
+
 		List<Assertion> assertions = new ArrayList<Assertion>();
 
 		assertions.add(assertion);
 		assertions.add(assertion2);
-		
+
 		AccessStatus accessStatus = AccessStatus.DENIED;
-		
+
 		for (Assertion ass : assertions) {
 			System.out.println(JsonMapper.toJson(ass));
 			AssertionEffect effect = ass.effect;
 			if (effect == null) {
-                effect = AssertionEffect.ALLOW;
-            }
+				effect = AssertionEffect.ALLOW;
+			}
 			if (accessStatus == AccessStatus.ALLOWED && effect == AssertionEffect.ALLOW) {
-                continue;
-            }
+				continue;
+			}
 			if (!assertionMatch(ass, req)) {
 				continue;
 			}
 			if (effect == AssertionEffect.DENY) {
-                return false;
-            }
-            accessStatus = AccessStatus.ALLOWED;
+				return false;
+			}
+			accessStatus = AccessStatus.ALLOWED;
 		}
 		return accessStatus == AccessStatus.ALLOWED;
 	}
@@ -213,8 +211,9 @@ public class DynamicAccessDecisionManager {
 		if (null != assertion.getRole() && !(matchResult = this.matchPrincipal(assertion.getRole(), request))) {
 			return false;
 		}
-		
-		if (null != assertion.getCondition() && !(matchResult = this.evaluateCondition(assertion.getCondition(), request))) {
+
+		if (null != assertion.getCondition()
+				&& !(matchResult = this.evaluateCondition(assertion.getCondition(), request))) {
 			return false;
 		}
 
