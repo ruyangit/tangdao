@@ -28,7 +28,7 @@ public abstract class AbstractMetaObjectHandler implements MetaObjectHandler{
 		Object createTime = getFieldValByName(CREATE_TIME, metaObject);
 
 		if (status == null || StringUtils.EMPTY.equals(status)) {
-			setFieldValByName(STATUS, DataStatus.NORMAL, metaObject);
+			setFieldValByName(STATUS, DataStatus.NORMAL.value(), metaObject);
 		}
 
 		if (createTime == null || updateTime == null) {
