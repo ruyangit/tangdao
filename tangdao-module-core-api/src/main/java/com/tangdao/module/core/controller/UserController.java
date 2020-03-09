@@ -1,8 +1,6 @@
 package com.tangdao.module.core.controller;
 
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.framework.annotation.Authorize;
 import com.tangdao.framework.web.BaseController;
 import com.tangdao.module.core.entity.User;
@@ -32,7 +31,7 @@ import com.tangdao.module.core.service.IUserService;
  * @since 2020-02-26
  */
 @RestController
-@RequestMapping(value = "/api/{env}/core", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/{env}/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController extends BaseController {
 
 	@Autowired
@@ -44,22 +43,10 @@ public class UserController extends BaseController {
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/users")
-	@Authorize("core:user:ListUsers")
-	public IPage<User> lists(IPage<User> page) {
+	@GetMapping
+	@Authorize("sys:user:PageUser")
+	public IPage<User> page(Page<User> page) {
 		return userService.page(page);
-	}
-
-	/**
-	 * 用户列表
-	 * 
-	 * @param page
-	 * @return
-	 */
-	@GetMapping("/user")
-	@Authorize("core:user:ListUser")
-	public List<User> list() {
-		return userService.list();
 	}
 
 	/**
@@ -68,23 +55,23 @@ public class UserController extends BaseController {
 	 * @param user
 	 * @return
 	 */
-	@PostMapping("/user")
+	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@Authorize("core:user:CreateUser")
-	public boolean save(@RequestBody @Validated User user) {
+	@Authorize("sys:user:CreateUser")
+	public boolean create(@RequestBody @Validated User user) {
 		return userService.save(user);
 	}
 	
 	/**
 	 * 用户信息
 	 * 
-	 * @param id
+	 * @param userId
 	 * @return
 	 */
-	@GetMapping("/user/{id}")
-	@Authorize("core:user:GetUser")
-	public User getUser(@PathVariable("id") String id) {
-		return userService.getById(id);
+	@GetMapping("/{userId}")
+	@Authorize("sys:user:GetUser")
+	public User get(@PathVariable("userId") String userId) {
+		return userService.getById(userId);
 	}
 
 	/**
@@ -94,21 +81,21 @@ public class UserController extends BaseController {
 	 * @param user
 	 * @return
 	 */
-	@PutMapping("/user/{id}")
-	@Authorize("core:user:UpdateUser")
-	public boolean update(@PathVariable("id") String id, @RequestBody @Validated User user) {
+	@PutMapping("/{userId}")
+	@Authorize("sys:user:UpdateUser")
+	public boolean update(@PathVariable("userId") String userId, @RequestBody @Validated User user) {
 		return userService.updateById(user);
 	}
 
 	/**
 	 * 用户删除
 	 * 
-	 * @param id
+	 * @param userId
 	 * @return
 	 */
-	@DeleteMapping("/user/{id}")
-	@Authorize("core:user:DeleteUser")
-	public boolean delete(@PathVariable("id") String id) {
-		return userService.removeById(id);
+	@DeleteMapping("/{userId}")
+	@Authorize("sys:user:DeleteUser")
+	public boolean delete(@PathVariable("userId") String userId) {
+		return userService.removeById(userId);
 	}
 }
