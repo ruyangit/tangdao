@@ -32,69 +32,50 @@ public class Role extends DataEntity {
     /**
      * 编号
      */
-    private String domainId;
-
-    /**
-     * 权限标识
-     */
-    private String roleCode;
-
-    /**
-     * 角色类型
-     */
-    private String roleType;
+    private String viewCode;
     
+    private String corpId;
+    
+    private String corpName;
 
-    public String getRoleId() {
-        return roleId;
-    }
+	public String getRoleId() {
+		return roleId;
+	}
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-    public String getRoleName() {
-        return roleName;
-    }
+	public void setRoleId(String roleId) {
+		this.roleId = roleId;
+	}
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-    public String getDomainId() {
-        return domainId;
-    }
+	public String getRoleName() {
+		return roleName;
+	}
 
-    public void setDomainId(String domainId) {
-        this.domainId = domainId;
-    }
-    public String getRoleCode() {
-        return roleCode;
-    }
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
 
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
-    public String getRoleType() {
-        return roleType;
-    }
+	public String getViewCode() {
+		return viewCode;
+	}
 
-    public void setRoleType(String roleType) {
-        this.roleType = roleType;
-    }
+	public void setViewCode(String viewCode) {
+		this.viewCode = viewCode;
+	}
 
-    @Override
-    public String toString() {
-        return "Role{" +
-            "roleId=" + roleId +
-            ", roleName=" + roleName +
-            ", domainId=" + domainId +
-            ", roleCode=" + roleCode +
-            ", roleType=" + roleType +
-    		", status=" + status +
-    		", createBy=" + createBy +
-    		", createTime=" + createTime +
-    		", updateBy=" + updateBy +
-    		", updateTime=" + updateTime +
-    		", remarks=" + remarks +
-        "}";
-    }
+	public String getCorpId() {
+		return corpId;
+	}
+
+	public void setCorpId(String corpId) {
+		this.corpId = corpId;
+	}
+
+	public String getCorpName() {
+		return corpName;
+	}
+
+	public void setCorpName(String corpName) {
+		this.corpName = corpName;
+	}
+
 }

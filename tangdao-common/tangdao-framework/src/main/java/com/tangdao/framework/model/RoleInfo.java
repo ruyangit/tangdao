@@ -22,10 +22,10 @@ public class RoleInfo implements Serializable {
 
 	private String roleId;
 	
-	private String roleCode;
-	
 	private String roleName;
 	
+	private String viewCode;
+
 	private String userId;
 
 	/**
@@ -40,21 +40,6 @@ public class RoleInfo implements Serializable {
 	 */
 	public RoleInfo setRoleId(String roleId) {
 		this.roleId = roleId;
-		return this;
-	}
-
-	/**
-	 * @return the roleCode
-	 */
-	public String getRoleCode() {
-		return roleCode;
-	}
-
-	/**
-	 * @param roleCode the roleCode to set
-	 */
-	public RoleInfo setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
 		return this;
 	}
 
@@ -84,6 +69,14 @@ public class RoleInfo implements Serializable {
 	 */
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
+	}
+
+	public String getViewCode() {
+		return viewCode;
+	}
+
+	public void setViewCode(String viewCode) {
+		this.viewCode = viewCode;
 	}
 	
 }

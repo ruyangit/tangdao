@@ -32,9 +32,11 @@ public class UserInfo implements Serializable {
 	
 	private String status;
 	
-	private String tenantId;
+	private String corpId;
 
 	private List<String> roles = new ArrayList<String>(1000);
+	
+	public static final String CORP_ID_DEFAULT = "0";
 
 	/**
 	 * @return the userId
@@ -93,18 +95,12 @@ public class UserInfo implements Serializable {
 		this.status = status;
 	}
 
-	/**
-	 * @return the tenantId
-	 */
-	public String getTenantId() {
-		return tenantId;
+	public String getCorpId() {
+		return corpId;
 	}
 
-	/**
-	 * @param tenantId the tenantId to set
-	 */
-	public void setTenantId(String tenantId) {
-		this.tenantId = tenantId;
+	public void setCorpId(String corpId) {
+		this.corpId = corpId;
 	}
 
 	/**

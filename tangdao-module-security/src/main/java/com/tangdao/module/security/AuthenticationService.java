@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import com.tangdao.common.servlet.ServletUtils;
 import com.tangdao.framework.context.UserContextAdapter;
 import com.tangdao.framework.exception.ServiceException;
-import com.tangdao.framework.model.Tenant;
 import com.tangdao.framework.model.UserInfo;
 import com.tangdao.module.core.mapper.UserMapper;
 import com.tangdao.module.security.model.UserPrincipal;
@@ -50,16 +49,16 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 	@Override
 	public UserDetails loadUserByUsername(String loginName) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		String tenantId = ServletUtils.getParameter("tenantId");
-		if (StrUtil.isEmpty(tenantId)) {
-			tenantId = Tenant.DEFAULT_VALUE;
+		String corpId = ServletUtils.getParameter("corp_id");
+		if (StrUtil.isEmpty(corpId)) {
+			corpId = UserInfo.CORP_ID_DEFAULT;
 		}
 		try {
 			UserInfo user = new UserInfo();
 			user.setLoginName(loginName);
-			user.setTenantId(tenantId);
+			user.setCorpId(corpId);
 			List<UserInfo> users = userMapper.listUserInfo(user);
-			user = users.stream().collect(Collectors.toMap(UserInfo::getTenantId, Function.identity())).get(tenantId);
+			user = users.stream().collect(Collectors.toMap(UserInfo::getCorpId, Function.identity())).get(corpId);
 			if (null == user) {
 				throw new UsernameNotFoundException("User with loginName " + loginName + " not founded");
 			}

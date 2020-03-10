@@ -19,14 +19,15 @@
         freeze_date as "freezeDate",
         freeze_cause as "freezeCause",
         mgr_type as "mgrType",
-        domain_id as "domainId",
         user_type as "userType",
 		status as "status",
 		create_by as "createBy",
 		create_time as "createTime",
 		update_by as "updateBy",
 		update_time as "updateTime",
-    	remarks as "remarks"
+    	remarks as "remarks",
+    	corp_id as "corpId",
+    	corp_name as "corpName"
     </sql>
 
 	<select id="listUserInfo" resultType="com.tangdao.framework.model.UserInfo">
@@ -35,7 +36,7 @@
 			login_name as "loginName",
 			password,
 			status,
-			0 as "tenantId"
+			corp_id as "corpId"
 		from sys_user 
 		where login_name = #{loginName}
 		<if test="password!=null and password!=''">

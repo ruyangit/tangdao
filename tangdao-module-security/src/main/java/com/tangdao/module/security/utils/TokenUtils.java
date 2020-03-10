@@ -82,7 +82,7 @@ public class TokenUtils {
                 .setIssuedAt(now)
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .claim("roles", user.getRoles())
-                .claim("tenantId", user.getTenantId());
+                .claim("corpId", user.getCorpId());
 
         // 设置过期时间
         int ttl = rememberMe ? REFRESH_TOKEN_VALIDITY_SECONDS : ACCESS_TOKEN_VALIDITY_SECONDS;

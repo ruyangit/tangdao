@@ -99,12 +99,11 @@ public class User extends DataEntity {
      */
     private String mgrType;
 
-    /**
-     * 编号
-     */
-    private String domainId;
-
     private String userType;
+    
+    private String corpId;
+    
+    private String corpName;
 
     public String getUserId() {
         return userId;
@@ -212,13 +211,6 @@ public class User extends DataEntity {
     public void setMgrType(String mgrType) {
         this.mgrType = mgrType;
     }
-    public String getDomainId() {
-        return domainId;
-    }
-
-    public void setDomainId(String domainId) {
-        this.domainId = domainId;
-    }
     public String getUserType() {
         return userType;
     }
@@ -226,33 +218,20 @@ public class User extends DataEntity {
     public void setUserType(String userType) {
         this.userType = userType;
     }
+    
+    public String getCorpId() {
+		return corpId;
+	}
 
-    @Override
-    public String toString() {
-        return "User{" +
-            "userId=" + userId +
-            ", loginName=" + loginName +
-            ", password=" + password +
-            ", nickname=" + nickname +
-            ", email=" + email +
-            ", mobile=" + mobile +
-            ", phone=" + phone +
-            ", sex=" + sex +
-            ", avatar=" + avatar +
-            ", sign=" + sign +
-            ", lastLoginIp=" + lastLoginIp +
-            ", lastLoginDate=" + lastLoginDate +
-            ", freezeDate=" + freezeDate +
-            ", freezeCause=" + freezeCause +
-            ", mgrType=" + mgrType +
-            ", domainId=" + domainId +
-            ", userType=" + userType +
-    		", status=" + status +
-    		", createBy=" + createBy +
-    		", createTime=" + createTime +
-    		", updateBy=" + updateBy +
-    		", updateTime=" + updateTime +
-    		", remarks=" + remarks +
-        "}";
-    }
+	public void setCorpId(String corpId) {
+		this.corpId = corpId;
+	}
+
+	public String getCorpName() {
+		return corpName;
+	}
+
+	public void setCorpName(String corpName) {
+		this.corpName = corpName;
+	}
 }
