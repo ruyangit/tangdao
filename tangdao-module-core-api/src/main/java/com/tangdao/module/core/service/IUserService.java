@@ -1,7 +1,7 @@
 package com.tangdao.module.core.service;
 
-import com.tangdao.module.core.entity.User;
 import com.tangdao.framework.service.ICrudService;
+import com.tangdao.module.core.entity.User;
 
 /**
  * <p>
@@ -13,4 +13,10 @@ import com.tangdao.framework.service.ICrudService;
  */
 public interface IUserService extends ICrudService<User> {
 
+	/**
+	 * todo 创建用户
+	 * @param user
+	 * @return
+	 */
+	public boolean createUser(User user);
 }

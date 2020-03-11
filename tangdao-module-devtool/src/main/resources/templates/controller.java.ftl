@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.stereotype.Controller;
 </#if>
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ${package.Entity}.${entity};
 import ${package.Service}.${table.serviceName};
 <#if superControllerClassPackage??>
@@ -40,7 +41,7 @@ import ${superControllerClassPackage};
 <#else>
 @Controller
 </#if>
-@RequestMapping(value = "/{env}<#if package.ModuleName??>/${package.ModuleName}</#if>", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/{env}/${table.entityPath}s", produces = MediaType.APPLICATION_JSON_VALUE)
 <#if kotlin>
 class ${table.controllerName}<#if superControllerClass??> : ${superControllerClass}()</#if>
 <#else>
@@ -59,20 +60,9 @@ public class ${table.controllerName} {
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/${table.entityPath}s")
-	public IPage<${entity}> lists(IPage<${entity}> page) {
+	@GetMapping
+	public IPage<${entity}> page(Page<${entity}> page) {
 		return ${table.entityPath}Service.page(page);
-	}
-
-	/**
-	 * ${table.comment!}列表
-	 * 
-	 * @param page
-	 * @return
-	 */
-	@GetMapping("/${table.entityPath}")
-	public List<${entity}> list() {
-		return ${table.entityPath}Service.list();
 	}
 
 	/**
@@ -81,7 +71,7 @@ public class ${table.controllerName} {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping("/${table.entityPath}/{id}")
+	@GetMapping("/{id}")
 	public ${entity} get${entity}(String id) {
 		return ${table.entityPath}Service.getById(id);
 	}
@@ -92,7 +82,7 @@ public class ${table.controllerName} {
 	 * @param ${table.entityPath}
 	 * @return
 	 */
-	@PostMapping("/${table.entityPath}")
+	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public boolean save(@RequestBody @Validated ${entity} ${table.entityPath}) {
 		return ${table.entityPath}Service.save(${table.entityPath});
@@ -105,8 +95,8 @@ public class ${table.controllerName} {
 	 * @param ${table.entityPath}
 	 * @return
 	 */
-	@PutMapping("/${table.entityPath}")
-	public boolean update(@RequestBody @Validated ${entity} ${table.entityPath}) {
+	@PutMapping("/{id}")
+	public boolean update(@PathVariable("id") String id, @RequestBody @Validated ${entity} ${table.entityPath}) {
 		return ${table.entityPath}Service.saveOrUpdate(${table.entityPath});
 	}
 
@@ -116,7 +106,7 @@ public class ${table.controllerName} {
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping("/${table.entityPath}/{id}")
+	@DeleteMapping("/{id}")
 	public boolean delete(@PathVariable("id") String id) {
 		return ${table.entityPath}Service.removeById(id);
 	}

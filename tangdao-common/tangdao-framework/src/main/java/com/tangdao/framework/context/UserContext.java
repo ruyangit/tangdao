@@ -16,8 +16,23 @@ import com.tangdao.framework.model.UserInfo;
 public interface UserContext {
 	
 	/**
-	 * 获取用户信息
+	 * todo 获取用户信息
 	 * @return
 	 */
 	public UserInfo getUserInfo();
+	
+	/**
+	 * todo 密码加密
+	 * @param rawPassword
+	 * @return
+	 */
+	public String passwordEncode(String rawPassword);
+	
+	/**
+	 * todo 密码校验
+	 * @param rawPassword 原密码
+	 * @param encodedPassword 加密密码
+	 * @return
+	 */
+	public boolean passwordMatches(String rawPassword, String encodedPassword);
 }

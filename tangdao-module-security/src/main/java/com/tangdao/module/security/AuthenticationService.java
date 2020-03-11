@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.common.servlet.ServletUtils;
@@ -45,6 +46,9 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 	 */
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserDetails loadUserByUsername(String loginName) throws UsernameNotFoundException {
@@ -86,6 +90,18 @@ public class AuthenticationService extends UserContextAdapter implements UserDet
 			return ((UserPrincipal) principal).getUser();
 		}
 		return null;
+	}
+
+	@Override
+	public String passwordEncode(String rawPassword) {
+		// TODO Auto-generated method stub
+		return passwordEncoder.encode(rawPassword);
+	}
+
+	@Override
+	public boolean passwordMatches(String rawPassword, String encodedPassword) {
+		// TODO Auto-generated method stub
+		return passwordEncoder.matches(rawPassword, encodedPassword);
 	}
 
 }

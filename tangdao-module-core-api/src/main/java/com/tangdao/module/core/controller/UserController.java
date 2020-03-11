@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.framework.annotation.Authorize;
+import com.tangdao.framework.persistence.wrapper.QueryPreWrapper;
 import com.tangdao.framework.web.BaseController;
 import com.tangdao.module.core.entity.User;
 import com.tangdao.module.core.service.IUserService;
@@ -46,7 +47,9 @@ public class UserController extends BaseController {
 	@GetMapping
 	@Authorize("sys:user:PageUser")
 	public IPage<User> page(Page<User> page) {
-		return userService.page(page);
+		QueryPreWrapper<User> queryWrapper = new QueryPreWrapper<User>();
+		queryWrapper.preCorpFilter();
+		return userService.page(page, queryWrapper);
 	}
 
 	/**
@@ -59,7 +62,7 @@ public class UserController extends BaseController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@Authorize("sys:user:CreateUser")
 	public boolean create(@RequestBody @Validated User user) {
-		return userService.save(user);
+		return userService.createUser(user);
 	}
 	
 	/**
