@@ -16,7 +16,6 @@
 		<module>tangdao-common/tangdao-common</module>
 		<module>tangdao-common/tangdao-framework</module>
 		<module>tangdao-common/tangdao-framework-mybatis-plus</module>
-		<module>tangdao-common/tangdao-framework-cache-ehcache</module>
 		<module>tangdao-common/tangdao-framework-cache-redis</module>
 		<module>tangdao-module-core-api</module>
 		<module>tangdao-module-test-api</module>
