@@ -16,7 +16,9 @@
 
 Tangdao 是一个基于角色的授权（RBAC - Role-Based Authorization）系统，用于提供和配置（集中授权）认证策略在服务运行时的访问权限。
 
-**前端：[预览](http://121.37.180.48/#/dashboard),[前端地址](https://gitee.com/ruyangit/quasar-element-pro/tree/tangdao-spa)**
+**[前端预览](http://121.37.180.48/#/dashboard)**
+
+**[前端项目](https://gitee.com/ruyangit/quasar-element-pro/tree/tangdao-spa)**
 
 ## 架构
 
