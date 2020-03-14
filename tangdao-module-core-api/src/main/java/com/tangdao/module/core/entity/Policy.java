@@ -31,7 +31,9 @@ public class Policy extends DataEntity {
      */
     private String policyType;
 
-    private String domainId;
+    private String corpId;
+    
+    private String corpName;
 
     public String getPolicyId() {
         return policyId;
@@ -54,27 +56,34 @@ public class Policy extends DataEntity {
     public void setPolicyType(String policyType) {
         this.policyType = policyType;
     }
-    public String getDomainId() {
-        return domainId;
-    }
 
-    public void setDomainId(String domainId) {
-        this.domainId = domainId;
-    }
+	/**
+	 * @return the corpId
+	 */
+	public String getCorpId() {
+		return corpId;
+	}
 
-    @Override
-    public String toString() {
-        return "Policy{" +
-            "policyId=" + policyId +
-            ", policyName=" + policyName +
-            ", policyType=" + policyType +
-            ", domainId=" + domainId +
-    		", status=" + status +
-    		", createBy=" + createBy +
-    		", createTime=" + createTime +
-    		", updateBy=" + updateBy +
-    		", updateTime=" + updateTime +
-    		", remarks=" + remarks +
-        "}";
-    }
+	/**
+	 * @param corpId the corpId to set
+	 */
+	public void setCorpId(String corpId) {
+		this.corpId = corpId;
+	}
+
+	/**
+	 * @return the corpName
+	 */
+	public String getCorpName() {
+		return corpName;
+	}
+
+	/**
+	 * @param corpName the corpName to set
+	 */
+	public void setCorpName(String corpName) {
+		this.corpName = corpName;
+	}
+    
+    
 }

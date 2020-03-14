@@ -7,13 +7,14 @@
         policy_id as "policyId",
         policy_name as "policyName",
         policy_type as "policyType",
-        domain_id as "domainId",
 		status as "status",
 		create_by as "createBy",
 		create_time as "createTime",
 		update_by as "updateBy",
 		update_time as "updateTime",
-    	remarks as "remarks"
+    	remarks as "remarks",
+    	corp_id as "corpId",
+    	corp_name as "corpName"
     </sql>
 
 </mapper>
