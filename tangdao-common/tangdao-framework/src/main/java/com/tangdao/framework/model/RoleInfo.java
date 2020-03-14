@@ -24,8 +24,6 @@ public class RoleInfo implements Serializable {
 	
 	private String roleName;
 	
-	private String viewCode;
-
 	private String userId;
 
 	/**
@@ -70,13 +68,4 @@ public class RoleInfo implements Serializable {
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
 	}
-
-	public String getViewCode() {
-		return viewCode;
-	}
-
-	public void setViewCode(String viewCode) {
-		this.viewCode = viewCode;
-	}
-	
 }

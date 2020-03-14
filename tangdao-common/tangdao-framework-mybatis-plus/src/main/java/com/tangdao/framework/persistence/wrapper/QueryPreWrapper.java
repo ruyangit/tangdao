@@ -29,7 +29,7 @@ public class QueryPreWrapper<T> extends QueryWrapper<T> {
 	 * todo 预处理租户内的数据
 	 */
 	public QueryPreWrapper<T> preCorpFilter() {
-		logger.info("corp filter...");
+		logger.info("CorpFilter...");
 		return this;
 	}
 	

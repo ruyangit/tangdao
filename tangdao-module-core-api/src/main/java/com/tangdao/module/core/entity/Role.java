@@ -29,11 +29,6 @@ public class Role extends DataEntity {
      */
     private String roleName;
 
-    /**
-     * 编号
-     */
-    private String viewCode;
-    
     private String corpId;
     
     private String corpName;
@@ -52,14 +47,6 @@ public class Role extends DataEntity {
 
 	public void setRoleName(String roleName) {
 		this.roleName = roleName;
-	}
-
-	public String getViewCode() {
-		return viewCode;
-	}
-
-	public void setViewCode(String viewCode) {
-		this.viewCode = viewCode;
 	}
 
 	public String getCorpId() {
