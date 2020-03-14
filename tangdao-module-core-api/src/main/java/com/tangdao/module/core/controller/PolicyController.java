@@ -16,39 +16,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tangdao.framework.web.BaseController;
 import com.tangdao.module.core.entity.Policy;
 import com.tangdao.module.core.service.IPolicyService;
-import com.tangdao.framework.web.BaseController;
 
 /**
  * <p>
- * 策略表 前端控制器
+ * 策略 前端控制器
  * </p>
  *
  * @author ruyangit@gmail.com
  * @since 2020-02-26
  */
 @RestController
-@RequestMapping(value = "/api/{env}/core", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/{env}/policies", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PolicyController extends BaseController {
 
 	@Autowired
 	private IPolicyService policyService;
 	
 	/**
-	 * 策略表分页
+	 * 策略分页
 	 * 
 	 * @param page
 	 * @return
 	 */
-	@GetMapping("/policys")
-	public IPage<Policy> lists(IPage<Policy> page) {
+	@GetMapping
+	public IPage<Policy> lists(Page<Policy> page) {
 		return policyService.page(page);
 	}
 
 	/**
-	 * 策略表列表
+	 * 策略列
 	 * 
 	 * @param page
 	 * @return
@@ -59,48 +61,48 @@ public class PolicyController extends BaseController {
 	}
 
 	/**
-	 * 策略表信息
+	 * 策略信息
 	 * 
 	 * @param id
 	 * @return
 	 */
-	@GetMapping("/policy/{id}")
-	public Policy getPolicy(String id) {
-		return policyService.getById(id);
+	@GetMapping("/{policyId}")
+	public Policy getPolicy(@PathVariable("policyId") String policyId) {
+		return policyService.getById(policyId);
 	}
 
 	/**
-	 * 策略表保存
+	 * 策略保存
 	 * 
 	 * @param policy
 	 * @return
 	 */
-	@PostMapping("/policy")
+	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public boolean save(@RequestBody @Validated Policy policy) {
 		return policyService.save(policy);
 	}
 
 	/**
-	 * 策略表修改
+	 * 策略修改
 	 * 
 	 * @param id
 	 * @param policy
 	 * @return
 	 */
-	@PutMapping("/policy")
-	public boolean update(@RequestBody @Validated Policy policy) {
+	@PutMapping("/{policyId}")
+	public boolean update(@PathVariable("policyId") String policyId, @RequestBody @Validated Policy policy) {
 		return policyService.saveOrUpdate(policy);
 	}
 
 	/**
-	 * 策略表删除
+	 * 策略删除
 	 * 
 	 * @param id
 	 * @return
 	 */
-	@DeleteMapping("/policy/{id}")
-	public boolean delete(@PathVariable("id") String id) {
-		return policyService.removeById(id);
+	@DeleteMapping("/{policyId}")
+	public boolean delete(@PathVariable("policyId") String policyId) {
+		return policyService.removeById(policyId);
 	}
 }
