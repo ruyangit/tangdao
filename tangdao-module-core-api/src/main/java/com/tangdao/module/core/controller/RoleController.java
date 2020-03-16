@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.framework.web.BaseController;
-import com.tangdao.module.core.entity.Role;
+import com.tangdao.module.core.model.domain.Role;
 import com.tangdao.module.core.service.IRoleService;
 
 /**
@@ -43,7 +43,7 @@ public class RoleController extends BaseController {
 	 * @return
 	 */
 	@GetMapping
-	public IPage<Role> lists(Page<Role> page) {
+	public IPage<Role> page(Page<Role> page) {
 		return roleService.page(page);
 	}
 
@@ -54,7 +54,7 @@ public class RoleController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/{roleId}")
-	public Role getRole(@PathVariable("roleId") String roleId) {
+	public Role get(@PathVariable("roleId") String roleId) {
 		return roleService.getById(roleId);
 	}
 

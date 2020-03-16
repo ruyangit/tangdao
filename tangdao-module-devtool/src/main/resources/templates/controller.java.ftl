@@ -30,7 +30,7 @@ import ${superControllerClassPackage};
 
 /**
  * <p>
- * ${table.comment!} 前端控制器
+ * @Todo ${table.comment!} 前端控制器
  * </p>
  *
  * @author ${author}
@@ -55,7 +55,7 @@ public class ${table.controllerName} {
 	private ${table.serviceName} ${table.entityPath}Service;
 	
 	/**
-	 * ${table.comment!}分页
+	 * @Todo ${table.comment!}分页
 	 * 
 	 * @param page
 	 * @return
@@ -66,18 +66,18 @@ public class ${table.controllerName} {
 	}
 
 	/**
-	 * ${table.comment!}信息
+	 * @Todo ${table.comment!}信息
 	 * 
-	 * @param id
+	 * @param ${table.entityPath}Id
 	 * @return
 	 */
-	@GetMapping("/{id}")
-	public ${entity} get${entity}(String id) {
-		return ${table.entityPath}Service.getById(id);
+	@GetMapping("/{${table.entityPath}Id}")
+	public ${entity} get(String ${table.entityPath}Id) {
+		return ${table.entityPath}Service.getById(${table.entityPath}Id);
 	}
 
 	/**
-	 * ${table.comment!}保存
+	 * @Todo ${table.comment!}保存
 	 * 
 	 * @param ${table.entityPath}
 	 * @return
@@ -89,26 +89,26 @@ public class ${table.controllerName} {
 	}
 
 	/**
-	 * ${table.comment!}修改
+	 * @Todo ${table.comment!}修改
 	 * 
-	 * @param id
+	 * @param ${table.entityPath}Id
 	 * @param ${table.entityPath}
 	 * @return
 	 */
-	@PutMapping("/{id}")
-	public boolean update(@PathVariable("id") String id, @RequestBody @Validated ${entity} ${table.entityPath}) {
+	@PutMapping("/{${table.entityPath}Id}")
+	public boolean update(@PathVariable("${table.entityPath}Id") String ${table.entityPath}Id, @RequestBody @Validated ${entity} ${table.entityPath}) {
 		return ${table.entityPath}Service.saveOrUpdate(${table.entityPath});
 	}
 
 	/**
-	 * ${table.comment!}删除
+	 * @Todo ${table.comment!}删除
 	 * 
-	 * @param id
+	 * @param ${table.entityPath}Id
 	 * @return
 	 */
-	@DeleteMapping("/{id}")
-	public boolean delete(@PathVariable("id") String id) {
-		return ${table.entityPath}Service.removeById(id);
+	@DeleteMapping("/{${table.entityPath}Id}")
+	public boolean delete(@PathVariable("${table.entityPath}Id") String ${table.entityPath}Id) {
+		return ${table.entityPath}Service.removeById(${table.entityPath}Id);
 	}
 }
 </#if>

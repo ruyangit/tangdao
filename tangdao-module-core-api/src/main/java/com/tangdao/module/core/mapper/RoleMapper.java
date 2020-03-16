@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.tangdao.framework.model.RoleInfo;
-import com.tangdao.module.core.entity.Role;
+import com.tangdao.module.core.model.domain.Role;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

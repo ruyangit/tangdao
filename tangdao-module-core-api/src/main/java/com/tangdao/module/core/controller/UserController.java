@@ -1,6 +1,8 @@
 package com.tangdao.module.core.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,7 +22,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.framework.annotation.Authorize;
 import com.tangdao.framework.persistence.wrapper.QueryPreWrapper;
 import com.tangdao.framework.web.BaseController;
-import com.tangdao.module.core.entity.User;
+import com.tangdao.module.core.model.domain.Group;
+import com.tangdao.module.core.model.domain.Policy;
+import com.tangdao.module.core.model.domain.User;
+import com.tangdao.module.core.service.IGroupService;
+import com.tangdao.module.core.service.IPolicyService;
 import com.tangdao.module.core.service.IUserService;
 
 /**
@@ -38,6 +44,12 @@ public class UserController extends BaseController {
 	@Autowired
 	private IUserService userService;
 	
+	@Autowired
+	private IGroupService groupService;
+	
+	@Autowired
+	private IPolicyService policyService;
+	
 	/**
 	 * 用户分页
 	 * 
@@ -51,7 +63,7 @@ public class UserController extends BaseController {
 		queryWrapper.preCorpFilter();
 		return userService.page(page, queryWrapper);
 	}
-
+	
 	/**
 	 * 用户保存
 	 * 
@@ -101,4 +113,27 @@ public class UserController extends BaseController {
 	public boolean delete(@PathVariable("userId") String userId) {
 		return userService.removeById(userId);
 	}
+	
+	/**
+	 * todo 用户组关系数据
+	 * @param userId
+	 * @return
+	 */
+	@GetMapping("/{userId}/groups")
+	@Authorize(action = "sys:user:ListGroupsForUser")
+	public List<Group> listGroupsForUser(@PathVariable("userId") String userId) {
+		return groupService.listGroupsForUser(userId);
+	}
+	
+	/**
+	 * @todo 策略权限关系数据
+	 * @param userId
+	 * @return
+	 */
+	@GetMapping("/{userId}/policies")
+	@Authorize(action = "sys:user:ListPolicyForUser")
+	public List<Policy> listPolicyForUser(@PathVariable("userId") String userId) {
+		return policyService.list();
+	}
+	
 }

@@ -1,7 +1,7 @@
 package com.tangdao.module.core.service.impl;
 
-import com.tangdao.module.core.entity.Role;
 import com.tangdao.module.core.mapper.RoleMapper;
+import com.tangdao.module.core.model.domain.Role;
 import com.tangdao.module.core.service.IRoleService;
 import com.tangdao.framework.service.impl.CrudServiceImpl;
 import org.springframework.stereotype.Service;

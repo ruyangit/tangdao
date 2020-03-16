@@ -1,4 +1,4 @@
-package com.tangdao.module.core.entity;
+package com.tangdao.module.core.model.domain;
 
 import java.util.Date;
 

@@ -31,19 +31,19 @@
     <sql id="Base_Column_List">
 <#list table.fields as field>
 <#if field.keyFlag><#--生成主键排在第一位-->
-        ${field.name} as "${field.propertyName}",
+        t.${field.name} as "${field.propertyName}",
 </#if>
 </#list>
 <#list table.fields as field>
 <#if !field.keyFlag><#--生成普通字段 -->
-        ${field.name} as "${field.propertyName}",
+        t.${field.name} as "${field.propertyName}",
 </#if>
 </#list>
 <#list table.commonFields as field><#--生成公共字段 -->
 <#if !field_has_next>
-    	${field.name} as "${field.propertyName}"
+    	t.${field.name} as "${field.propertyName}"
 <#else>
-		${field.name} as "${field.propertyName}",
+		t.${field.name} as "${field.propertyName}",
 </#if>
 </#list>
     </sql>

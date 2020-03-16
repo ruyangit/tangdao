@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.framework.web.BaseController;
-import com.tangdao.module.core.entity.Group;
+import com.tangdao.module.core.model.domain.Group;
 import com.tangdao.module.core.service.IGroupService;
 
 /**
@@ -43,10 +43,10 @@ public class GroupController extends BaseController {
 	 * @return
 	 */
 	@GetMapping
-	public IPage<Group> lists(Page<Group> page) {
+	public IPage<Group> page(Page<Group> page) {
 		return groupService.page(page);
 	}
-
+	
 	/**
 	 * 用户组信息
 	 * 
@@ -54,7 +54,7 @@ public class GroupController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/{groupId}")
-	public Group getGroup(String groupId) {
+	public Group get(String groupId) {
 		return groupService.getById(groupId);
 	}
 

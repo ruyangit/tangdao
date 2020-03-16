@@ -1,7 +1,7 @@
 package com.tangdao.module.core.service;
 
-import com.tangdao.module.core.entity.Policy;
 import com.tangdao.framework.service.ICrudService;
+import com.tangdao.module.core.model.domain.Policy;
 
 /**
  * <p>

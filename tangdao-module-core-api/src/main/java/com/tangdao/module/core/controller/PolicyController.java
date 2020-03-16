@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.framework.web.BaseController;
-import com.tangdao.module.core.entity.Policy;
+import com.tangdao.module.core.model.domain.Policy;
 import com.tangdao.module.core.service.IPolicyService;
 
 /**
@@ -45,7 +45,7 @@ public class PolicyController extends BaseController {
 	 * @return
 	 */
 	@GetMapping
-	public IPage<Policy> lists(Page<Policy> page) {
+	public IPage<Policy> page(Page<Policy> page) {
 		return policyService.page(page);
 	}
 
@@ -67,7 +67,7 @@ public class PolicyController extends BaseController {
 	 * @return
 	 */
 	@GetMapping("/{policyId}")
-	public Policy getPolicy(@PathVariable("policyId") String policyId) {
+	public Policy get(@PathVariable("policyId") String policyId) {
 		return policyService.getById(policyId);
 	}
 

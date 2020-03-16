@@ -1,7 +1,9 @@
 package com.tangdao.module.core.service;
 
-import com.tangdao.module.core.entity.Group;
+import java.util.List;
+
 import com.tangdao.framework.service.ICrudService;
+import com.tangdao.module.core.model.domain.Group;
 
 /**
  * <p>
@@ -13,4 +15,10 @@ import com.tangdao.framework.service.ICrudService;
  */
 public interface IGroupService extends ICrudService<Group> {
 
+	/**
+	 * @todo 用户组数据
+	 * @param userId
+	 * @return
+	 */
+	public List<Group> listGroupsForUser(String userId);
 }

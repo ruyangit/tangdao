@@ -1,7 +1,7 @@
 package com.tangdao.module.core.service.impl;
 
-import com.tangdao.module.core.entity.Policy;
 import com.tangdao.module.core.mapper.PolicyMapper;
+import com.tangdao.module.core.model.domain.Policy;
 import com.tangdao.module.core.service.IPolicyService;
 import com.tangdao.framework.service.impl.CrudServiceImpl;
 import org.springframework.stereotype.Service;
