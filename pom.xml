@@ -14,15 +14,8 @@
 	<modules>
 		<module>tangdao-parent</module>
 		<module>tangdao-common/tangdao-common</module>
-		<module>tangdao-common/tangdao-framework</module>
-		<module>tangdao-common/tangdao-framework-mybatis-plus</module>
-		<module>tangdao-common/tangdao-framework-cache-redis</module>
-		<module>tangdao-module-core-api</module>
-		<module>tangdao-module-test-api</module>
-		<module>tangdao-module-security</module>
-		<module>tangdao-module-oauth2</module>
-		<module>tangdao-module-devtool</module>
-		<module>tangdao-starter-web</module>
+		<module>tangdao-common/tangdao-core</module>
+		<module>tangdao-common/tangdao-model</module>
 	</modules>
 
 	<properties>
