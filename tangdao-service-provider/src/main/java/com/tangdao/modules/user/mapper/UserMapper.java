@@ -3,6 +3,8 @@
  */
 package com.tangdao.modules.user.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tangdao.model.User;
 
@@ -14,6 +16,7 @@ import com.tangdao.model.User;
  * @author ruyang@gmail.com
  * @since 2020年5月28日
  */
+@Mapper
 public interface UserMapper extends BaseMapper<User> {
 
 }

@@ -31,7 +31,7 @@ public class UserModel extends Model<UserModel>{
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private Long id;
+	private String id;
 	
 	private String username;
 	

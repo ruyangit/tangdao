@@ -16,7 +16,7 @@ public abstract class BaseController {
 	/**
 	 * 成功消息
 	 * @param message
-	 * @return {success:'true'}
+	 * @return {success:true}
 	 */
 	protected CommonResponse success(String message) {
 		return CommonResponse.createCommonResponse().success(message);
@@ -25,8 +25,17 @@ public abstract class BaseController {
 	/**
 	 * 成功消息
 	 * @param message
+	 * @return {success:true}
+	 */
+	protected CommonResponse success(Object data) {
+		return CommonResponse.createCommonResponse().setData(data);
+	}
+	
+	/**
+	 * 成功消息
+	 * @param message
 	 * @param data
-	 * @return {success:'true',message:'', data:{}}
+	 * @return {success:true, message:'', data:{}}
 	 */
 	protected CommonResponse success(String message, Object data) {
 		return CommonResponse.createCommonResponse().success(message).setData(data);
@@ -35,7 +44,7 @@ public abstract class BaseController {
 	/**
 	 * 失败消息
 	 * @param message
-	 * @return {success:'false',message:''}
+	 * @return {success:false,message:''}
 	 */
 	protected CommonResponse fail(String message) {
 		return CommonResponse.createCommonResponse().fail(message);

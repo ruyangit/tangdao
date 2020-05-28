@@ -37,12 +37,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-module-core-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-module-security</artifactId>
+			<artifactId>tangdao-service-provider</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
