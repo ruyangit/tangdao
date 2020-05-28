@@ -11,8 +11,8 @@
 		<relativePath>../../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-model</artifactId>
-	<name>Tangdao Model</name>
+	<artifactId>tangdao-service-provider</artifactId>
+	<name>Tangdao Service Provider</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
@@ -22,9 +22,14 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus</artifactId>
-			<version>${mybatis-plus.version}</version>
+			<groupId>com.tangdao</groupId>
+			<artifactId>tangdao-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tangdao</groupId>
+			<artifactId>tangdao-core</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 

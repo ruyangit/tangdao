@@ -16,6 +16,7 @@
 		<module>tangdao-common/tangdao-common</module>
 		<module>tangdao-common/tangdao-core</module>
 		<module>tangdao-common/tangdao-model</module>
+		<module>tangdao-service-provider</module>
 	</modules>
 
 	<properties>
