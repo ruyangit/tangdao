@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tangdao.common.ApiController;
 import com.tangdao.common.CommonResponse;
-import com.tangdao.core.web.BaseController;
 import com.tangdao.modules.user.service.UserService;
 
 /**
@@ -22,8 +22,8 @@ import com.tangdao.modules.user.service.UserService;
  * @since 2020年5月28日
  */
 @RestController
-@RequestMapping("/admin/user")
-public class UserController extends BaseController {
+@RequestMapping("/api/user")
+public class UserController extends ApiController {
 
 	@Resource
 	private UserService userService;

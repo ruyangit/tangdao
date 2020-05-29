@@ -1,6 +1,6 @@
-package com.tangdao.core.web;
+package com.tangdao.common;
 
-import com.tangdao.common.CommonResponse;
+import com.tangdao.common.constant.IBaseEnum;
 
 /**
  * 
@@ -11,7 +11,7 @@ import com.tangdao.common.CommonResponse;
  * @author ruyang@gmail.com
  * @since 2020年4月2日
  */
-public abstract class BaseController {
+public abstract class ApiController {
 
 	/**
 	 * 成功消息
@@ -28,7 +28,7 @@ public abstract class BaseController {
 	 * @return {success:true}
 	 */
 	protected CommonResponse success(Object data) {
-		return CommonResponse.createCommonResponse().setData(data);
+		return CommonResponse.createCommonResponse().success(CommonResponse.SUCCESS).setData(data);
 	}
 	
 	/**
@@ -49,4 +49,13 @@ public abstract class BaseController {
 	protected CommonResponse fail(String message) {
 		return CommonResponse.createCommonResponse().fail(message);
 	}
+	
+	/**
+	 * 失败消息
+	 * @param message
+	 * @return {success:false,message:''}
+	 */
+    protected CommonResponse fail(IBaseEnum baseEnum) {
+    	return CommonResponse.createCommonResponse().fail(baseEnum);
+    }
 }

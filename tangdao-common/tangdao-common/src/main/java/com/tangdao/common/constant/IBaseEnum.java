@@ -17,11 +17,11 @@ public interface IBaseEnum {
 	 * TODO 枚举值
 	 * @return
 	 */
-	public String value();
+	public String code();
 	
 	/**
 	 * TODO 枚举描述
 	 * @return
 	 */
-	public String reasonPhrase();
+	public String message();
 }

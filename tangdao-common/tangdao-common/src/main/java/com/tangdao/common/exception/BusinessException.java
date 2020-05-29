@@ -1,5 +1,8 @@
 package com.tangdao.common.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import com.tangdao.common.constant.IBaseEnum;
 
 /** 
@@ -9,6 +12,7 @@ import com.tangdao.common.constant.IBaseEnum;
  * @date 2018年10月11日 下午4:26:18
  *  
  */
+@ResponseStatus(HttpStatus.OK)
 public class BusinessException extends RuntimeException {
 	
 	private static final long serialVersionUID = 1L;
@@ -32,7 +36,7 @@ public class BusinessException extends RuntimeException {
 	private IBaseEnum baseEnum;
 	
 	public BusinessException(IBaseEnum baseEnum) {
-		this(baseEnum.reasonPhrase());
+		this(baseEnum.message());
 		this.baseEnum = baseEnum;
 	}
 

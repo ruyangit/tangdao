@@ -22,7 +22,7 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final String SUCCESS = "success";
+	public static final String SUCCESS = "success";
 
 	private static final String MESSAGE = "message";
 
@@ -74,8 +74,8 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 	
 	public CommonResponse fail(IBaseEnum baseEnum) {
 		this.put(SUCCESS, false);
-		this.put(CODE, baseEnum.value());
-		this.put(MESSAGE, baseEnum.reasonPhrase());
+		this.put(CODE, baseEnum.code());
+		this.put(MESSAGE, baseEnum.message());
 		return this;
 	}
 
