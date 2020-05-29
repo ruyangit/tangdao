@@ -61,11 +61,6 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) {
 
-		String[] ignoreURLs = "".split(SECURITY_IGNORE_URLS_SPILT_CHAR);
-		for (String ignoreURL : ignoreURLs) {
-			web.ignoring().antMatchers(ignoreURL.trim());
-		}
-
 	}
 
 	@Override

@@ -3,15 +3,22 @@
  */
 package com.tangdao.web.controller;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tangdao.common.ApiController;
 import com.tangdao.common.CommonResponse;
-import com.tangdao.modules.user.service.UserService;
+import com.tangdao.core.auth.AccessException;
+import com.tangdao.web.security.AuthConfig;
+import com.tangdao.web.security.AuthManagerImpl;
+import com.tangdao.web.security.user.SecurityUser;
 
 /**
  * <p>
@@ -25,12 +32,19 @@ import com.tangdao.modules.user.service.UserService;
 @RequestMapping(value = { "/v1/auth", "/v1/user" })
 public class UserController extends ApiController {
 
-	@Resource
-	private UserService userService;
+	@Autowired
+    private AuthManagerImpl authManager;
 
 	@PostMapping("/login")
-	public CommonResponse doLogin(String username, String password) {
+	public CommonResponse doLogin(@RequestParam String username, @RequestParam String password,
+            HttpServletResponse response, HttpServletRequest request) throws AccessException {
 
-		return CommonResponse.createCommonResponse().setData("aliens23lsnf1s=");
+		 SecurityUser user = (SecurityUser) authManager.login(request);
+
+         response.addHeader(AuthConfig.AUTHORIZATION_HEADER, AuthConfig.TOKEN_PREFIX + user.getToken());
+
+         JSONObject result = new JSONObject();
+         result.put("access_token", user.getToken());
+         return success(result);
 	}
 }
