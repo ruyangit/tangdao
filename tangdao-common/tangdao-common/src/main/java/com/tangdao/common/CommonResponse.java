@@ -46,10 +46,12 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 	private CommonResponse() {
 		super();
 		this.put(SUCCESS, false);
+		this.put(MESSAGE, SUCCESS);
 	}
 
 	public CommonResponse success() {
 		this.put(SUCCESS, true);
+		this.put(MESSAGE, SUCCESS);
 		return this;
 	}
 

@@ -28,8 +28,8 @@ public class UserController extends ApiController {
 	@Resource
 	private UserService userService;
 
-	@GetMapping("/findByUsername")
-	public CommonResponse findByUsername(String username) {
-		return success(userService.findUserByUsername(username));
+	@GetMapping("/doLogin")
+	public CommonResponse doLogin(String username, String password) {
+		return CommonResponse.createCommonResponse().setData("aliens23lsnf1s=");
 	}
 }
