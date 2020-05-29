@@ -46,7 +46,7 @@ public enum ErrorApiCode implements IBaseEnum {
 	/**
 	 * TODO 未授权操作
 	 */
-	UnauthorizedOperation("UnauthorizedOperation", "未授权操作"),
+	Unauthorized("Unauthorized", "未授权操作"),
 	/**
 	 * TODO 未知参数错误
 	 */
@@ -90,7 +90,7 @@ public enum ErrorApiCode implements IBaseEnum {
 	/**
 	 * TODO 密钥不存在
 	 */
-	AuthFailure_SecretIdNotFound("AuthFailure.SecretIdNotFound", "密钥不存在"),
+	AuthFailure_SecretNotFound("AuthFailure.SecretNotFound", "密钥不存在"),
 	/**
 	 * TODO 签名错误
 	 */
@@ -106,19 +106,23 @@ public enum ErrorApiCode implements IBaseEnum {
 	/**
 	 * TODO 未授权操作
 	 */
-	AuthFailure_UnauthorizedOperation("AuthFailure.UnauthorizedOperation", "未授权操作"),
+	AuthFailure_Unauthorized("AuthFailure.Unauthorized", "未授权操作"),
 	/**
 	 * TODO 用户信息为空
 	 */
-	AuthFailure_UserEmpty("AuthFailure.UserEmpty", "用户信息为空"),
+	AuthFailure_UserNotFound("AuthFailure.UserNotFound", "用户为空"),
 	/**
 	 * TODO 密钥非法
 	 */
-	AuthFailure_InvalidSecretId("AuthFailure.InvalidSecretId", "密钥非法"),
+	AuthFailure_InvalidSecret("AuthFailure.InvalidSecret", "密钥非法"),
 	/**
-	 * TODO token 错误
+	 * TODO token failure
 	 */
-	AuthFailure_TokenFailure("AuthFailure.TokenFailure", "token 错误"),;
+	AuthFailure_TokenFailure("AuthFailure.TokenFailure", "token failure"),
+	/**
+	 * TODO token expired
+	 */
+	AuthFailure_TokenExpire("AuthFailure.TokenExpire", "token Expire"),;
 
 	private String code;
 	private String message;
