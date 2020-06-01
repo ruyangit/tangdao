@@ -101,7 +101,7 @@ public class AuthManagerImpl implements AuthManager {
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName, rawPassword);
 			authenticationManager.authenticate(authenticationToken);
 		} catch (AuthenticationException e) {
-			throw new AccessException(ErrorApiCode.AuthFailure_UserNotFound);
+			throw new AccessException(ErrorApiCode.AuthFailure_UserLoginFailure);
 		}
 
 		return tokenManager.createToken(userName);

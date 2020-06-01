@@ -41,8 +41,6 @@ public class UserModel extends Model<UserModel>{
 	
 	private String password;
 	
-	private String salt;
-	
 	private String mobile;
 	
 	private String email;

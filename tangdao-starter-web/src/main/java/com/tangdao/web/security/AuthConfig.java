@@ -6,6 +6,7 @@ package com.tangdao.web.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -39,6 +40,8 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 	public static final String SECURITY_IGNORE_URLS_SPILT_CHAR = ",";
 
 	public static final String LOGIN_ENTRY_POINT = "/v1/auth/login";
+
+	public static final String USERS_ENTRY_POINT = "/v1/auth/users";
 
 	public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/v1/auth/**";
 
@@ -89,6 +92,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 	        .authorizeRequests()
 	        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 	        .antMatchers(LOGIN_ENTRY_POINT).permitAll()
+	        .antMatchers(HttpMethod.POST, USERS_ENTRY_POINT).permitAll()
 	
 	        .and()
 	        .authorizeRequests()

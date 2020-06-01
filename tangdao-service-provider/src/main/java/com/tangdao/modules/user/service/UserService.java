@@ -3,6 +3,7 @@
  */
 package com.tangdao.modules.user.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -43,5 +44,13 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IServi
 			return users.get(0);
 		}
 		return null;
+	}
+	
+	public void createUser(String username, String password) {
+		User user = new User();
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setCreated(new Date());
+		this.save(user);
 	}
 }

@@ -108,9 +108,13 @@ public enum ErrorApiCode implements IBaseEnum {
 	 */
 	AuthFailure_Unauthorized("AuthFailure.Unauthorized", "未授权操作"),
 	/**
-	 * TODO 用户信息为空
+	 * TODO 用户不存在
 	 */
-	AuthFailure_UserNotFound("AuthFailure.UserNotFound", "用户为空"),
+	AuthFailure_UserNotFound("AuthFailure.UserNotFound", "用户不存在"),
+	/**
+	 * TODO 未知用户
+	 */
+	AuthFailure_UserLoginFailure("AuthFailure.UserLoginFailure", "用户登录错误"),
 	/**
 	 * TODO 密钥非法
 	 */
