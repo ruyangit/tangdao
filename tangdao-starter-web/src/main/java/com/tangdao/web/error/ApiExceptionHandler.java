@@ -3,6 +3,10 @@
  */
 package com.tangdao.web.error;
 
+import java.util.Objects;
+
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,7 +35,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	private @ResponseBody Object handleIllegalArgumentException(IllegalArgumentException e) {
-		CommonResponse commonResponse = CommonResponse.createCommonResponse().fail(ErrorApiCode.InvalidParameter);
+		CommonResponse commonResponse = CommonResponse.createCommonResponse().fail(ErrorApiCode.InvalidParameterValue);
 		commonResponse.success(e.getMessage());
 		return commonResponse;
 	}
@@ -39,6 +43,11 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse().fail(ErrorApiCode.InternalError);
+		if (Objects.equals(MissingServletRequestParameterException.class, e.getClass())) {
+			commonResponse.fail(ErrorApiCode.InvalidParameter);
+        } else if (Objects.equals(HttpRequestMethodNotSupportedException.class, e.getClass())) {
+			commonResponse.fail(ErrorApiCode.UnsupportedOperation);
+        }
 		commonResponse.put("error_message", ExceptionUtil.getMessage(e));
 		return commonResponse;
 	}

@@ -48,14 +48,6 @@ public enum ErrorApiCode implements IBaseEnum {
 	 */
 	Unauthorized("Unauthorized", "未授权操作"),
 	/**
-	 * TODO 未知参数错误
-	 */
-	UnknownParameter("UnknownParameter", "未知参数错误"),
-	/**
-	 * TODO 缺少参数错误
-	 */
-	MissingParameter("MissingParameter", "缺少参数错误"),
-	/**
 	 * TODO 参数错误
 	 */
 	InvalidParameter("InvalidParameter", "参数错误"),
@@ -122,11 +114,11 @@ public enum ErrorApiCode implements IBaseEnum {
 	/**
 	 * TODO token failure
 	 */
-	AuthFailure_TokenFailure("AuthFailure.TokenFailure", "token failure"),
+	AuthFailure_TokenFailure("AuthFailure.TokenFailure", "Token Failure"),
 	/**
 	 * TODO token expired
 	 */
-	AuthFailure_TokenExpire("AuthFailure.TokenExpire", "token Expire"),;
+	AuthFailure_TokenExpire("AuthFailure.TokenExpire", "Token Expire"),;
 
 	private String code;
 	private String message;

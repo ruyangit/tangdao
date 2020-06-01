@@ -54,6 +54,7 @@ public class UserController extends ApiController {
 
 		JSONObject result = new JSONObject();
 		result.put("access_token", user.getToken());
+		result.put("username", username);
 		return success(result);
 	}
 
