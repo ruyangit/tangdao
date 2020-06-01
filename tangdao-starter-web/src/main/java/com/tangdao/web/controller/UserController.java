@@ -47,7 +47,6 @@ public class UserController extends ApiController {
 	@PostMapping("/login")
 	public CommonResponse login(@RequestParam String username, @RequestParam String password,
 			HttpServletResponse response, HttpServletRequest request) throws AccessException {
-
 		SecurityUser user = (SecurityUser) authManager.login(request);
 
 		response.addHeader(AuthConfig.AUTHORIZATION_HEADER, AuthConfig.TOKEN_PREFIX + user.getToken());
