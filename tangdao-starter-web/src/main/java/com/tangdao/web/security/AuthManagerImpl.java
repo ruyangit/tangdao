@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -47,6 +48,9 @@ public class AuthManagerImpl implements AuthManager {
 	
 	@Autowired
 	private RoleService roleService;
+	
+	@Value("${user.superAdmin:ruyang}")
+	private String superAdmin;
 
 	@Override
 	public User login(Object request) throws AccessException {
@@ -71,6 +75,7 @@ public class AuthManagerImpl implements AuthManager {
 		SecurityUser user = new SecurityUser();
 		user.setUsername(username);
 		user.setToken(token);
+		user.setSuperAdmin(superAdmin.equals(username));
 		return user;
 	}
 

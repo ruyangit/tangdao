@@ -41,7 +41,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 
 	public static final String LOGIN_ENTRY_POINT = "/v1/auth/login";
 
-	public static final String USERS_ENTRY_POINT = "/v1/auth/users";
+	public static final String USERS_ENTRY_POINT = "/v1/users";
 
 	public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/v1/auth/**";
 

@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tangdao.common.exception.BusinessException;
-import com.tangdao.core.auth.AccessException;
 import com.tangdao.core.auth.Permission;
 import com.tangdao.model.Role;
 import com.tangdao.modules.user.mapper.RoleMapper;
@@ -30,6 +28,6 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> implements IServi
 //		List<Role> roles = this.list();
 //		System.out.println(username);
 //		throw new BusinessException("afasfsaf");
-		return false;
+		return true;
 	}
 }
