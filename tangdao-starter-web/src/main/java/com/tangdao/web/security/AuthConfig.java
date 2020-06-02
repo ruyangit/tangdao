@@ -47,8 +47,6 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 
 	public static final String TOKEN_PREFIX = "Bearer ";
 
-	public static final String CONSOLE_RESOURCE_NAME_PREFIX = "console/";
-
 	@Autowired
 	private JwtTokenManager tokenProvider;
 

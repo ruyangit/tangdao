@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.alibaba.fastjson.JSON;
+import com.tangdao.common.CommonResponse;
+import com.tangdao.common.constant.ErrorCode;
+
 /**
  * <p>
  * TODO 描述
@@ -86,5 +90,26 @@ public class WebUtils {
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(body);
 		response.setStatus(code);
+	}
+	
+	public static void responseJson(HttpServletResponse response, String body) throws IOException {
+		response(response, body, 200);
+	}
+	
+	public static void responseJson(HttpServletResponse response, Object body) throws IOException {
+		response(response, JSON.toJSONString(body), 200);
+	}
+	
+	public static void responseJson(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(errorCode);
+		responseJson(response, JSON.toJSONString(commonResponse));
+	}
+	
+	public static void responseJson(HttpServletResponse response, ErrorCode errorCode, String error) throws IOException {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(errorCode);
+		commonResponse.put("error_message", error);
+		responseJson(response, JSON.toJSONString(commonResponse));
 	}
 }

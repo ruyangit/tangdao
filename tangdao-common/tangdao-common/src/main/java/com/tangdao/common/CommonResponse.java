@@ -5,7 +5,7 @@ package com.tangdao.common;
 
 import java.util.LinkedHashMap;
 
-import com.tangdao.common.constant.IBaseEnum;
+import com.tangdao.common.constant.ErrorCode;
 
 /**
  * <p>
@@ -74,10 +74,10 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 		return this;
 	}
 	
-	public CommonResponse fail(IBaseEnum baseEnum) {
+	public CommonResponse fail(ErrorCode errorCode) {
 		this.put(SUCCESS, false);
-		this.put(CODE, baseEnum.code());
-		this.put(MESSAGE, baseEnum.message());
+		this.put(CODE, errorCode.code());
+		this.put(MESSAGE, errorCode.message());
 		return this;
 	}
 

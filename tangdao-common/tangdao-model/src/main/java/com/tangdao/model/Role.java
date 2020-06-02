@@ -17,11 +17,11 @@ import lombok.Setter;
  * </p>
  *
  * @author ruyang@gmail.com
- * @since 2020年5月28日
+ * @since 2020年6月2日
  */
 @Getter
 @Setter
-public class User extends Model<User>{
+public class Role extends Model<Role>{
 
 	/**
 	 * 
@@ -31,23 +31,7 @@ public class User extends Model<User>{
 	@TableId
 	private String id;
 	
-	private String username;
-	
-	private String nickname;
-	
-	private String realname;
-	
-	private String password;
-	
-	private String mobile;
-	
-	private String email;
-	
-	private String gender;
-	
-	private String signature;
-	
-	private String avatar;
+	private String roleName;
 	
 	private String remark;
 	
@@ -55,13 +39,6 @@ public class User extends Model<User>{
 	
 	private Date created;
 	
-	private Date createSource;
-	
 	private Date modified;
 	
-	private Date activated;
-	
-	private Date lastLoginDate;
-	
-	private String lastLoginIp;
 }

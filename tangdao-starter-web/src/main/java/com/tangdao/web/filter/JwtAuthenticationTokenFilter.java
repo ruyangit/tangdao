@@ -15,8 +15,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.tangdao.common.constant.ErrorApiCode;
+import com.tangdao.common.utils.WebUtils;
 import com.tangdao.web.security.AuthConfig;
 import com.tangdao.web.security.JwtTokenManager;
+
+import cn.hutool.core.exceptions.ExceptionUtil;
 
 /**
  * <p>
@@ -42,14 +46,19 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String jwt = resolveToken(request);
+		try {
+			String jwt = resolveToken(request);
 
-        if (StringUtils.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
-            this.tokenManager.validateToken(jwt);
-            Authentication authentication = this.tokenManager.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-        filterChain.doFilter(request, response);
+			if (StringUtils.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
+			    this.tokenManager.validateToken(jwt);
+			    Authentication authentication = this.tokenManager.getAuthentication(jwt);
+			    SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+			filterChain.doFilter(request, response);
+		} catch (Exception e) {
+			WebUtils.responseJson(response, ErrorApiCode.AuthFailure_Unauthorized, ExceptionUtil.getRootCauseMessage(e));
+			return;
+		}
 	}
 	
 	/**

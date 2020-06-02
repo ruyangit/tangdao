@@ -3,7 +3,7 @@ package com.tangdao.common.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.tangdao.common.constant.IBaseEnum;
+import com.tangdao.common.constant.ErrorCode;
 
 /** 
  * @ClassName: BusinessException.java 
@@ -33,25 +33,25 @@ public class BusinessException extends RuntimeException {
 		super(cause);
 	}
 	
-	private IBaseEnum baseEnum;
+	private ErrorCode errorCode;
 	
-	public BusinessException(IBaseEnum baseEnum) {
-		this(baseEnum.message());
-		this.baseEnum = baseEnum;
+	public BusinessException(ErrorCode errorCode) {
+		this(errorCode.message());
+		this.errorCode = errorCode;
 	}
 
-	public BusinessException(IBaseEnum baseEnum, String message) {
+	public BusinessException(ErrorCode errorCode, String message) {
 		this(message);
-		this.baseEnum = baseEnum;
+		this.errorCode = errorCode;
 	}
 	
-	public BusinessException(IBaseEnum baseEnum, Throwable cause) {
+	public BusinessException(ErrorCode errorCode, Throwable cause) {
 		super(cause);
-		this.baseEnum = baseEnum;
+		this.errorCode = errorCode;
 	}
 	
-	public IBaseEnum getBaseEnum() {
-		return baseEnum;
+	public ErrorCode getErrorCode() {
+		return errorCode;
 	}
 }
 

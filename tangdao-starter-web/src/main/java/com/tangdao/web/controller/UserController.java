@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tangdao.common.ApiController;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.core.auth.AccessException;
+import com.tangdao.core.auth.Secured;
 import com.tangdao.model.User;
 import com.tangdao.modules.user.service.UserService;
 import com.tangdao.web.security.AuthConfig;
@@ -40,7 +41,7 @@ public class UserController extends ApiController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -65,6 +66,12 @@ public class UserController extends ApiController {
 			throw new IllegalArgumentException("user '" + username + "' already exist!");
 		}
 		userService.createUser(username, passwordEncoder.encode(password));
-        return success("创建用户成功");
+		return success("创建用户成功");
+	}
+
+	@Secured
+	@PostMapping("/t")
+	public CommonResponse t() {
+		return success("t");
 	}
 }

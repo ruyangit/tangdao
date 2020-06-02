@@ -19,6 +19,7 @@ import com.tangdao.core.auth.AccessException;
 import com.tangdao.core.auth.AuthManager;
 import com.tangdao.core.auth.Permission;
 import com.tangdao.core.auth.User;
+import com.tangdao.modules.user.service.RoleService;
 import com.tangdao.web.security.user.SecurityUser;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -43,6 +44,9 @@ public class AuthManagerImpl implements AuthManager {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private RoleService roleService;
 
 	@Override
 	public User login(Object request) throws AccessException {
@@ -72,9 +76,9 @@ public class AuthManagerImpl implements AuthManager {
 
 	@Override
 	public void auth(Permission permission, User user) throws AccessException {
-//		if (!roleService.hasPermission(user.getUserName(), permission)) {
-			throw new AccessException(ErrorApiCode.AuthFailure_Unauthorized);
-//		}
+		if (!roleService.hasPermission(user.getUsername(), permission)) {
+			throw new AccessException(ErrorApiCode.AuthFailure_Forbidden);
+		}
 	}
 
 	/**

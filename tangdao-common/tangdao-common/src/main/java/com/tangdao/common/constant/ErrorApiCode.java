@@ -13,7 +13,7 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang@gmail.com
  * @since 2020年5月29日
  */
-public enum ErrorApiCode implements IBaseEnum {
+public enum ErrorApiCode implements ErrorCode {
 
 	/**
 	 * TODO 内部错误
@@ -22,7 +22,7 @@ public enum ErrorApiCode implements IBaseEnum {
 	/**
 	 * TODO HTTP(S)请求协议错误，只支持 GET 和 POST 请求
 	 */
-	UnsupportedProtocol("UnsupportedProtocol", "HTTP(S)请求协议错误，只支持 GET 和 POST 请求"),
+	MethodNotSupported("MethodNotSupported", "HTTP(S)请求协议错误，只支持 GET 和 POST 请求"),
 	/**
 	 * TODO 请求的次数超过了频率限制
 	 */
@@ -36,18 +36,6 @@ public enum ErrorApiCode implements IBaseEnum {
 	 */
 	NoSuchVersion("NoSuchVersion", "接口版本不存在"),
 	/**
-	 * TODO 操作不支持
-	 */
-	UnsupportedOperation("UnsupportedOperation", "操作不支持"),
-	/**
-	 * TODO 接口不支持所传地域
-	 */
-	UnsupportedRegion("UnsupportedRegion", "接口不支持所传地域"),
-	/**
-	 * TODO 未授权操作
-	 */
-	Unauthorized("Unauthorized", "未授权操作"),
-	/**
 	 * TODO 参数错误
 	 */
 	InvalidParameter("InvalidParameter", "参数错误"),
@@ -55,14 +43,6 @@ public enum ErrorApiCode implements IBaseEnum {
 	 * TODO 参数取值错误
 	 */
 	InvalidParameterValue("InvalidParameterValue", "参数取值错误"),
-	/**
-	 * TODO 接口不存在
-	 */
-	InvalidAction("InvalidAction", "接口不存在"),
-	/**
-	 * TODO 资源被占用
-	 */
-	ResourceInUse("ResourceInUse", "资源被占用"),
 	/**
 	 * TODO 资源不存在
 	 */
@@ -72,33 +52,13 @@ public enum ErrorApiCode implements IBaseEnum {
 	 */
 	ResourceUnavailable("ResourceUnavailable", "资源不可用"),
 	/**
-	 * TODO 资源不足
-	 */
-	ResourceInsufficient("ResourceInsufficient", "资源不足"),
-	/**
-	 * TODO 操作失败
-	 */
-	FailedOperation("FailedOperation", "操作失败"),
-	/**
-	 * TODO 密钥不存在
-	 */
-	AuthFailure_SecretNotFound("AuthFailure.SecretNotFound", "密钥不存在"),
-	/**
-	 * TODO 签名错误
-	 */
-	AuthFailure_SignatureFailure("AuthFailure.SignatureFailure", "签名错误"),
-	/**
-	 * TODO 签名过期
-	 */
-	AuthFailure_SignatureExpire("AuthFailure.SignatureExpire", "签名过期"),
-	/**
-	 * TODO MFA 错误
-	 */
-	AuthFailure_MFAFailure("AuthFailure.MFAFailure", "MFA 错误"),
-	/**
 	 * TODO 未授权操作
 	 */
 	AuthFailure_Unauthorized("AuthFailure.Unauthorized", "未授权操作"),
+	/**
+	 * TODO 无权限访问
+	 */
+	AuthFailure_Forbidden("AuthFailure.Forbidden", "无权限访问"),
 	/**
 	 * TODO 用户不存在
 	 */
@@ -107,10 +67,6 @@ public enum ErrorApiCode implements IBaseEnum {
 	 * TODO 未知用户
 	 */
 	AuthFailure_UserLoginFailure("AuthFailure.UserLoginFailure", "用户登录错误"),
-	/**
-	 * TODO 密钥非法
-	 */
-	AuthFailure_InvalidSecret("AuthFailure.InvalidSecret", "密钥非法"),
 	/**
 	 * TODO token failure
 	 */

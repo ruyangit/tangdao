@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tangdao.common.constant.ErrorApiCode;
 import com.tangdao.common.utils.WebUtils;
 import com.tangdao.core.code.ControllerMethodsCache;
 
@@ -40,7 +41,7 @@ public class AuthFilter implements Filter {
 
 	@Autowired
 	private ControllerMethodsCache methodsCache;
-
+	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
@@ -49,12 +50,11 @@ public class AuthFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 
 		String userAgent = WebUtils.getUserAgent(req);
-
 		if (StringUtils.startsWith(userAgent, SERVER_HEADER)) {
 			chain.doFilter(request, response);
 			return;
 		}
-
+		
 		try {
 
 			String path = new URI(req.getRequestURI()).getPath();
@@ -71,31 +71,30 @@ public class AuthFilter implements Filter {
 				String action = secured.action().toString();
 				String resource = secured.resource();
 
-//                if (StringUtils.isBlank(resource)) {
-//                    ResourceParser parser = secured.parser().newInstance();
-//                    resource = parser.parseName(req);
-//                }
-//
-//                if (StringUtils.isBlank(resource)) {
-//                    // deny if we don't find any resource:
-//                    throw new AccessException("resource name invalid!");
-//                }
+				if (StringUtils.isBlank(resource)) {
+					ResourceParser parser = secured.parser().newInstance();
+					resource = parser.parseName(req);
+				}
+
+				if (StringUtils.isBlank(resource)) {
+					// deny if we don't find any resource:
+					throw new AccessException(ErrorApiCode.ResourceUnavailable);
+				}
 
 				authManager.auth(new Permission(resource, action), authManager.login(req));
 
 			}
 			chain.doFilter(request, response);
 		} catch (AccessException e) {
-			resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
+			WebUtils.responseJson(resp, e.getErrorCode());
 			return;
 		} catch (IllegalArgumentException e) {
-			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, ExceptionUtil.getRootCauseMessage(e));
+			WebUtils.responseJson(resp, ErrorApiCode.InvalidParameterValue, ExceptionUtil.getRootCauseMessage(e));
 			return;
 		} catch (Exception e) {
-			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Server failed," + e.getMessage());
+			WebUtils.responseJson(resp, ErrorApiCode.InternalError, ExceptionUtil.getRootCauseMessage(e));
 			return;
 		}
 
 	}
-
 }

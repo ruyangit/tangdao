@@ -13,6 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+import com.tangdao.common.constant.ErrorApiCode;
+import com.tangdao.common.utils.WebUtils;
+
 /**
  * <p>
  * TODO 描述
@@ -28,7 +31,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+		WebUtils.responseJson(response, ErrorApiCode.AuthFailure_Unauthorized);
 	}
 
 }

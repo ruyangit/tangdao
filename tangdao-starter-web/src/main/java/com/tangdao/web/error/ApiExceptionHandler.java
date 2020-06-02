@@ -30,7 +30,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(AccessException.class)
 	public @ResponseBody Object accessException(AccessException e) {
-		return CommonResponse.createCommonResponse().fail(e.getBaseEnum());
+		return CommonResponse.createCommonResponse().fail(e.getErrorCode());
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
@@ -46,7 +46,7 @@ public class ApiExceptionHandler {
 		if (Objects.equals(MissingServletRequestParameterException.class, e.getClass())) {
 			commonResponse.fail(ErrorApiCode.InvalidParameter);
         } else if (Objects.equals(HttpRequestMethodNotSupportedException.class, e.getClass())) {
-			commonResponse.fail(ErrorApiCode.UnsupportedOperation);
+			commonResponse.fail(ErrorApiCode.MethodNotSupported);
         }
 		commonResponse.put("error_message", ExceptionUtil.getMessage(e));
 		return commonResponse;

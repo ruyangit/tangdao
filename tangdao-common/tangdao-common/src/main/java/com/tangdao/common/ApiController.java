@@ -1,6 +1,6 @@
 package com.tangdao.common;
 
-import com.tangdao.common.constant.IBaseEnum;
+import com.tangdao.common.constant.ErrorCode;
 
 /**
  * 
@@ -55,7 +55,7 @@ public abstract class ApiController {
 	 * @param message
 	 * @return {success:false,message:''}
 	 */
-    protected CommonResponse fail(IBaseEnum baseEnum) {
-    	return CommonResponse.createCommonResponse().fail(baseEnum);
+    protected CommonResponse fail(ErrorCode errorCode) {
+    	return CommonResponse.createCommonResponse().fail(errorCode);
     }
 }
