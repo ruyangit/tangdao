@@ -5,6 +5,7 @@ package com.tangdao.model;
 
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
@@ -64,4 +65,7 @@ public class User extends Model<User>{
 	private Date lastLoginDate;
 	
 	private String lastLoginIp;
+	
+	@TableField(exist = false)
+	private Role role;
 }

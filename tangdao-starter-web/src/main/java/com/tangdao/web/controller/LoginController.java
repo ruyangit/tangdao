@@ -7,9 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
@@ -29,22 +28,21 @@ import com.tangdao.web.security.user.SecurityUser;
  * @since 2020年5月28日
  */
 @RestController
-@RequestMapping(value = { "/v1/auth"})
+@RequestMapping(value = { "/v1/auth" })
 public class LoginController extends ApiController {
 
 	@Autowired
 	private AuthManagerImpl authManager;
 
-	@PostMapping("/login")
-	public CommonResponse login(@RequestParam String username, @RequestParam String password,
-			HttpServletResponse response, HttpServletRequest request) throws AccessException {
+	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
+	public CommonResponse login(HttpServletResponse response, HttpServletRequest request) throws AccessException {
 		SecurityUser user = (SecurityUser) authManager.login(request);
 
 		response.addHeader(AuthConfig.AUTHORIZATION_HEADER, AuthConfig.TOKEN_PREFIX + user.getToken());
 
 		JSONObject result = new JSONObject();
 		result.put("access_token", user.getToken());
-		result.put("username", username);
+		result.put("username", user.getUsername());
 		return success(result);
 	}
 }

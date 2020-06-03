@@ -64,10 +64,6 @@ public enum ErrorApiCode implements ErrorCode {
 	 */
 	AuthFailure_UserNotFound("AuthFailure.UserNotFound", "用户不存在"),
 	/**
-	 * TODO 未知用户
-	 */
-	AuthFailure_UserLoginFailure("AuthFailure.UserLoginFailure", "用户登录错误"),
-	/**
 	 * TODO token failure
 	 */
 	AuthFailure_TokenFailure("AuthFailure.TokenFailure", "Token Failure"),

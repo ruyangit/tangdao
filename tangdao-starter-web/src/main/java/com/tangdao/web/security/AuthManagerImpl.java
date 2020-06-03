@@ -100,17 +100,15 @@ public class AuthManagerImpl implements AuthManager {
 			String password = request.getParameter("password");
 			bearerToken = resolveTokenFromUser(userName, password);
 		}
-
 		return bearerToken;
 	}
 
 	private String resolveTokenFromUser(String userName, String rawPassword) throws AccessException {
-
 		try {
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName, rawPassword);
 			authenticationManager.authenticate(authenticationToken);
 		} catch (AuthenticationException e) {
-			throw new AccessException(ErrorApiCode.AuthFailure_UserLoginFailure);
+			throw new AccessException(ErrorApiCode.AuthFailure_Unauthorized);
 		}
 
 		return tokenManager.createToken(userName);

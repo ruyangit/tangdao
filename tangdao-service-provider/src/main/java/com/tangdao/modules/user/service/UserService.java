@@ -46,11 +46,11 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IServi
 		return null;
 	}
 	
-	public void createUser(String username, String password) {
+	public boolean createUser(String username, String password) {
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setCreated(new Date());
-		this.save(user);
+		return this.save(user);
 	}
 }

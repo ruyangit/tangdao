@@ -27,6 +27,15 @@ public abstract class ApiController {
 	 * @param message
 	 * @return {success:true}
 	 */
+	protected CommonResponse success(Boolean result) {
+		return CommonResponse.createCommonResponse().putData("result", result);
+	}
+	
+	/**
+	 * 成功消息
+	 * @param message
+	 * @return {success:true}
+	 */
 	protected CommonResponse success(Object data) {
 		return CommonResponse.createCommonResponse().success(CommonResponse.SUCCESS).setData(data);
 	}

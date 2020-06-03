@@ -42,6 +42,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
+		e.printStackTrace();
 		CommonResponse commonResponse = CommonResponse.createCommonResponse().fail(ErrorApiCode.InternalError);
 		if (Objects.equals(MissingServletRequestParameterException.class, e.getClass())) {
 			commonResponse.fail(ErrorApiCode.InvalidParameter);

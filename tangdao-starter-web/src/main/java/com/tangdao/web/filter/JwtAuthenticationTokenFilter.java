@@ -20,7 +20,10 @@ import com.tangdao.common.utils.WebUtils;
 import com.tangdao.web.security.AuthConfig;
 import com.tangdao.web.security.JwtTokenManager;
 
-import cn.hutool.core.exceptions.ExceptionUtil;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 
 /**
  * <p>
@@ -55,8 +58,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 			    SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 			filterChain.doFilter(request, response);
+		} catch (ExpiredJwtException e) {
+			WebUtils.responseJson(response, ErrorApiCode.AuthFailure_TokenExpire);
+			return;
+		} catch (SignatureException | MalformedJwtException | UnsupportedJwtException e) {
+			WebUtils.responseJson(response, ErrorApiCode.AuthFailure_TokenFailure);
+			return;
 		} catch (Exception e) {
-			WebUtils.responseJson(response, ErrorApiCode.AuthFailure_Unauthorized, ExceptionUtil.getRootCauseMessage(e));
+			WebUtils.responseJson(response, ErrorApiCode.AuthFailure_Unauthorized);
 			return;
 		}
 	}
