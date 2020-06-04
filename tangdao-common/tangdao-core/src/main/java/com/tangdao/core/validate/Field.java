@@ -25,6 +25,6 @@ import java.lang.annotation.Target;
 public @interface Field {
 
 	String name() default "";
-
+	
 	Rule[] rules() default { @Rule };
 }

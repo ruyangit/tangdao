@@ -19,7 +19,7 @@ public class MobileParser implements RuleParser {
 
 	@Override
 	public Boolean validate(Object value, String... rvs) {
-		return Validator.isMobile(String.valueOf(value));
+		return !Validator.isMobile(String.valueOf(value));
 	}
 
 }

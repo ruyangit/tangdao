@@ -20,7 +20,6 @@ import com.tangdao.core.auth.ActionTypes;
 import com.tangdao.core.auth.Secured;
 import com.tangdao.core.validate.Field;
 import com.tangdao.core.validate.Rule;
-import com.tangdao.core.validate.RuleType;
 import com.tangdao.core.validate.Validate;
 import com.tangdao.model.User;
 import com.tangdao.modules.user.service.UserService;
@@ -57,18 +56,14 @@ public class UserController extends ApiController {
 
 	@Validate({ 
 		@Field(name = "user.username", rules = { 
-			@Rule(message = "账号不能为空"),
-			@Rule(type = RuleType.PATTERN, value = "\\d+", message = "账号由英文字母组成") 
+			@Rule(message = "账号不能为空")
 		}),
-//		@Field(name = "user.password", rules = { 
-//				@Rule(message = "密码不能为空"),
-//				@Rule(type = RuleType.PATTERN, value = "[a-zA-Z]*", message = "账号由英文字母和下划线组成") 
-//		}),
-		@Field(name = "test"),
-		@Field(name = "user.role.roleName") 
+		@Field(name = "user.password", rules = { 
+			@Rule(message = "密码不能为空")
+		}) 
 	})
 	@PostMapping
-	public CommonResponse createUser(@RequestBody User user, String test) {
+	public CommonResponse createUser(@RequestBody User user) {
 		User eu = userService.findUserByUsername(user.getUsername());
 		if (eu != null) {
 			throw new IllegalArgumentException("用户 '" + eu.getUsername() + "' 已存在");

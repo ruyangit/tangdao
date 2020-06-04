@@ -19,7 +19,7 @@ public class EmailParser implements RuleParser {
 
 	@Override
 	public Boolean validate(Object value, String... rvs) {
-		return Validator.isEmail(String.valueOf(value));
+		return !Validator.isEmail(String.valueOf(value));
 	}
 
 }
