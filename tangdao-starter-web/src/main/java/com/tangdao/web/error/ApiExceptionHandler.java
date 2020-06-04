@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.tangdao.common.CommonResponse;
 import com.tangdao.common.constant.ErrorApiCode;
+import com.tangdao.common.exception.BusinessException;
 import com.tangdao.core.auth.AccessException;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
@@ -32,17 +33,21 @@ public class ApiExceptionHandler {
 	public @ResponseBody Object accessException(AccessException e) {
 		return CommonResponse.createCommonResponse().fail(e.getErrorCode());
 	}
+	
+	@ExceptionHandler(BusinessException.class)
+	public @ResponseBody Object businessException(BusinessException e) {
+		return CommonResponse.createCommonResponse().fail(e.getErrorCode());
+	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	private @ResponseBody Object handleIllegalArgumentException(IllegalArgumentException e) {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse().fail(ErrorApiCode.InvalidParameterValue);
-		commonResponse.success(e.getMessage());
+		commonResponse.fail(e.getMessage());
 		return commonResponse;
 	}
 
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
-		e.printStackTrace();
 		CommonResponse commonResponse = CommonResponse.createCommonResponse().fail(ErrorApiCode.InternalError);
 		if (Objects.equals(MissingServletRequestParameterException.class, e.getClass())) {
 			commonResponse.fail(ErrorApiCode.InvalidParameter);

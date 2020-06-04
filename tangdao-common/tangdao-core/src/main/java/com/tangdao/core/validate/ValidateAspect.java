@@ -4,20 +4,17 @@
 package com.tangdao.core.validate;
 
 
-import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.DefaultParameterNameDiscoverer;
-import org.springframework.stereotype.Component;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.tangdao.common.utils.ReflectUtils;
-
-import cn.hutool.core.util.ReflectUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -28,14 +25,22 @@ import cn.hutool.core.util.ReflectUtil;
  * @since 2020年4月25日
  */
 @Aspect
-@Component
 public class ValidateAspect {
+	
+	/**
+	 * 用于SpEL表达式解析.
+	 */
+	private SpelExpressionParser spelExpressionParser = new SpelExpressionParser();
 	
 	/**
 	 * 用于获取方法参数定义名字.
 	 */
 	private DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
 
+	/**
+	 * 
+	 * @param validate
+	 */
 	@Pointcut("@within(validate) || @annotation(validate)")
 	public void validatePointcut(Validate validate) {
 	}
@@ -47,57 +52,26 @@ public class ValidateAspect {
 	 * @throws Throwable
 	 */
 	@Around("validatePointcut(validate)")
-	public void doAround(ProceedingJoinPoint joinPoint, Validate validate) throws Throwable {
+	public Object doAround(ProceedingJoinPoint joinPoint, Validate validate) throws Throwable {
 		MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 		String[] paramNames = nameDiscoverer.getParameterNames(methodSignature.getMethod());
-		
-		for(Field field: validate.value()) {
-//			Field fields = validate.value()[i];
-			String fieldName = field.name();
-			Object fieldValue = null;
-			
-			for(int c=0; c<joinPoint.getArgs().length; c++) {
-				Object fvo = joinPoint.getArgs()[c];
-				if(fieldName.equals(paramNames[c])) {
-					fieldValue = fvo;
-					break;
-				}
-//				fieldValue = ReflectUtils.invokeGetter(joinPoint.getArgs()[c], fieldName);
-				
-//				fieldValue = ReflectUtil.getFieldValue(fvo, fieldName);
-//				if(fieldValue!=null) {
-//					break;
-//				}
-				boolean vfs = false;
-				for (String name : StringUtils.split(fieldName, ".")){
-//					String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(name);
-//					object = invokeMethod(object, getterMethodName, new Class[] {}, new Object[] {});
-//					System.out.println(name);
-					ReflectUtils.getFieldValue(fvo, name);
-					fieldValue = ReflectUtil.getFieldValue(fvo, fieldName);
-					if(fieldValue!=null) {
-						vfs = true;
-						break;
-					}
-				}
-				
-				if(vfs) {
-					break;
-				}
-			}
-			System.out.println(fieldName);
-			System.out.println(fieldValue);
-			for(Rule rule: field.rules()) {
-//				Method method = ReflectUtil.getMethod(Validator.class, "isNull()");
-//				Object obj = ReflectUtil.invoke(null, "cn.hutool.core.lang.isNull(val)", fieldValue);
-//				System.out.println(obj);
-				System.out.println(rule);
-				System.out.println(rule.type().getValue());
-			}
-			System.out.println("----");
+		Object[] paramValues = joinPoint.getArgs();
+		// spring的表达式上下文对象
+		EvaluationContext context = new StandardEvaluationContext();
+		// 封装参数
+		for(int i=0; i<paramNames.length; i++) {
+			context.setVariable(paramNames[i], paramValues[i]);
 		}
-		
-//		System.out.println(JSON.toJSONString(validate));
-//		System.out.println(JSON.toJSONString(argsMap));
+		for(Field field: validate.value()) {
+			Object fieldValue = spelExpressionParser.parseExpression("#"+field.name()).getValue(context);
+			for(Rule rule: field.rules()) {
+				RuleParser ruleParser = rule.type().getParser().newInstance();
+				if(ruleParser.validate(fieldValue, rule.value())) {
+					String message = StrUtil.isEmpty(rule.message())?rule.type().getMessage():rule.message();
+					throw new IllegalArgumentException(message);
+				}
+			}
+		}
+		return joinPoint.proceed();
 	}
 }

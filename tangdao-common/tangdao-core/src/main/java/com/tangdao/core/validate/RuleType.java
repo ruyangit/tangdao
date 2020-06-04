@@ -13,31 +13,30 @@ package com.tangdao.core.validate;
  */
 public enum RuleType {
 
-	/**
-	 * TODO 内部错误
-	 */
-	IS_NULL("isNull", "参数不能位空"),
-	MAX("max", "最大值"),
-	MIN("min", "最小值"),
-	PATTERN("pattern", "正则"),
-	IS_EMAIL("isEmail", "邮箱"),
-	IS_MOBILE("isMobile", "手机号"),
-	;
+	NULL("参数为空", com.tangdao.core.validate.parser.NullParser.class),
+	NOT_NULL("参数为空", com.tangdao.core.validate.parser.NotNullParser.class),
+	EMPTY("参数为空", com.tangdao.core.validate.parser.EmptyParser.class),
+	NOT_EMPTY("参数不为空", com.tangdao.core.validate.parser.NotEmptyParser.class),
+	EMAIL("邮箱", com.tangdao.core.validate.parser.EmailParser.class),
+	MOBILE("手机号", com.tangdao.core.validate.parser.MobileParser.class),
+	EQUAL("相等", com.tangdao.core.validate.parser.EqualParser.class),
+	PATTERN("正则校验", com.tangdao.core.validate.parser.MactchRegexParser.class),;
 
-	private String value;
 	private String message;
 
-	private RuleType(String value, String message) {
-		this.value = value;
+	private Class<? extends RuleParser> parser;
+
+	private RuleType(String message, Class<? extends RuleParser> parser) {
 		this.message = message;
+		this.parser = parser;
 	}
-	
-	public String getValue() {
-		return value;
-	}
-	
+
 	public String getMessage() {
 		return message;
+	}
+
+	public Class<? extends RuleParser> getParser() {
+		return parser;
 	}
 
 }

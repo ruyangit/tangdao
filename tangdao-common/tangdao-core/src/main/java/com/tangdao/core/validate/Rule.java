@@ -26,9 +26,9 @@ import org.apache.commons.lang3.StringUtils;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Rule {
 
-	RuleType type() default RuleType.IS_NULL;
+	RuleType type() default RuleType.NULL;
 
-	String value() default StringUtils.EMPTY;
-	
+	String[] value() default {};
+
 	String message() default StringUtils.EMPTY;
 }
