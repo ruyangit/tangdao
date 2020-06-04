@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.tangdao.common.ApiController;
 import com.tangdao.common.CommonResponse;
-import com.tangdao.core.auth.AccessException;
 import com.tangdao.web.security.AuthConfig;
-import com.tangdao.web.security.AuthManagerImpl;
+import com.tangdao.web.security.AuthManager;
 import com.tangdao.web.security.user.SecurityUser;
 
 /**
@@ -32,11 +31,11 @@ import com.tangdao.web.security.user.SecurityUser;
 public class LoginController extends ApiController {
 
 	@Autowired
-	private AuthManagerImpl authManager;
+	private AuthManager authManager;
 
 	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
-	public CommonResponse login(HttpServletResponse response, HttpServletRequest request) throws AccessException {
-		SecurityUser user = (SecurityUser) authManager.login(request);
+	public CommonResponse login(HttpServletResponse response, HttpServletRequest request) {
+		SecurityUser user = authManager.login(request);
 
 		response.addHeader(AuthConfig.AUTHORIZATION_HEADER, AuthConfig.TOKEN_PREFIX + user.getToken());
 

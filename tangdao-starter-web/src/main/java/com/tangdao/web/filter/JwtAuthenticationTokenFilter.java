@@ -15,15 +15,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.tangdao.common.constant.ErrorApiCode;
+import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.utils.WebUtils;
 import com.tangdao.web.security.AuthConfig;
 import com.tangdao.web.security.JwtTokenManager;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.UnsupportedJwtException;
 
 /**
  * <p>
@@ -59,13 +56,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 			}
 			filterChain.doFilter(request, response);
 		} catch (ExpiredJwtException e) {
-			WebUtils.responseJson(response, ErrorApiCode.AuthFailure_TokenExpire);
-			return;
-		} catch (SignatureException | MalformedJwtException | UnsupportedJwtException e) {
-			WebUtils.responseJson(response, ErrorApiCode.AuthFailure_TokenFailure);
+			WebUtils.responseJson(response, CommonApiCode.AUTH_EXPIRE);
 			return;
 		} catch (Exception e) {
-			WebUtils.responseJson(response, ErrorApiCode.AuthFailure_Unauthorized);
+			WebUtils.responseJson(response, CommonApiCode.UNAUTHORIZED);
 			return;
 		}
 	}

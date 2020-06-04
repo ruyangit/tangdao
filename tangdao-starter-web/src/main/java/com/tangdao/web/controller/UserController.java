@@ -16,8 +16,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.common.ApiController;
 import com.tangdao.common.CommonResponse;
-import com.tangdao.core.auth.ActionTypes;
-import com.tangdao.core.auth.Secured;
 import com.tangdao.core.validate.Field;
 import com.tangdao.core.validate.Rule;
 import com.tangdao.core.validate.Validate;
@@ -45,7 +43,6 @@ public class UserController extends ApiController {
 	private PasswordEncoder passwordEncoder;
 
 	@GetMapping
-	@Secured(resource = "user", action = ActionTypes.READ)
 	public CommonResponse page(String username, @RequestParam Integer current, @RequestParam Integer size) {
 		QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
 		if (StrUtil.isNotBlank(username)) {
@@ -54,14 +51,8 @@ public class UserController extends ApiController {
 		return success(userService.page(new Page<User>(current, size), queryWrapper));
 	}
 
-	@Validate({ 
-		@Field(name = "user.username", rules = { 
-			@Rule(message = "账号不能为空")
-		}),
-		@Field(name = "user.password", rules = { 
-			@Rule(message = "密码不能为空")
-		}) 
-	})
+	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
+			@Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
 	@PostMapping
 	public CommonResponse createUser(@RequestBody User user) {
 		User eu = userService.findUserByUsername(user.getUsername());
@@ -77,13 +68,11 @@ public class UserController extends ApiController {
 	}
 
 	@PostMapping("/update")
-	@Secured(resource = "user", action = ActionTypes.WRITE)
 	public CommonResponse updateUser(@RequestBody User user) {
 		return success(userService.updateById(user));
 	}
 
 	@PostMapping("/delete")
-	@Secured(resource = "user", action = ActionTypes.WRITE)
 	public CommonResponse deleteUser(@RequestBody User user) {
 		return success(userService.removeById(user.getId()));
 	}

@@ -11,17 +11,19 @@ package com.tangdao.common.constant;
  * @author ruyang@gmail.com
  * @since 2020年5月14日
  */
-public interface IBaseEnum {
+public interface Base<K, V> {
 
 	/**
 	 * TODO 枚举值
+	 * 
 	 * @return
 	 */
-	public String code();
-	
+	public K getCode();
+
 	/**
 	 * TODO 枚举描述
+	 * 
 	 * @return
 	 */
-	public String message();
+	public V getMessage();
 }

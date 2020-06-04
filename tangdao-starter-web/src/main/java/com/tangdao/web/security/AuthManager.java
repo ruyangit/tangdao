@@ -15,11 +15,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import com.tangdao.common.constant.ErrorApiCode;
-import com.tangdao.core.auth.AccessException;
-import com.tangdao.core.auth.AuthManager;
-import com.tangdao.core.auth.Permission;
-import com.tangdao.core.auth.User;
+import com.tangdao.common.constant.CommonApiCode;
+import com.tangdao.common.exception.BusinessException;
 import com.tangdao.modules.user.service.RoleService;
 import com.tangdao.web.security.user.SecurityUser;
 
@@ -34,38 +31,32 @@ import io.jsonwebtoken.ExpiredJwtException;
  * @since 2020年5月29日
  */
 @Component
-public class AuthManagerImpl implements AuthManager {
+public class AuthManager {
 
-	private static final String TOKEN_PREFIX = "Bearer ";
-	
-	private static final String ACCESS_TOKEN = "access_token";
+	public static final String TOKEN_PREFIX = "Bearer ";
+
+	public static final String ACCESS_TOKEN = "access_token";
 
 	@Autowired
 	private JwtTokenManager tokenManager;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-	
+
 	@Autowired
 	private RoleService roleService;
-	
+
 	@Value("${user.superAdmin:ruyang}")
 	private String superAdmin;
 
-	@Override
-	public User login(Object request) throws AccessException {
-		HttpServletRequest req = (HttpServletRequest) request;
-		String token = resolveToken(req);
-		if (StringUtils.isBlank(token)) {
-			throw new AccessException(ErrorApiCode.AuthFailure_UserNotFound);
-		}
-
+	public SecurityUser login(HttpServletRequest request) {
+		String token = resolveToken(request);
 		try {
 			tokenManager.validateToken(token);
 		} catch (ExpiredJwtException e) {
-			throw new AccessException(ErrorApiCode.AuthFailure_TokenExpire);
+			throw new BusinessException(CommonApiCode.AUTH_EXPIRE);
 		} catch (Exception e) {
-			throw new AccessException(ErrorApiCode.AuthFailure_TokenFailure);
+			throw new BusinessException(CommonApiCode.UNAUTHORIZED);
 		}
 
 		Authentication authentication = tokenManager.getAuthentication(token);
@@ -79,17 +70,17 @@ public class AuthManagerImpl implements AuthManager {
 		return user;
 	}
 
-	@Override
-	public void auth(Permission permission, User user) throws AccessException {
-		if (!roleService.hasPermission(user.getUsername(), permission)) {
-			throw new AccessException(ErrorApiCode.AuthFailure_Forbidden);
-		}
-	}
+//	@Override
+//	public void auth(Permission permission, User user) throws AccessException {
+//		if (!roleService.hasPermission(user.getUsername(), permission)) {
+//			throw new AccessException(ErrorApiCode.AuthFailure_Forbidden);
+//		}
+//	}
 
 	/**
 	 * Get token from header
 	 */
-	private String resolveToken(HttpServletRequest request) throws AccessException {
+	private String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AuthConfig.AUTHORIZATION_HEADER);
 		if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
 			return bearerToken.substring(7);
@@ -103,12 +94,13 @@ public class AuthManagerImpl implements AuthManager {
 		return bearerToken;
 	}
 
-	private String resolveTokenFromUser(String userName, String rawPassword) throws AccessException {
+	private String resolveTokenFromUser(String userName, String rawPassword) {
 		try {
-			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName, rawPassword);
+			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName,
+					rawPassword);
 			authenticationManager.authenticate(authenticationToken);
 		} catch (AuthenticationException e) {
-			throw new AccessException(ErrorApiCode.AuthFailure_Unauthorized);
+			throw new IllegalArgumentException("用户名或密码输入错误");
 		}
 
 		return tokenManager.createToken(userName);

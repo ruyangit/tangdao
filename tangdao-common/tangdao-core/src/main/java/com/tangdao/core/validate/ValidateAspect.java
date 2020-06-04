@@ -13,6 +13,7 @@ import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.stereotype.Component;
 
 import cn.hutool.core.util.StrUtil;
 
@@ -25,6 +26,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 2020年4月25日
  */
 @Aspect
+@Component
 public class ValidateAspect {
 	
 	/**

@@ -13,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-import com.tangdao.common.constant.ErrorApiCode;
+import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.utils.WebUtils;
 
 /**
@@ -31,7 +31,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		// TODO Auto-generated method stub
-		WebUtils.responseJson(response, ErrorApiCode.AuthFailure_Unauthorized);
+		WebUtils.responseJson(response, CommonApiCode.UNAUTHORIZED);
 	}
 
 }

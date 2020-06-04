@@ -1,6 +1,10 @@
 package com.tangdao.common;
 
+import java.util.Map;
+
 import com.tangdao.common.constant.ErrorCode;
+
+import cn.hutool.core.map.MapUtil;
 
 /**
  * 
@@ -28,7 +32,9 @@ public abstract class ApiController {
 	 * @return {success:true}
 	 */
 	protected CommonResponse success(Boolean result) {
-		return CommonResponse.createCommonResponse().putData("result", result);
+		Map<String, Object> data = MapUtil.newHashMap();
+		data.put("result", result);
+		return CommonResponse.createCommonResponse().success().setData(data);
 	}
 	
 	/**
@@ -37,7 +43,7 @@ public abstract class ApiController {
 	 * @return {success:true}
 	 */
 	protected CommonResponse success(Object data) {
-		return CommonResponse.createCommonResponse().success(CommonResponse.SUCCESS).setData(data);
+		return CommonResponse.createCommonResponse().success().setData(data);
 	}
 	
 	/**

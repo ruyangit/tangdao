@@ -5,6 +5,9 @@ package com.tangdao.common;
 
 import java.util.LinkedHashMap;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.constant.ErrorCode;
 
 /**
@@ -22,65 +25,45 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final String SUCCESS = "success";
-
 	private static final String MESSAGE = "message";
 
 	private static final String CODE = "code";
 
 	private static final String DATA = "data";
 
-	private static final String EMPTY = "";
-
-	public boolean isSuccess() {
-		return get(SUCCESS) != null && (Boolean) get(SUCCESS);
-	}
-
-	public String getMessage() {
-		if (get(MESSAGE) != null) {
-			return (String) get(MESSAGE);
-		}
-		return EMPTY;
-	}
-
 	private CommonResponse() {
 		super();
-		this.put(SUCCESS, false);
-		this.put(MESSAGE, SUCCESS);
+		this.success();
 	}
 
 	public CommonResponse success() {
-		this.put(SUCCESS, true);
-		this.put(MESSAGE, SUCCESS);
+		this.success(StringUtils.EMPTY);
 		return this;
 	}
 
 	public CommonResponse success(String message) {
-		this.put(SUCCESS, true);
+		this.put(CODE, CommonApiCode.SUCCESS.getCode());
 		this.put(MESSAGE, message);
 		return this;
 	}
 
 	public CommonResponse fail(String message) {
-		this.put(SUCCESS, false);
-		this.put(MESSAGE, message);
-		return this;
-	}
-	
-	public CommonResponse fail(String code, String message) {
-		this.put(SUCCESS, false);
-		this.put(CODE, code);
+		this.put(CODE, CommonApiCode.FAILED.getCode());
 		this.put(MESSAGE, message);
 		return this;
 	}
 	
 	public CommonResponse fail(ErrorCode errorCode) {
-		this.put(SUCCESS, false);
-		this.put(CODE, errorCode.code());
-		this.put(MESSAGE, errorCode.message());
+		this.fail(errorCode.getCode(), errorCode.getMessage());
 		return this;
 	}
-
+	
+	public CommonResponse fail(String code, String message) {
+		this.put(CODE, code);
+		this.put(MESSAGE, message);
+		return this;
+	}
+	
 	public CommonResponse setData(Object data) {
 		return putData(DATA, data);
 	}

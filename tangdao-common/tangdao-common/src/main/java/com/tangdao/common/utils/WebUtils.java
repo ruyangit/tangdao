@@ -109,7 +109,8 @@ public class WebUtils {
 	public static void responseJson(HttpServletResponse response, ErrorCode errorCode, String error) throws IOException {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
 		commonResponse.fail(errorCode);
-		commonResponse.put("error_message", error);
+		// 异常描述
+		commonResponse.put("message_description", error);
 		responseJson(response, JSON.toJSONString(commonResponse));
 	}
 }
