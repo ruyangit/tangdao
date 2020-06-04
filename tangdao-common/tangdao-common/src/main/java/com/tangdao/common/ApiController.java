@@ -22,15 +22,6 @@ public abstract class ApiController {
 	 * @param message
 	 * @return {success:true}
 	 */
-	protected CommonResponse success(String message) {
-		return CommonResponse.createCommonResponse().success(message);
-	}
-	
-	/**
-	 * 成功消息
-	 * @param message
-	 * @return {success:true}
-	 */
 	protected CommonResponse success(Boolean result) {
 		Map<String, Object> data = MapUtil.newHashMap();
 		data.put("result", result);
@@ -54,15 +45,6 @@ public abstract class ApiController {
 	 */
 	protected CommonResponse success(String message, Object data) {
 		return CommonResponse.createCommonResponse().success(message).setData(data);
-	}
-	
-	/**
-	 * 失败消息
-	 * @param message
-	 * @return {success:false,message:''}
-	 */
-	protected CommonResponse fail(String message) {
-		return CommonResponse.createCommonResponse().fail(message);
 	}
 	
 	/**

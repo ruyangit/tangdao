@@ -17,12 +17,11 @@ public enum CommonApiCode implements ErrorCode {
 	FAILED("-1", "操作失败"),
 	
 	BAD_REQUEST("400", "非法参数"),
-	UNAUTHORIZED("401", "授权访问失败"),
-	FORBIDDEN("403", "暂无权限"),
+	UNAUTHORIZED("401", "用户身份验证失败"),
+	FORBIDDEN("403", "不允许访问"),
 	INTERNAL_ERROR("500", "内部异常"),
 	
-	AUTH_EXPIRE("1007", "授权凭证过期"),
-	AUTH_REMOTE_LOGIN("1008", "异地登录异常"),
+	USER_TOKEN_EXPIRE("1007", "用户凭证已过期"),
 	;
 	
 	private String code;

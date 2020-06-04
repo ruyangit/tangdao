@@ -40,7 +40,7 @@ public class LoginController extends ApiController {
 		response.addHeader(AuthConfig.AUTHORIZATION_HEADER, AuthConfig.TOKEN_PREFIX + user.getToken());
 
 		JSONObject result = new JSONObject();
-		result.put("access_token", user.getToken());
+		result.put(AuthConfig.ACCESS_TOKEN, user.getToken());
 		result.put("username", user.getUsername());
 		return success(result);
 	}

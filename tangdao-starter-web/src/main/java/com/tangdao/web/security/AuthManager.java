@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.exception.BusinessException;
-import com.tangdao.modules.user.service.RoleService;
 import com.tangdao.web.security.user.SecurityUser;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -33,18 +32,11 @@ import io.jsonwebtoken.ExpiredJwtException;
 @Component
 public class AuthManager {
 
-	public static final String TOKEN_PREFIX = "Bearer ";
-
-	public static final String ACCESS_TOKEN = "access_token";
-
 	@Autowired
 	private JwtTokenManager tokenManager;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private RoleService roleService;
 
 	@Value("${user.superAdmin:ruyang}")
 	private String superAdmin;
@@ -54,7 +46,7 @@ public class AuthManager {
 		try {
 			tokenManager.validateToken(token);
 		} catch (ExpiredJwtException e) {
-			throw new BusinessException(CommonApiCode.AUTH_EXPIRE);
+			throw new BusinessException(CommonApiCode.USER_TOKEN_EXPIRE);
 		} catch (Exception e) {
 			throw new BusinessException(CommonApiCode.UNAUTHORIZED);
 		}
@@ -70,22 +62,15 @@ public class AuthManager {
 		return user;
 	}
 
-//	@Override
-//	public void auth(Permission permission, User user) throws AccessException {
-//		if (!roleService.hasPermission(user.getUsername(), permission)) {
-//			throw new AccessException(ErrorApiCode.AuthFailure_Forbidden);
-//		}
-//	}
-
 	/**
 	 * Get token from header
 	 */
 	private String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AuthConfig.AUTHORIZATION_HEADER);
-		if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
+		if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(AuthConfig.TOKEN_PREFIX)) {
 			return bearerToken.substring(7);
 		}
-		bearerToken = request.getParameter(ACCESS_TOKEN);
+		bearerToken = request.getParameter(AuthConfig.ACCESS_TOKEN);
 		if (StringUtils.isBlank(bearerToken)) {
 			String userName = request.getParameter("username");
 			String password = request.getParameter("password");
@@ -100,7 +85,7 @@ public class AuthManager {
 					rawPassword);
 			authenticationManager.authenticate(authenticationToken);
 		} catch (AuthenticationException e) {
-			throw new IllegalArgumentException("用户名或密码输入错误");
+			throw new IllegalArgumentException("用户名或密码输入有误");
 		}
 
 		return tokenManager.createToken(userName);

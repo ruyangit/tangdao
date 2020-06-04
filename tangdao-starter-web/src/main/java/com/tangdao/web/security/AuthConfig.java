@@ -43,9 +43,9 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 
 	public static final String USERS_ENTRY_POINT = "/v1/users";
 
-	public static final String TOKEN_BASED_AUTH_ENTRY_POINT = "/v1/auth/**";
-
 	public static final String TOKEN_PREFIX = "Bearer ";
+	
+	public static final String ACCESS_TOKEN = "access_token";
 
 	@Autowired
 	private JwtTokenManager tokenProvider;
@@ -93,8 +93,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 	        .antMatchers(HttpMethod.POST, USERS_ENTRY_POINT).permitAll()
 	
 	        .and()
-	        .authorizeRequests()
-	        .antMatchers(TOKEN_BASED_AUTH_ENTRY_POINT).authenticated()
+	        .authorizeRequests().anyRequest().authenticated()
 	
 	        .and()
 	        .exceptionHandling()

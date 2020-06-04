@@ -5,6 +5,7 @@ package com.tangdao.web.error;
 
 import java.util.Objects;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,14 +35,22 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	private @ResponseBody Object handleIllegalArgumentException(IllegalArgumentException e) {
-		CommonResponse commonResponse = CommonResponse.createCommonResponse().fail(CommonApiCode.BAD_REQUEST);
-		commonResponse.fail(e.getMessage());
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(CommonApiCode.BAD_REQUEST.getCode(), e.getMessage());
+		return commonResponse;
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	private @ResponseBody Object accessDeniedException(AccessDeniedException e) {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(CommonApiCode.FORBIDDEN.getCode(), e.getMessage());
 		return commonResponse;
 	}
 
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
-		CommonResponse commonResponse = CommonResponse.createCommonResponse().fail(CommonApiCode.INTERNAL_ERROR);
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(CommonApiCode.INTERNAL_ERROR);
 		if (Objects.equals(MissingServletRequestParameterException.class, e.getClass())) {
 			commonResponse.fail(CommonApiCode.BAD_REQUEST);
 		}

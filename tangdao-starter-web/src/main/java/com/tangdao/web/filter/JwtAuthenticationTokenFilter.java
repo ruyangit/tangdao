@@ -32,10 +32,6 @@ import io.jsonwebtoken.ExpiredJwtException;
  */
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 
-	private static final String TOKEN_PREFIX = "Bearer ";
-	
-	private static final String ACCESS_TOKEN = "access_token";
-	
 	private JwtTokenManager tokenManager;
 
     public JwtAuthenticationTokenFilter(JwtTokenManager tokenManager) {
@@ -56,7 +52,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 			}
 			filterChain.doFilter(request, response);
 		} catch (ExpiredJwtException e) {
-			WebUtils.responseJson(response, CommonApiCode.AUTH_EXPIRE);
+			WebUtils.responseJson(response, CommonApiCode.USER_TOKEN_EXPIRE);
 			return;
 		} catch (Exception e) {
 			WebUtils.responseJson(response, CommonApiCode.UNAUTHORIZED);
@@ -69,10 +65,10 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
      */
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AuthConfig.AUTHORIZATION_HEADER);
-        if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
+        if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(AuthConfig.TOKEN_PREFIX)) {
             return bearerToken.substring(7);
         }
-        String jwt = request.getParameter(ACCESS_TOKEN);
+        String jwt = request.getParameter(AuthConfig.ACCESS_TOKEN);
         if (StringUtils.isNotBlank(jwt)) {
             return jwt;
         }

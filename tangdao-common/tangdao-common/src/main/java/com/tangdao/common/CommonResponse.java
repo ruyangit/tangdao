@@ -47,12 +47,6 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 		return this;
 	}
 
-	public CommonResponse fail(String message) {
-		this.put(CODE, CommonApiCode.FAILED.getCode());
-		this.put(MESSAGE, message);
-		return this;
-	}
-	
 	public CommonResponse fail(ErrorCode errorCode) {
 		this.fail(errorCode.getCode(), errorCode.getMessage());
 		return this;
