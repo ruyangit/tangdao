@@ -1,9 +1,9 @@
 /**
  *
  */
-package com.tangdao.core.validate.parser;
+package com.tangdao.core.web.validate.parser;
 
-import com.tangdao.core.validate.RuleParser;
+import com.tangdao.core.web.validate.RuleParser;
 
 import cn.hutool.core.lang.Validator;
 
@@ -15,11 +15,11 @@ import cn.hutool.core.lang.Validator;
  * @author ruyang@gmail.com
  * @since 2020年6月4日
  */
-public class NotEmptyParser implements RuleParser {
+public class EmptyParser implements RuleParser {
 
 	@Override
 	public Boolean validate(Object value, String... rvs) {
-		return Validator.isNotEmpty(value);
+		return Validator.isEmpty(value);
 	}
 
 }

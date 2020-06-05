@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.validate;
+package com.tangdao.core.web.validate;
 
 
 import org.aspectj.lang.ProceedingJoinPoint;

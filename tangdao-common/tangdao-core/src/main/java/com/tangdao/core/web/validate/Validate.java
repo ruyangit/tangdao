@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.validate;
+package com.tangdao.core.web.validate;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

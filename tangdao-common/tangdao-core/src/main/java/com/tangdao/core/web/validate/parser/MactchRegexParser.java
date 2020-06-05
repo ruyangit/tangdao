@@ -1,9 +1,9 @@
 /**
  *
  */
-package com.tangdao.core.validate.parser;
+package com.tangdao.core.web.validate.parser;
 
-import com.tangdao.core.validate.RuleParser;
+import com.tangdao.core.web.validate.RuleParser;
 
 import cn.hutool.core.lang.Validator;
 

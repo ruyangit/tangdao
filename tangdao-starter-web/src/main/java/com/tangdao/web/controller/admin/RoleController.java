@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.common.CommonResponse;
-import com.tangdao.core.validate.Field;
-import com.tangdao.core.validate.Rule;
-import com.tangdao.core.validate.Validate;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.core.web.validate.Field;
+import com.tangdao.core.web.validate.Rule;
+import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.Role;
 import com.tangdao.modules.sys.service.RoleService;
 
