@@ -16,6 +16,111 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `log`
+--
+
+DROP TABLE IF EXISTS `log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `log` (
+  `id` varchar(128) NOT NULL COMMENT '主键ID',
+  `title` varchar(200) NOT NULL COMMENT '标题',
+  `create_by` varchar(64) DEFAULT NULL COMMENT '创建者',
+  `create_by_name` varchar(100) DEFAULT NULL COMMENT '用户名称',
+  `created` datetime DEFAULT NULL COMMENT '创建时间',
+  `request_uri` varchar(500) DEFAULT NULL COMMENT '请求URI',
+  `request_method` varchar(10) DEFAULT NULL COMMENT '操作方式',
+  `request_params` longtext COMMENT '操作提交的数据',
+  `class_name` varchar(200) DEFAULT NULL COMMENT '类名',
+  `method_name` varchar(200) DEFAULT NULL COMMENT '方法名',
+  `remote_addr` varchar(255) DEFAULT NULL COMMENT '操作IP地址',
+  `is_exception` char(1) DEFAULT NULL COMMENT '是否异常',
+  `exception_name` varchar(500) DEFAULT NULL COMMENT '异常名称',
+  `exception_info` text COMMENT '异常信息',
+  `user_agent` varchar(500) DEFAULT NULL COMMENT '用户代理',
+  `device_name` varchar(100) DEFAULT NULL COMMENT '设备名称/操作系统',
+  `browser_name` varchar(100) DEFAULT NULL COMMENT '浏览器名称',
+  `execute_time` decimal(19,0) DEFAULT NULL COMMENT '执行时间',
+  `service_name` varchar(200) DEFAULT NULL COMMENT '服务名称',
+  `request_id` varchar(200) DEFAULT NULL COMMENT '请求id',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `log_title_IDX` (`title`) USING BTREE,
+  KEY `log_trace_id_IDX` (`request_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='审计日志表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `log`
+--
+
+LOCK TABLES `log` WRITE;
+/*!40000 ALTER TABLE `log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `menu`
+--
+
+DROP TABLE IF EXISTS `menu`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `menu` (
+  `id` varchar(128) NOT NULL COMMENT '主键ID',
+  `pid` varchar(128) NOT NULL COMMENT '父节点',
+  `name` varchar(128) NOT NULL COMMENT '权限名称',
+  `resource` varchar(128) NOT NULL COMMENT '资源',
+  `premission` varchar(128) NOT NULL COMMENT '权限',
+  `type` char(1) NOT NULL COMMENT '资源类型',
+  `is_show` char(1) NOT NULL COMMENT '是否显示',
+  `status` varchar(32) DEFAULT NULL COMMENT '状态',
+  `created` datetime DEFAULT NULL COMMENT '创建日期',
+  `modified` datetime DEFAULT NULL COMMENT '更新日期',
+  PRIMARY KEY (`id`),
+  KEY `created` (`created`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限列表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `menu`
+--
+
+LOCK TABLES `menu` WRITE;
+/*!40000 ALTER TABLE `menu` DISABLE KEYS */;
+/*!40000 ALTER TABLE `menu` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `role`
+--
+
+DROP TABLE IF EXISTS `role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role` (
+  `id` varchar(128) NOT NULL COMMENT '主键ID',
+  `role_name` varchar(128) NOT NULL COMMENT '角色名称',
+  `remark` varchar(512) DEFAULT NULL COMMENT '备注',
+  `status` varchar(32) NOT NULL DEFAULT '0' COMMENT '状态',
+  `created` datetime NOT NULL COMMENT '创建日期',
+  `modified` datetime DEFAULT NULL COMMENT '更新日期',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `un_role_name` (`role_name`),
+  KEY `created` (`created`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色信息';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `role`
+--
+
+LOCK TABLES `role` WRITE;
+/*!40000 ALTER TABLE `role` DISABLE KEYS */;
+INSERT INTO `role` VALUES ('1','系统管理员','客户方使用的系统管理员，用于一些常用的基础数据配置。','0','2020-06-05 11:28:00',NULL),('2','财务','','0','2020-06-05 11:28:02',NULL),('3','商铺管理员','','0','2020-06-05 11:28:04',NULL),('4','普通员工','','0','2020-06-05 11:28:06',NULL);
+/*!40000 ALTER TABLE `role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sys_assertion`
 --
 
@@ -374,6 +479,80 @@ LOCK TABLES `sys_user_role` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `id` varchar(128) NOT NULL COMMENT '主键ID',
+  `username` varchar(128) NOT NULL COMMENT '登录名',
+  `nickname` varchar(128) DEFAULT NULL COMMENT '昵称',
+  `realname` varchar(128) DEFAULT NULL COMMENT '实名',
+  `identity` varchar(128) DEFAULT NULL COMMENT '身份',
+  `password` varchar(128) NOT NULL COMMENT '密码',
+  `email` varchar(64) DEFAULT NULL COMMENT '邮件',
+  `email_status` varchar(32) DEFAULT '0' COMMENT '邮箱状态（是否认证等）',
+  `mobile` varchar(32) DEFAULT NULL COMMENT '手机电话',
+  `mobile_status` varchar(32) DEFAULT '0' COMMENT '手机状态（是否认证等）',
+  `gender` varchar(16) DEFAULT NULL COMMENT '性别',
+  `signature` varchar(2048) DEFAULT NULL COMMENT '签名',
+  `avatar` varchar(256) DEFAULT NULL COMMENT '头像',
+  `remark` varchar(512) DEFAULT NULL COMMENT '备注',
+  `status` varchar(32) DEFAULT '0' COMMENT '状态',
+  `created` datetime NOT NULL COMMENT '创建日期',
+  `modified` datetime DEFAULT NULL COMMENT '更新日期',
+  `create_source` varchar(128) DEFAULT NULL COMMENT '用户来源',
+  `last_login_date` datetime DEFAULT NULL COMMENT '最后登录时间',
+  `last_login_ip` varchar(32) DEFAULT NULL COMMENT '最后登录IP',
+  `activated` datetime DEFAULT NULL COMMENT '激活时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `mobile` (`mobile`),
+  KEY `created` (`created`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户信息';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user`
+--
+
+LOCK TABLES `user` WRITE;
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES ('1267278761309622274','admin',NULL,NULL,NULL,'$2a$10$wPGLY/ZvWC9TAdcToUgtfuBvou9kd7iUVjdzSpjB81bVLDtbx9k1W',NULL,'0',NULL,'0',NULL,NULL,NULL,NULL,'0','2020-06-01 10:16:16',NULL,NULL,NULL,NULL,NULL),('1267278761309622275','user_dnef',NULL,NULL,NULL,'$2a$10$wPGLY/ZvWC9TAdcToUgtfuBvou9kd7iUVjdzSpjB81bVLDtbx9k1W',NULL,'0',NULL,'0',NULL,NULL,NULL,NULL,'0','2020-06-01 10:16:16',NULL,NULL,NULL,NULL,NULL);
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_role`
+--
+
+DROP TABLE IF EXISTS `user_role`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_role` (
+  `id` varchar(128) NOT NULL COMMENT '主键ID',
+  `user_id` varchar(128) NOT NULL COMMENT '用户编码',
+  `role_id` varchar(128) NOT NULL COMMENT '角色编码',
+  `created` datetime DEFAULT NULL COMMENT '创建日期',
+  PRIMARY KEY (`id`),
+  KEY `created` (`created`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户与角色关联表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_role`
+--
+
+LOCK TABLES `user_role` WRITE;
+/*!40000 ALTER TABLE `user_role` DISABLE KEYS */;
+INSERT INTO `user_role` VALUES ('1','1267278761309622274','1','2020-06-05 13:30:55'),('2','1267278761309622274','2','2020-06-05 13:31:08');
+/*!40000 ALTER TABLE `user_role` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping routines for database 'tangdao_dev'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -386,4 +565,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-16 13:35:10
+-- Dump completed on 2020-06-05 18:33:49
