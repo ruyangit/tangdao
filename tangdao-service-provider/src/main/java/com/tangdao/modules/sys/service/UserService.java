@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.modules.user.service;
+package com.tangdao.modules.sys.service;
 
 import java.util.Date;
 import java.util.List;
@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.User;
-import com.tangdao.modules.user.mapper.UserMapper;
+import com.tangdao.modules.sys.mapper.UserMapper;
 
 import cn.hutool.core.collection.CollUtil;
 

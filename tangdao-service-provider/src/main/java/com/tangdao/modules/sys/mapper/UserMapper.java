@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.modules.user.mapper;
+package com.tangdao.modules.sys.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

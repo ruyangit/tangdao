@@ -18,7 +18,7 @@ import com.tangdao.core.validate.Rule;
 import com.tangdao.core.validate.Validate;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.model.domain.User;
-import com.tangdao.modules.user.service.UserService;
+import com.tangdao.modules.sys.service.UserService;
 
 /**
  * <p>

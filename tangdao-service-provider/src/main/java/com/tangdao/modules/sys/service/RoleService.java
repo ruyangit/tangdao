@@ -1,13 +1,13 @@
 /**
  *
  */
-package com.tangdao.modules.user.service;
+package com.tangdao.modules.sys.service;
 
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.Role;
-import com.tangdao.modules.user.mapper.RoleMapper;
+import com.tangdao.modules.sys.mapper.RoleMapper;
 
 /**
  * <p>

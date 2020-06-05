@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.model.domain.Role;
-import com.tangdao.modules.user.service.RoleService;
+import com.tangdao.modules.sys.service.RoleService;
 
 import cn.hutool.core.util.StrUtil;
 
