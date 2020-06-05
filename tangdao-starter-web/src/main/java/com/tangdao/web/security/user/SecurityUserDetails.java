@@ -8,7 +8,7 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.tangdao.model.User;
+import com.tangdao.model.domain.User;
 
 import cn.hutool.core.collection.CollUtil;
 

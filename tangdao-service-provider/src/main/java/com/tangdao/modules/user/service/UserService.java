@@ -9,9 +9,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tangdao.model.User;
+import com.tangdao.core.mybatis.pagination.Pageinfo;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.model.domain.User;
 import com.tangdao.modules.user.mapper.UserMapper;
 
 import cn.hutool.core.collection.CollUtil;
@@ -25,17 +25,17 @@ import cn.hutool.core.collection.CollUtil;
  * @since 2020年5月28日
  */
 @Service
-public class UserService extends ServiceImpl<UserMapper, User> implements IService<User> {
+public class UserService extends BaseService<UserMapper, User> {
 
-	public User findUserByUsername(String username) {
+	public User findByUsername(String username) {
 		return findUser(this.list(Wrappers.<User>lambdaQuery().eq(User::getUsername, username)));
 	}
-	
-	public User findUserByMobile(String mobile) {
+
+	public User findByMobile(String mobile) {
 		return findUser(this.list(Wrappers.<User>lambdaQuery().eq(User::getMobile, mobile)));
 	}
-	
-	public User findUserById(String id) {
+
+	public User findById(String id) {
 		return findUser(this.list(Wrappers.<User>lambdaQuery().eq(User::getId, id)));
 	}
 
@@ -45,12 +45,16 @@ public class UserService extends ServiceImpl<UserMapper, User> implements IServi
 		}
 		return null;
 	}
-	
+
 	public boolean createUser(String username, String password) {
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
 		user.setCreated(new Date());
 		return this.save(user);
+	}
+
+	public Pageinfo findMapsPage(Pageinfo page, User user) {
+		return getBaseMapper().findMapsPage(page, user);
 	}
 }

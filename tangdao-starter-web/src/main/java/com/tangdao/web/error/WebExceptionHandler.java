@@ -26,7 +26,7 @@ import cn.hutool.core.exceptions.ExceptionUtil;
  * @since 2020年3月31日
  */
 @RestControllerAdvice
-public class ApiExceptionHandler {
+public class WebExceptionHandler {
 
 	@ExceptionHandler(BusinessException.class)
 	public @ResponseBody Object businessException(BusinessException e) {
@@ -49,6 +49,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
+		e.printStackTrace();
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
 		commonResponse.fail(CommonApiCode.INTERNAL_ERROR);
 		if (Objects.equals(MissingServletRequestParameterException.class, e.getClass())) {

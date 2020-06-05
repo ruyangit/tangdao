@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
 import com.tangdao.common.CommonResponse;
@@ -29,25 +31,51 @@ public class WebUtils {
 	public static String USER_AGENT_HEADER = "User-Agent";
 	public static String CLIENT_VERSION_HEADER = "Client-Version";
 	public static String REQUEST_SOURCE_HEADER = "Request-Source";
+	
+	public static HttpServletRequest getRequest(){
+		HttpServletRequest request = null;
+		try{
+			request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+			if (request == null){
+				return null;
+			}
+			return request;
+		}catch(Exception e){
+			return null;
+		}
+	}
+	
+	public static HttpServletResponse getResponse(){
+		HttpServletResponse response = null;
+		try{
+			response = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getResponse();
+			if (response == null){
+				return null;
+			}
+		}catch(Exception e){
+			return null;
+		}
+		return response;
+	}
 
-	public static String required(final HttpServletRequest req, final String key) {
-		String value = req.getParameter(key);
+	public static String required(final HttpServletRequest request, final String key) {
+		String value = request.getParameter(key);
 		if (StringUtils.isBlank(value)) {
 			throw new IllegalArgumentException("Param '" + key + "' is required.");
 		}
-		String encoding = req.getParameter("encoding");
+		String encoding = request.getParameter("encoding");
 		return resolveValue(value, encoding);
 	}
 
-	public static String optional(final HttpServletRequest req, final String key, final String defaultValue) {
-		if (!req.getParameterMap().containsKey(key) || req.getParameterMap().get(key)[0] == null) {
+	public static String optional(final HttpServletRequest request, final String key, final String defaultValue) {
+		if (!request.getParameterMap().containsKey(key) || request.getParameterMap().get(key)[0] == null) {
 			return defaultValue;
 		}
-		String value = req.getParameter(key);
+		String value = request.getParameter(key);
 		if (StringUtils.isBlank(value)) {
 			return defaultValue;
 		}
-		String encoding = req.getParameter("encoding");
+		String encoding = request.getParameter("encoding");
 		return resolveValue(value, encoding);
 	}
 
@@ -62,8 +90,8 @@ public class WebUtils {
 		return value.trim();
 	}
 
-	public static String getAcceptEncoding(HttpServletRequest req) {
-		String encode = StringUtils.defaultIfEmpty(req.getHeader("Accept-Charset"), StandardCharsets.UTF_8.name());
+	public static String getAcceptEncoding(HttpServletRequest request) {
+		String encode = StringUtils.defaultIfEmpty(request.getHeader("Accept-Charset"), StandardCharsets.UTF_8.name());
 		encode = encode.contains(",") ? encode.substring(0, encode.indexOf(",")) : encode;
 		return encode.contains(";") ? encode.substring(0, encode.indexOf(";")) : encode;
 	}

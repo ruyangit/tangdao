@@ -6,7 +6,7 @@ package com.tangdao.modules.user.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.model.Role;
+import com.tangdao.model.domain.Role;
 
 /**
  * <p>

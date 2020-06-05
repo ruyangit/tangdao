@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.web.controller;
+package com.tangdao.web.controller.admin;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tangdao.common.ApiController;
 import com.tangdao.common.CommonResponse;
+import com.tangdao.core.web.BaseController;
 import com.tangdao.web.security.AuthConfig;
 import com.tangdao.web.security.AuthManager;
 import com.tangdao.web.security.user.SecurityUser;
@@ -27,8 +27,8 @@ import com.tangdao.web.security.user.SecurityUser;
  * @since 2020年5月28日
  */
 @RestController
-@RequestMapping(value = { "/v1/auth" })
-public class LoginController extends ApiController {
+@RequestMapping(value = { "/admin" })
+public class LoginController extends BaseController {
 
 	@Autowired
 	private AuthManager authManager;

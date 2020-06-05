@@ -3,7 +3,7 @@
  */
 package com.tangdao.web.security.user;
 
-import com.tangdao.model.User;
+import com.tangdao.model.domain.User;
 
 import lombok.Getter;
 import lombok.Setter;

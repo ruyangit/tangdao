@@ -1,7 +1,8 @@
-package com.tangdao.common;
+package com.tangdao.core.web;
 
 import java.util.Map;
 
+import com.tangdao.common.CommonResponse;
 import com.tangdao.common.constant.ErrorCode;
 
 import cn.hutool.core.map.MapUtil;
@@ -15,7 +16,7 @@ import cn.hutool.core.map.MapUtil;
  * @author ruyang@gmail.com
  * @since 2020年4月2日
  */
-public abstract class ApiController {
+public abstract class BaseController {
 
 	/**
 	 * 成功消息

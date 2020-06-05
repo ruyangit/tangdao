@@ -1,12 +1,11 @@
 /**
  *
  */
-package com.tangdao.model;
+package com.tangdao.model.domain;
 
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.tangdao.model.base.BaseEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,16 +20,13 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class User extends Model<User>{
+public class User extends BaseEntity{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@TableId
-	private String id;
-	
 	private String username;
 	
 	private String nickname;
@@ -52,8 +48,6 @@ public class User extends Model<User>{
 	private String remark;
 	
 	private String status;
-	
-	private Date created;
 	
 	private Date createSource;
 	

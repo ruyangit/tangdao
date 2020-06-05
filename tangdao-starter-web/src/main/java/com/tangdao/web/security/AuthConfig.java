@@ -6,7 +6,6 @@ package com.tangdao.web.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -38,10 +37,6 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 
 	public static final String SECURITY_IGNORE_URLS_SPILT_CHAR = ",";
-
-	public static final String LOGIN_ENTRY_POINT = "/v1/auth/login";
-
-	public static final String USERS_ENTRY_POINT = "/v1/users";
 
 	public static final String TOKEN_PREFIX = "Bearer ";
 	
@@ -89,19 +84,17 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 	        .and()
 	        .authorizeRequests()
 	        .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-	        .antMatchers(LOGIN_ENTRY_POINT).permitAll()
-	        .antMatchers(HttpMethod.POST, USERS_ENTRY_POINT).permitAll()
-	
+	        .antMatchers("/admin/login").permitAll()
 	        .and()
-	        .authorizeRequests().anyRequest().authenticated()
+	        .authorizeRequests().antMatchers("/admin/**").authenticated()
 	
 	        .and()
 	        .exceptionHandling()
 	        .authenticationEntryPoint(new JwtAuthenticationEntryPoint());
-
+		
 	    // disable cache
 	    http.headers().cacheControl();
-	
+	    // jwt filter
 	    http.addFilterBefore(new JwtAuthenticationTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 	}
 }

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.web.controller;
+package com.tangdao.web.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,20 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.tangdao.common.ApiController;
 import com.tangdao.common.CommonResponse;
+import com.tangdao.core.mybatis.pagination.Pageinfo;
 import com.tangdao.core.validate.Field;
 import com.tangdao.core.validate.Rule;
 import com.tangdao.core.validate.Validate;
-import com.tangdao.model.User;
+import com.tangdao.core.web.BaseController;
+import com.tangdao.model.domain.User;
 import com.tangdao.modules.user.service.UserService;
-
-import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -33,8 +29,8 @@ import cn.hutool.core.util.StrUtil;
  * @since 2020年5月28日
  */
 @RestController
-@RequestMapping(value = { "/v1/users" })
-public class UserController extends ApiController {
+@RequestMapping(value = { "/admin/users" })
+public class UserController extends BaseController {
 
 	@Autowired
 	private UserService userService;
@@ -43,19 +39,15 @@ public class UserController extends ApiController {
 	private PasswordEncoder passwordEncoder;
 
 	@GetMapping
-	public CommonResponse page(String username, @RequestParam Integer current, @RequestParam Integer size) {
-		QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
-		if (StrUtil.isNotBlank(username)) {
-			queryWrapper.like("username", username);
-		}
-		return success(userService.page(new Page<User>(current, size), queryWrapper));
+	public CommonResponse page(Pageinfo page, User user) {
+		return success(userService.findMapsPage(page, user));
 	}
 
 	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
 			@Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
 	@PostMapping
 	public CommonResponse createUser(@RequestBody User user) {
-		User eu = userService.findUserByUsername(user.getUsername());
+		User eu = userService.findByUsername(user.getUsername());
 		if (eu != null) {
 			throw new IllegalArgumentException("用户 '" + eu.getUsername() + "' 已存在");
 		}

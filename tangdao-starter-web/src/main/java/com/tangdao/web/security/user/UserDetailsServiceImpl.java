@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.tangdao.model.User;
+import com.tangdao.model.domain.User;
 import com.tangdao.modules.user.service.UserService;
 
 /**
@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements IUserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
-		User user = userService.findUserByUsername(username);
+		User user = userService.findByUsername(username);
 		if (user == null) {
 			throw new UsernameNotFoundException(username);
 		}
