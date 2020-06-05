@@ -18,6 +18,7 @@ import com.tangdao.core.validate.Rule;
 import com.tangdao.core.validate.Validate;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.model.domain.User;
+import com.tangdao.model.dto.UserDTO;
 import com.tangdao.modules.sys.service.UserService;
 
 /**
@@ -46,17 +47,18 @@ public class UserController extends BaseController {
 	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
 			@Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
 	@PostMapping
-	public CommonResponse createUser(@RequestBody User user) {
+	public CommonResponse createUser(@RequestBody UserDTO user) {
 		User eu = userService.findByUsername(user.getUsername());
 		if (eu != null) {
 			throw new IllegalArgumentException("用户 '" + eu.getUsername() + "' 已存在");
 		}
-		return success(userService.createUser(user.getUsername(), passwordEncoder.encode(user.getPassword())));
+		return success(userService.createUserAndRoleId(user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getRoleId()));
 	}
 
-	@PostMapping("/password/change")
-	public CommonResponse passwordChange(@RequestBody User user) {
-		return success("创建用户成功");
+	@Validate({ @Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
+	@PostMapping("/password/modify")
+	public CommonResponse passwordModify(@RequestBody User user) {
+		return success(userService.passwordModify(user.getId(), passwordEncoder.encode(user.getPassword())));
 	}
 
 	@PostMapping("/update")
