@@ -3,6 +3,7 @@
  */
 package com.tangdao.core.mybatis;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParser
  * @since 2020年6月5日
  */
 @Configuration
+@MapperScan("com.tangdao.modules.*.mapper")
 public class DataSourceAutoConfiguration {
 
 	@Bean

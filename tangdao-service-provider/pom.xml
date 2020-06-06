@@ -8,7 +8,7 @@
 		<groupId>com.tangdao</groupId>
 		<artifactId>tangdao-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../../tangdao-parent</relativePath>
+		<relativePath>../tangdao-parent</relativePath>
 	</parent>
 
 	<artifactId>tangdao-service-provider</artifactId>
