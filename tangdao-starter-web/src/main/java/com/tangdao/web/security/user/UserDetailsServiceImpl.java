@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.tangdao.model.domain.User;
 import com.tangdao.modules.sys.service.UserService;
 
+import cn.hutool.core.bean.BeanUtil;
+
 /**
  * <p>
  * TODO 描述
@@ -22,15 +24,8 @@ import com.tangdao.modules.sys.service.UserService;
 @Service
 public class UserDetailsServiceImpl implements IUserDetailsService{
 
-	/**
-	 * 用户服务
-	 */
-	private UserService userService;
-
 	@Autowired
-	public UserDetailsServiceImpl(UserService userService) {
-		this.userService = userService;
-	}
+	private UserService userService;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -39,6 +34,8 @@ public class UserDetailsServiceImpl implements IUserDetailsService{
 		if (user == null) {
 			throw new UsernameNotFoundException(username);
 		}
-		return new SecurityUserDetails(user);
+		SecurityUser securityUser = new SecurityUser();
+		BeanUtil.copyProperties(user, securityUser);
+		return new SecurityUserDetails(securityUser);
 	}
 }

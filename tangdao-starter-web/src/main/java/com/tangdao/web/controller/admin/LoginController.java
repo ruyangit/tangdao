@@ -33,7 +33,7 @@ public class LoginController extends BaseController {
 	@Autowired
 	private AuthManager authManager;
 
-	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
+	@RequestMapping(value = { "/login", "/check_token" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public CommonResponse login(HttpServletResponse response, HttpServletRequest request) {
 		SecurityUser user = authManager.login(request);
 

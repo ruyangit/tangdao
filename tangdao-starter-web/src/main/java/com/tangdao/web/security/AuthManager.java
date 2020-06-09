@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.exception.BusinessException;
+import com.tangdao.common.utils.WebUtils;
+import com.tangdao.modules.sys.service.UserService;
 import com.tangdao.web.security.user.SecurityUser;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -34,6 +36,9 @@ public class AuthManager {
 
 	@Autowired
 	private JwtTokenManager tokenManager;
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -72,23 +77,25 @@ public class AuthManager {
 		}
 		bearerToken = request.getParameter(AuthConfig.ACCESS_TOKEN);
 		if (StringUtils.isBlank(bearerToken)) {
-			String userName = request.getParameter("username");
+			String username = request.getParameter("username");
 			String password = request.getParameter("password");
-			bearerToken = resolveTokenFromUser(userName, password);
+			bearerToken = resolveTokenFromUser(username, password);
 		}
 		return bearerToken;
 	}
 
-	private String resolveTokenFromUser(String userName, String rawPassword) {
+	private String resolveTokenFromUser(String username, String password) {
 		try {
-			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName,
-					rawPassword);
-			authenticationManager.authenticate(authenticationToken);
+			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+			Authentication authentication = authenticationManager.authenticate(authenticationToken);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+//			String lastLoginIp = WebUtils.
+			userService.lastLoginUserModify(UserUtils.getUserId(), WebUtils.getClientIP());
 		} catch (AuthenticationException e) {
-			throw new IllegalArgumentException("用户名或密码输入有误");
+			throw new IllegalArgumentException("账号或密码错误！");
 		}
 
-		return tokenManager.createToken(userName);
+		return tokenManager.createToken(username);
 	}
 
 }

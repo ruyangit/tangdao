@@ -79,6 +79,14 @@ public class UserService extends BaseService<UserMapper, User> {
 		user.setModified(new Date());
 		return this.updateById(user);
 	}
+	
+	public boolean lastLoginUserModify(String id, String lastLoginIp) {
+		User user = new User();
+		user.setId(id);
+		user.setLastLoginIp(lastLoginIp);
+		user.setLastLoginDate(new Date());
+		return this.updateById(user);
+	}
 
 	public Pageinfo findMapsPage(Pageinfo page, User user) {
 		return getBaseMapper().findMapsPage(page, user);

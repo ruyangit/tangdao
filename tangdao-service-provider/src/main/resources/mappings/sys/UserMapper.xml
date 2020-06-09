@@ -6,6 +6,10 @@
 		select
 			distinct t.id,
 			t.username,
+			t.nickname,
+			t.gender,
+			t.last_login_ip as lastLoginIp,
+			t.last_login_date as lastLoginDate,
 			t.status,
 			t.created,
 			group_concat(r.role_name) as roleName

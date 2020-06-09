@@ -18,6 +18,9 @@ import com.alibaba.fastjson.JSON;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.common.constant.ErrorCode;
 
+import cn.hutool.core.net.NetUtil;
+import cn.hutool.core.util.ArrayUtil;
+
 /**
  * <p>
  * TODO 描述
@@ -31,28 +34,28 @@ public class WebUtils {
 	public static String USER_AGENT_HEADER = "User-Agent";
 	public static String CLIENT_VERSION_HEADER = "Client-Version";
 	public static String REQUEST_SOURCE_HEADER = "Request-Source";
-	
-	public static HttpServletRequest getRequest(){
+
+	public static HttpServletRequest getRequest() {
 		HttpServletRequest request = null;
-		try{
-			request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
-			if (request == null){
+		try {
+			request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+			if (request == null) {
 				return null;
 			}
 			return request;
-		}catch(Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 	}
-	
-	public static HttpServletResponse getResponse(){
+
+	public static HttpServletResponse getResponse() {
 		HttpServletResponse response = null;
-		try{
-			response = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getResponse();
-			if (response == null){
+		try {
+			response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+			if (response == null) {
 				return null;
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			return null;
 		}
 		return response;
@@ -113,28 +116,56 @@ public class WebUtils {
 		return userAgent;
 	}
 
+	public static String getClientIP() {
+		return getClientIP(getRequest());
+	}
+
+	public static String getClientIP(HttpServletRequest request, String... otherHeaderNames) {
+		String[] headers = { "X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP",
+				"HTTP_X_FORWARDED_FOR" };
+		if (ArrayUtil.isNotEmpty(otherHeaderNames)) {
+			headers = ArrayUtil.addAll(headers, otherHeaderNames);
+		}
+
+		return getClientIPByHeader(request, headers);
+	}
+
+	public static String getClientIPByHeader(HttpServletRequest request, String... headerNames) {
+		String ip;
+		for (String header : headerNames) {
+			ip = request.getHeader(header);
+			if (!NetUtil.isUnknow(ip)) {
+				return NetUtil.getMultistageReverseProxyIp(ip);
+			}
+		}
+
+		ip = request.getRemoteAddr();
+		return NetUtil.getMultistageReverseProxyIp(ip);
+	}
+
 	public static void response(HttpServletResponse response, String body, int code) throws IOException {
 		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
 		response.setContentType("application/json;charset=UTF-8");
 		response.getWriter().write(body);
 		response.setStatus(code);
 	}
-	
+
 	public static void responseJson(HttpServletResponse response, String body) throws IOException {
 		response(response, body, 200);
 	}
-	
+
 	public static void responseJson(HttpServletResponse response, Object body) throws IOException {
 		response(response, JSON.toJSONString(body), 200);
 	}
-	
+
 	public static void responseJson(HttpServletResponse response, ErrorCode errorCode) throws IOException {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
 		commonResponse.fail(errorCode);
 		responseJson(response, JSON.toJSONString(commonResponse));
 	}
-	
-	public static void responseJson(HttpServletResponse response, ErrorCode errorCode, String error) throws IOException {
+
+	public static void responseJson(HttpServletResponse response, ErrorCode errorCode, String error)
+			throws IOException {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
 		commonResponse.fail(errorCode);
 		// 异常描述

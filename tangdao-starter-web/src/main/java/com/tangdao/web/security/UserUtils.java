@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.tangdao.web.security.user.SecurityUser;
+import com.tangdao.web.security.user.SecurityUserDetails;
 
 /**
  * <p>
@@ -33,10 +34,8 @@ public class UserUtils {
 		}
 
 		Object principal = authentication.getPrincipal();
-		if (principal != null) {
-			if (principal instanceof SecurityUser) {
-				return (SecurityUser) principal;
-			}
+		if (principal != null && principal instanceof SecurityUserDetails) {
+			return ((SecurityUserDetails) principal).getSecurityUser();
 		}
 		return null;
 	}
