@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
@@ -59,16 +60,19 @@ public class UserService extends BaseService<UserMapper, User> {
 		return this.save(user);
 	}
 	
-	public boolean createUserAndRoleId(String username, String password, String roleId) {
+	@Transactional(rollbackFor = Exception.class)
+	public boolean createUserAndRoleIds(String username, String password, List<String> roleIds) {
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
 		this.save(user);
 		this.userRoleMapper.delete(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, user.getId()));
-		UserRole ur = new UserRole();
-		ur.setRoleId(roleId);
-		ur.setUserId(user.getId());
-		this.userRoleMapper.insert(ur);
+		roleIds.forEach(roleId ->{
+			UserRole ur = new UserRole();
+			ur.setRoleId(roleId);
+			ur.setUserId(user.getId());
+			this.userRoleMapper.insert(ur);
+		});
 		return true;
 	}
 	

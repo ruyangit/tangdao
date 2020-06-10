@@ -52,7 +52,7 @@ public class UserController extends BaseController {
 		if (eu != null) {
 			throw new IllegalArgumentException("用户 '" + eu.getUsername() + "' 已存在");
 		}
-		return success(userService.createUserAndRoleId(user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getRoleId()));
+		return success(userService.createUserAndRoleIds(user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getRoleIds()));
 	}
 
 	@Validate({ @Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
