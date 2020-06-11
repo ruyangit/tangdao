@@ -3,6 +3,8 @@
  */
 package com.tangdao.web.controller.admin;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,9 @@ import com.tangdao.model.domain.User;
 import com.tangdao.model.dto.UserDTO;
 import com.tangdao.modules.sys.service.UserService;
 import com.tangdao.web.config.TangdaoProperties;
+
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -47,6 +52,15 @@ public class UserController extends BaseController {
 	public CommonResponse page(Pageinfo page, UserDTO user) {
 		user.setSuperAdmin(properties.getSuperAdmin());
 		return success(userService.findMapsPage(page, user));
+	}
+	
+	@GetMapping("/detail/info")
+	public CommonResponse detailInfo(String username) {
+		User user = userService.findByUsername(username);
+		Map<String, Object> data = MapUtil.newHashMap();
+		data.put("user", user);
+		data.put("isa", StrUtil.equals(properties.getSuperAdmin(), username)?"1":"0");
+		return success(data);
 	}
 
 	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
