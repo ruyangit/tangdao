@@ -27,10 +27,10 @@ public class UserUtils {
 		return null;
 	}
 	
-	public static boolean isSuperAdmin() {
+	public static boolean isa() {
 		SecurityUser user = getPrincipal();
 		if (user != null) {
-			return user.isSuperAdmin();
+			return user.isa();
 		}
 		return false;
 	}

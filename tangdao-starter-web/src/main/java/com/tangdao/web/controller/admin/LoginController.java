@@ -42,7 +42,6 @@ public class LoginController extends BaseController {
 		JSONObject result = new JSONObject();
 		result.put(AuthConfig.ACCESS_TOKEN, user.getToken());
 		result.put("username", user.getUsername());
-		result.put("isSuperAdmin", user.isSuperAdmin());
 		return success(result);
 	}
 }

@@ -27,5 +27,9 @@ public class SecurityUser extends User {
 
 	private String token;
 
-	private boolean superAdmin = false;
+	private boolean isa = false;
+	
+	public boolean isa() {
+		return isa;
+	}
 }
