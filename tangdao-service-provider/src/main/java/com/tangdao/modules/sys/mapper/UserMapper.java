@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
 import com.tangdao.model.domain.User;
+import com.tangdao.model.dto.UserDTO;
 
 /**
  * <p>
@@ -21,5 +22,5 @@ import com.tangdao.model.domain.User;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
-	public Pageinfo findMapsPage(Pageinfo page, @Param("user") User user);
+	public Pageinfo findMapsPage(Pageinfo page, @Param("user") UserDTO user);
 }

@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
@@ -46,10 +46,10 @@ public class AuthManager {
 		String token = resolveToken(request);
 		try {
 			tokenManager.validateToken(token);
-		} catch (ExpiredJwtException e) {
-			throw new BusinessException(CommonApiCode.USER_TOKEN_EXPIRE);
-		} catch (Exception e) {
-			throw new BusinessException(CommonApiCode.UNAUTHORIZED);
+		} catch (ExpiredJwtException ex) {
+			throw new BusinessException(CommonApiCode.USER_TOKEN_EXPIRE, ex);
+		} catch (Exception ex) {
+			throw new BusinessException(CommonApiCode.UNAUTHORIZED, ex);
 		}
 
 		Authentication authentication = tokenManager.getAuthentication(token);
@@ -85,10 +85,12 @@ public class AuthManager {
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 			Authentication authentication = authenticationManager.authenticate(authenticationToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-//			String lastLoginIp = WebUtils.
 			userService.lastLoginUserModify(UserUtils.getUserId(), WebUtils.getClientIP());
-		} catch (AuthenticationException e) {
-			throw new IllegalArgumentException("账号或密码错误！");
+		} catch (Exception ex) {
+			if(ex instanceof BadCredentialsException) {
+				throw new IllegalArgumentException("用户账号或密码错误！", ex);
+			}
+			throw new IllegalArgumentException(ex.getMessage(), ex);
 		}
 
 		return tokenManager.createToken(username);

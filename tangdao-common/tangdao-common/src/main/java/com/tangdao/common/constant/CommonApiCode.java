@@ -13,8 +13,7 @@ package com.tangdao.common.constant;
  */
 public enum CommonApiCode implements ErrorCode {
 	
-	SUCCESS("200", "执行成功"),
-	FAILED("-1", "操作失败"),
+	OK("200", "执行成功"),
 	
 	BAD_REQUEST("400", "非法参数"),
 	UNAUTHORIZED("401", "用户身份验证失败"),

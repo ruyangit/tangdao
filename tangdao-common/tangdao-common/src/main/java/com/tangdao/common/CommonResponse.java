@@ -42,7 +42,7 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 	}
 
 	public CommonResponse success(String message) {
-		this.put(CODE, CommonApiCode.SUCCESS.getCode());
+		this.put(CODE, CommonApiCode.OK.getCode());
 		this.put(MESSAGE, message);
 		return this;
 	}

@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.tangdao.common.constant.CommonApiCode;
+import com.tangdao.common.exception.BusinessException;
+import com.tangdao.core.constant.DataStatus;
 import com.tangdao.model.domain.User;
 import com.tangdao.modules.sys.service.UserService;
 
@@ -33,6 +36,9 @@ public class UserDetailsServiceImpl implements IUserDetailsService{
 		User user = userService.findByUsername(username);
 		if (user == null) {
 			throw new UsernameNotFoundException(username);
+		}
+		if(DataStatus.DISABLE.equals(user.getStatus())) {
+			throw new BusinessException(CommonApiCode.UNAUTHORIZED, "用户账号已被锁定！");
 		}
 		SecurityUser securityUser = new SecurityUser();
 		BeanUtil.copyProperties(user, securityUser);

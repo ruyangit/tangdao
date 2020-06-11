@@ -20,6 +20,7 @@ import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.User;
 import com.tangdao.model.dto.UserDTO;
 import com.tangdao.modules.sys.service.UserService;
+import com.tangdao.web.config.TangdaoProperties;
 
 /**
  * <p>
@@ -38,9 +39,13 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private TangdaoProperties properties;
 
 	@GetMapping
-	public CommonResponse page(Pageinfo page, User user) {
+	public CommonResponse page(Pageinfo page, UserDTO user) {
+		user.setSuperAdmin(properties.getSuperAdmin());
 		return success(userService.findMapsPage(page, user));
 	}
 
@@ -68,7 +73,7 @@ public class UserController extends BaseController {
 
 	@PostMapping("/delete")
 	public CommonResponse deleteUser(@RequestBody User user) {
-		return success(userService.removeById(user.getId()));
+		return success(userService.deleteUser(user.getId()));
 	}
 
 }

@@ -15,6 +15,7 @@ import com.tangdao.core.mybatis.pagination.Pageinfo;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.User;
 import com.tangdao.model.domain.UserRole;
+import com.tangdao.model.dto.UserDTO;
 import com.tangdao.modules.sys.mapper.UserMapper;
 import com.tangdao.modules.sys.mapper.UserRoleMapper;
 
@@ -76,6 +77,12 @@ public class UserService extends BaseService<UserMapper, User> {
 		return true;
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
+	public boolean deleteUser(String id) {
+		this.userRoleMapper.delete(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, id));
+		return super.removeById(id);
+	}
+	
 	public boolean passwordModify(String id, String password) {
 		User user = new User();
 		user.setId(id);
@@ -92,7 +99,7 @@ public class UserService extends BaseService<UserMapper, User> {
 		return this.updateById(user);
 	}
 
-	public Pageinfo findMapsPage(Pageinfo page, User user) {
+	public Pageinfo findMapsPage(Pageinfo page, UserDTO user) {
 		return getBaseMapper().findMapsPage(page, user);
 	}
 }

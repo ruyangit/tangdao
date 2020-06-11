@@ -6,13 +6,14 @@ package com.tangdao.web.security;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
+import com.tangdao.web.config.TangdaoProperties;
 import com.tangdao.web.security.user.SecurityUser;
 
 import io.jsonwebtoken.Claims;
@@ -30,8 +31,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtTokenManager {
 	
-	@Value("${user.superAdmin:ruyang}")
-	private String superAdmin;
+	@Autowired
+	private TangdaoProperties properties;
 
 	private static final String AUTHORITIES_KEY = "auth";
 
@@ -80,7 +81,7 @@ public class JwtTokenManager {
 		SecurityUser principal = new SecurityUser();
 		principal.setUsername(claims.getSubject());
 		principal.setToken(token);
-		principal.setSuperAdmin(superAdmin.equals(claims.getSubject()));
+		principal.setSuperAdmin(properties.getSuperAdmin().equals(claims.getSubject()));
 		
 		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 	}
