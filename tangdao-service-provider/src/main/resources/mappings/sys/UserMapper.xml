@@ -12,6 +12,7 @@
 			t.last_login_date as lastLoginDate,
 			t.status,
 			t.created,
+			t.remark,
 			group_concat(r.role_name) as roleName
 		from
 			user t 

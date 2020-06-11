@@ -26,6 +26,14 @@ public class UserUtils {
 		}
 		return null;
 	}
+	
+	public static boolean isSuperAdmin() {
+		SecurityUser user = getPrincipal();
+		if (user != null) {
+			return user.isSuperAdmin();
+		}
+		return false;
+	}
 
 	public static SecurityUser getPrincipal() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

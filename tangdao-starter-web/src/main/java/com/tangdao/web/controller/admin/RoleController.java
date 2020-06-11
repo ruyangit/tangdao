@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.common.CommonResponse;
+import com.tangdao.core.constant.DataStatus;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.core.web.validate.Field;
 import com.tangdao.core.web.validate.Rule;
@@ -44,6 +45,16 @@ public class RoleController extends BaseController {
 			queryWrapper.like("role_name", roleName);
 		}
 		return success(roleService.page(page, queryWrapper));
+	}
+	
+	@GetMapping("/list")
+	public CommonResponse list(String roleName) {
+		QueryWrapper<Role> queryWrapper = new QueryWrapper<Role>();
+		if (StrUtil.isNotBlank(roleName)) {
+			queryWrapper.like("role_name", roleName);
+		}
+		queryWrapper.eq("status", DataStatus.NORMAL);
+		return success(roleService.list(queryWrapper));
 	}
 
 	@Validate({ @Field(name = "role.roleName", rules = { @Rule(message = "角色名不能为空") }) })
