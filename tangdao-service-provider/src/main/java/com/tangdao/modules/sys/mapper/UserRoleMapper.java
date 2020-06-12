@@ -3,10 +3,15 @@
  */
 package com.tangdao.modules.sys.mapper;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tangdao.model.domain.UserRole;
+import com.tangdao.model.dto.UserDTO;
 
 /**
  * <p>
@@ -19,4 +24,5 @@ import com.tangdao.model.domain.UserRole;
 @Mapper
 public interface UserRoleMapper extends BaseMapper<UserRole>{
 	
+	public List<Map<String, Object>> findUserRoleMapsList(@Param("user") UserDTO user);
 }

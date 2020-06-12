@@ -44,7 +44,7 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private TangdaoProperties properties;
 
@@ -53,14 +53,22 @@ public class UserController extends BaseController {
 		user.setSuperAdmin(properties.getSuperAdmin());
 		return success(userService.findMapsPage(page, user));
 	}
-	
+
 	@GetMapping("/detail/info")
 	public CommonResponse detailInfo(String username) {
 		User user = userService.findByUsername(username);
 		Map<String, Object> data = MapUtil.newHashMap();
 		data.put("user", user);
-		data.put("isa", StrUtil.equals(properties.getSuperAdmin(), username)?"1":"0");
+		data.put("isa", StrUtil.equals(properties.getSuperAdmin(), username) ? "1" : "0");
 		return success(data);
+	}
+
+	@GetMapping("/role")
+	public CommonResponse role(UserDTO user) {
+		if (StrUtil.isEmpty(user.getUsername()) && StrUtil.isEmpty(user.getId()) && StrUtil.isEmpty(user.getRoleId())) {
+			throw new IllegalArgumentException("参数不能为空");
+		}
+		return success(userService.findUserRoleMapsList(user));
 	}
 
 	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
@@ -71,7 +79,8 @@ public class UserController extends BaseController {
 		if (eu != null) {
 			throw new IllegalArgumentException("用户 '" + eu.getUsername() + "' 已存在");
 		}
-		return success(userService.createUserAndRoleIds(user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getRoleIds()));
+		return success(userService.createUserAndRoleIds(user.getUsername(), passwordEncoder.encode(user.getPassword()),
+				user.getRoleIds()));
 	}
 
 	@Validate({ @Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
