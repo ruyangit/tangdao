@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.User;
 import com.tangdao.model.domain.UserRole;
 import com.tangdao.model.dto.UserDTO;
+import com.tangdao.model.dto.UserRoleDTO;
 import com.tangdao.modules.sys.mapper.UserMapper;
 import com.tangdao.modules.sys.mapper.UserRoleMapper;
 
@@ -53,13 +55,6 @@ public class UserService extends BaseService<UserMapper, User> {
 			return users.get(0);
 		}
 		return null;
-	}
-	
-	public boolean createUser(String username, String password) {
-		User user = new User();
-		user.setUsername(username);
-		user.setPassword(password);
-		return this.save(user);
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -106,5 +101,10 @@ public class UserService extends BaseService<UserMapper, User> {
 	
 	public List<Map<String, Object>> findUserRoleMapsList(UserDTO user){
 		return userRoleMapper.findUserRoleMapsList(user);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public boolean deleteUserRole(UserRoleDTO userRole) {
+		return SqlHelper.retBool(this.userRoleMapper.deleteById(userRole.getId()));
 	}
 }

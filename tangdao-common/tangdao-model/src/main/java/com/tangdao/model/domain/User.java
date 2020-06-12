@@ -49,7 +49,7 @@ public class User extends BaseEntity{
 	
 	private String status;
 	
-	private Date createSource;
+	private String createSource;
 	
 	private Date modified;
 	
