@@ -35,7 +35,7 @@ public class UserDetailsServiceImpl implements IUserDetailsService{
 		// TODO Auto-generated method stub
 		User user = userService.findByUsername(username);
 		if (user == null) {
-			throw new UsernameNotFoundException(username);
+			throw new BusinessException(CommonApiCode.BAD_REQUEST, "用户账号不存在！");
 		}
 		if(DataStatus.DISABLE.equals(user.getStatus())) {
 			throw new BusinessException(CommonApiCode.UNAUTHORIZED, "用户账号已被锁定！");

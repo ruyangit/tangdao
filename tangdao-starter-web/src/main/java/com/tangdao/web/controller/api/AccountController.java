@@ -39,9 +39,9 @@ public class AccountController extends BaseController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
-			@Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }),
-			@Field(name = "user.mobile", rules = { @Rule(type = RuleType.MOBILE) }) })
+	@Validate({ @Field(name = "register.username", rules = { @Rule(message = "账号不能为空") }),
+			@Field(name = "register.password", rules = { @Rule(message = "密码不能为空") }),
+			@Field(name = "register.mobile", rules = { @Rule(type = RuleType.MOBILE) }) })
 	@PostMapping("/register")
 	public CommonResponse register(@RequestBody RegisterDTO register) {
 		User eu = userService.findByUsername(register.getUsername());
@@ -50,7 +50,7 @@ public class AccountController extends BaseController {
 		}
 		User user = new User();
 		user.setUsername(register.getUsername());
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setPassword(passwordEncoder.encode(register.getPassword()));
 		user.setMobile(register.getMobile());
 		user.setCreateSource(UserSource.WEB.getName());
 		userService.save(user);
