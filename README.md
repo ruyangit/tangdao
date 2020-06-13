@@ -1,4 +1,4 @@
-# 综合权限管理系统（Tangdao）
+# 权限管理系统（Tangdao）
 
 <p align="left">
   <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html"><img alt="JDK" src="https://img.shields.io/badge/JDK-1.8.0_162-orange.svg"/></a>
@@ -14,13 +14,18 @@
 
 ## 简介
 
-Tangdao 是一个基于角色的授权（RBAC - Role-Based Authorization）系统。
+Tangdao 是基于角色的权限管理系统（RBAC），采用Springboot开发。系统简单易懂，前端使用Vue、Quasarframework开发，页面简洁美观。后端核心框架使用Springboot、Mybatis-plus、SpringSecurity为主要，扩展基于框架的权限校验、参数校验、统一异常、统一响应的通用功能。
+
+## 功能
+
+1、系统管理，管理员用户、角色组、操作日志（开发中）
+
+## 预览
 
 **[前端预览](http://121.37.180.48:12001/#/user/login)**
 
 **[前端项目](https://gitee.com/ruyangit/quasar-element-pro/tree/tangdao-spa)**
 
-## 预览
 <img src='http://121.37.180.48:12001/statics/1.png' width="100%" />
 <img src='http://121.37.180.48:12001/statics/2.png' width="100%" />
 <img src='http://121.37.180.48:12001/statics/3.png' width="100%" />
