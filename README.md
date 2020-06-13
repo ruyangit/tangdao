@@ -25,6 +25,8 @@ Tangdao 是一个基于角色的授权（RBAC - Role-Based Authorization）系�
 <img src='http://121.37.180.48:12001/statics/2.png' width="100%" />
 <img src='http://121.37.180.48:12001/statics/3.png' width="100%" />
 <img src='http://121.37.180.48:12001/statics/4.png' width="100%" />
+<img src='http://121.37.180.48:12001/statics/5.png' width="100%" />
+<img src='http://121.37.180.48:12001/statics/6.png' width="100%" />
 
 ## 运行项目
 

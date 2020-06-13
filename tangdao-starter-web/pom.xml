@@ -14,8 +14,13 @@
 	<artifactId>tangdao-starter-web</artifactId>
 	<name>Tangdao Starter Web</name>
 	<inceptionYear>2020-Now</inceptionYear>
+	
+	<properties>
+		<start-class>com.tangdao.web.TangdaoApplication</start-class>
+	</properties>
 
 	<dependencies>
+		<!-- 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -26,9 +31,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-undertow</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>${jjwt.veersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
@@ -37,18 +52,14 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-module-core-api</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-module-security</artifactId>
+			<artifactId>tangdao-service-provider</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
 	</dependencies>
 
 	<build>
+		<finalName>tangdao</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
