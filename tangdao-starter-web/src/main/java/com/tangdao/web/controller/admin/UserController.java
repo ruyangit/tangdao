@@ -93,11 +93,11 @@ public class UserController extends BaseController {
 	}
 	
 	@GetMapping("/role")
-	public CommonResponse role(UserDTO user) {
-		if (StrUtil.isEmpty(user.getUsername()) && StrUtil.isEmpty(user.getId()) && StrUtil.isEmpty(user.getRoleId())) {
+	public CommonResponse userRole(UserRoleDTO userRole) {
+		if (StrUtil.isEmpty(userRole.getUsername()) && StrUtil.isEmpty(userRole.getUserId()) && StrUtil.isEmpty(userRole.getRoleId())) {
 			throw new IllegalArgumentException("参数不能为空");
 		}
-		return success(userService.findUserRoleMapsList(user));
+		return success(userService.findUserRoleMapsList(userRole));
 	}
 	
 	@Validate({ @Field(name = "userRole.id", rules = { @Rule(message = "删除主键不能为空") }) })

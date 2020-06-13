@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tangdao.model.domain.UserRole;
-import com.tangdao.model.dto.UserDTO;
+import com.tangdao.model.dto.UserRoleDTO;
 
 /**
  * <p>
@@ -24,5 +24,5 @@ import com.tangdao.model.dto.UserDTO;
 @Mapper
 public interface UserRoleMapper extends BaseMapper<UserRole>{
 	
-	public List<Map<String, Object>> findUserRoleMapsList(@Param("user") UserDTO user);
+	public List<Map<String, Object>> findUserRoleMapsList(@Param("userRole") UserRoleDTO userRole);
 }

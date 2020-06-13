@@ -20,14 +20,14 @@
 		where
 			t.id = ur.role_id
 			and u.id = ur.user_id
-			<if test="user.id!=null">
-				and u.id = #{user.id}
+			<if test="userRole.userId!=null">
+				and u.id = #{userRole.userId}
 			</if>
-			<if test="user.username!=null">
-				and u.username = #{user.username}
+			<if test="userRole.username!=null">
+				and u.username = #{userRole.username}
 			</if>
-			<if test="user.roleId!=null">
-				and ur.role_id = #{user.roleId}
+			<if test="userRole.roleId!=null">
+				and ur.role_id = #{userRole.roleId}
 			</if>
 		order by ur.created
 	</select>

@@ -99,8 +99,8 @@ public class UserService extends BaseService<UserMapper, User> {
 		return getBaseMapper().findMapsPage(page, user);
 	}
 	
-	public List<Map<String, Object>> findUserRoleMapsList(UserDTO user){
-		return userRoleMapper.findUserRoleMapsList(user);
+	public List<Map<String, Object>> findUserRoleMapsList(UserRoleDTO userRole){
+		return userRoleMapper.findUserRoleMapsList(userRole);
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
