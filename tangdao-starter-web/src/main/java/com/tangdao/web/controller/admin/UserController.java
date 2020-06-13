@@ -67,12 +67,12 @@ public class UserController extends BaseController {
 	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
 			@Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
 	@PostMapping
-	public CommonResponse createUser(@RequestBody UserDTO user) {
+	public CommonResponse saveUser(@RequestBody UserDTO user) {
 		User eu = userService.findByUsername(user.getUsername());
 		if (eu != null) {
 			throw new IllegalArgumentException("用户 '" + eu.getUsername() + "' 已存在");
 		}
-		return success(userService.createUserAndRoleIds(user.getUsername(), passwordEncoder.encode(user.getPassword()),
+		return success(userService.saveUserAndRoleIds(user.getUsername(), passwordEncoder.encode(user.getPassword()),
 				user.getRoleIds()));
 	}
 
@@ -98,6 +98,11 @@ public class UserController extends BaseController {
 			throw new IllegalArgumentException("参数不能为空");
 		}
 		return success(userService.findUserRoleMapsList(userRole));
+	}
+	
+	@PostMapping("/role")
+	public CommonResponse saveUserRole(@RequestBody UserRoleDTO userRole) {
+		return success(userService.saveUserRole(userRole));
 	}
 	
 	@Validate({ @Field(name = "userRole.id", rules = { @Rule(message = "删除主键不能为空") }) })

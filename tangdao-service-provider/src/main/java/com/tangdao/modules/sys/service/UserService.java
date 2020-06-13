@@ -58,18 +58,12 @@ public class UserService extends BaseService<UserMapper, User> {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public boolean createUserAndRoleIds(String username, String password, List<String> roleIds) {
+	public boolean saveUserAndRoleIds(String username, String password, List<String> roleIds) {
 		User user = new User();
 		user.setUsername(username);
 		user.setPassword(password);
 		this.save(user);
-		this.userRoleMapper.delete(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, user.getId()));
-		roleIds.forEach(roleId ->{
-			UserRole ur = new UserRole();
-			ur.setRoleId(roleId);
-			ur.setUserId(user.getId());
-			this.userRoleMapper.insert(ur);
-		});
+		this.saveUserRole(user.getId(), roleIds);
 		return true;
 	}
 	
@@ -104,7 +98,23 @@ public class UserService extends BaseService<UserMapper, User> {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
+	public boolean saveUserRole(UserRoleDTO userRole) {
+		this.saveUserRole(userRole.getUserId(), userRole.getRoleIds());
+		return true;
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteUserRole(UserRoleDTO userRole) {
 		return SqlHelper.retBool(this.userRoleMapper.deleteById(userRole.getId()));
+	}
+	
+	private void saveUserRole(String userId, List<String> roleIds) {
+		this.userRoleMapper.delete(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userId));
+		roleIds.forEach(roleId ->{
+			UserRole ur = new UserRole();
+			ur.setRoleId(roleId);
+			ur.setUserId(userId);
+			this.userRoleMapper.insert(ur);
+		});
 	}
 }
