@@ -74,6 +74,6 @@ public class RoleController extends BaseController {
 
 	@PostMapping("/delete")
 	public CommonResponse deleteRole(@RequestBody Role role) {
-		return success(roleService.removeById(role.getId()));
+		return success(roleService.deleteRole(role.getId()));
 	}
 }
