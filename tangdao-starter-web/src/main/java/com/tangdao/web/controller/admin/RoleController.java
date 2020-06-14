@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.core.constant.DataStatus;
@@ -19,8 +20,11 @@ import com.tangdao.core.web.validate.Field;
 import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.Role;
+import com.tangdao.model.dto.RoleDTO;
 import com.tangdao.modules.sys.service.RoleService;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -59,7 +63,7 @@ public class RoleController extends BaseController {
 
 	@Validate({ @Field(name = "role.roleName", rules = { @Rule(message = "角色名不能为空") }) })
 	@PostMapping
-	public CommonResponse createRole(@RequestBody Role role) {
+	public CommonResponse saveRole(@RequestBody Role role) {
 		Role er = roleService.findByRoleName(role.getRoleName());
 		if (er != null) {
 			throw new IllegalArgumentException("角色 '" + er.getRoleName() + "' 已存在");
@@ -68,12 +72,21 @@ public class RoleController extends BaseController {
 	}
 
 	@PostMapping("/update")
-	public CommonResponse updateRole(@RequestBody Role role) {
+	public CommonResponse updateRole(@RequestBody RoleDTO roleDto) {
+		
+		Role role = new Role();
+		BeanUtil.copyProperties(roleDto, role);
+		
+		if (!Validator.equal(roleDto.getRoleName(), roleDto.getOldRoleName()) 
+				&& roleService.count(Wrappers.<Role>lambdaQuery().eq(Role::getRoleName, roleDto.getRoleName())) >0 ) {
+			throw new IllegalArgumentException("角色 '" + roleDto.getRoleName() + "' 已存在");
+		} 
+		
 		return success(roleService.updateById(role));
 	}
 
 	@PostMapping("/delete")
-	public CommonResponse deleteRole(@RequestBody Role role) {
-		return success(roleService.deleteRole(role.getId()));
+	public CommonResponse deleteRole(@RequestBody RoleDTO roleDto) {
+		return success(roleService.deleteRole(roleDto.getId()));
 	}
 }

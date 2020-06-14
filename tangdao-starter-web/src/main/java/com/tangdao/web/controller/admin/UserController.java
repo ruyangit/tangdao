@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
 import com.tangdao.core.web.BaseController;
@@ -25,6 +26,8 @@ import com.tangdao.model.dto.UserRoleDTO;
 import com.tangdao.modules.sys.service.UserService;
 import com.tangdao.web.config.TangdaoProperties;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -83,12 +86,20 @@ public class UserController extends BaseController {
 	}
 
 	@PostMapping("/update")
-	public CommonResponse updateUser(@RequestBody User user) {
+	public CommonResponse updateUser(@RequestBody UserDTO userDto) {
+		User user = new User();
+		BeanUtil.copyProperties(userDto, user);
+		
+		if (!Validator.equal(userDto.getUsername(), userDto.getOldUsername()) 
+				&& userService.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, userDto.getUsername())) >0 ) {
+			throw new IllegalArgumentException("用户 '" + userDto.getUsername() + "' 已存在");
+		} 
+		
 		return success(userService.updateById(user));
 	}
 
 	@PostMapping("/delete")
-	public CommonResponse deleteUser(@RequestBody User user) {
+	public CommonResponse deleteUser(@RequestBody UserDTO user) {
 		return success(userService.deleteUser(user.getId()));
 	}
 	
