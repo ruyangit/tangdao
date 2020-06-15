@@ -23,7 +23,7 @@ import com.tangdao.core.mybatis.injector.DateMetaObjectHandler;
  */
 @Configuration
 @MapperScan("com.tangdao.modules.*.mapper")
-public class DataSourceAutoConfiguration {
+public class MyBatisAutoConfigurer {
 
 	@Bean
 	@ConditionalOnMissingBean
