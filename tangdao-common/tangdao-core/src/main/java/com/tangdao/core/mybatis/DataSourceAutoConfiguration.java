@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import com.tangdao.core.mybatis.injector.DateMetaObjectHandler;
 
 /**
  * <p>

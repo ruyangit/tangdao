@@ -81,12 +81,11 @@ public class UserService extends BaseService<UserMapper, User> {
 		return this.updateById(user);
 	}
 	
-	public boolean lastLoginUserModify(String id, String lastLoginIp) {
+	public boolean lastLoginUserModify(String username, String lastLoginIp) {
 		User user = new User();
-		user.setId(id);
 		user.setLastLoginIp(lastLoginIp);
 		user.setLastLoginDate(new Date());
-		return this.updateById(user);
+		return this.update(user, Wrappers.<User>lambdaUpdate().eq(User::getUsername, username));
 	}
 
 	public Pageinfo findMapsPage(Pageinfo page, UserDTO user) {

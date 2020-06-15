@@ -85,7 +85,8 @@ public class AuthManager {
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 			Authentication authentication = authenticationManager.authenticate(authenticationToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			userService.lastLoginUserModify(UserUtils.getUserId(), WebUtils.getClientIP());
+			
+			userService.lastLoginUserModify(username, WebUtils.getClientIP());
 		} catch (Exception ex) {
 			if(ex instanceof BadCredentialsException) {
 				throw new IllegalArgumentException("用户账号或密码错误！", ex);

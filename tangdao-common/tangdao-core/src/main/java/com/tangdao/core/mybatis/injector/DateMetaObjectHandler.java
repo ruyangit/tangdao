@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.mybatis;
+package com.tangdao.core.mybatis.injector;
 
 import java.util.Date;
 
