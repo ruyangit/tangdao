@@ -81,7 +81,7 @@ public class JwtTokenManager {
 		SecurityUser principal = new SecurityUser();
 		principal.setUsername(claims.getSubject());
 		principal.setToken(token);
-		principal.setIsa(properties.getSuperAdmin().equals(claims.getSubject()));
+		principal.setIsa(properties.isa(claims.getSubject()));
 		
 		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 	}

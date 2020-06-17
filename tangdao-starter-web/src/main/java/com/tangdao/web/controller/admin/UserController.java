@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
@@ -54,8 +55,11 @@ public class UserController extends BaseController {
 
 	@GetMapping
 	public CommonResponse page(Pageinfo page, UserDTO user) {
-		user.setSuperAdmin(properties.getSuperAdmin());
-		return success(userService.findMapsPage(page, user));
+		IPage<Map<String, Object>> pageinfo = userService.findMapsPage(page, user);
+		pageinfo.getRecords().forEach(e->{
+			e.put("isa", properties.isa(String.valueOf(e.get("username"))));
+		});
+		return success(pageinfo);
 	}
 
 	@GetMapping("/detail/info")
@@ -63,7 +67,7 @@ public class UserController extends BaseController {
 		User user = userService.findByUsername(username);
 		Map<String, Object> data = MapUtil.newHashMap();
 		data.put("user", user);
-		data.put("isa", StrUtil.equals(properties.getSuperAdmin(), username) ? "1" : "0");
+		data.put("isa", properties.isa(username));
 		return success(data);
 	}
 

@@ -6,7 +6,8 @@ package com.tangdao.web.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import lombok.Data;
+import cn.hutool.core.util.StrUtil;
+import lombok.Setter;
 
 /**
  * <p>
@@ -16,10 +17,18 @@ import lombok.Data;
  * @author ruyang@gmail.com
  * @since 2020年6月11日
  */
-@Data
+@Setter
 @ConfigurationProperties
-public class TangdaoProperties{
+public class TangdaoProperties {
 
-	@Value("${user.superAdmin:ruyang}")
-	private String superAdmin;
+	@Value("${user.sa:ruyang}")
+	private String sa;
+
+	public String sa() {
+		return sa;
+	}
+
+	public boolean isa(String username) {
+		return StrUtil.equals(sa, username);
+	}
 }

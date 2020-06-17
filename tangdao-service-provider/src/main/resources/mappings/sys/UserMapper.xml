@@ -13,11 +13,6 @@
 			t.status,
 			t.created,
 			t.remark,
-			( CASE
-				t.username
-				WHEN #{user.superAdmin} THEN '1'
-				ELSE '0'
-			END ) isa,
 			group_concat(r.role_name) as roleName
 		from
 			user t 

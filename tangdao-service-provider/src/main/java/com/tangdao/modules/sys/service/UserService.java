@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
@@ -88,7 +89,7 @@ public class UserService extends BaseService<UserMapper, User> {
 		return this.update(user, Wrappers.<User>lambdaUpdate().eq(User::getUsername, username));
 	}
 
-	public Pageinfo findMapsPage(Pageinfo page, UserDTO user) {
+	public IPage<Map<String, Object>> findMapsPage(Pageinfo page, UserDTO user) {
 		return getBaseMapper().findMapsPage(page, user);
 	}
 	
