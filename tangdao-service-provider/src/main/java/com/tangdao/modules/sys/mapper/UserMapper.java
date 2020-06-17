@@ -23,4 +23,5 @@ import com.tangdao.model.dto.UserDTO;
 public interface UserMapper extends BaseMapper<User> {
 
 	public Pageinfo findMapsPage(Pageinfo page, @Param("user") UserDTO user);
+	
 }
