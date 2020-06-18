@@ -4,13 +4,9 @@
 package com.tangdao.model.domain;
 
 import java.util.Date;
-import java.util.List;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.tangdao.common.constant.CommonContext;
 import com.tangdao.model.base.BaseEntity;
 
-import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -43,15 +39,15 @@ public class Menu extends BaseEntity {
 
 	private String menuType;
 
-	private String isShow;
+	private Boolean isShow;
 
 	private Integer sort;
 
 	private String icon;
 
-	private String link;
+	private Boolean link;
 
-	private String opened;
+	private Boolean opened;
 
 	private String badge;
 
@@ -60,15 +56,4 @@ public class Menu extends BaseEntity {
 	private String status;
 
 	private Date modified;
-
-	@TableField(exist = false)
-	private List<Menu> children;
-
-	public void addChild(Menu menu) {
-		this.children.add(menu);
-	}
-
-	public boolean show() {
-		return StrUtil.equals(CommonContext.YES, this.isShow);
-	}
 }

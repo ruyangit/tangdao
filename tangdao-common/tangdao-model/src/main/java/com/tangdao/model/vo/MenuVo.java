@@ -40,7 +40,7 @@ public class MenuVo implements Serializable {
 
 	private String icon;
 
-	private String link;
+	private Boolean link;
 
 	private Boolean opened;
 
@@ -50,5 +50,9 @@ public class MenuVo implements Serializable {
 
 	public static final String TYPE_MENU = "1";
 	public static final String TYPE_PERM = "2";
+	
+	public void addChild(MenuVo menu) {
+		this.children.add(menu);
+	}
 
 }
