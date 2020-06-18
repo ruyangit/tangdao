@@ -10,6 +10,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.tangdao.web.security.user.TSessionInterceptor;
 
 /**
  * <p>
@@ -22,7 +27,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableScheduling
 @EnableConfigurationProperties(TangdaoProperties.class)
-public class TangdaoConfig {
+public class TangdaoConfig implements WebMvcConfigurer {
 
 	@Bean
 	public CorsFilter corsFilter() {
@@ -35,5 +40,18 @@ public class TangdaoConfig {
 		config.addAllowedMethod("*");
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
+	}
+	
+	@Bean
+	public TSessionInterceptor tSessionInterceptor() {
+		return new TSessionInterceptor();
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		InterceptorRegistration irs = registry.addInterceptor(tSessionInterceptor());
+		irs.order(6);
+		irs.addPathPatterns("/admin/**");
+		irs.excludePathPatterns("/admin/login");
 	}
 }

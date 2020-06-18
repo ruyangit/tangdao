@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
 
-import com.tangdao.web.filter.JwtAuthenticationTokenFilter;
+import com.tangdao.web.security.filter.JwtAuthenticationTokenFilter;
 import com.tangdao.web.security.user.UserDetailsServiceImpl;
 
 /**

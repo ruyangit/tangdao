@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.tangdao.web.config.TangdaoProperties;
 import com.tangdao.web.security.user.SecurityUser;
+import com.tangdao.web.security.user.SecurityUserDetails;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -30,14 +31,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
  */
 @Component
 public class JwtTokenManager {
-	
+
 	@Autowired
 	private TangdaoProperties properties;
 
 	private static final String AUTHORITIES_KEY = "auth";
 
 	private static final String SECRET_KEY = "2020";
-	
+
 	private static final Long SECRET_EXPIRATION = 18000L;
 
 	/**
@@ -47,20 +48,18 @@ public class JwtTokenManager {
 	 * @return token
 	 */
 	public String createToken(Authentication authentication) {
-		return createToken(authentication.getName());
-	}
-
-	public String createToken(String userName) {
 
 		long now = (new Date()).getTime();
 
 		Date validity;
 		validity = new Date(now + SECRET_EXPIRATION * 1000L);
 
-		Claims claims = Jwts.claims().setSubject(userName);
+		Claims claims = Jwts.claims().setSubject(authentication.getName());
 
-		return Jwts.builder().setClaims(claims).setExpiration(validity)
-				.signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
+		claims.put("userId", ((SecurityUserDetails) authentication.getPrincipal()).getSecurityUser().getId());
+
+		return Jwts.builder().setClaims(claims).setExpiration(validity).signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+				.compact();
 	}
 
 	/**
@@ -75,14 +74,16 @@ public class JwtTokenManager {
 		 */
 		Claims claims = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
 
-		List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES_KEY));
+		List<GrantedAuthority> authorities = AuthorityUtils
+				.commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES_KEY));
 
 //		User principal = new User(claims.getSubject(), "", authorities);
 		SecurityUser principal = new SecurityUser();
 		principal.setUsername(claims.getSubject());
+		principal.setId((String)claims.get("userId"));
 		principal.setToken(token);
 		principal.setIsa(properties.isa(claims.getSubject()));
-		
+
 		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
 	}
 

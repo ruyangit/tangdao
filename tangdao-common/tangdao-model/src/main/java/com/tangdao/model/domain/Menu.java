@@ -7,8 +7,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.tangdao.common.constant.CommonContext;
 import com.tangdao.model.base.BaseEntity;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,13 +33,17 @@ public class Menu extends BaseEntity {
 
 	private String name;
 
-	private String pid;
+	private String pId;
+	
+	private String pIds;
 
 	private String path;
 
 	private String premission;
 
 	private String menuType;
+
+	private String isShow;
 
 	private Integer sort;
 
@@ -60,5 +66,9 @@ public class Menu extends BaseEntity {
 
 	public void addChild(Menu menu) {
 		this.children.add(menu);
+	}
+
+	public boolean show() {
+		return StrUtil.equals(CommonContext.YES, this.isShow);
 	}
 }

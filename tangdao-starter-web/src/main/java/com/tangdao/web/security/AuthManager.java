@@ -54,19 +54,13 @@ public class AuthManager {
 
 		Authentication authentication = tokenManager.getAuthentication(token);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-//		String username = authentication.getName();
-//		SecurityUser user = new SecurityUser();
-//		user.setUsername(username);
-//		user.setToken(token);
-//		user.setSuperAdmin(superAdmin.equals(username));
 		return (SecurityUser)authentication.getPrincipal();
 	}
 
 	/**
 	 * Get token from header
 	 */
-	private String resolveToken(HttpServletRequest request) {
+	public String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AuthConfig.AUTHORIZATION_HEADER);
 		if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(AuthConfig.TOKEN_PREFIX)) {
 			return bearerToken.substring(7);
@@ -87,6 +81,8 @@ public class AuthManager {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
 			userService.lastLoginUserModify(username, WebUtils.getClientIP());
+			
+			return tokenManager.createToken(authentication);
 		} catch (Exception ex) {
 			if(ex instanceof BadCredentialsException) {
 				throw new IllegalArgumentException("用户账号或密码错误！", ex);
@@ -94,7 +90,6 @@ public class AuthManager {
 			throw new IllegalArgumentException(ex.getMessage(), ex);
 		}
 
-		return tokenManager.createToken(username);
 	}
 
 }

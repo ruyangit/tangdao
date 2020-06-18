@@ -3,8 +3,6 @@
  */
 package com.tangdao.core.session;
 
-import java.io.Serializable;
-
 /**
  * <p>
  * TODO 描述
@@ -34,11 +32,11 @@ public class SessionContext {
 	 *
 	 * @return id
 	 */
-	public static Serializable getId() {
+	public static String getUserId() {
 		TSession session = getSession();
 		if (session == null)
 			return null;
-		return session.getId();
+		return (String)session.getUserId();
 	}
 
 	/**

@@ -28,12 +28,10 @@ public class TSession implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private Serializable userId;
 
-	private Serializable id;
-
-	private Serializable name;
-
-	private Serializable tenant;
+	private Serializable username;
 
 	private Map<String, Object> claims;
 

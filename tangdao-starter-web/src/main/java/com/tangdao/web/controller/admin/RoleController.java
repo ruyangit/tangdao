@@ -21,6 +21,7 @@ import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.Role;
 import com.tangdao.model.dto.RoleDTO;
+import com.tangdao.modules.sys.service.MenuService;
 import com.tangdao.modules.sys.service.RoleService;
 
 import cn.hutool.core.bean.BeanUtil;
@@ -41,6 +42,9 @@ public class RoleController extends BaseController {
 
 	@Autowired
 	private RoleService roleService;
+	
+	@Autowired
+	private MenuService menuService;
 
 	@GetMapping
 	public CommonResponse page(Page<Role> page, String roleName) {
@@ -48,6 +52,9 @@ public class RoleController extends BaseController {
 		if (StrUtil.isNotBlank(roleName)) {
 			queryWrapper.like("role_name", roleName);
 		}
+		
+		menuService.findMenuVoList();
+		
 		return success(roleService.page(page, queryWrapper));
 	}
 	

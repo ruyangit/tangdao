@@ -13,6 +13,9 @@ package com.tangdao.common.constant;
  */
 public class CommonContext {
 
+	public static final String YES = "1";
+	public static final String NO = "0";
+
 	public enum UserSource {
 
 		WEB("网页注册"),

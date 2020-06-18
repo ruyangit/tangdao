@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.web.filter;
+package com.tangdao.web.security.filter;
 
 import java.io.IOException;
 
@@ -43,13 +43,14 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			String jwt = resolveToken(request);
+			String token = resolveToken(request);
 
-			if (StringUtils.isNotBlank(jwt) && SecurityContextHolder.getContext().getAuthentication() == null) {
-			    this.tokenManager.validateToken(jwt);
-			    Authentication authentication = this.tokenManager.getAuthentication(jwt);
+			if (StringUtils.isNotBlank(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
+			    this.tokenManager.validateToken(token);
+			    Authentication authentication = this.tokenManager.getAuthentication(token);
 			    SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
+			
 			filterChain.doFilter(request, response);
 		} catch (ExpiredJwtException e) {
 			WebUtils.responseJson(response, CommonApiCode.USER_TOKEN_EXPIRE);
@@ -63,7 +64,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 	/**
      * Get token from header
      */
-    private String resolveToken(HttpServletRequest request) {
+    public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AuthConfig.AUTHORIZATION_HEADER);
         if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(AuthConfig.TOKEN_PREFIX)) {
             return bearerToken.substring(7);

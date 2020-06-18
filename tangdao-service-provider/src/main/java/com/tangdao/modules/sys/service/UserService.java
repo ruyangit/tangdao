@@ -117,4 +117,5 @@ public class UserService extends BaseService<UserMapper, User> {
 			this.userRoleMapper.insert(ur);
 		});
 	}
+	
 }

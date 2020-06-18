@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,11 +39,17 @@ public class LoginController extends BaseController {
 		SecurityUser user = authManager.login(request);
 
 		response.addHeader(AuthConfig.AUTHORIZATION_HEADER, AuthConfig.TOKEN_PREFIX + user.getToken());
-
+		
 		JSONObject result = new JSONObject();
 		result.put(AuthConfig.ACCESS_TOKEN, user.getToken());
 		result.put("username", user.getUsername());
 		return success(result);
 	}
 	
+	@GetMapping("/nav")
+	public CommonResponse user() {
+		
+		return CommonResponse.createCommonResponse();
+	}
+
 }
