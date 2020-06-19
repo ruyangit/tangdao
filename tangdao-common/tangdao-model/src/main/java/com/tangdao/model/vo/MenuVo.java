@@ -40,9 +40,9 @@ public class MenuVo implements Serializable {
 
 	private String icon;
 
-	private Boolean link;
-
 	private Boolean opened;
+	
+	private Boolean isShow;
 
 	private String badge;
 

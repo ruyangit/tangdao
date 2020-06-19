@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ import com.tangdao.modules.sys.mapper.UserRoleMapper;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -67,9 +69,9 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 		// 权限列表
 		List<Menu> premissionList = CollUtil.newLinkedList();
 		Map<String, MenuVo> dtoMap = new LinkedHashMap<String, MenuVo>();
-		
+
 		for (Menu menu : sourceList) {
-			if (!menu.getIsShow() && MenuVo.TYPE_PERM.equals(menu.getMenuType())) {
+			if (!menu.getIsShow()) {
 				premissionList.add(menu);
 				continue;
 			}
@@ -78,7 +80,18 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 			BeanUtil.copyProperties(menu, menuVo);
 			dtoMap.put(menu.getId(), menuVo);
 		}
-		
+
+//		for (Menu menu : premissionList) {
+//			if (StrUtil.isEmpty(menu.getPremission())) {
+//				continue;
+//			}
+//			MenuVo tMenuVo = dtoMap.get(menu.getPId());
+//			if (tMenuVo.getPremissions() == null) {
+//				tMenuVo.setPremissions(new LinkedList<String>());
+//			}
+//			tMenuVo.getPremissions().add(menu.getPremission());
+//		}
+
 		List<MenuVo> targetList = CollUtil.newLinkedList();
 		for (Map.Entry<String, MenuVo> entry : dtoMap.entrySet()) {
 			MenuVo menu = entry.getValue();
@@ -95,7 +108,7 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 				parent.addChild(menu);
 			}
 		}
-		
-		return null;
+
+		return targetList;
 	}
 }

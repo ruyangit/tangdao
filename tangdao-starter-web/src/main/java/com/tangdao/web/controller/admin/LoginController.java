@@ -3,6 +3,9 @@
  */
 package com.tangdao.web.controller.admin;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,9 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.model.vo.MenuVo;
+import com.tangdao.modules.sys.service.MenuService;
 import com.tangdao.web.security.AuthConfig;
 import com.tangdao.web.security.AuthManager;
 import com.tangdao.web.security.user.SecurityUser;
+
+import cn.hutool.core.map.MapUtil;
 
 /**
  * <p>
@@ -34,22 +41,28 @@ public class LoginController extends BaseController {
 	@Autowired
 	private AuthManager authManager;
 
+	@Autowired
+	private MenuService menuService;
+
 	@RequestMapping(value = { "/login", "/check_token" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public CommonResponse login(HttpServletResponse response, HttpServletRequest request) {
 		SecurityUser user = authManager.login(request);
 
 		response.addHeader(AuthConfig.AUTHORIZATION_HEADER, AuthConfig.TOKEN_PREFIX + user.getToken());
-		
+
 		JSONObject result = new JSONObject();
 		result.put(AuthConfig.ACCESS_TOKEN, user.getToken());
 		result.put("username", user.getUsername());
 		return success(result);
 	}
-	
-	@GetMapping("/nav")
-	public CommonResponse user() {
-		
-		return CommonResponse.createCommonResponse();
+
+	@GetMapping("/navs")
+	public CommonResponse navs() {
+		List<MenuVo> menuVoList = menuService.findMenuVoList();
+
+		Map<String, Object> data = MapUtil.newHashMap();
+		data.put("menuVoList", menuVoList);
+		return CommonResponse.createCommonResponse(data);
 	}
 
 }

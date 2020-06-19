@@ -41,13 +41,11 @@ public class Menu extends BaseEntity {
 
 	private Boolean isShow;
 
-	private Integer sort;
-
 	private String icon;
 
-	private Boolean link;
-
 	private Boolean opened;
+
+	private Integer sort;
 
 	private String badge;
 
