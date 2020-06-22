@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.Role;
 import com.tangdao.model.domain.UserRole;
+import com.tangdao.model.dto.RoleDTO;
 import com.tangdao.modules.sys.mapper.RoleMapper;
 import com.tangdao.modules.sys.mapper.UserRoleMapper;
 
@@ -28,7 +29,7 @@ import cn.hutool.core.collection.CollUtil;
  */
 @Service
 public class RoleService extends BaseService<RoleMapper, Role> {
-	
+
 	@Autowired
 	private UserRoleMapper userRoleMapper;
 
@@ -42,10 +43,21 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 		}
 		return null;
 	}
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteRole(String id) {
 		this.userRoleMapper.delete(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getRoleId, id));
 		return super.removeById(id);
+	}
+
+	/**
+	 * TODO 检查角色信息是否被引用
+	 * 
+	 * @param roleDto
+	 * @return true 引用，false 未引用
+	 */
+	public boolean checkUserRoleRef(RoleDTO roleDto) {
+		return this.userRoleMapper
+				.selectCount(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getRoleId, roleDto.getId())) > 0;
 	}
 }

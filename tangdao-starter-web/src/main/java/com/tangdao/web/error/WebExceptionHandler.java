@@ -30,7 +30,9 @@ public class WebExceptionHandler {
 
 	@ExceptionHandler(BusinessException.class)
 	public @ResponseBody Object businessException(BusinessException e) {
-		return CommonResponse.createCommonResponse().fail(e.getErrorCode());
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(e.getErrorCode().getCode(), e.getMessage());
+		return commonResponse;
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)

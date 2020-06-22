@@ -12,17 +12,15 @@ package com.tangdao.common.constant;
  * @since 2020年5月29日
  */
 public enum CommonApiCode implements ErrorCode {
-	
-	OK("200", "执行成功"),
-	
-	BAD_REQUEST("400", "非法参数"),
-	UNAUTHORIZED("401", "用户身份验证失败"),
-	FORBIDDEN("403", "不允许访问"),
+
+	OK("200", "执行成功"), 
+
+	BAD_REQUEST("400", "非法参数"), UNAUTHORIZED("401", "用户身份验证失败"), FORBIDDEN("403", "不允许访问"),
 	INTERNAL_ERROR("500", "内部异常"),
-	
-	USER_TOKEN_EXPIRE("1007", "用户凭证已过期"),
-	;
-	
+
+	FAIL("1000", "操作失败"),
+	USER_TOKEN_EXPIRE("1007", "用户凭证已过期"),;
+
 	private String code;
 	private String message;
 

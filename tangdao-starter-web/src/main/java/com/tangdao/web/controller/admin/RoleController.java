@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.common.CommonResponse;
+import com.tangdao.common.constant.CommonApiCode;
+import com.tangdao.common.exception.BusinessException;
 import com.tangdao.core.constant.DataStatus;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.core.web.validate.Field;
@@ -50,7 +52,7 @@ public class RoleController extends BaseController {
 		}
 		return success(roleService.page(page, queryWrapper));
 	}
-	
+
 	@GetMapping("/list")
 	public CommonResponse list(String roleName) {
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<Role>();
@@ -73,20 +75,26 @@ public class RoleController extends BaseController {
 
 	@PostMapping("/update")
 	public CommonResponse updateRole(@RequestBody RoleDTO roleDto) {
-		
 		Role role = new Role();
 		BeanUtil.copyProperties(roleDto, role);
-		
-		if (!Validator.equal(roleDto.getRoleName(), roleDto.getOldRoleName()) 
-				&& roleService.count(Wrappers.<Role>lambdaQuery().eq(Role::getRoleName, roleDto.getRoleName())) >0 ) {
+
+		if (!Validator.equal(roleDto.getRoleName(), roleDto.getOldRoleName())
+				&& roleService.count(Wrappers.<Role>lambdaQuery().eq(Role::getRoleName, roleDto.getRoleName())) > 0) {
 			throw new IllegalArgumentException("角色 '" + roleDto.getRoleName() + "' 已存在");
-		} 
-		
+		}
+
+		if (roleService.checkUserRoleRef(roleDto)) {
+			throw new BusinessException(CommonApiCode.FAIL, "操作失败，存在未解除的关联数据");
+		}
+
 		return success(roleService.updateById(role));
 	}
 
 	@PostMapping("/delete")
 	public CommonResponse deleteRole(@RequestBody RoleDTO roleDto) {
+		if (roleService.checkUserRoleRef(roleDto)) {
+			throw new BusinessException(CommonApiCode.FAIL, "操作失败，存在未解除的关联数据");
+		}
 		return success(roleService.deleteRole(roleDto.getId()));
 	}
 }
