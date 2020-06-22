@@ -36,8 +36,6 @@ public class MenuVo implements Serializable {
 
 	private String path;
 
-	private List<String> premissions;
-
 	private String icon;
 
 	private Boolean opened;

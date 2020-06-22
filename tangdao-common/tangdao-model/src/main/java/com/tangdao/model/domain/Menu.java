@@ -35,7 +35,7 @@ public class Menu extends BaseEntity {
 
 	private String path;
 
-	private String premission;
+	private String permission;
 
 	private String menuType;
 

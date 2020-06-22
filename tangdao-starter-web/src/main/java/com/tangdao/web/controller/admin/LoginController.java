@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSONObject;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.model.domain.Menu;
 import com.tangdao.model.vo.MenuVo;
 import com.tangdao.modules.sys.service.MenuService;
 import com.tangdao.web.security.AuthConfig;
@@ -56,12 +57,15 @@ public class LoginController extends BaseController {
 		return success(result);
 	}
 
-	@GetMapping("/navs")
-	public CommonResponse navs() {
-		List<MenuVo> menuVoList = menuService.findMenuVoList();
+	@GetMapping("/authority")
+	public CommonResponse authority() {
+		List<Menu> sourceList = menuService.findUserMenuList();
+		List<MenuVo> menuVoList = menuService.findUserMenuVoList(sourceList);
+		List<String> permVoList = menuService.findUserPermVoList(sourceList);
 
 		Map<String, Object> data = MapUtil.newHashMap();
-		data.put("menuVoList", menuVoList);
+		data.put("permList", permVoList);
+		data.put("menuList", menuVoList);
 		return CommonResponse.createCommonResponse(data);
 	}
 
