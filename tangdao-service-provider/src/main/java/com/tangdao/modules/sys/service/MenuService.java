@@ -11,7 +11,6 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.service.BaseService;
-import com.tangdao.core.session.SessionContext;
 import com.tangdao.model.domain.Menu;
 import com.tangdao.model.vo.MenuVo;
 import com.tangdao.modules.sys.mapper.MenuMapper;
