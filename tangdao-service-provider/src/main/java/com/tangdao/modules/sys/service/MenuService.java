@@ -31,24 +31,37 @@ import cn.hutool.core.util.StrUtil;
 @Service
 public class MenuService extends BaseService<MenuMapper, Menu> {
 
-//	@Autowired
-//	private UserRoleMapper userRoleMapper;
-//
-//	@Autowired
-//	private RoleMenuMapper roleMenuMapper;
+	public List<MenuVo> findMenuVoChildList() {
+		List<MenuVo> sourceList = this.baseMapper.findMenuVoList(new MenuVo());
+		Map<String, MenuVo> dtoMap = new LinkedHashMap<String, MenuVo>();
+		for (MenuVo menu : sourceList) {
+			menu.setChildren(null);
+			dtoMap.put(menu.getId(), menu);
+		}
+		List<MenuVo> targetList = CollUtil.newLinkedList();
+		for (Map.Entry<String, MenuVo> entry : dtoMap.entrySet()) {
+			MenuVo menu = entry.getValue();
+			String tpid = menu.getPId();
+			if (dtoMap.get(tpid) == null) {
+				// 如果是顶层节点，直接添加到结果集合中
+				targetList.add(menu);
+			} else {
+				// 如果不是顶层节点，有父节点，然后添加到父节点的子节点中
+				MenuVo parent = dtoMap.get(tpid);
+				if (parent.getChildren() == null) {
+					parent.setChildren(new LinkedList<MenuVo>());
+				}
+				parent.addChild(menu);
+			}
+		}
+		return targetList;
+	}
+	
+	public List<Menu> findRoleMenuList(String roleId){
+		return super.baseMapper.findRoleMenuList(roleId);
+	}
 
 	public List<Menu> findUserMenuList() {
-//		QueryWrapper<UserRole> userRoleQw = new QueryWrapper<UserRole>();
-//		userRoleQw.eq("user_id", SessionContext.getUserId());
-//		List<String> roleIds = CollUtil.getFieldValues(userRoleMapper.selectList(userRoleQw), "roleId", String.class);
-//		QueryWrapper<RoleMenu> roleMenuQw = new QueryWrapper<RoleMenu>();
-//		roleMenuQw.in("role_id", roleIds);
-//		List<String> menuIds = CollUtil.getFieldValues(roleMenuMapper.selectList(roleMenuQw), "menuId", String.class);
-//		// 原始数据
-//		QueryWrapper<Menu> menuQw = new QueryWrapper<Menu>();
-//		menuQw.in("id", menuIds);
-//		menuQw.eq("status", DataStatus.NORMAL);
-//		menuQw.orderByAsc("sort");
 		return super.baseMapper.findUserMenuList(SessionContext.getUserId());
 	}
 

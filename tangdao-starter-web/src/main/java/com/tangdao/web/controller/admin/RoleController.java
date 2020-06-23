@@ -3,6 +3,9 @@
  */
 package com.tangdao.web.controller.admin;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,10 +26,14 @@ import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.Role;
 import com.tangdao.model.dto.RoleDTO;
+import com.tangdao.model.dto.RoleMenuDTO;
+import com.tangdao.modules.sys.service.MenuService;
 import com.tangdao.modules.sys.service.RoleService;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Validator;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -43,6 +50,9 @@ public class RoleController extends BaseController {
 
 	@Autowired
 	private RoleService roleService;
+
+	@Autowired
+	private MenuService menuService;
 
 	@GetMapping
 	public CommonResponse page(Page<Role> page, String roleName) {
@@ -63,6 +73,18 @@ public class RoleController extends BaseController {
 		return success(roleService.list(queryWrapper));
 	}
 
+	@Validate({ @Field(name = "id", rules = { @Rule(message = "查询主键不能为空") }) })
+	@GetMapping("/detail")
+	public CommonResponse detail(String id) {
+		Role role = roleService.getById(id);
+		Map<String, Object> data = MapUtil.newHashMap();
+		data.put("role", role);
+
+		List<String> menuIds = CollUtil.getFieldValues(menuService.findRoleMenuList(id), "id", String.class);
+		data.put("menuIds", menuIds);
+		return success(data);
+	}
+
 	@Validate({ @Field(name = "role.roleName", rules = { @Rule(message = "角色名不能为空") }) })
 	@PostMapping
 	public CommonResponse saveRole(@RequestBody Role role) {
@@ -71,6 +93,11 @@ public class RoleController extends BaseController {
 			throw new IllegalArgumentException("角色 '" + er.getRoleName() + "' 已存在");
 		}
 		return success(roleService.save(role));
+	}
+	
+	@PostMapping("/menu")
+	public CommonResponse saveRoleMenu(@RequestBody RoleMenuDTO roleMenuDTO) {
+		return success(roleService.saveRoleMenu(roleMenuDTO));
 	}
 
 	@PostMapping("/update")

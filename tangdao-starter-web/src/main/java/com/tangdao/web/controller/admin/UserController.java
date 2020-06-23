@@ -62,8 +62,8 @@ public class UserController extends BaseController {
 		return success(pageinfo);
 	}
 
-	@GetMapping("/detail/info")
-	public CommonResponse detailInfo(String username) {
+	@GetMapping("/detail")
+	public CommonResponse detail(String username) {
 		User user = userService.findByUsername(username);
 		Map<String, Object> data = MapUtil.newHashMap();
 		data.put("user", user);

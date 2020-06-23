@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tangdao.model.domain.Menu;
+import com.tangdao.model.vo.MenuVo;
 
 /**
  * <p>
@@ -22,4 +23,8 @@ import com.tangdao.model.domain.Menu;
 public interface MenuMapper extends BaseMapper<Menu> {
 
 	public List<Menu> findUserMenuList(String userId);
+	
+	public List<Menu> findRoleMenuList(String roleId);
+	
+	public List<MenuVo> findMenuVoList(MenuVo menu);
 }
