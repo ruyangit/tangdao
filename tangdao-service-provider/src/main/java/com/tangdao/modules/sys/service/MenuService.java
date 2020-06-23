@@ -56,21 +56,33 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 		}
 		return targetList;
 	}
-	
-	public List<Menu> findRoleMenuList(String roleId){
+
+	public List<Menu> findRoleMenuList(String roleId) {
 		return super.baseMapper.findRoleMenuList(roleId);
 	}
 
-	public List<Menu> findUserMenuList() {
-		return super.baseMapper.findUserMenuList(SessionContext.getUserId());
+	public List<Menu> findUserMenuList(String userId) {
+		return super.baseMapper.findUserMenuList(userId);
 	}
 
-	public List<MenuVo> findUserMenuVoList(List<Menu> sourceList) {
+	/**
+	 * 
+	 * @param sourceList
+	 * @param isAll      控制是否显示所有节点 （true 显示所有节点）
+	 * @return
+	 */
+	public List<MenuVo> findUserMenuVoList(List<Menu> sourceList, boolean isAll) {
 
 		Map<String, MenuVo> dtoMap = new LinkedHashMap<String, MenuVo>();
 		for (Menu menu : sourceList) {
-			if (menu.getIsShow() && StrUtil.equals(MenuVo.TYPE_MENU, menu.getMenuType())) {
-				// 原始数据对象为Node，放入dtoMap中。
+			if (!isAll) {
+				if (menu.getIsShow() && StrUtil.equals(MenuVo.TYPE_MENU, menu.getMenuType())) {
+					// 原始数据对象为Node，放入dtoMap中。
+					MenuVo menuVo = new MenuVo();
+					BeanUtil.copyProperties(menu, menuVo);
+					dtoMap.put(menu.getId(), menuVo);
+				}
+			} else {
 				MenuVo menuVo = new MenuVo();
 				BeanUtil.copyProperties(menu, menuVo);
 				dtoMap.put(menu.getId(), menuVo);

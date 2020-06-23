@@ -3,6 +3,7 @@
  */
 package com.tangdao.web.controller.admin;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,12 @@ import com.tangdao.core.web.BaseController;
 import com.tangdao.core.web.validate.Field;
 import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
+import com.tangdao.model.domain.Menu;
 import com.tangdao.model.domain.User;
 import com.tangdao.model.dto.UserDTO;
 import com.tangdao.model.dto.UserRoleDTO;
+import com.tangdao.model.vo.MenuVo;
+import com.tangdao.modules.sys.service.MenuService;
 import com.tangdao.modules.sys.service.UserService;
 import com.tangdao.web.config.TangdaoProperties;
 
@@ -46,6 +50,9 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private MenuService menuService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -124,6 +131,15 @@ public class UserController extends BaseController {
 	@PostMapping("role/delete")
 	public CommonResponse deleteUserRole(@RequestBody UserRoleDTO userRole) {
 		return success(userService.deleteUserRole(userRole));
+	}
+	
+	@GetMapping("/menu")
+	public CommonResponse userMenu(String userId) {
+		List<Menu> sourceList = menuService.findUserMenuList(userId);
+		List<MenuVo> menuVoList = menuService.findUserMenuVoList(sourceList, true);
+		Map<String, Object> data = MapUtil.newHashMap();
+		data.put("menuList", menuVoList);
+		return success(data);
 	}
 
 }
