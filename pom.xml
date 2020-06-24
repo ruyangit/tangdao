@@ -4,20 +4,20 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.tangdao</groupId>
-	<artifactId>tangdao-application</artifactId>
+	<artifactId>tangdao</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Tangdao Application</name>
+	<name>Tangdao</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<modules>
 		<module>tangdao-parent</module>
-		<module>tangdao-common/tangdao-common</module>
-		<module>tangdao-common/tangdao-core</module>
-		<module>tangdao-common/tangdao-model</module>
+		<module>tangdao-common</module>
+		<module>tangdao-core</module>
+		<module>tangdao-model</module>
 		<module>tangdao-service-provider</module>
-		<module>tangdao-starter-web</module>
+		<module>tangdao-web</module>
 	</modules>
 
 	<properties>
