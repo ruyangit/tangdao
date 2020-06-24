@@ -6,6 +6,8 @@ package com.tangdao.model.vo;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,8 +30,10 @@ public class MenuVo implements Serializable {
 
 	private String id;
 
+	@JsonIgnore
 	private String pId;
 
+	@JsonIgnore
 	private String pIds;
 
 	private String name;
@@ -40,6 +44,7 @@ public class MenuVo implements Serializable {
 
 	private Boolean opened;
 	
+	@JsonIgnore
 	private Boolean isShow;
 
 	private String badge;
