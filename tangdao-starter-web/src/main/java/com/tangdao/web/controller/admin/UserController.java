@@ -17,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.common.CommonResponse;
+import com.tangdao.common.constant.CommonApiCode;
+import com.tangdao.common.exception.BusinessException;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
+import com.tangdao.core.session.SessionContext;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.core.web.validate.Field;
 import com.tangdao.core.web.validate.Rule;
@@ -105,12 +108,15 @@ public class UserController extends BaseController {
 				&& userService.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, userDto.getUsername())) >0 ) {
 			throw new IllegalArgumentException("用户 '" + userDto.getUsername() + "' 已存在");
 		} 
-		
+		user.setPassword(null); //密码不更新
 		return success(userService.updateById(user));
 	}
 
 	@PostMapping("/delete")
 	public CommonResponse deleteUser(@RequestBody UserDTO user) {
+		if(user.getId().equals(SessionContext.getUserId())) {
+			throw new BusinessException(CommonApiCode.FAIL, "操作失败，不可以删除用户自己");
+		}
 		return success(userService.deleteUser(user.getId()));
 	}
 	
@@ -141,5 +147,4 @@ public class UserController extends BaseController {
 		data.put("menuList", menuVoList);
 		return success(data);
 	}
-
 }

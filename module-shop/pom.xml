@@ -11,16 +11,11 @@
 		<relativePath>../tangdao-parent</relativePath>
 	</parent>
 
-	<artifactId>tangdao-module-shop</artifactId>
-	<name>Tangdao Module Shop</name>
+	<artifactId>module-shop</artifactId>
+	<name>Module Shop</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 	</dependencies>
 
 </project>
