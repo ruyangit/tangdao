@@ -38,7 +38,7 @@ public class UserService extends BaseService<UserMapper, User> {
 	
 	@Autowired
 	private UserRoleMapper userRoleMapper;
-
+	
 	public User findByUsername(String username) {
 		return findUser(this.list(Wrappers.<User>lambdaQuery().eq(User::getUsername, username)));
 	}

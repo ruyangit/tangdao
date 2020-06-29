@@ -27,15 +27,15 @@ public class DataPrivilegeDaoTest {
 		/* single condition */
 		DataPrivilegeParameter dataPrivilegeParameter = new DataPrivilegeParameter();
 		Map<String, Boolean> filterCategory = new HashMap<String, Boolean>();
-		filterCategory.put("nameKey", Boolean.TRUE);
-		filterCategory.put("idKey", Boolean.TRUE);
+		filterCategory.put("createByKey", Boolean.TRUE);
+//		filterCategory.put("idKey", Boolean.TRUE);
 		
 		dataPrivilegeParameter.setFilterCategory(filterCategory);
 		dataPrivilegeParameter.setMDataPrivilege(mDataPrivilege);
 		dataPrivilegeParameter.setOriginalSql(dataSql.value());
 		Map<String, Object> privilegeData = new HashMap<String, Object>();
-		privilegeData.put("nameKey", 11);
-		privilegeData.put("empKey", 12);
+		privilegeData.put("createByKey", 11);
+//		privilegeData.put("empKey", 12);
 		dataPrivilegeParameter.setPrivilegeData(privilegeData);
 		String privilegeSql = DataPrivilegeUtil.getPrivilegeSql(dataPrivilegeParameter);
 		System.out.println(privilegeSql);

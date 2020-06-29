@@ -34,7 +34,7 @@ import com.tangdao.core.mybatis.data.privilege.util.MDataPrivilegeUtil;
 })
 public class DataPrivilegeInterceptor implements Interceptor {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DataPrivilegeInterceptor.class);
+	private static final Logger log = LoggerFactory.getLogger(DataPrivilegeInterceptor.class);
 	private static final String SQL = "sql";
 	private DataPrivilegeFilter dataPrivilegeFilter;
 	private DataPrivilegeProvider dataPrivilegeProvider;
@@ -56,7 +56,7 @@ public class DataPrivilegeInterceptor implements Interceptor {
 			dataPrivilegeParameter.setOriginalSql(statementHandler.getBoundSql().getSql());
 			dataPrivilegeParameter.setPrivilegeData(dataPrivilegeProvider.getPrivilegeData());
 			String privilegeSql = DataPrivilegeUtil.getPrivilegeSql(dataPrivilegeParameter);
-			LOGGER.warn("Privilege sql is: {}", privilegeSql);
+			log.debug("Privilege {}: {}", SQL, privilegeSql);
 			sqlField = boundSql.getClass().getDeclaredField(SQL);
 			sqlField.setAccessible(true);
 			sqlField.set(boundSql, privilegeSql);
