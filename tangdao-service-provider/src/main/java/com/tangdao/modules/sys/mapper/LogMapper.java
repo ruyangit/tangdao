@@ -6,7 +6,7 @@ package com.tangdao.modules.sys.mapper;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.model.domain.Log;
+import com.tangdao.core.web.aspect.model.Log;
 
 /**
  * <p>

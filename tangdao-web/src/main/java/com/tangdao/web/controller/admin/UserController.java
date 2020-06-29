@@ -19,6 +19,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.exception.BusinessException;
+import com.tangdao.core.annotation.AuditLog;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
 import com.tangdao.core.session.SessionContext;
 import com.tangdao.core.web.BaseController;
@@ -73,6 +74,7 @@ public class UserController extends BaseController {
 	}
 
 	@GetMapping("/detail")
+	@AuditLog(title = "用户详情", operation = "'访问【'+#username+'】详情信息接口'")
 	public CommonResponse detail(String username) {
 		User user = userService.findByUsername(username);
 		Map<String, Object> data = MapUtil.newHashMap();
