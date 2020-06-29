@@ -3,6 +3,7 @@
  */
 package com.tangdao.core.web.data;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
@@ -23,7 +24,9 @@ public class DemoDataPrivilegeFilter implements DataPrivilegeFilter {
 	@Override
 	public Map<String, Boolean> getFilterData() {
 		// TODO Auto-generated method stub
-		return null;
+		Map<String, Boolean> filterData = new HashMap<String, Boolean>();
+		filterData.put("createByKey", Boolean.TRUE);
+		return filterData;
 	}
 
 }

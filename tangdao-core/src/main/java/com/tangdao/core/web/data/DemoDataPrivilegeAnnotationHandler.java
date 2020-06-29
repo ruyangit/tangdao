@@ -24,5 +24,4 @@ public class DemoDataPrivilegeAnnotationHandler implements DataPrivilegeAnnotati
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

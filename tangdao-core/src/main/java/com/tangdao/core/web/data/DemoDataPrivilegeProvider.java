@@ -3,11 +3,13 @@
  */
 package com.tangdao.core.web.data;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
 import com.tangdao.core.mybatis.data.privilege.provider.DataPrivilegeProvider;
+import com.tangdao.core.session.SessionContext;
 
 /**
  * <p>
@@ -23,6 +25,8 @@ public class DemoDataPrivilegeProvider implements DataPrivilegeProvider {
 	@Override
 	public Map<String, Object> getPrivilegeData() {
 		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> privilegeData = new HashMap<String, Object>();
+		privilegeData.put("createByKey", SessionContext.getUserId());
+		return privilegeData;
 	}
 }

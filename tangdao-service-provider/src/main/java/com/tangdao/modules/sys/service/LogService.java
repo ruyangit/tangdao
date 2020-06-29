@@ -3,24 +3,14 @@
  */
 package com.tangdao.modules.sys.service;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.tangdao.core.mybatis.data.privilege.annotation.DataPrivilege;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.core.session.SessionContext;
 import com.tangdao.core.web.aspect.AuditLogService;
 import com.tangdao.core.web.aspect.model.Log;
-import com.tangdao.core.web.data.DemoDataPrivilegeAnnotationHandler;
-import com.tangdao.core.web.data.DemoDataPrivilegeFilter;
-import com.tangdao.core.web.data.DemoDataPrivilegeProvider;
 import com.tangdao.modules.sys.mapper.LogMapper;
 
 /**
@@ -34,14 +24,14 @@ import com.tangdao.modules.sys.mapper.LogMapper;
 @Service
 public class LogService extends BaseService<LogMapper, Log> implements AuditLogService {
 
-	@Autowired
-	private DemoDataPrivilegeAnnotationHandler demoDataPrivilegeAnnotationHandler;
-	
-	@Autowired
-	private DemoDataPrivilegeFilter demoDataPrivilegeFilter;
-	
-	@Autowired
-	private DemoDataPrivilegeProvider demoDataPrivilegeProvider;
+//	@Autowired
+//	private DemoDataPrivilegeAnnotationHandler demoDataPrivilegeAnnotationHandler;
+//	
+//	@Autowired
+//	private DemoDataPrivilegeFilter demoDataPrivilegeFilter;
+//	
+//	@Autowired
+//	private DemoDataPrivilegeProvider demoDataPrivilegeProvider;
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -51,22 +41,22 @@ public class LogService extends BaseService<LogMapper, Log> implements AuditLogS
 	}
 
 	public IPage<Log> findPage(Page<Log> page) {
-		Map<String, Boolean> filterData = new HashMap<String, Boolean>();
-		filterData.put("createByKey", Boolean.TRUE);
-		Map<String, Object> privilegeData = new HashMap<String, Object>();
-		privilegeData.put("createByKey", SessionContext.getUserId());
-
-		try {
-			Method method = LogMapper.class.getMethod("findPage", new Class[] { Page.class });
-			DataPrivilege dataPrivilege = method.getAnnotation(DataPrivilege.class);
-
+//		Map<String, Boolean> filterData = new HashMap<String, Boolean>();
+//		filterData.put("createByKey", Boolean.TRUE);
+//		Map<String, Object> privilegeData = new HashMap<String, Object>();
+//		privilegeData.put("createByKey", SessionContext.getUserId());
+//
+//		try {
+//			Method method = LogMapper.class.getMethod("findPage", new Class[] { Page.class });
+//			DataPrivilege dataPrivilege = method.getAnnotation(DataPrivilege.class);
+//
 //			demoDataPrivilegeFilter.setFilterData(filterData);
 //			demoDataPrivilegeProvider.setPrivilegeData(privilegeData);
 //			demoDataPrivilegeAnnotationHandler.setDataPrivilege(dataPrivilege);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return this.baseMapper.findPage(page);
 	}
 
