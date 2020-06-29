@@ -21,24 +21,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.DefaultParameterNameDiscoverer;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import com.alibaba.fastjson.JSON;
-import com.tangdao.common.utils.WebUtils;
 import com.tangdao.core.annotation.AuditLog;
-import com.tangdao.core.session.SessionContext;
-import com.tangdao.core.session.TSession;
-import com.tangdao.core.web.aspect.model.Log;
 
 import cn.hutool.core.thread.threadlocal.NamedThreadLocal;
-import cn.hutool.http.useragent.UserAgent;
-import cn.hutool.http.useragent.UserAgentUtil;
 
 /**
  * <p>
@@ -49,6 +43,7 @@ import cn.hutool.http.useragent.UserAgentUtil;
  * @since 2020年6月29日
  */
 @Aspect
+@Component
 @ConditionalOnClass({ HttpServletRequest.class, RequestContextHolder.class })
 public class AuditLogAspect {
 
@@ -73,13 +68,7 @@ public class AuditLogAspect {
 	private DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
 
 	@Autowired
-	private TaskExecutor taskExecutor;
-
-	private AuditLogService auditLogService;
-
-	public AuditLogAspect(AuditLogService auditLogService) {
-		this.auditLogService = auditLogService;
-	}
+	private LogUtils logUtils;
 
 	/**
 	 * 解析spEL表达式
@@ -125,96 +114,43 @@ public class AuditLogAspect {
 		return null;
 	}
 
-	/**
-	 * 异常信息
-	 * 
-	 * @param exceptionName
-	 * @param exceptionMessage
-	 * @param elements
-	 * @return
-	 */
-	private String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {
-		StringBuffer strbuff = new StringBuffer();
-		for (StackTraceElement stet : elements) {
-			strbuff.append(stet + "\n");
-		}
-		return exceptionName + ":" + exceptionMessage + "\n\t" + strbuff.toString();
-	}
-
 	private void saveAuditLog(JoinPoint joinPoint, AuditLog auditLog, Object data, Throwable throwable) {
 		// 判断功能是否开启
 		if (startTimeThreadLocal.get() == null) {
+			// 不保存日志
 			return;
 		}
 		long beginTime = startTimeThreadLocal.get();// 得到线程绑定的局部变量（开始时间）
 		long endTime = System.currentTimeMillis(); // 2、结束时间
 		long executeTime = endTime - beginTime; // 3、获取执行时间
 		startTimeThreadLocal.remove(); // 用完之后销毁线程变量数据
-		if (auditLogService == null) {
-			log.warn("AuditLogAspect - AuditLogService is null");
-			return;
-		}
-
-		// 从获取RequestAttributes中获取HttpServletRequest的信息
-		HttpServletRequest request = WebUtils.getRequest();
 
 		if (auditLog == null) {
 			// 获取类上的注解
 			auditLog = joinPoint.getTarget().getClass().getDeclaredAnnotation(AuditLog.class);
 		}
-
-		Log audit = new Log();
-		// 审计标题
-		audit.setTitle(auditLog.title());
+		if (auditLog == null) {
+			// 不保存日志
+			return;
+		}
 
 		// 从切面织入点处通过反射机制获取织入点处的方法
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 		Map<String, Object> argsMap = getArgsMap(signature, joinPoint.getArgs());
 		String operation = auditLog.operation();
-		try {
-			audit.setRequestParams(JSON.toJSONString(argsMap));
-		} catch (Exception e) {
-			log.error(e.getMessage(), e);
-		}
-
 		if (operation.contains("#")) {
 			// 获取方法参数值
 			operation = getValBySpEL(operation, argsMap);
 		}
-		audit.setOperation(operation);
 
-		audit.setClassName(signature.getDeclaringTypeName());
-		// 获取请求的方法名
-		audit.setMethodName(signature.getName());
-
-		TSession session = SessionContext.getSession();
-		if (session != null) {
-			audit.setCreateBy((String) session.getUserId());
-			audit.setCreateByName((String) session.getUsername());
+		try {
+			logUtils.saveLog(auditLog.title(), operation, JSON.toJSONString(argsMap), signature.getDeclaringTypeName(),
+					signature.getName(), throwable, executeTime);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			log.error(e.getMessage(), e);
 		}
 
-		audit.setExecuteTime(executeTime);
-
-		audit.setIsException(throwable != null ? "1" : "0");
-		if (throwable != null) {
-			audit.setExceptionName(throwable.getClass().getName());
-			audit.setExceptionInfo(stackTraceToString(throwable.getClass().getName(), throwable.getMessage(),
-					throwable.getStackTrace()));
-		}
-		audit.setRemoteAddr(request.getRemoteAddr());
-		audit.setRequestMethod(request.getMethod());
-		audit.setRequestUri(request.getRequestURI());
-		audit.setServerAddr(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());
-
-		audit.setUserAgent(request.getHeader("User-Agent"));
-		UserAgent userAgent = UserAgentUtil.parse(audit.getUserAgent());
-		audit.setBrowserName(userAgent.getBrowser().getName());
-		audit.setDeviceName(userAgent.getOs().getName());
-
-		// 保存日志
-		taskExecutor.execute(() -> {
-			auditLogService.saveAuditLog(audit);
-		});
 	}
 
 	/**

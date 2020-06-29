@@ -17,8 +17,12 @@ import org.springframework.stereotype.Component;
 import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.exception.BusinessException;
 import com.tangdao.common.utils.WebUtils;
+import com.tangdao.core.session.SessionContext;
+import com.tangdao.core.session.TSession;
+import com.tangdao.core.web.aspect.LogUtils;
 import com.tangdao.modules.sys.service.UserService;
 import com.tangdao.web.security.user.SecurityUser;
+import com.tangdao.web.security.user.SecurityUserDetails;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -35,12 +39,15 @@ public class AuthManager {
 
 	@Autowired
 	private JwtTokenManager tokenManager;
-	
+
 	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private LogUtils logUtils;
 
 	public SecurityUser login(HttpServletRequest request) {
 		String token = resolveToken(request);
@@ -54,7 +61,7 @@ public class AuthManager {
 
 		Authentication authentication = tokenManager.getAuthentication(token);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		return (SecurityUser)authentication.getPrincipal();
+		return (SecurityUser) authentication.getPrincipal();
 	}
 
 	/**
@@ -76,18 +83,30 @@ public class AuthManager {
 
 	private String resolveTokenFromUser(String username, String password) {
 		try {
-			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username,
+					password);
 			Authentication authentication = authenticationManager.authenticate(authenticationToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			
 			userService.lastLoginUserModify(username, WebUtils.getClientIP());
 			
+			// 认证信息
+			SecurityUserDetails securityUserDetails = (SecurityUserDetails) authentication.getPrincipal();
+			
+			TSession session = new TSession();
+			session.setUsername(securityUserDetails.getUsername());
+			session.setUserId(securityUserDetails.getSecurityUser().getId());
+			SessionContext.setSession(session);
+			// 保存登录日志
+			logUtils.saveLog("用户认证", "用户【" + username + "】登录，IP地址：" + WebUtils.getClientIP() + "。");
 			return tokenManager.createToken(authentication);
 		} catch (Exception ex) {
-			if(ex instanceof BadCredentialsException) {
+			if (ex instanceof BadCredentialsException) {
 				throw new IllegalArgumentException("用户账号或密码错误！", ex);
 			}
 			throw new IllegalArgumentException(ex.getMessage(), ex);
+		} finally {
+			SessionContext.removeSession();
 		}
 
 	}

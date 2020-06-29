@@ -3,7 +3,6 @@
  */
 package com.tangdao.web.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +14,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.tangdao.core.web.aspect.AuditLogAspect;
-import com.tangdao.core.web.aspect.AuditLogService;
 import com.tangdao.web.security.user.TSessionInterceptor;
 
 /**
@@ -43,11 +40,6 @@ public class TangdaoConfig implements WebMvcConfigurer {
 		config.addAllowedMethod("*");
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
-	}
-
-	@Bean
-	public AuditLogAspect auditLogAspect(@Autowired AuditLogService auditLogService) {
-		return new AuditLogAspect(auditLogService);
 	}
 
 	@Bean
