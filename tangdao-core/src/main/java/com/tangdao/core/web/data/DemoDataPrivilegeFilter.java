@@ -24,9 +24,16 @@ public class DemoDataPrivilegeFilter implements DataPrivilegeFilter {
 	@Override
 	public Map<String, Boolean> getFilterData() {
 		// TODO Auto-generated method stub
-		Map<String, Boolean> filterData = new HashMap<String, Boolean>();
-		filterData.put("createByKey", Boolean.TRUE);
-		return filterData;
+		try {
+			Map<String, Boolean> filterData = new HashMap<String, Boolean>();
+			filterData.put("createByKey", Boolean.TRUE);
+			if (DemoDataPrivilegeContext.getDataPrivilegeFilter() != null) {
+				filterData.putAll(DemoDataPrivilegeContext.getDataPrivilegeFilter());
+			}
+			return filterData;
+		} finally {
+			DemoDataPrivilegeContext.removeDataPrivilegeFilter();
+		}
 	}
 
 }

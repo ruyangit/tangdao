@@ -25,8 +25,15 @@ public class DemoDataPrivilegeProvider implements DataPrivilegeProvider {
 	@Override
 	public Map<String, Object> getPrivilegeData() {
 		// TODO Auto-generated method stub
-		Map<String, Object> privilegeData = new HashMap<String, Object>();
-		privilegeData.put("createByKey", SessionContext.getUserId());
-		return privilegeData;
+		try {
+			Map<String, Object> privilegeData = new HashMap<String, Object>();
+			privilegeData.put("createByKey", SessionContext.getUserId());
+			if(DemoDataPrivilegeContext.getDataPrivilegeProvider()!=null) {
+				privilegeData.putAll(DemoDataPrivilegeContext.getDataPrivilegeProvider());
+			}
+			return privilegeData;
+		} finally {
+			DemoDataPrivilegeContext.removeDataPrivilegeProvider();
+		}
 	}
 }

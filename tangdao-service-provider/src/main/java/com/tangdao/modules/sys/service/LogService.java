@@ -3,14 +3,18 @@
  */
 package com.tangdao.modules.sys.service;
 
+import java.lang.reflect.Method;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tangdao.core.mybatis.data.privilege.annotation.DataPrivilege;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.web.aspect.AuditLogService;
 import com.tangdao.core.web.aspect.model.Log;
+import com.tangdao.core.web.data.DemoDataPrivilegeContext;
 import com.tangdao.modules.sys.mapper.LogMapper;
 
 /**
@@ -46,17 +50,17 @@ public class LogService extends BaseService<LogMapper, Log> implements AuditLogS
 //		Map<String, Object> privilegeData = new HashMap<String, Object>();
 //		privilegeData.put("createByKey", SessionContext.getUserId());
 //
-//		try {
-//			Method method = LogMapper.class.getMethod("findPage", new Class[] { Page.class });
-//			DataPrivilege dataPrivilege = method.getAnnotation(DataPrivilege.class);
-//
+		try {
+			Method method = LogMapper.class.getMethod("findPage", new Class[] { Page.class });
+			DemoDataPrivilegeContext.setDataPrivilege(method.getAnnotation(DataPrivilege.class));
 //			demoDataPrivilegeFilter.setFilterData(filterData);
 //			demoDataPrivilegeProvider.setPrivilegeData(privilegeData);
 //			demoDataPrivilegeAnnotationHandler.setDataPrivilege(dataPrivilege);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return this.baseMapper.findPage(page);
 	}
 

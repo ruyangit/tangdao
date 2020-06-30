@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -45,7 +46,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 		try {
 			String token = resolveToken(request);
 
-			if (StringUtils.isNotBlank(token) && SecurityContextHolder.getContext().getAuthentication() == null) {
+			if (StringUtils.isNotBlank(token) && !isAuthenticated()) {
 			    this.tokenManager.validateToken(token);
 			    Authentication authentication = this.tokenManager.getAuthentication(token);
 			    SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -75,5 +76,18 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
         }
         return null;
     }
+    
+    /**
+	 * 是否已經認證
+	 * 
+	 * @return
+	 */
+	private boolean isAuthenticated() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+			return false;
+		}
+		return true;
+	}
 
 }

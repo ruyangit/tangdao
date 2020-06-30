@@ -22,6 +22,11 @@ public class DemoDataPrivilegeAnnotationHandler implements DataPrivilegeAnnotati
 	@Override
 	public DataPrivilege getDataPrivilegeAnnotation() {
 		// TODO Auto-generated method stub
-		return null;
+		try {
+			DataPrivilege dataPrivilege = DemoDataPrivilegeContext.getDataPrivilege();
+			return dataPrivilege;
+		} finally {
+			DemoDataPrivilegeContext.removeDataPrivilege();
+		}
 	}
 }

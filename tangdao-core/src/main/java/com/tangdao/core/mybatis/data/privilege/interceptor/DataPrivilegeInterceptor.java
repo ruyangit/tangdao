@@ -11,8 +11,6 @@ import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.tangdao.core.mybatis.data.privilege.annotation.DataPrivilege;
 import com.tangdao.core.mybatis.data.privilege.filter.DataPrivilegeFilter;
@@ -34,7 +32,6 @@ import com.tangdao.core.mybatis.data.privilege.util.MDataPrivilegeUtil;
 })
 public class DataPrivilegeInterceptor implements Interceptor {
 
-	private static final Logger log = LoggerFactory.getLogger(DataPrivilegeInterceptor.class);
 	private static final String SQL = "sql";
 	private DataPrivilegeFilter dataPrivilegeFilter;
 	private DataPrivilegeProvider dataPrivilegeProvider;
@@ -56,7 +53,6 @@ public class DataPrivilegeInterceptor implements Interceptor {
 			dataPrivilegeParameter.setOriginalSql(statementHandler.getBoundSql().getSql());
 			dataPrivilegeParameter.setPrivilegeData(dataPrivilegeProvider.getPrivilegeData());
 			String privilegeSql = DataPrivilegeUtil.getPrivilegeSql(dataPrivilegeParameter);
-			log.debug("Privilege {}: {}", SQL, privilegeSql);
 			sqlField = boundSql.getClass().getDeclaredField(SQL);
 			sqlField.setAccessible(true);
 			sqlField.set(boundSql, privilegeSql);
