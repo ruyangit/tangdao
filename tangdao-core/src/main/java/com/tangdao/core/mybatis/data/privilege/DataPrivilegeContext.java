@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.web.data;
+package com.tangdao.core.mybatis.data.privilege;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ import cn.hutool.core.thread.threadlocal.NamedThreadLocal;
  * @author ruyang@gmail.com
  * @since 2020年6月30日
  */
-public class DemoDataPrivilegeContext {
+public class DataPrivilegeContext {
 
 	private static final ThreadLocal<DataPrivilege> dataPrivilegeLocal = new NamedThreadLocal<DataPrivilege>(
 			"dataPrivilege");

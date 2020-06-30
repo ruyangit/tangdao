@@ -4,6 +4,7 @@
 package com.tangdao.modules.sys.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,5 +29,6 @@ public interface LogMapper extends BaseMapper<Log> {
 
 	@DataPrivilege(conditions = { @DataCondition(reference = @DataObject(name = "log", alias = "t"), columns = {
 			@DataColumn(categoryKey = "createByKey", name = "create_by", columnType = ColumnType.String, object = @DataObject(name = "log", alias = "t")) }) })
+	@Select("select t.* from log t")
 	IPage<Log> findPage(Page<Log> page);
 }
