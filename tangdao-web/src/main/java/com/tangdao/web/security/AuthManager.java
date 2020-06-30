@@ -98,7 +98,7 @@ public class AuthManager {
 			session.setUserId(securityUserDetails.getSecurityUser().getId());
 			SessionContext.setSession(session);
 			// 保存登录日志
-			logUtils.saveLog("用户认证", "用户【" + username + "】登录，IP地址：" + WebUtils.getClientIP() + "。");
+			logUtils.saveLog("用户认证", "用户【" + username + "】登录，IP地址：" + WebUtils.getClientIP() + "");
 			return tokenManager.createToken(authentication);
 		} catch (Exception ex) {
 			if (ex instanceof BadCredentialsException) {
