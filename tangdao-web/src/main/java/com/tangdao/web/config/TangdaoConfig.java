@@ -3,6 +3,7 @@
  */
 package com.tangdao.web.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,10 +30,10 @@ import com.tangdao.web.security.user.TSessionInterceptor;
 @EnableScheduling
 @EnableConfigurationProperties(TangdaoProperties.class)
 public class TangdaoConfig implements WebMvcConfigurer {
-	
+
 	@Bean
-	
-	public DemoAspect demoAspect(){
+	@ConditionalOnProperty(prefix = "tangdao", name = "demo", havingValue = "true", matchIfMissing = true)
+	public DemoAspect demoAspect() {
 		return new DemoAspect();
 	}
 
