@@ -14,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.tangdao.core.web.aspect.DemoAspect;
 import com.tangdao.web.security.user.TSessionInterceptor;
 
 /**
@@ -28,6 +29,12 @@ import com.tangdao.web.security.user.TSessionInterceptor;
 @EnableScheduling
 @EnableConfigurationProperties(TangdaoProperties.class)
 public class TangdaoConfig implements WebMvcConfigurer {
+	
+	@Bean
+	
+	public DemoAspect demoAspect(){
+		return new DemoAspect();
+	}
 
 	@Bean
 	public CorsFilter corsFilter() {

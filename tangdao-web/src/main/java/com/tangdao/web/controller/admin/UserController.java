@@ -74,7 +74,7 @@ public class UserController extends BaseController {
 	public CommonResponse page(Pageinfo page, UserDTO user) {
 		IPage<Map<String, Object>> pageinfo = userService.findMapsPage(page, user);
 		pageinfo.getRecords().forEach(e -> {
-			e.put("isa", properties.isa(String.valueOf(e.get("username"))));
+			e.put("isa", properties.getUser().isSuperAdmin(String.valueOf(e.get("username"))));
 		});
 		return success(pageinfo);
 	}
@@ -85,7 +85,7 @@ public class UserController extends BaseController {
 		User user = userService.findByUsername(username);
 		Map<String, Object> data = MapUtil.newHashMap();
 		data.put("user", user);
-		data.put("isa", properties.isa(username));
+		data.put("isa", properties.getUser().isSuperAdmin(username));
 		return success(data);
 	}
 

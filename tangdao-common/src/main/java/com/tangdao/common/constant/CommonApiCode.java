@@ -19,6 +19,7 @@ public enum CommonApiCode implements ErrorCode {
 	INTERNAL_ERROR("500", "内部异常"),
 
 	FAIL("1000", "操作失败"),
+	DEMO("1003", "演示系统，非法操作"),
 	USER_TOKEN_EXPIRE("1007", "用户凭证已过期"),;
 
 	private String code;
