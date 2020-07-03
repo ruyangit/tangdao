@@ -29,6 +29,6 @@ public interface LogMapper extends BaseMapper<Log> {
 
 	@DataPrivilege(conditions = { @DataCondition(reference = @DataObject(name = "log", alias = "t"), columns = {
 			@DataColumn(categoryKey = "createByKey", name = "create_by", columnType = ColumnType.String, object = @DataObject(name = "log", alias = "t")) }) })
-	@Select("select t.* from log t")
+	@Select("select t.* from log t order by t.created desc")
 	IPage<Log> findPage(Page<Log> page);
 }
