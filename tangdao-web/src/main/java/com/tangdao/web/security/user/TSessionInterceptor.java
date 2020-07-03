@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -32,6 +33,7 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang@gmail.com
  * @since 2020年6月18日
  */
+@Component
 public class TSessionInterceptor implements HandlerInterceptor {
 
 	public static final String REQ_ATTR_KEY_CURRENT_TSESSION = "REQ_ATTR_KEY_CURRENT_TSESSION";

@@ -55,6 +55,7 @@ public class RoleController extends BaseController {
 	private MenuService menuService;
 
 	@GetMapping
+//	@PreAuthorize("hasAuthority('admin:roles:GET')")
 	public CommonResponse page(Page<Role> page, String roleName) {
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<Role>();
 		if (StrUtil.isNotBlank(roleName)) {
