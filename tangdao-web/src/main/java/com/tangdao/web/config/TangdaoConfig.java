@@ -6,9 +6,12 @@ package com.tangdao.web.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -29,6 +32,7 @@ import com.tangdao.web.security.user.TSessionInterceptor;
  */
 @Configuration
 @EnableCaching
+@EnableScheduling
 @EnableConfigurationProperties(TangdaoProperties.class)
 public class TangdaoConfig implements WebMvcConfigurer {
 	
@@ -70,4 +74,13 @@ public class TangdaoConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+    @Autowired
+	private CacheManager cacheManager;
+	
+	@Scheduled(cron = "0 0 0/1 * * *")
+	public void clearAll() {
+		cacheManager.getCacheNames().forEach(e->{
+			cacheManager.getCache(e).clear();
+		});
+	}
 }

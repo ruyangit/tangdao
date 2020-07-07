@@ -65,7 +65,7 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 	public List<Menu> findUserMenuList(String userId) {
 		return super.baseMapper.findUserMenuList(userId);
 	}
-
+	
 	/**
 	 * 
 	 * @param sourceList
