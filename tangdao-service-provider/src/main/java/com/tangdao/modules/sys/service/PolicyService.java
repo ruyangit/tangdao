@@ -62,10 +62,7 @@ public class PolicyService extends BaseService<PolicyMapper, Policy> {
 			Iterator<String> itersP = statement.getPermissions().iterator();
 			while (itersP.hasNext()) {
 				String policy = itersP.next();
-				System.out.println(policy);
-				System.out.println(antPathMatcher.match(policy, value));
 				if(antPathMatcher.match(policy, value)) {
-					System.out.println("-------------------------");
 					System.out.println(itersP);
 					System.out.println(statement);
 				}
