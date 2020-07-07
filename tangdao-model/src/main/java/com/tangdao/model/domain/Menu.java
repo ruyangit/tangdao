@@ -27,13 +27,13 @@ public class Menu extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String name;
+	private String menuName;
 
 	private String pId;
 	
 	private String pIds;
 
-	private String path;
+	private String menuPath;
 
 	private String permission;
 

@@ -65,8 +65,8 @@ public class LoginController extends BaseController {
 		List<String> permVoList = menuService.findUserPermVoList(sourceList);
 
 		Map<String, Object> data = MapUtil.newHashMap();
-		data.put("permList", permVoList);
 		data.put("menuList", menuVoList);
+		data.put("permList", permVoList);
 		return CommonResponse.createCommonResponse(data);
 	}
 

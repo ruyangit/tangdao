@@ -29,6 +29,10 @@ public class Role extends BaseEntity{
 
 	private String roleName;
 	
+	private String roleNameCn;
+	
+	private String roleType;
+	
 	private String remark;
 	
 	private String status;

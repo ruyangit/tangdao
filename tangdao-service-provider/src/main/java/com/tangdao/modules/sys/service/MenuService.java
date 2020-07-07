@@ -79,11 +79,15 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 					// 原始数据对象为Node，放入dtoMap中。
 					MenuVo menuVo = new MenuVo();
 					BeanUtil.copyProperties(menu, menuVo);
+					menuVo.setName(menu.getMenuName());
+					menuVo.setPath(menu.getMenuPath());
 					dtoMap.put(menu.getId(), menuVo);
 				}
 			} else {
 				MenuVo menuVo = new MenuVo();
 				BeanUtil.copyProperties(menu, menuVo);
+				menuVo.setName(menu.getMenuName());
+				menuVo.setPath(menu.getMenuPath());
 				dtoMap.put(menu.getId(), menuVo);
 			}
 		}

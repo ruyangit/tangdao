@@ -22,6 +22,7 @@ import com.tangdao.web.security.AuthConfig;
 import com.tangdao.web.security.JwtTokenManager;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -31,6 +32,7 @@ import io.jsonwebtoken.ExpiredJwtException;
  * @author ruyang@gmail.com
  * @since 2020年5月29日
  */
+@Slf4j
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 
 	private JwtTokenManager tokenManager;
@@ -54,9 +56,11 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter{
 			
 			filterChain.doFilter(request, response);
 		} catch (ExpiredJwtException e) {
+			log.error(e.getMessage(), e);
 			WebUtils.responseJson(response, CommonApiCode.USER_TOKEN_EXPIRE);
 			return;
 		} catch (Exception e) {
+			log.error(e.getMessage(), e);
 			WebUtils.responseJson(response, CommonApiCode.UNAUTHORIZED);
 			return;
 		}
