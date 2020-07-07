@@ -6,9 +6,9 @@ package com.tangdao.web.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -28,7 +28,7 @@ import com.tangdao.web.security.user.TSessionInterceptor;
  * @since 2020年5月29日
  */
 @Configuration
-@EnableScheduling
+@EnableCaching
 @EnableConfigurationProperties(TangdaoProperties.class)
 public class TangdaoConfig implements WebMvcConfigurer {
 	

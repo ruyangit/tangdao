@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.service.BaseService;
@@ -60,6 +61,7 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 		return super.baseMapper.findRoleMenuList(roleId);
 	}
 
+	@Cacheable(value = "user-menu", key = "#userId")
 	public List<Menu> findUserMenuList(String userId) {
 		return super.baseMapper.findUserMenuList(userId);
 	}
