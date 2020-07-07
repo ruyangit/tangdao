@@ -23,9 +23,7 @@ import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.AuthenticationException;
@@ -39,6 +37,7 @@ import org.springframework.web.cors.CorsUtils;
 
 import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.utils.WebUtils;
+import com.tangdao.modules.sys.service.PolicyService;
 import com.tangdao.web.security.filter.JwtAuthenticationTokenFilter;
 import com.tangdao.web.security.user.UserDetailsServiceImpl;
 
@@ -51,8 +50,6 @@ import com.tangdao.web.security.user.UserDetailsServiceImpl;
  * @since 2020年5月29日
  */
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthConfig extends WebSecurityConfigurerAdapter {
 
 	public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -68,6 +65,9 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsServiceImpl userDetailsService;
+	
+	@Autowired
+	private PolicyService policyService;
 	
 	@Bean(name = BeanIds.AUTHENTICATION_MANAGER)
 	@Override
@@ -103,15 +103,6 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin/login").permitAll()
 				.antMatchers("/admin/**").authenticated()
 				.accessDecisionManager(accessDecisionManager())
-//				.withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-//					@Override
-//					public <O extends FilterSecurityInterceptor> O postProcess(O object) {
-//						// TODO Auto-generated method stub
-//						object.setSecurityMetadataSource(new MinuteMetadataSource(object.getSecurityMetadataSource()));
-//						object.setAccessDecisionManager(accessDecisionManager());
-//						return object;
-//					}
-//				})
 			.and()
 				.exceptionHandling().authenticationEntryPoint(new AuthenticationEntryPoint() {
 					
@@ -143,7 +134,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 	        new WebExpressionVoter(),
 	        new RoleVoter(),
 	        new AuthenticatedVoter(),
-	        new PoliciesVoter());
+	        new PoliciesVoter(policyService));
 	    return new UnanimousBased(decisionVoters);
 	}
 	

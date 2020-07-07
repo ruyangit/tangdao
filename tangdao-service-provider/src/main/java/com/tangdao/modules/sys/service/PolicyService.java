@@ -3,7 +3,6 @@
  */
 package com.tangdao.modules.sys.service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -62,13 +61,12 @@ public class PolicyService extends BaseService<PolicyMapper, Policy> {
 			Iterator<String> itersP = statement.getPermissions().iterator();
 			while (itersP.hasNext()) {
 				String policy = itersP.next();
-				if(antPathMatcher.match(policy, value)) {
-					System.out.println(itersP);
-					System.out.println(statement);
+				if (antPathMatcher.match(policy, value) && "-1".equals(statement.getEffect())) {
+					return -1;
 				}
 			}
 		}
-		return 0;
+		return 1;
 	}
 
 }

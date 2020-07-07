@@ -9,8 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.FilterInvocation;
+
+import com.tangdao.modules.sys.service.PolicyService;
+import com.tangdao.web.security.user.SecurityUser;
 
 /**
  * <p>
@@ -21,6 +25,12 @@ import org.springframework.security.web.FilterInvocation;
  * @since 2020年7月6日
  */
 public class PoliciesVoter implements AccessDecisionVoter<Object> {
+	
+	private PolicyService policyService;
+	
+	public PoliciesVoter(PolicyService policyService) {
+		this.policyService = policyService;
+	}
 
 	@Override
 	public boolean supports(ConfigAttribute attribute) {
@@ -37,8 +47,10 @@ public class PoliciesVoter implements AccessDecisionVoter<Object> {
 		if (authentication == null) {
 			return ACCESS_DENIED;
 		}
-
-		int result = ACCESS_ABSTAIN;
+		
+		if(authentication instanceof AnonymousAuthenticationToken) {
+			return ACCESS_ABSTAIN;
+		}
 		
 		HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
 		// 获取请求所需的权限
@@ -49,17 +61,7 @@ public class PoliciesVoter implements AccessDecisionVoter<Object> {
 		// 1、获取用户策略
 		// 2、根据用户请求匹配安全策略
 		// 3、校验策略拒绝或通过，默认为放弃
-		
-		System.out.println(sbf.substring(1));
-		
-		for (ConfigAttribute attribute : attributes) {
-			System.out.println(attribute);
-		}
-
-		System.out.println(object);
-//		System.out.println(attributes);
-
-		return result;
+		return policyService.policiesVote(((SecurityUser)authentication.getPrincipal()).getId(), sbf.substring(1));
 	}
 
 }

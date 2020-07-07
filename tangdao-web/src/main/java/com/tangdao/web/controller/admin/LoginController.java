@@ -22,7 +22,6 @@ import com.tangdao.core.web.BaseController;
 import com.tangdao.model.domain.Menu;
 import com.tangdao.model.vo.MenuVo;
 import com.tangdao.modules.sys.service.MenuService;
-import com.tangdao.modules.sys.service.PolicyService;
 import com.tangdao.web.security.AuthConfig;
 import com.tangdao.web.security.AuthManager;
 import com.tangdao.web.security.user.SecurityUser;
@@ -47,9 +46,6 @@ public class LoginController extends BaseController {
 	@Autowired
 	private MenuService menuService;
 	
-	@Autowired
-	private PolicyService policyService;
-
 	@RequestMapping(value = { "/login", "/check_token" }, method = { RequestMethod.GET, RequestMethod.POST })
 	public CommonResponse login(HttpServletResponse response, HttpServletRequest request) {
 		SecurityUser user = authManager.login(request);
@@ -64,9 +60,6 @@ public class LoginController extends BaseController {
 
 	@GetMapping("/authority")
 	public CommonResponse authority() {
-		
-		policyService.policiesVote(SessionContext.getUserId(), "admin:users:GET");
-		
 		List<Menu> sourceList = menuService.findUserMenuList(SessionContext.getUserId());
 		List<MenuVo> menuVoList = menuService.findUserMenuVoList(sourceList, false);
 		List<String> permVoList = menuService.findUserPermVoList(sourceList);
