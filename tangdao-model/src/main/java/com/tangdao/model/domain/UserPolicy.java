@@ -3,8 +3,6 @@
  */
 package com.tangdao.model.domain;
 
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.model.base.BaseEntity;
 
@@ -21,27 +19,15 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("policy")
-public class Policies extends BaseEntity {
+@TableName("role_policy")
+public class UserPolicy extends BaseEntity {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String policyName;
+	private String userId;
 	
-	private String policyNameCn;
-	
-	private String policyType;
-	
-	private String content;
-	
-	private String version;
-	
-	private String remark;
-	
-	private String status;
-	
-	private Date modified;
+	private String policyId;
 }
