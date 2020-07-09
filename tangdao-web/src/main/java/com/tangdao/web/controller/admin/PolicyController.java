@@ -53,7 +53,7 @@ public class PolicyController extends BaseController {
 		Policy policy = policyService.getById(id);
 		Map<String, Object> data = MapUtil.newHashMap();
 		data.put("policy", policy);
-
+		
 		return success(data);
 	}
 
