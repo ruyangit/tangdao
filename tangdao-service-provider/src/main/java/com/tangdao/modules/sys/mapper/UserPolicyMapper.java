@@ -3,15 +3,10 @@
  */
 package com.tangdao.modules.sys.mapper;
 
-import java.util.List;
-import java.util.Map;
-
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.model.domain.UserRole;
-import com.tangdao.model.dto.UserRoleDTO;
+import com.tangdao.model.domain.UserPolicy;
 
 /**
  * <p>
@@ -22,7 +17,6 @@ import com.tangdao.model.dto.UserRoleDTO;
  * @since 2020年6月5日
  */
 @Mapper
-public interface UserPolicyMapper extends BaseMapper<UserRole>{
+public interface UserPolicyMapper extends BaseMapper<UserPolicy>{
 	
-	public List<Map<String, Object>> findUserRoleMapsList(@Param("userRole") UserRoleDTO userRole);
 }

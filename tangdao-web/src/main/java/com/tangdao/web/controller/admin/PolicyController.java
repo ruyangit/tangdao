@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.common.CommonResponse;
+import com.tangdao.core.constant.DataStatus;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.core.web.validate.Field;
 import com.tangdao.core.web.validate.Rule;
@@ -45,6 +46,16 @@ public class PolicyController extends BaseController {
 			queryWrapper.like("policy_name", PolicyName);
 		}
 		return success(policyService.page(page, queryWrapper));
+	}
+	
+	@GetMapping("/list")
+	public CommonResponse list(String policyName) {
+		QueryWrapper<Policy> queryWrapper = new QueryWrapper<Policy>();
+		if (StrUtil.isNotBlank(policyName)) {
+			queryWrapper.like("policy_name", policyName);
+		}
+		queryWrapper.eq("status", DataStatus.NORMAL);
+		return success(policyService.list(queryWrapper));
 	}
 
 	@Validate({ @Field(name = "id", rules = { @Rule(message = "查询主键不能为空") }) })

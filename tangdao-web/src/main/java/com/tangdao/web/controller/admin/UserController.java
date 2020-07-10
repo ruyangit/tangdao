@@ -30,6 +30,7 @@ import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.Menu;
 import com.tangdao.model.domain.User;
+import com.tangdao.model.dto.PolicyDTO;
 import com.tangdao.model.dto.UserDTO;
 import com.tangdao.model.dto.UserRoleDTO;
 import com.tangdao.model.vo.MenuVo;
@@ -160,5 +161,15 @@ public class UserController extends BaseController {
 	@GetMapping("/log")
 	public CommonResponse logPage(Page<Log> page) {
 		return success(logService.findPage(page));
+	}
+	
+	@GetMapping("/policies")
+	public CommonResponse policies(String userId) {
+		return success(userService.findUserPolicy(userId));
+	}
+	
+	@PostMapping("/policies")
+	public CommonResponse policies(@RequestBody PolicyDTO policyDTO) {
+		return success(userService.saveUserPolicy(policyDTO));
 	}
 }

@@ -37,8 +37,8 @@ public class PolicyService extends BaseService<PolicyMapper, Policy> {
 		return this.baseMapper.findRolePolicyList(userId);
 	}
 
-	@Cacheable(value = "policy-statements", key = "#userId")
-	public Set<Statement> getStatementSets(String userId){
+	@Cacheable(value = CacheService.RED_USER_POLICY_STATEMENTS, key = "#userId")
+	public Set<Statement> getStatementSets(String userId) {
 		List<Policy> policies = this.findUserPolicy(userId);
 		if (CollUtil.isEmpty(policies)) {
 			policies = CollUtil.newArrayList();

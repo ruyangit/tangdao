@@ -19,7 +19,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("role_policy")
+@TableName("user_policy")
 public class UserPolicy extends BaseEntity {
 
 	/**

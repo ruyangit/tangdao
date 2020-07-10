@@ -63,6 +63,7 @@ public class PoliciesVoter implements AccessDecisionVoter<Object> {
 		sbf.append(request.getRequestURI().replaceAll("/", ":"));
 		sbf.append(":").append(request.getMethod());
 		
+		String ACCESS_GRANTED_STR = "1";
 		// 1、获取用户策略
 		// 2、根据用户请求匹配安全策略
 		// 3、校验策略拒绝或通过，默认为放弃
@@ -72,12 +73,12 @@ public class PoliciesVoter implements AccessDecisionVoter<Object> {
 			Iterator<String> itersP = statement.getPermissions().iterator();
 			while (itersP.hasNext()) {
 				String policy = itersP.next();
-				if (antPathMatcher.match(policy, sbf.substring(1)) && "-1".equals(statement.getEffect())) {
-					return -1;
+				if (antPathMatcher.match(policy, sbf.substring(1)) && ACCESS_GRANTED_STR.equals(statement.getEffect())) {
+					return ACCESS_GRANTED;
 				}
 			}
 		}
-		return 1;
+		return ACCESS_DENIED;
 	}
 
 }

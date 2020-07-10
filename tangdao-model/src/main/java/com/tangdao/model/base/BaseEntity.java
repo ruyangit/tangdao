@@ -26,10 +26,10 @@ public class BaseEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private String id;
+	protected String id;
 
 	@TableField(fill = FieldFill.INSERT)
-	private Date created;
+	protected Date created;
 
 	public String getId() {
 		return id;

@@ -45,10 +45,4 @@ public class Policy extends BaseEntity {
 	
 	private Date modified;
 	
-	@Override
-	public boolean equals(Object arg0) {
-		// TODO Auto-generated method stub
-		Policy p = (Policy) arg0;
-		return policyName.equals(p.policyName) && getId().equals(p.getId());
-	}
 }

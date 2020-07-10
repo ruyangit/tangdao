@@ -25,6 +25,7 @@ import com.tangdao.core.web.validate.Field;
 import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.Role;
+import com.tangdao.model.dto.PolicyDTO;
 import com.tangdao.model.dto.RoleDTO;
 import com.tangdao.model.dto.RoleMenuDTO;
 import com.tangdao.modules.sys.service.MenuService;
@@ -53,7 +54,7 @@ public class RoleController extends BaseController {
 
 	@Autowired
 	private MenuService menuService;
-
+	
 	@GetMapping
 //	@PreAuthorize("hasAuthority('admin:roles:GET')")
 	public CommonResponse page(Page<Role> page, String roleName) {
@@ -124,5 +125,15 @@ public class RoleController extends BaseController {
 			throw new BusinessException(CommonApiCode.FAIL, "操作失败，存在未解除的关联数据");
 		}
 		return success(roleService.deleteRole(roleDto.getId()));
+	}
+	
+	@GetMapping("/policies")
+	public CommonResponse policies(String roleId) {
+		return success(roleService.findRolePolicy(roleId));
+	}
+	
+	@PostMapping("/policies")
+	public CommonResponse policies(@RequestBody PolicyDTO policyDTO) {
+		return success(roleService.saveRolePolicy(policyDTO));
 	}
 }

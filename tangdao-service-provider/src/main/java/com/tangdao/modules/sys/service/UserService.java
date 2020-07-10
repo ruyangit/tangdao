@@ -11,16 +11,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.tangdao.core.mybatis.pagination.Pageinfo;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.User;
+import com.tangdao.model.domain.UserPolicy;
 import com.tangdao.model.domain.UserRole;
+import com.tangdao.model.dto.PolicyDTO;
 import com.tangdao.model.dto.UserDTO;
 import com.tangdao.model.dto.UserRoleDTO;
 import com.tangdao.modules.sys.mapper.UserMapper;
+import com.tangdao.modules.sys.mapper.UserPolicyMapper;
 import com.tangdao.modules.sys.mapper.UserRoleMapper;
 
 import cn.hutool.core.collection.CollUtil;
@@ -38,6 +42,12 @@ public class UserService extends BaseService<UserMapper, User> {
 	
 	@Autowired
 	private UserRoleMapper userRoleMapper;
+	
+	@Autowired
+	private UserPolicyMapper userPolicyMapper;
+	
+	@Autowired
+	private CacheService cacheService;
 	
 	public User findByUsername(String username) {
 		return findUser(this.list(Wrappers.<User>lambdaQuery().eq(User::getUsername, username)));
@@ -116,6 +126,26 @@ public class UserService extends BaseService<UserMapper, User> {
 			ur.setUserId(userId);
 			this.userRoleMapper.insert(ur);
 		});
+		this.cacheService.clear(CacheService.RED_USER_MENU, userId);
+	}
+	
+	public List<UserPolicy> findUserPolicy(String userId){
+		QueryWrapper<UserPolicy> queryWrapper = new QueryWrapper<UserPolicy>();
+		queryWrapper.eq("user_id", userId);
+		return this.userPolicyMapper.selectList(queryWrapper);
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public boolean saveUserPolicy(PolicyDTO policyDTO) {
+		this.userPolicyMapper.delete(Wrappers.<UserPolicy>lambdaQuery().eq(UserPolicy::getUserId, policyDTO.getUserId()));
+		policyDTO.getPolicyIds().forEach(id->{
+			UserPolicy userPolicy = new UserPolicy();
+			userPolicy.setUserId(policyDTO.getUserId());
+			userPolicy.setPolicyId(id);
+			this.userPolicyMapper.insert(userPolicy);
+		});
+		this.cacheService.clear(CacheService.RED_USER_POLICY_STATEMENTS, policyDTO.getUserId());
+		return true;
 	}
 	
 }
