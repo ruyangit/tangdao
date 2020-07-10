@@ -30,6 +30,8 @@ public class PolicyDTO extends Policy {
 	private String userId;
 
 	private String roleId;
+	
+	private String oldPolicyName;
 
 	private List<String> policyIds;
 

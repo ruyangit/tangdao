@@ -15,7 +15,7 @@ public enum CommonApiCode implements ErrorCode {
 
 	OK("200", "执行成功"), 
 
-	BAD_REQUEST("400", "非法参数"), UNAUTHORIZED("401", "用户身份验证失败"), FORBIDDEN("403", "不允许访问"),
+	BAD_REQUEST("400", "非法参数"), UNAUTHORIZED("401", "用户身份验证失败"), FORBIDDEN("403", "不允许访问"), METHOD_NOT_ALLOWED("405", "不允许请求"),
 	INTERNAL_ERROR("500", "内部异常"),
 
 	FAIL("1000", "操作失败"),

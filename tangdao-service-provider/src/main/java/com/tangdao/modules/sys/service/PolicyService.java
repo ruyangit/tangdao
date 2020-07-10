@@ -11,6 +11,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.Policy;
 import com.tangdao.model.vo.Statement;
@@ -35,6 +36,17 @@ public class PolicyService extends BaseService<PolicyMapper, Policy> {
 
 	public List<Policy> findRolePolicy(String userId) {
 		return this.baseMapper.findRolePolicyList(userId);
+	}
+	
+	public Policy findByPolicyName(String policyName) {
+		return findPolicy(this.list(Wrappers.<Policy>lambdaQuery().eq(Policy::getPolicyName, policyName)));
+	}
+
+	public Policy findPolicy(List<Policy> policies) {
+		if (CollUtil.isNotEmpty(policies)) {
+			return policies.get(0);
+		}
+		return null;
 	}
 
 	@Cacheable(value = CacheService.RED_USER_POLICY_STATEMENTS, key = "#userId")
