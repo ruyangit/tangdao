@@ -3,7 +3,10 @@
  */
 package com.tangdao.modules.sys.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
@@ -24,17 +27,25 @@ public class CacheService {
 	@Autowired
 	private CacheManager cacheManager;
 
+	public Collection<String> getCacheNames() {
+		return cacheManager.getCacheNames();
+	}
+
+	public Cache getCache(String name) {
+		return cacheManager.getCache(name);
+	}
+
 	public void clearAll() {
-		cacheManager.getCacheNames().forEach(e -> {
+		getCacheNames().forEach(e -> {
 			cacheManager.getCache(e).clear();
 		});
 	}
 
 	public void clear(String name) {
-		cacheManager.getCache(name).clear();
+		getCache(name).clear();
 	}
 
 	public void clear(String name, String key) {
-		cacheManager.getCache(name).evict(key);
+		getCache(name).evict(key);
 	}
 }
