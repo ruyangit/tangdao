@@ -55,8 +55,8 @@ public class JwtTokenManager {
 		validity = new Date(now + SECRET_EXPIRATION * 1000L);
 
 		Claims claims = Jwts.claims().setSubject(authentication.getName());
-
-		claims.put("userId", ((SecurityUserDetails) authentication.getPrincipal()).getSecurityUser().getId());
+		SecurityUserDetails userDetails = (SecurityUserDetails) authentication.getPrincipal();
+		claims.put("id", userDetails.getSecurityUser().getId());
 
 		return Jwts.builder().setClaims(claims).setExpiration(validity).signWith(SignatureAlgorithm.HS256, SECRET_KEY)
 				.compact();
@@ -77,10 +77,9 @@ public class JwtTokenManager {
 		List<GrantedAuthority> authorities = AuthorityUtils
 				.commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES_KEY));
 
-//		User principal = new User(claims.getSubject(), "", authorities);
 		SecurityUser principal = new SecurityUser();
 		principal.setUsername(claims.getSubject());
-		principal.setId((String)claims.get("userId"));
+		principal.setId((String) claims.get("id"));
 		principal.setToken(token);
 		principal.setIsa(properties.getUser().isSuperAdmin(claims.getSubject()));
 

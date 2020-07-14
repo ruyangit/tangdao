@@ -24,7 +24,7 @@ Tangdao 是基于角色的权限管理系统（RBAC），采用Springboot开发�
 
 **[前端预览](http://121.37.180.48:12001/#/user/login)**
 
-**[前端项目](https://gitee.com/ruyangit/quasar-element-pro/tree/tangdao-spa)**
+**[前端项目](https://gitee.com/ruyangit/quasar-element-pro)**
 
 <img src='https://ruyangit.gitee.io/2020/tangdao/spa/arct/1.png' width="100%" />
 <img src='https://ruyangit.gitee.io/2020/tangdao/spa/arct/2.png' width="100%" />
