@@ -67,14 +67,17 @@ public class PoliciesVoter implements AccessDecisionVoter<Object> {
 		// 1、获取用户策略
 		// 2、根据用户请求匹配安全策略
 		// 3、校验策略拒绝或通过，默认为放弃
-		Iterator<Statement> iters = policyService.getStatementSets(((SecurityUser)authentication.getPrincipal()).getId()).iterator();
-		while (iters.hasNext()) {
-			Statement statement = iters.next();
-			Iterator<String> itersP = statement.getPermissions().iterator();
-			while (itersP.hasNext()) {
-				String policy = itersP.next();
-				if (antPathMatcher.match(policy, sbf.substring(1)) && ACCESS_GRANTED_STR.equals(statement.getEffect())) {
-					return ACCESS_GRANTED;
+		SecurityUser userDetails = (SecurityUser)authentication.getPrincipal();
+		if(userDetails != null) {
+			Iterator<Statement> iters = policyService.getStatementSets(userDetails.getId()).iterator();
+			while (iters.hasNext()) {
+				Statement statement = iters.next();
+				Iterator<String> itersP = statement.getPermissions().iterator();
+				while (itersP.hasNext()) {
+					String policy = itersP.next();
+					if (antPathMatcher.match(policy, sbf.substring(1)) && ACCESS_GRANTED_STR.equals(statement.getEffect())) {
+						return ACCESS_GRANTED;
+					}
 				}
 			}
 		}
