@@ -5,6 +5,7 @@ package com.tangdao.core.web.aspect;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.ibatis.mapping.SqlCommandType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import com.tangdao.core.session.SessionContext;
 import com.tangdao.core.session.TSession;
 import com.tangdao.core.web.aspect.model.Log;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 
@@ -63,8 +66,8 @@ public class LogUtils {
 	 * @param title
 	 * @param operation
 	 */
-	public void saveLog(String title, String operation) {
-		saveLog(title, operation, null, null, null, null, 0);
+	public void saveLog(String title, String logType, String operation) {
+		saveLog(title, logType, operation, null, null, null, null, 0);
 	}
 
 	/**
@@ -77,7 +80,7 @@ public class LogUtils {
 	 * @param executeTime
 	 */
 	public void saveLog(String title, String operation, String requestParams, Throwable throwable, long executeTime) {
-		saveLog(title, operation, requestParams, null, null, throwable, executeTime);
+		saveLog(title, null, operation, requestParams, null, null, throwable, executeTime);
 	}
 
 	/**
@@ -91,7 +94,7 @@ public class LogUtils {
 	 * @param throwable
 	 * @param executeTime
 	 */
-	public void saveLog(String title, String operation, String requestParams, String className, String methodName,
+	public void saveLog(String title, String logType, String operation, String requestParams, String className, String methodName,
 			Throwable throwable, long executeTime) {
 		if (auditLogService == null) {
 			log.warn("AuditLogAspect - AuditLogService is null");
@@ -102,6 +105,17 @@ public class LogUtils {
 		HttpServletRequest request = WebUtils.getRequest();
 
 		Log audit = new Log();
+		
+		if (StrUtil.isEmpty(logType)) {
+			String sqlCommandTypes = ObjectUtil.toString(request.getAttribute(SqlCommandType.class.getName()));
+			if (StrUtil.containsAny("," + sqlCommandTypes + ",", ",INSERT,", ",UPDATE,", ",DELETE,")) {
+				audit.setLogType(Log.TYPE_UPDATE);
+			} else if (StrUtil.contains("," + sqlCommandTypes + ",", ",SELECT,")) {
+				audit.setLogType(Log.TYPE_SELECT);
+			} else {
+				audit.setLogType(Log.TYPE_ACCESS);
+			}
+		}
 		// 审计标题
 		audit.setTitle(title);
 		audit.setRequestParams(requestParams);

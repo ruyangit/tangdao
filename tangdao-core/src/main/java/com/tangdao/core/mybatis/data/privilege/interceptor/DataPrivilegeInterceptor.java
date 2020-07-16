@@ -4,14 +4,23 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.util.Properties;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.mapping.SqlCommandType;
+import org.apache.ibatis.mapping.StatementType;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.reflection.SystemMetaObject;
 
+import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
+import com.tangdao.common.utils.WebUtils;
 import com.tangdao.core.mybatis.data.privilege.annotation.DataPrivilege;
 import com.tangdao.core.mybatis.data.privilege.filter.DataPrivilegeFilter;
 import com.tangdao.core.mybatis.data.privilege.handler.DataPrivilegeAnnotationHandler;
@@ -39,12 +48,25 @@ public class DataPrivilegeInterceptor implements Interceptor {
 
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
+		StatementHandler statementHandler = PluginUtils.realTarget(invocation.getTarget());
+		// 数据操作类型
+		MetaObject metaObject = SystemMetaObject.forObject(statementHandler);
+		MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
+		// 用于日志处理
+		HttpServletRequest request = WebUtils.getRequest();
+		if (request != null) {
+			request.setAttribute(SqlCommandType.class.getName(), mappedStatement.getSqlCommandType());
+		}
+		
+		// 不是查询或者是存储过程直接跳过
+		if (SqlCommandType.SELECT != mappedStatement.getSqlCommandType() || StatementType.CALLABLE == mappedStatement.getStatementType()) {
+			return invocation.proceed();
+		}
+		
 		Field sqlField = null;
-		StatementHandler statementHandler = null;
 		DataPrivilegeParameter dataPrivilegeParameter = null;
 		DataPrivilege dataPrivilege = dataPrivilegeAnnotationHandler.getDataPrivilegeAnnotation();
 		if (null != dataPrivilege) {
-			statementHandler = (StatementHandler) invocation.getTarget();
 			BoundSql boundSql = statementHandler.getBoundSql();
 			dataPrivilegeParameter = new DataPrivilegeParameter();
 			MDataPrivilege mDataPrivilege = MDataPrivilegeUtil.create(dataPrivilege);

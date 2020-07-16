@@ -20,6 +20,7 @@ import com.tangdao.common.utils.WebUtils;
 import com.tangdao.core.session.SessionContext;
 import com.tangdao.core.session.TSession;
 import com.tangdao.core.web.aspect.LogUtils;
+import com.tangdao.core.web.aspect.model.Log;
 import com.tangdao.modules.sys.service.UserService;
 import com.tangdao.web.security.user.SecurityUser;
 import com.tangdao.web.security.user.SecurityUserDetails;
@@ -98,7 +99,7 @@ public class AuthManager {
 			session.setUserId(securityUserDetails.getSecurityUser().getId());
 			SessionContext.setSession(session);
 			// 保存登录日志
-			logUtils.saveLog("用户认证", "用户【" + username + "】登录，IP地址：" + WebUtils.getClientIP() + "");
+			logUtils.saveLog("用户认证", Log.TYPE_LOGIN_LOGOUT, "用户【" + username + "】登录，IP地址：" + WebUtils.getClientIP() + "");
 			return tokenManager.createToken(authentication);
 		} catch (Exception ex) {
 			if (ex instanceof BadCredentialsException) {

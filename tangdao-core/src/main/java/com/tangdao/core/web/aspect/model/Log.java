@@ -132,5 +132,14 @@ public class Log implements Serializable {
 	 * 服务名称
 	 */
 	private String serviceName;
-
+	
+	/**
+	 * 日志类型
+	 */
+	private String logType;
+	
+	public static final String TYPE_ACCESS = "access";
+	public static final String TYPE_UPDATE = "update";
+	public static final String TYPE_SELECT = "select";
+	public static final String TYPE_LOGIN_LOGOUT = "loginLogout";
 }

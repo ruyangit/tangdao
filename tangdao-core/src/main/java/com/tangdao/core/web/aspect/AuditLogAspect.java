@@ -144,7 +144,8 @@ public class AuditLogAspect {
 		}
 
 		try {
-			logUtils.saveLog(auditLog.title(), operation, JSON.toJSONString(argsMap), signature.getDeclaringTypeName(),
+			
+			logUtils.saveLog(auditLog.title(), null, operation, JSON.toJSONString(argsMap), signature.getDeclaringTypeName(),
 					signature.getName(), throwable, executeTime);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
