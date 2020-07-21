@@ -3,6 +3,8 @@
  */
 package com.tangdao.web.controller.admin;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tangdao.common.CommonResponse;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.core.web.validate.Field;
+import com.tangdao.core.web.validate.Rule;
+import com.tangdao.core.web.validate.Validate;
+import com.tangdao.model.domain.Menu;
 import com.tangdao.modules.sys.service.MenuService;
+
+import cn.hutool.core.map.MapUtil;
 
 /**
  * <p>
@@ -30,5 +38,15 @@ public class MenuController extends BaseController {
 	@GetMapping("/tree")
 	public CommonResponse tree() {
 		return success(menuService.findMenuVoChildList());
+	}
+	
+	@Validate({ @Field(name = "id", rules = { @Rule(message = "查询主键不能为空") }) })
+	@GetMapping("/detail")
+	public CommonResponse detail(String id) {
+		Menu menu = menuService.getById(id);
+		Map<String, Object> data = MapUtil.newHashMap();
+		data.put("menu", menu);
+		
+		return success(data);
 	}
 }

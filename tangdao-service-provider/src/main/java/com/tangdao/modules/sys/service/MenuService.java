@@ -11,6 +11,8 @@ import java.util.Map;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.common.constant.CommonContext;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.Menu;
 import com.tangdao.model.vo.MenuVo;
@@ -77,7 +79,7 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 		Map<String, MenuVo> dtoMap = new LinkedHashMap<String, MenuVo>();
 		for (Menu menu : sourceList) {
 			if (!isAll) {
-				if (menu.getIsShow() && StrUtil.equals(MenuVo.TYPE_MENU, menu.getMenuType())) {
+				if (menu.getIsShow().equals(CommonContext.YES) && StrUtil.equals(MenuVo.TYPE_MENU, menu.getMenuType())) {
 					// 原始数据对象为Node，放入dtoMap中。
 					MenuVo menuVo = new MenuVo();
 					BeanUtil.copyProperties(menu, menuVo);
@@ -127,4 +129,13 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 		});
 		return premInnerList;
 	}
+	
+	public List<Menu> findList(String pId){
+		if(StrUtil.isEmpty(pId)) {
+			return this.list();
+		}
+		return this.list(Wrappers.<Menu>lambdaQuery().eq(Menu::getPId, pId).or().eq(Menu::getId, pId));
+	}
+	
+	
 }

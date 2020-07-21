@@ -7,7 +7,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tangdao.common.constant.CommonContext;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,10 +44,10 @@ public class MenuVo implements Serializable {
 
 	private String icon;
 
-	private Boolean opened;
+	private String opened;
 	
 	@JsonIgnore
-	private Boolean isShow;
+	private String isShow;
 
 	private String badge;
 
@@ -56,6 +58,14 @@ public class MenuVo implements Serializable {
 	
 	public void addChild(MenuVo menu) {
 		this.children.add(menu);
+	}
+	
+	public boolean getOpened() {
+		return StrUtil.equals(opened, CommonContext.YES);
+	}
+	
+	public boolean getIsShow() {
+		return StrUtil.equals(opened, CommonContext.YES);
 	}
 
 }
