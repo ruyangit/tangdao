@@ -6,16 +6,13 @@
 	<packaging>pom</packaging>
 	<parent>
 		<groupId>com.tangdao</groupId>
-		<artifactId>tangdao-parent</artifactId>
+		<artifactId>module-goods</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../tangdao-parent</relativePath>
+		<relativePath>../</relativePath>
 	</parent>
 
-	<artifactId>module-shop</artifactId>
-	<name>Module Shop</name>
+	<artifactId>module-goods-common</artifactId>
+	<name>Module Goods Common</name>
 	<inceptionYear>2020-Now</inceptionYear>
-
-	<modules>
-	</modules>
 
 </project>
