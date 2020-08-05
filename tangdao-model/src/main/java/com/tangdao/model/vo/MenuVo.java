@@ -56,6 +56,8 @@ public class MenuVo implements Serializable {
 	public static final String TYPE_MENU = "1";
 	public static final String TYPE_PERM = "2";
 	
+	public static final String ROOT_ID = "0"; 
+	
 	public void addChild(MenuVo menu) {
 		this.children.add(menu);
 	}

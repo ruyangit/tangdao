@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,5 +50,11 @@ public class MenuController extends BaseController {
 		data.put("menu", menu);
 		
 		return success(data);
+	}
+	
+	@Validate({ @Field(name = "menu.menuName", rules = { @Rule(message = "菜单名不能为空") }) })
+	@PostMapping
+	public CommonResponse saveMenu(@RequestBody Menu menu) {
+		return success(menuService.saveOrUpdate(menu));
 	}
 }
