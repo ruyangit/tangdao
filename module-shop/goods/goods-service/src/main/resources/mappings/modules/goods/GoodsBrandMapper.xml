@@ -21,11 +21,4 @@
         <result column="brand_apply" property="brandApply" />
     </resultMap>
 
-    <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-        id,
-        created,
-        store_id, brand_logo, brand_cover, brand_initial, brand_name, summary, content, sort, options, status, brand_class, brand_recommend, brand_apply
-    </sql>
-
 </mapper>

@@ -1,6 +1,9 @@
 package com.tangdao.modules.goods.mapper;
 
 import com.tangdao.modules.goods.model.domain.GoodsBrand;
+
+import org.apache.ibatis.annotations.Mapper;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author ruyang
  * @since 2020-08-06
  */
+@Mapper
 public interface GoodsBrandMapper extends BaseMapper<GoodsBrand> {
 
 }

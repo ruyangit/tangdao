@@ -14,4 +14,16 @@
 	<name>Module Goods Web</name>
 	<inceptionYear>2020-Now</inceptionYear>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.tangdao</groupId>
+			<artifactId>module-goods-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tangdao</groupId>
+			<artifactId>module-goods-service-proxy</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
 </project>

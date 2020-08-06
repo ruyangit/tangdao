@@ -75,7 +75,7 @@ public class CodeServiceGen {
         gc.setOpen(false);
         // gc.setSwagger2(true); 实体属性 Swagger2 注解
         gc.setBaseResultMap(true);
-        gc.setBaseColumnList(true);
+        gc.setBaseColumnList(false);
 //        gc.setDateType(DateType.ONLY_DATE);
 //        gc.setIdType(IdType.ASSIGN_ID);
         mpg.setGlobalConfig(gc);
