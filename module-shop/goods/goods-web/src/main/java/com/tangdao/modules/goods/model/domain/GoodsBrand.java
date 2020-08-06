@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.modules.goods.service;
+package com.tangdao.modules.goods.model.domain;
 
 import java.io.Serializable;
 

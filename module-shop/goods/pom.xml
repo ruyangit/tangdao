@@ -22,4 +22,33 @@
 		<module>goods-web</module>
 	</modules>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.tangdao</groupId>
+			<artifactId>tangdao-model</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tangdao</groupId>
+			<artifactId>tangdao-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- gen test -->
+		<dependency>
+		    <groupId>com.baomidou</groupId>
+		    <artifactId>mybatis-plus-generator</artifactId>
+		    <version>${mybatis-plus.version}</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.freemarker</groupId>
+		    <artifactId>freemarker</artifactId>
+		   	<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>
