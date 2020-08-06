@@ -16,7 +16,7 @@
 	<inceptionYear>2020-Now</inceptionYear>
 
 	<modules>
-		<module>goods-common</module>
+		<module>goods-model</module>
 		<module>goods-service</module>
 		<module>goods-service-proxy</module>
 		<module>goods-web</module>
