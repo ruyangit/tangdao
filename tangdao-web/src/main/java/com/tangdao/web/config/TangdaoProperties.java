@@ -26,14 +26,19 @@ public class TangdaoProperties {
 	private Boolean demo = false;
 
 	/**
-	 * 默認用戶配置
+	 * 用戶配置
 	 */
 	private UserProperties user = new UserProperties();
-
+	
+	/**
+	 * 文件配置
+	 */
+	private FileProperties file = new FileProperties();
+	
 	@Data
 	public class UserProperties {
 
-		private String superAdmin;
+		private String superAdmin = "demo";
 
 		/**
 		 * 是否超管理员
@@ -44,5 +49,19 @@ public class TangdaoProperties {
 		public boolean isSuperAdmin(String username) {
 			return StrUtil.equals(superAdmin, username);
 		}
+	}
+
+	@Data
+	public class FileProperties {
+
+		private String baseDir;
+		
+		private String uploadPath = "{yyyy}{MM}/";
+		
+		private Long maxFileSize = 524288000L;
+		
+		private String[] allowSuffixes = { ".jpeg", ".jpg" };
+		
+		private Boolean isFileStreamDown = false;
 	}
 }
