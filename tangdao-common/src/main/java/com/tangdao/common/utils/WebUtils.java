@@ -6,6 +6,7 @@ package com.tangdao.common.utils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +19,10 @@ import com.alibaba.fastjson.JSON;
 import com.tangdao.common.CommonResponse;
 import com.tangdao.common.constant.ErrorCode;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -172,4 +175,45 @@ public class WebUtils {
 		commonResponse.put("message_description", error);
 		responseJson(response, JSON.toJSONString(commonResponse));
 	}
+
+	public static String getPath(String path) {
+		String p = StringUtils.replace(path, "\\", "/");
+		p = StringUtils.join(StringUtils.split(p, "/"), "/");
+		if (!StringUtils.startsWithAny(p, "/") && StringUtils.startsWithAny(path, "\\", "/")) {
+			p += "/";
+		}
+		if (!StringUtils.endsWithAny(p, "/") && StringUtils.endsWithAny(path, "\\", "/")) {
+			p = p + "/";
+		}
+		if (path != null && path.startsWith("/")) {
+			p = "/" + p; // linux下路径
+		}
+		return p;
+	}
+	
+	public static String getReplacePathDkh(String path) {
+		String[] fmts = StringUtils.substringsBetween(path, "{", "}");
+		if (path != null) {
+			for (String fmt : fmts) {
+				if (StrUtil.isNotBlank(fmt) && StrUtil.containsAny(fmt, "yyyy", "MM", "dd", "HH", "mm", "ss", "E")) {
+					path = StringUtils.replace(path, "{" + fmt + "}", DateUtil.format(new Date(), fmt));
+				}
+			}
+		}
+		return path;
+	}
+
+	public static String getUserfilesBaseDir(String baseDir, String path) {
+		if (StringUtils.isBlank(baseDir)) {
+			baseDir = getRequest().getSession().getServletContext().getRealPath("/");
+		}
+		if (StringUtils.isBlank(baseDir)) {
+			baseDir = System.getProperty("user.dir");
+		}
+		if (!baseDir.endsWith("/")) {
+			baseDir = baseDir + "/";
+		}
+		return StringUtils.isEmpty(path) ? getPath(path) : getPath(baseDir + "/userfiles/" + path);
+	}
+	
 }

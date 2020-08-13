@@ -3,14 +3,16 @@
  */
 package com.tangdao.web.controller.api;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,11 +22,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.tangdao.common.CommonResponse;
+import com.tangdao.common.utils.WebUtils;
+import com.tangdao.core.web.BaseController;
 import com.tangdao.web.config.TangdaoProperties;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <p>
@@ -34,9 +38,10 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang@gmail.com
  * @since 2020年6月24日
  */
+@Slf4j
 @Controller
 @RequestMapping(value = { "/uploader" })
-public class UploaderController {
+public class UploaderController extends BaseController {
 
 	@Autowired
 	private TangdaoProperties tangdaoProperties;
@@ -52,31 +57,58 @@ public class UploaderController {
 			}
 		}
 		Long maxFileSize = tangdaoProperties.getFile().getMaxFileSize();
-		String uploadPath = tangdaoProperties.getFile().getUploadPath();
-		String[] fmts = StringUtils.substringsBetween(uploadPath, "{", "}");
-		if(uploadPath != null) {
-			for (String fmt : fmts) {
-				if(StrUtil.isNotBlank(fmt) && StrUtil.containsAny(fmt, "yyyy", "MM", "dd", "HH", "mm", "ss", "E")) {
-					uploadPath = StringUtils.replace(uploadPath, "{"+fmt+"}", DateUtil.format(new Date(), fmt));
-				}
-			}
-		}
-		
+		String uploadPath = WebUtils.getReplacePathDkh(tangdaoProperties.getFile().getUploadPath());
+
+		List<Map<String, Object>> results = new LinkedList<Map<String, Object>>();
+		String relativePath = WebUtils.getPath(uploadPath);
 		String[] allowSuffixes = tangdaoProperties.getFile().getAllowSuffixes();
-		for (MultipartFile file : files) {
-			String fileName = file.getOriginalFilename();
-			String fileExtension = FileUtil.extName(fileName);
-			if(allowSuffixes!=null && !StrUtil.containsAny(fileExtension, allowSuffixes)) {
-				// 文件格式不正确
+		for (MultipartFile multipartFile : files) {
+			Map<String, Object> result = new LinkedHashMap<String, Object>();
+			try {
+				String fileName = multipartFile.getOriginalFilename();
+				String fileExtension = FileUtil.extName(fileName);
+				if (allowSuffixes != null && !StrUtil.containsAny(fileExtension, allowSuffixes)) {
+					// 文件格式不正确
+				}
+				if (maxFileSize != null && multipartFile.getSize() > maxFileSize.longValue()) {
+					// 文件大小限制
+				}
+				String fileRealPath = getFileRealPath(tangdaoProperties.getFile().getBaseDir(), relativePath, fileName);
+				File file;
+				if (!(file = new File(fileRealPath)).getParentFile().exists()) {
+					file.getParentFile().mkdirs();
+				}
+				if (file.exists()) {
+					file.delete();
+				}
+				multipartFile.transferTo(file);
+//				result.put("fileRealPath", fileRealPath);
+				result.put("filePath", relativePath);
+				result.put("fileUrl", getFileUrl(relativePath, fileName));
+				result.put("fileName", fileName);
+				result.put("fileExtension", fileExtension);
+				result.put("fileContentType", multipartFile.getContentType());
+
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+				result.put("status", "1");
+				result.put("message", "上传失败");
 			}
-			if(maxFileSize!=null&&file.getSize() > maxFileSize.longValue()) {
-				// 文件大小限制
-			}
-			String fileRealPath = "";
-			String filePath = "";
-			
+			results.add(result);
 		}
+		return success("上传完成", results);
+	}
+	
+	@PostMapping("/down")
+	public void downloadFile(HttpServletRequest request) throws Exception {
 		
-		return CommonResponse.createCommonResponse();
+	}
+
+	private String getFileRealPath(String baseDir, String relativePath, String fileName) {
+		return WebUtils.getUserfilesBaseDir(baseDir, "/fileupload/" + relativePath) + fileName;
+	}
+
+	private String getFileUrl(String relativePath, String fileName) {
+		return WebUtils.getPath("/userfiles/fileupload/" + relativePath) + fileName;
 	}
 }
