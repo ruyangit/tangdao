@@ -3,6 +3,7 @@
  */
 package com.tangdao.web.controller.api;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,11 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -27,6 +30,7 @@ import com.tangdao.core.web.BaseController;
 import com.tangdao.web.config.TangdaoProperties;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,13 +44,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Controller
-@RequestMapping(value = { "/uploader" })
 public class UploaderController extends BaseController {
 
 	@Autowired
 	private TangdaoProperties tangdaoProperties;
 
-	@PostMapping
+	@PostMapping(value = { "/uploader" })
 	public @ResponseBody CommonResponse uploadFile(HttpServletRequest request) throws Exception {
 		List<MultipartFile> files = new ArrayList<MultipartFile>();
 		if (request instanceof MultipartHttpServletRequest) {
@@ -99,9 +102,11 @@ public class UploaderController extends BaseController {
 		return success("上传完成", results);
 	}
 	
-	@PostMapping("/down")
-	public void downloadFile(HttpServletRequest request) throws Exception {
-		
+	@GetMapping("/userfiles/**")
+	public void userfiles(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String filePath = StringUtils.substringAfter(request.getRequestURI(), "/userfiles");
+		filePath = WebUtils.getUserfilesBaseDir(tangdaoProperties.getFile().getBaseDir(), filePath);
+		BufferedReader bufferedReader = FileUtil.getReader(filePath, CharsetUtil.defaultCharset());
 	}
 
 	private String getFileRealPath(String baseDir, String relativePath, String fileName) {

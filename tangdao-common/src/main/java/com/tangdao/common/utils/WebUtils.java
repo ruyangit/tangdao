@@ -5,6 +5,7 @@ package com.tangdao.common.utils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
@@ -84,13 +85,28 @@ public class WebUtils {
 		String encoding = request.getParameter("encoding");
 		return resolveValue(value, encoding);
 	}
+	
+	public static String decode(String str, String encode) throws UnsupportedEncodingException {
+		return innerDecode(null, str, encode);
+	}
+
+	private static String innerDecode(String pre, String now, String encode) throws UnsupportedEncodingException {
+		// Because the data may be encoded by the URL more than once,
+		// it needs to be decoded recursively until it is fully successful
+		if (StringUtils.equals(pre, now)) {
+			return pre;
+		}
+		pre = now;
+		now = URLDecoder.decode(now, encode);
+		return innerDecode(pre, now, encode);
+	}
 
 	private static String resolveValue(String value, String encoding) {
 		if (StringUtils.isBlank(encoding)) {
 			encoding = StandardCharsets.UTF_8.name();
 		}
 		try {
-			value = HttpUtils.decode(new String(value.getBytes(StandardCharsets.UTF_8), encoding), encoding);
+			value = decode(new String(value.getBytes(StandardCharsets.UTF_8), encoding), encoding);
 		} catch (UnsupportedEncodingException ignore) {
 		}
 		return value.trim();
