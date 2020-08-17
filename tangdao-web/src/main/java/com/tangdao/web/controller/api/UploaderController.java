@@ -3,6 +3,7 @@
  */
 package com.tangdao.web.controller.api;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,6 +32,8 @@ import com.tangdao.core.web.BaseController;
 import com.tangdao.web.config.TangdaoProperties;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
+import cn.hutool.core.net.URLEncoder;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -69,8 +73,8 @@ public class UploaderController extends BaseController {
 			Map<String, Object> result = new LinkedHashMap<String, Object>();
 			try {
 				String fileName = multipartFile.getOriginalFilename();
-				String fileExtension = FileUtil.extName(fileName);
-				if (allowSuffixes != null && !StrUtil.containsAny(fileExtension, allowSuffixes)) {
+				String fileExt = FileUtil.extName(fileName);
+				if (allowSuffixes != null && !StrUtil.containsAny(fileExt, allowSuffixes)) {
 					// 文件格式不正确
 				}
 				if (maxFileSize != null && multipartFile.getSize() > maxFileSize.longValue()) {
@@ -81,15 +85,14 @@ public class UploaderController extends BaseController {
 				if (!(file = new File(fileRealPath)).getParentFile().exists()) {
 					file.getParentFile().mkdirs();
 				}
-				if (file.exists()) {
-					file.delete();
+				if (!file.exists()) {
+					multipartFile.transferTo(file);
 				}
-				multipartFile.transferTo(file);
 //				result.put("fileRealPath", fileRealPath);
 				result.put("filePath", relativePath);
 				result.put("fileUrl", getFileUrl(relativePath, fileName));
 				result.put("fileName", fileName);
-				result.put("fileExtension", fileExtension);
+				result.put("fileExt", fileExt);
 				result.put("fileContentType", multipartFile.getContentType());
 
 			} catch (Exception e) {
@@ -105,8 +108,20 @@ public class UploaderController extends BaseController {
 	@GetMapping("/userfiles/**")
 	public void userfiles(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String filePath = StringUtils.substringAfter(request.getRequestURI(), "/userfiles");
-		filePath = WebUtils.getUserfilesBaseDir(tangdaoProperties.getFile().getBaseDir(), filePath);
-		BufferedReader bufferedReader = FileUtil.getReader(filePath, CharsetUtil.defaultCharset());
+		String fileName = FileUtil.getName(filePath);
+		response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+		
+		ServletOutputStream out = response.getOutputStream();
+		BufferedInputStream input = null;
+		try {
+			filePath = WebUtils.getUserfilesBaseDir(tangdaoProperties.getFile().getBaseDir(), filePath);
+			input = FileUtil.getInputStream(filePath);
+			IoUtil.copy(input, out);
+			input.close();
+			out.close();
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
 	}
 
 	private String getFileRealPath(String baseDir, String relativePath, String fileName) {
