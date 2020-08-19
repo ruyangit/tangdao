@@ -90,5 +90,4 @@ public class GoodsBrand extends BaseEntity {
     	this.setStatus(null);
     	this.setCreated(null);
     }
-
 }
