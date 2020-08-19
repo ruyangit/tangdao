@@ -67,6 +67,7 @@ public class GoodsBrandController extends BaseController {
 	@Validate({ @Field(name = "goodsBrand.id", rules = { @Rule(message = "主键不能为空") }) })
 	@PostMapping("/brand-update")
 	public CommonResponse updateRole(@RequestBody GoodsBrand goodsBrand) {
+		goodsBrand.setEmpty();
 		return success(goodsBrandService.updateById(goodsBrand));
 	}
 

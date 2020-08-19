@@ -85,5 +85,10 @@ public class GoodsBrand extends BaseEntity {
      */
     private String brandApply;
 
+    
+    public void setEmpty() {
+    	this.setStatus(null);
+    	this.setCreated(null);
+    }
 
 }
