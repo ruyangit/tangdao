@@ -39,7 +39,7 @@ public class GoodsCategoryController extends BaseController {
 
 	@GetMapping("/category-tree")
 	public CommonResponse tree() {
-		return success("");
+		return success(goodsCategoryService.findGoodsCategoryChildList());
 	}
 
 	@Validate({ @Field(name = "id", rules = { @Rule(message = "主键不能为空") }) })
@@ -51,22 +51,15 @@ public class GoodsCategoryController extends BaseController {
 		return success(data);
 	}
 
-	@Validate({ @Field(name = "goodsCategory.brandName", rules = { @Rule(message = "分类名不能为空") }) })
+	@Validate({ @Field(name = "goodsCategory.categoryName", rules = { @Rule(message = "分类名不能为空") }) })
 	@PostMapping("/category")
 	public CommonResponse saveGoodsBrand(@RequestBody GoodsCategory goodsCategory) {
-		return success(goodsCategoryService.save(goodsCategory));
+		return success(goodsCategoryService.saveOrUpdate(goodsCategory));
 	}
 
-	@Validate({ @Field(name = "goodsBrand.id", rules = { @Rule(message = "主键不能为空") }) })
-	@PostMapping("/category-update")
-	public CommonResponse updateRole(@RequestBody GoodsCategory goodsCategory) {
-		goodsCategory.setEmpty();
-		return success(goodsCategoryService.updateById(goodsCategory));
-	}
-
-	@Validate({ @Field(name = "goodsBrand.id", rules = { @Rule(message = "主键不能为空") }) })
+	@Validate({ @Field(name = "goodsCategory.id", rules = { @Rule(message = "主键不能为空") }) })
 	@PostMapping("/category-delete")
 	public CommonResponse deleteGoodsBrand(@RequestBody GoodsCategory goodsCategory) {
-		return success(goodsCategoryService.removeById(goodsCategory.getId()));
+		return success(goodsCategoryService.removeChildById(goodsCategory.getId()));
 	}
 }
