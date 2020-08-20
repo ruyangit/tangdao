@@ -19,7 +19,9 @@ import com.tangdao.core.web.BaseController;
 import com.tangdao.core.web.validate.Field;
 import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
+import com.tangdao.modules.goods.model.domain.GoodsAttribute;
 import com.tangdao.modules.goods.model.domain.GoodsType;
+import com.tangdao.modules.goods.service.GoodsAttributeService;
 import com.tangdao.modules.goods.service.GoodsTypeService;
 
 import cn.hutool.core.map.MapUtil;
@@ -39,6 +41,9 @@ public class GoodsTypeController extends BaseController {
 
 	@Autowired
 	GoodsTypeService goodsTypeService;
+	
+	@Autowired
+	GoodsAttributeService goodsAttributeService;
 
 	@GetMapping("/types")
 	public CommonResponse page(Page<GoodsType> page, String typeName) {
@@ -47,6 +52,16 @@ public class GoodsTypeController extends BaseController {
 			queryWrapper.like("type_name", typeName);
 		}
 		return success(goodsTypeService.page(page, queryWrapper));
+	}
+	
+	@GetMapping("/attributes")
+	public CommonResponse attributes(String typeId, String attrName) {
+		QueryWrapper<GoodsAttribute> queryWrapper = new QueryWrapper<GoodsAttribute>();
+		if (StrUtil.isNotBlank(attrName)) {
+			queryWrapper.like("attr_name", attrName);
+		}
+		queryWrapper.eq("type_id", typeId);
+		return success(goodsAttributeService.list(queryWrapper));
 	}
 
 	@Validate({ @Field(name = "id", rules = { @Rule(message = "主键不能为空") }) })
