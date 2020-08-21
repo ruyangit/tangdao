@@ -3,6 +3,7 @@
  */
 package com.tangdao.modules.goods.controller.admin;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
 import com.tangdao.modules.goods.model.domain.GoodsAttribute;
 import com.tangdao.modules.goods.model.domain.GoodsType;
+import com.tangdao.modules.goods.model.vo.GoodsTypeVo;
 import com.tangdao.modules.goods.service.GoodsAttributeService;
 import com.tangdao.modules.goods.service.GoodsTypeService;
 
@@ -54,37 +56,36 @@ public class GoodsTypeController extends BaseController {
 		return success(goodsTypeService.page(page, queryWrapper));
 	}
 	
-	@GetMapping("/attributes")
-	public CommonResponse attributes(String typeId, String attrName) {
-		QueryWrapper<GoodsAttribute> queryWrapper = new QueryWrapper<GoodsAttribute>();
-		if (StrUtil.isNotBlank(attrName)) {
-			queryWrapper.like("attr_name", attrName);
-		}
-		queryWrapper.eq("type_id", typeId);
-		return success(goodsAttributeService.list(queryWrapper));
-	}
-
 	@Validate({ @Field(name = "id", rules = { @Rule(message = "主键不能为空") }) })
 	@GetMapping("/type-detail")
 	public CommonResponse detail(String id) {
 		GoodsType goodsType = goodsTypeService.getById(id);
 		Map<String, Object> data = MapUtil.newHashMap();
 		data.put("goodsType", goodsType);
+		QueryWrapper<GoodsAttribute> queryWrapper = new QueryWrapper<GoodsAttribute>();
+		queryWrapper.eq("type_id", id);
+		List<GoodsAttribute> goodsAttributes = goodsAttributeService.list(queryWrapper);
+		data.put("goodsAttributes", goodsAttributes);
 		return success(data);
 	}
 
-	@Validate({ @Field(name = "goodsType.typeName", rules = { @Rule(message = "类型名称不能为空") }) })
 	@PostMapping("/types")
-	public CommonResponse saveGoodsType(@RequestBody GoodsType goodsType) {
-		return success(goodsTypeService.save(goodsType));
+	public CommonResponse saveGoodsType(@RequestBody GoodsTypeVo goodsTypeVo) {
+		return success(goodsTypeService.saveTypeAndAttr(goodsTypeVo));
 	}
 
-	@Validate({ @Field(name = "goodsType.id", rules = { @Rule(message = "主键不能为空") }) })
+	@Validate({ @Field(name = "goodsTypeVo.goodsType.id", rules = { @Rule(message = "主键不能为空") }) })
 	@PostMapping("/type-update")
-	public CommonResponse updateGoodsType(@RequestBody GoodsType goodsType) {
-		return success(goodsTypeService.updateById(goodsType));
+	public CommonResponse updateGoodsType(@RequestBody GoodsTypeVo goodsTypeVo) {
+		return success(goodsTypeService.updateTypeAndAttrById(goodsTypeVo));
 	}
 
+	@Validate({ @Field(name = "goodsAttribute.id", rules = { @Rule(message = "主键不能为空") }) })
+	@PostMapping("/attribute-delete")
+	public CommonResponse deleteGoodsType(@RequestBody GoodsAttribute goodsAttribute) {
+		return success(goodsAttributeService.removeById(goodsAttribute.getId()));
+	}
+	
 	@Validate({ @Field(name = "goodsType.id", rules = { @Rule(message = "主键不能为空") }) })
 	@PostMapping("/type-delete")
 	public CommonResponse deleteGoodsType(@RequestBody GoodsType goodsType) {
