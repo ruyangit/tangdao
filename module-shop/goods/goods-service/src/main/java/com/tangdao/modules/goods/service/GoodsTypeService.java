@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.modules.goods.mapper.GoodsTypeMapper;
+import com.tangdao.modules.goods.model.domain.GoodsAttribute;
 import com.tangdao.modules.goods.model.domain.GoodsType;
 import com.tangdao.modules.goods.model.vo.GoodsTypeVo;
 
@@ -53,6 +55,15 @@ public class GoodsTypeService extends BaseService<GoodsTypeMapper, GoodsType> {
 				}
 			});
 		}
+		return true;
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public boolean removeTypeAndAttrById(String id) {
+		this.removeById(id);
+		QueryWrapper<GoodsAttribute> queryWrapper = new QueryWrapper<GoodsAttribute>();
+		queryWrapper.eq("type_id", id);
+		goodsAttributeService.remove(queryWrapper);
 		return true;
 	}
 }

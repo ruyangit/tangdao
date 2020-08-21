@@ -89,6 +89,6 @@ public class GoodsTypeController extends BaseController {
 	@Validate({ @Field(name = "goodsType.id", rules = { @Rule(message = "主键不能为空") }) })
 	@PostMapping("/type-delete")
 	public CommonResponse deleteGoodsType(@RequestBody GoodsType goodsType) {
-		return success(goodsTypeService.removeById(goodsType.getId()));
+		return success(goodsTypeService.removeTypeAndAttrById(goodsType.getId()));
 	}
 }
