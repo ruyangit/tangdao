@@ -48,6 +48,15 @@ public class GoodsBrandController extends BaseController {
 		}
 		return success(goodsBrandService.page(page, queryWrapper));
 	}
+	
+	@GetMapping("/brand-list")
+	public CommonResponse list(String brandName) {
+		QueryWrapper<GoodsBrand> queryWrapper = new QueryWrapper<GoodsBrand>();
+		if (StrUtil.isNotBlank(brandName)) {
+			queryWrapper.like("brand_name", brandName);
+		}
+		return success(goodsBrandService.list(queryWrapper));
+	}
 
 	@Validate({ @Field(name = "id", rules = { @Rule(message = "主键不能为空") }) })
 	@GetMapping("/brand-detail")
