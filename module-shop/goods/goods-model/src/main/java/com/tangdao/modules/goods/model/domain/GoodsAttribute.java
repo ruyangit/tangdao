@@ -36,12 +36,12 @@ public class GoodsAttribute extends BaseEntity {
     /**
      * 0唯一属性 1单选属性 2复选属性
      */
-    private BigDecimal attrType;
+    private String attrType;
 
     /**
      *  0 手工录入 1从列表中选择 2多行文本框
      */
-    private BigDecimal attrInputType;
+    private String attrInputType;
 
     /**
      * 可选值列表

@@ -86,6 +86,15 @@ public class GoodsTypeController extends BaseController {
 		return success(goodsAttributeService.removeById(goodsAttribute.getId()));
 	}
 	
+	@GetMapping("/type-list")
+	public CommonResponse list(String typeName) {
+		QueryWrapper<GoodsType> queryWrapper = new QueryWrapper<GoodsType>();
+		if (StrUtil.isNotBlank(typeName)) {
+			queryWrapper.like("type_name", typeName);
+		}
+		return success(goodsTypeService.list(queryWrapper));
+	}
+	
 	@Validate({ @Field(name = "goodsType.id", rules = { @Rule(message = "主键不能为空") }) })
 	@PostMapping("/type-delete")
 	public CommonResponse deleteGoodsType(@RequestBody GoodsType goodsType) {
