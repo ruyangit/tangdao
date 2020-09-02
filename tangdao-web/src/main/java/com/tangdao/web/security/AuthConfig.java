@@ -122,6 +122,7 @@ public class AuthConfig extends WebSecurityConfigurerAdapter {
 					}
 				});
 
+		http.headers().frameOptions().disable();
 		http.headers().cacheControl();
 		// jwt filter
 		http.addFilterBefore(jwtAuthTokenFilter(), UsernamePasswordAuthenticationFilter.class);

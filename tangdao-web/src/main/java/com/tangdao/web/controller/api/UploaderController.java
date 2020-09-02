@@ -3,8 +3,6 @@
  */
 package com.tangdao.web.controller.api;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -13,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,9 +29,6 @@ import com.tangdao.core.web.BaseController;
 import com.tangdao.web.config.TangdaoProperties;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.IoUtil;
-import cn.hutool.core.net.URLEncoder;
-import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -109,21 +103,26 @@ public class UploaderController extends BaseController {
 	public void userfiles(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String filePath = StringUtils.substringAfter(request.getRequestURI(), "/userfiles");
 		String fileName = FileUtil.getName(filePath);
-		response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+//		response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
 		
-		ServletOutputStream out = response.getOutputStream();
-		BufferedInputStream input = null;
 		try {
 			filePath = WebUtils.getUserfilesBaseDir(tangdaoProperties.getFile().getBaseDir(), filePath);
-			input = FileUtil.getInputStream(filePath);
-			IoUtil.copy(input, out);
-			input.close();
-			out.close();
+			WebUtils.downFile(new File(filePath), request, response, fileName);
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
+//		ServletOutputStream out = response.getOutputStream();
+//		BufferedInputStream input = null;
+//		try {
+//			input = FileUtil.getInputStream(filePath);
+//			IoUtil.copy(input, out);
+//			input.close();
+//			out.close();
+//		} catch (Exception e) {
+//			log.error(e.getMessage(), e);
+//		}
 	}
-
+	
 	private String getFileRealPath(String baseDir, String relativePath, String fileName) {
 		return WebUtils.getUserfilesBaseDir(baseDir, "/fileupload/" + relativePath) + fileName;
 	}

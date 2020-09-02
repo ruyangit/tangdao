@@ -3,12 +3,20 @@
  */
 package com.tangdao.common.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
+import javax.activation.MimetypesFileTypeMap;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,9 +29,12 @@ import com.tangdao.common.CommonResponse;
 import com.tangdao.common.constant.ErrorCode;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.URLUtil;
 
 /**
  * <p>
@@ -85,7 +96,7 @@ public class WebUtils {
 		String encoding = request.getParameter("encoding");
 		return resolveValue(value, encoding);
 	}
-	
+
 	public static String decode(String str, String encode) throws UnsupportedEncodingException {
 		return innerDecode(null, str, encode);
 	}
@@ -192,6 +203,92 @@ public class WebUtils {
 		responseJson(response, JSON.toJSONString(commonResponse));
 	}
 
+	public static void downFile(File file, HttpServletRequest request, HttpServletResponse response, String fileName) {
+		if (file == null || !file.exists() || file.length() <= 0) {
+			return;
+		}
+		try (RandomAccessFile randomFile = new RandomAccessFile(file, "r");
+				ServletOutputStream out = response.getOutputStream()) {
+			long contentLength = randomFile.length();
+			String range = request.getHeader("Range");
+			long start = 0, end = 0;
+			if (range != null && range.startsWith("bytes=")) {
+				String[] values = range.split("=")[1].split("-");
+				start = Long.parseLong(values[0]);
+				if (values.length > 1) {
+					end = Long.parseLong(values[1]);
+				}
+			}
+			int requestSize = 0;
+			if (end != 0 && end > start) {
+				requestSize = Long.valueOf(end - start + 1).intValue();
+			} else {
+				requestSize = Integer.MAX_VALUE;
+			}
+			String contentType = null;
+			try {
+				contentType = new MimetypesFileTypeMap().getContentType(file);
+			} catch (Exception e) {
+			}
+			if (contentType != null) {
+				response.setContentType(contentType);
+			}
+
+			// video/mp4 mp4
+			// video/webm webm
+			boolean isPreview = "preview".equalsIgnoreCase(request.getParameter("source"));
+			response.addHeader("Content-Disposition", (!isPreview ? "attachment; " : "") + "filename*=utf-8'zh_cn'"
+					+ URLUtil.encode(StringUtils.isBlank(fileName) ? file.getName() : fileName));
+			response.setHeader("Accept-Ranges", "bytes");
+			// 第一次请求只返回 content length 来让客户端请求多次实际数据
+			if (range == null) {
+				response.setHeader("Content-Length", String.valueOf(contentLength));
+			} else {
+				// 以后的多次以断点续传的方式来返回视频数据
+				response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT); // 206
+				long requestStart = 0, requestEnd = 0;
+				String[] ranges = range.split("=");
+				if (ranges.length > 1) {
+					String[] rangeDatas = ranges[1].split("-");
+					requestStart = Long.parseLong(rangeDatas[0]);
+					if (rangeDatas.length > 1) {
+						requestEnd = Long.parseLong(rangeDatas[1]);
+					}
+				}
+				long length = 0;
+				if (requestEnd > 0) {
+					length = requestEnd - requestStart + 1;
+					response.setHeader("Content-Length", String.valueOf(length));
+					response.setHeader("Content-Range",
+							"bytes " + requestStart + "-" + requestEnd + "/" + contentLength);
+				} else {
+					length = contentLength - requestStart;
+					response.setHeader("Content-Length", String.valueOf(length));
+					response.setHeader("Content-Range",
+							"bytes " + requestStart + "-" + (contentLength - 1) + "/" + contentLength);
+				}
+			}
+			randomFile.seek(start);
+			int needSize = requestSize;
+			while (needSize > 0) {
+				byte[] buffer = new byte[1024];
+				int len = randomFile.read(buffer);
+				if (needSize < buffer.length) {
+					out.write(buffer, 0, needSize);
+				} else {
+					out.write(buffer, 0, len);
+					if (len < buffer.length) {
+						break;
+					}
+				}
+				needSize -= buffer.length;
+			}
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static String getPath(String path) {
 		String p = StringUtils.replace(path, "\\", "/");
 		p = StringUtils.join(StringUtils.split(p, "/"), "/");
@@ -206,7 +303,7 @@ public class WebUtils {
 		}
 		return p;
 	}
-	
+
 	public static String getReplacePathDkh(String path) {
 		String[] fmts = StringUtils.substringsBetween(path, "{", "}");
 		if (path != null) {
@@ -231,5 +328,5 @@ public class WebUtils {
 		}
 		return StringUtils.isEmpty(path) ? getPath(path) : getPath(baseDir + "/userfiles/" + path);
 	}
-	
+
 }
