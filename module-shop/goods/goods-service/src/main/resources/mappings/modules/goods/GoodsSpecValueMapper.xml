@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tangdao.modules.goods.mapper.GoodsSpecValueMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.tangdao.modules.goods.model.domain.GoodsSpecValue">
+    <result column="id" property="id" />
+        <result column="goods_id" property="goodsId" />
+        <result column="key" property="key" />
+        <result column="key_name" property="keyName" />
+        <result column="shop_price" property="shopPrice" />
+        <result column="market_price" property="marketPrice" />
+        <result column="store_count" property="storeCount" />
+        <result column="bar_code" property="barCode" />
+        <result column="sku" property="sku" />
+        <result column="thumbnail" property="thumbnail" />
+    </resultMap>
+
+</mapper>
