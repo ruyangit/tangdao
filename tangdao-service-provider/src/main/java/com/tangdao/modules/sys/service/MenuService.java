@@ -66,7 +66,7 @@ public class MenuService extends BaseService<MenuMapper, Menu> {
 		return super.baseMapper.findRoleMenuList(roleId);
 	}
 
-	@Cacheable(value = CacheService.RED_USER_MENU, key = "#userId")
+//	@Cacheable(value = CacheService.RED_USER_MENU, key = "#userId")
 	public List<Menu> findUserMenuList(String userId) {
 		return super.baseMapper.findUserMenuList(userId);
 	}

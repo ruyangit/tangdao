@@ -53,7 +53,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 2020年5月28日
  */
 @RestController
-@RequestMapping(value = { "/admin/users" })
+@RequestMapping(value = { "/admin" })
 public class UserController extends BaseController {
 
 	@Autowired
@@ -71,7 +71,7 @@ public class UserController extends BaseController {
 	@Autowired
 	private TangdaoProperties properties;
 
-	@GetMapping
+	@GetMapping("/users")
 	public CommonResponse page(Pageinfo page, UserDTO user) {
 		IPage<Map<String, Object>> pageinfo = userService.findMapsPage(page, user);
 		pageinfo.getRecords().forEach(e -> {
@@ -80,7 +80,7 @@ public class UserController extends BaseController {
 		return success(pageinfo);
 	}
 
-	@GetMapping("/detail")
+	@GetMapping("/user-detail")
 	@AuditLog(title = "用户详情", operation = "'访问【'+#username+'】详情信息接口'")
 	public CommonResponse detail(String username) {
 		User user = userService.findByUsername(username);
@@ -92,23 +92,22 @@ public class UserController extends BaseController {
 
 	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
 			@Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
-	@PostMapping
+	@PostMapping("/users")
 	public CommonResponse saveUser(@RequestBody UserDTO user) {
 		User eu = userService.findByUsername(user.getUsername());
 		if (eu != null) {
 			throw new IllegalArgumentException("用户 '" + eu.getUsername() + "' 已存在");
 		}
-		return success(userService.saveUserAndRoleIds(user.getUsername(), passwordEncoder.encode(user.getPassword()),
-				user.getRoleIds()));
+		return success(userService.saveUserAndRoleIds(user, passwordEncoder.encode(user.getPassword())));
 	}
 
 	@Validate({ @Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
-	@PostMapping("/password/modify")
+	@PostMapping("/user-password-modify")
 	public CommonResponse passwordModify(@RequestBody User user) {
 		return success(userService.passwordModify(user.getId(), passwordEncoder.encode(user.getPassword())));
 	}
 
-	@PostMapping("/update")
+	@PostMapping("/user-update")
 	public CommonResponse updateUser(@RequestBody UserDTO userDto) {
 		User user = new User();
 		BeanUtil.copyProperties(userDto, user);
@@ -121,7 +120,7 @@ public class UserController extends BaseController {
 		return success(userService.updateById(user));
 	}
 
-	@PostMapping("/delete")
+	@PostMapping("/user-delete")
 	public CommonResponse deleteUser(@RequestBody UserDTO user) {
 		if (user.getId().equals(SessionContext.getUserId())) {
 			throw new BusinessException(CommonApiCode.FAIL, "操作失败，不可以删除用户自己");
@@ -129,7 +128,7 @@ public class UserController extends BaseController {
 		return success(userService.deleteUser(user.getId()));
 	}
 
-	@GetMapping("/role")
+	@GetMapping("/user-roles")
 	public CommonResponse userRole(UserRoleDTO userRole) {
 		if (StrUtil.isEmpty(userRole.getUsername()) && StrUtil.isEmpty(userRole.getUserId())
 				&& StrUtil.isEmpty(userRole.getRoleId())) {
@@ -138,18 +137,18 @@ public class UserController extends BaseController {
 		return success(userService.findUserRoleMapsList(userRole));
 	}
 
-	@PostMapping("/role")
+	@PostMapping("/user-roles")
 	public CommonResponse saveUserRole(@RequestBody UserRoleDTO userRole) {
 		return success(userService.saveUserRole(userRole));
 	}
 
 	@Validate({ @Field(name = "userRole.id", rules = { @Rule(message = "删除主键不能为空") }) })
-	@PostMapping("role/delete")
+	@PostMapping("/user-role-delete")
 	public CommonResponse deleteUserRole(@RequestBody UserRoleDTO userRole) {
 		return success(userService.deleteUserRole(userRole));
 	}
 
-	@GetMapping("/menu")
+	@GetMapping("/user-menus")
 	public CommonResponse userMenu(String userId) {
 		List<Menu> sourceList = menuService.findUserMenuList(userId);
 		List<MenuVo> menuVoList = menuService.findUserMenuVoList(sourceList, true);
@@ -158,17 +157,17 @@ public class UserController extends BaseController {
 		return success(data);
 	}
 
-	@GetMapping("/log")
+	@GetMapping("/user-logs")
 	public CommonResponse logPage(Page<Log> page) {
 		return success(logService.findPage(page));
 	}
 	
-	@GetMapping("/policies")
+	@GetMapping("/user-policies")
 	public CommonResponse policies(String userId) {
 		return success(userService.findUserPolicy(userId));
 	}
 	
-	@PostMapping("/policies")
+	@PostMapping("/user-policies")
 	public CommonResponse policies(@RequestBody PolicyDTO policyDTO) {
 		return success(userService.saveUserPolicy(policyDTO));
 	}

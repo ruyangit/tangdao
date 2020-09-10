@@ -18,7 +18,6 @@ import com.tangdao.model.domain.RolePolicy;
 import com.tangdao.model.domain.UserRole;
 import com.tangdao.model.dto.PolicyDTO;
 import com.tangdao.model.dto.RoleDTO;
-import com.tangdao.model.dto.RoleMenuDTO;
 import com.tangdao.modules.sys.mapper.RoleMapper;
 import com.tangdao.modules.sys.mapper.RoleMenuMapper;
 import com.tangdao.modules.sys.mapper.RolePolicyMapper;
@@ -67,11 +66,11 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public boolean saveRoleMenu(RoleMenuDTO roleMenuDTO) {
-		this.roleMenuMapper.delete(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRoleId, roleMenuDTO.getRoleId()));
-		roleMenuDTO.getMenuIds().forEach(id->{
-			RoleMenu roleMenu = new RoleMenuDTO();
-			roleMenu.setRoleId(roleMenuDTO.getRoleId());
+	public boolean saveRoleMenu(RoleDTO roleDTO) {
+		this.roleMenuMapper.delete(Wrappers.<RoleMenu>lambdaQuery().eq(RoleMenu::getRoleId, roleDTO.getId()));
+		roleDTO.getMenuIds().forEach(id->{
+			RoleMenu roleMenu = new RoleMenu();
+			roleMenu.setRoleId(roleDTO.getId());
 			roleMenu.setMenuId(id);
 			this.roleMenuMapper.insert(roleMenu);
 		});

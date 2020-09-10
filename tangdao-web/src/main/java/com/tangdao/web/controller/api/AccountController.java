@@ -30,7 +30,7 @@ import com.tangdao.modules.sys.service.UserService;
  * @since 2020年6月12日
  */
 @RestController
-@RequestMapping(value = { "/api/account" })
+@RequestMapping(value = { "/api" })
 public class AccountController extends BaseController {
 
 	@Autowired
@@ -42,7 +42,7 @@ public class AccountController extends BaseController {
 	@Validate({ @Field(name = "register.username", rules = { @Rule(message = "账号不能为空") }),
 			@Field(name = "register.password", rules = { @Rule(message = "密码不能为空") }),
 			@Field(name = "register.mobile", rules = { @Rule(type = RuleType.MOBILE) }) })
-	@PostMapping("/register")
+	@PostMapping("/account-register")
 	public CommonResponse register(@RequestBody RegisterDTO register) {
 		User eu = userService.findByUsername(register.getUsername());
 		if (eu != null) {

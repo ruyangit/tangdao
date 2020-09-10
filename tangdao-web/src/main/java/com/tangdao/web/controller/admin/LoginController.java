@@ -4,7 +4,6 @@
 package com.tangdao.web.controller.admin;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,8 +24,6 @@ import com.tangdao.modules.sys.service.MenuService;
 import com.tangdao.web.security.AuthConfig;
 import com.tangdao.web.security.AuthManager;
 import com.tangdao.web.security.user.SecurityUser;
-
-import cn.hutool.core.map.MapUtil;
 
 /**
  * <p>
@@ -58,16 +55,11 @@ public class LoginController extends BaseController {
 		return success(result);
 	}
 
-	@GetMapping("/authority")
+	@GetMapping("/nav-menu-tree")
 	public CommonResponse authority() {
 		List<Menu> sourceList = menuService.findUserMenuList(SessionContext.getUserId());
 		List<MenuVo> menuVoList = menuService.findUserMenuVoList(sourceList, false);
-		List<String> permVoList = menuService.findUserPermVoList(sourceList);
-
-		Map<String, Object> data = MapUtil.newHashMap();
-		data.put("menuList", menuVoList);
-		data.put("permList", permVoList);
-		return CommonResponse.createCommonResponse(data);
+		return CommonResponse.createCommonResponse(menuVoList);
 	}
 
 }

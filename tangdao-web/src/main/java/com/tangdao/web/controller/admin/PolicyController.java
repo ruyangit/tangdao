@@ -39,13 +39,13 @@ import cn.hutool.core.util.StrUtil;
  * @since 2020年6月5日
  */
 @RestController
-@RequestMapping(value = { "/admin/policies" })
+@RequestMapping(value = { "/admin" })
 public class PolicyController extends BaseController {
 
 	@Autowired
 	private PolicyService policyService;
 
-	@GetMapping
+	@GetMapping("/policies")
 	public CommonResponse page(Page<Policy> page, String PolicyName) {
 		QueryWrapper<Policy> queryWrapper = new QueryWrapper<Policy>();
 		if (StrUtil.isNotBlank(PolicyName)) {
@@ -54,7 +54,7 @@ public class PolicyController extends BaseController {
 		return success(policyService.page(page, queryWrapper));
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/policy-list")
 	public CommonResponse list(String policyName) {
 		QueryWrapper<Policy> queryWrapper = new QueryWrapper<Policy>();
 		if (StrUtil.isNotBlank(policyName)) {
@@ -65,7 +65,7 @@ public class PolicyController extends BaseController {
 	}
 
 	@Validate({ @Field(name = "id", rules = { @Rule(message = "查询主键不能为空") }) })
-	@GetMapping("/detail")
+	@GetMapping("/policy-detail")
 	public CommonResponse detail(String id) {
 		Policy policy = policyService.getById(id);
 		Map<String, Object> data = MapUtil.newHashMap();
@@ -75,7 +75,7 @@ public class PolicyController extends BaseController {
 	}
 
 	@Validate({ @Field(name = "policy.policyName", rules = { @Rule(message = "策略名不能为空") }) })
-	@PostMapping
+	@PostMapping("/policies")
 	public CommonResponse savePolicy(@RequestBody Policy policy) {
 		Policy er = policyService.findByPolicyName(policy.getPolicyName());
 		if (er != null) {
@@ -84,7 +84,7 @@ public class PolicyController extends BaseController {
 		return success(policyService.save(policy));
 	}
 	
-	@PostMapping("/update")
+	@PostMapping("/policy-update")
 	public CommonResponse updatePolicy(@RequestBody PolicyDTO policyDto) {
 		Policy policy = new Policy();
 		BeanUtil.copyProperties(policyDto, policy);
@@ -96,7 +96,7 @@ public class PolicyController extends BaseController {
 		return success(policyService.updateById(policy));
 	}
 
-	@PostMapping("/delete")
+	@PostMapping("/policy-delete")
 	public CommonResponse deletePolicy(@RequestBody PolicyDTO policyDto) {
 		return success(policyService.removeById(policyDto.getId()));
 	}

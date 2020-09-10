@@ -13,7 +13,8 @@
 			t.status,
 			t.created,
 			t.remark,
-			group_concat(r.role_name) as roleName
+			group_concat(r.role_name) as roleName,
+			group_concat(r.role_name_cn) as roleNameCn
 		from
 			user t 
 			left join user_role ur on t.id = ur.user_id

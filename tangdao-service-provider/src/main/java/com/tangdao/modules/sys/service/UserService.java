@@ -69,12 +69,17 @@ public class UserService extends BaseService<UserMapper, User> {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public boolean saveUserAndRoleIds(String username, String password, List<String> roleIds) {
+	public boolean saveUserAndRoleIds(UserDTO userDTO, String password) {
 		User user = new User();
-		user.setUsername(username);
+		user.setUsername(userDTO.getUsername());
 		user.setPassword(password);
+		user.setNickname(userDTO.getNickname());
+		user.setMobile(userDTO.getMobile());
+		user.setEmail(userDTO.getEmail());
 		this.save(user);
-		this.saveUserRole(user.getId(), roleIds);
+		if(CollUtil.isNotEmpty(userDTO.getRoleIds())) {
+			this.saveUserRole(user.getId(), userDTO.getRoleIds());
+		}
 		return true;
 	}
 	

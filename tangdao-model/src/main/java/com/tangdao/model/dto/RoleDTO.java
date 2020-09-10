@@ -3,6 +3,8 @@
  */
 package com.tangdao.model.dto;
 
+import java.util.List;
+
 import com.tangdao.model.domain.Role;
 
 import lombok.Getter;
@@ -26,5 +28,7 @@ public class RoleDTO extends Role {
 	private static final long serialVersionUID = 1L;
 	
 	private String oldRoleName;
+	
+	private List<String> menuIds;
 
 }

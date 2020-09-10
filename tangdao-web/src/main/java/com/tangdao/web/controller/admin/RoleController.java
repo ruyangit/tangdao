@@ -27,7 +27,6 @@ import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.Role;
 import com.tangdao.model.dto.PolicyDTO;
 import com.tangdao.model.dto.RoleDTO;
-import com.tangdao.model.dto.RoleMenuDTO;
 import com.tangdao.modules.sys.service.MenuService;
 import com.tangdao.modules.sys.service.RoleService;
 
@@ -46,7 +45,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 2020年6月5日
  */
 @RestController
-@RequestMapping(value = { "/admin/roles" })
+@RequestMapping(value = { "/admin" })
 public class RoleController extends BaseController {
 
 	@Autowired
@@ -55,7 +54,7 @@ public class RoleController extends BaseController {
 	@Autowired
 	private MenuService menuService;
 	
-	@GetMapping
+	@GetMapping("/roles")
 	public CommonResponse page(Page<Role> page, String roleName) {
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<Role>();
 		if (StrUtil.isNotBlank(roleName)) {
@@ -64,7 +63,7 @@ public class RoleController extends BaseController {
 		return success(roleService.page(page, queryWrapper));
 	}
 
-	@GetMapping("/list")
+	@GetMapping("/role-list")
 	public CommonResponse list(String roleName) {
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<Role>();
 		if (StrUtil.isNotBlank(roleName)) {
@@ -75,7 +74,7 @@ public class RoleController extends BaseController {
 	}
 
 	@Validate({ @Field(name = "id", rules = { @Rule(message = "查询主键不能为空") }) })
-	@GetMapping("/detail")
+	@GetMapping("/role-detail")
 	public CommonResponse detail(String id) {
 		Role role = roleService.getById(id);
 		Map<String, Object> data = MapUtil.newHashMap();
@@ -87,7 +86,7 @@ public class RoleController extends BaseController {
 	}
 
 	@Validate({ @Field(name = "role.roleName", rules = { @Rule(message = "角色名不能为空") }) })
-	@PostMapping
+	@PostMapping("/roles")
 	public CommonResponse saveRole(@RequestBody Role role) {
 		Role er = roleService.findByRoleName(role.getRoleName());
 		if (er != null) {
@@ -96,12 +95,12 @@ public class RoleController extends BaseController {
 		return success(roleService.save(role));
 	}
 	
-	@PostMapping("/menu")
-	public CommonResponse saveRoleMenu(@RequestBody RoleMenuDTO roleMenuDTO) {
-		return success(roleService.saveRoleMenu(roleMenuDTO));
-	}
+//	@PostMapping("/role-menus")
+//	public CommonResponse saveRoleMenu(@RequestBody RoleMenuDTO roleMenuDTO) {
+//		return success(roleService.saveRoleMenu(roleMenuDTO));
+//	}
 
-	@PostMapping("/update")
+	@PostMapping("/role-update")
 	public CommonResponse updateRole(@RequestBody RoleDTO roleDto) {
 		Role role = new Role();
 		BeanUtil.copyProperties(roleDto, role);
@@ -111,14 +110,16 @@ public class RoleController extends BaseController {
 			throw new IllegalArgumentException("角色 '" + roleDto.getRoleName() + "' 已存在");
 		}
 
-		if (roleService.checkUserRoleRef(roleDto)) {
-			throw new BusinessException(CommonApiCode.FAIL, "操作失败，存在未解除的关联数据");
-		}
+//		if (roleService.checkUserRoleRef(roleDto)) {
+//			throw new BusinessException(CommonApiCode.FAIL, "操作失败，存在未解除的关联数据");
+//		}
+		
+		roleService.saveRoleMenu(roleDto);
 
 		return success(roleService.updateById(role));
 	}
 
-	@PostMapping("/delete")
+	@PostMapping("/role-delete")
 	public CommonResponse deleteRole(@RequestBody RoleDTO roleDto) {
 		if (roleService.checkUserRoleRef(roleDto)) {
 			throw new BusinessException(CommonApiCode.FAIL, "操作失败，存在未解除的关联数据");
@@ -126,12 +127,12 @@ public class RoleController extends BaseController {
 		return success(roleService.deleteRole(roleDto.getId()));
 	}
 	
-	@GetMapping("/policies")
+	@GetMapping("/role-policies")
 	public CommonResponse policies(String roleId) {
 		return success(roleService.findRolePolicy(roleId));
 	}
 	
-	@PostMapping("/policies")
+	@PostMapping("/role-policies")
 	public CommonResponse policies(@RequestBody PolicyDTO policyDTO) {
 		return success(roleService.saveRolePolicy(policyDTO));
 	}

@@ -31,19 +31,19 @@ import cn.hutool.core.map.MapUtil;
  * @since 2020年6月23日
  */
 @RestController
-@RequestMapping(value = { "/admin/menus" })
+@RequestMapping(value = { "/admin" })
 public class MenuController extends BaseController {
 
 	@Autowired
 	private MenuService menuService;
 
-	@GetMapping("/tree")
+	@GetMapping("/menu-tree")
 	public CommonResponse tree() {
 		return success(menuService.findMenuVoChildList());
 	}
 	
 	@Validate({ @Field(name = "id", rules = { @Rule(message = "查询主键不能为空") }) })
-	@GetMapping("/detail")
+	@GetMapping("/menu-detail")
 	public CommonResponse detail(String id) {
 		Menu menu = menuService.getById(id);
 		Map<String, Object> data = MapUtil.newHashMap();
@@ -53,7 +53,7 @@ public class MenuController extends BaseController {
 	}
 	
 	@Validate({ @Field(name = "menu.menuName", rules = { @Rule(message = "菜单名不能为空") }) })
-	@PostMapping
+	@PostMapping("/menus")
 	public CommonResponse saveMenu(@RequestBody Menu menu) {
 		return success(menuService.saveOrUpdate(menu));
 	}
