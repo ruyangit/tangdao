@@ -69,7 +69,7 @@ public class UserService extends BaseService<UserMapper, User> {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public boolean saveUserAndRoleIds(UserDTO userDTO, String password) {
+	public String saveUserAndRoleIds(UserDTO userDTO, String password) {
 		User user = new User();
 		user.setUsername(userDTO.getUsername());
 		user.setPassword(password);
@@ -80,7 +80,7 @@ public class UserService extends BaseService<UserMapper, User> {
 		if(CollUtil.isNotEmpty(userDTO.getRoleIds())) {
 			this.saveUserRole(user.getId(), userDTO.getRoleIds());
 		}
-		return true;
+		return user.getId();
 	}
 	
 	@Transactional(rollbackFor = Exception.class)

@@ -9,6 +9,7 @@
 			ur.created,
 			ur.id,
 			t.role_name as roleName,
+			t.role_name_cn as roleNameCn,
 			t.remark,
 			u.username,
 			u.nickname,

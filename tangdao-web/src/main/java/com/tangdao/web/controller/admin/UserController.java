@@ -3,6 +3,7 @@
  */
 package com.tangdao.web.controller.admin;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -30,6 +32,7 @@ import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
 import com.tangdao.model.domain.Menu;
 import com.tangdao.model.domain.User;
+import com.tangdao.model.dto.FieldDTO;
 import com.tangdao.model.dto.PolicyDTO;
 import com.tangdao.model.dto.UserDTO;
 import com.tangdao.model.dto.UserRoleDTO;
@@ -71,6 +74,16 @@ public class UserController extends BaseController {
 	@Autowired
 	private TangdaoProperties properties;
 
+	@Validate({ @Field(name = "field.id", rules = { @Rule(message = "id不能为空") }),
+			@Field(name = "field.name", rules = { @Rule(message = "name不能为空") }) })
+	@PostMapping("/user-field")
+	public CommonResponse field(@RequestBody FieldDTO field) {
+		UpdateWrapper<User> updateWrapper = new UpdateWrapper<User>();
+		updateWrapper.set(field.getName(), field.getValue());
+		updateWrapper.eq("id", field.getId());
+		return success(userService.update(updateWrapper));
+	}
+
 	@GetMapping("/users")
 	public CommonResponse page(Pageinfo page, UserDTO user) {
 		IPage<Map<String, Object>> pageinfo = userService.findMapsPage(page, user);
@@ -81,14 +94,24 @@ public class UserController extends BaseController {
 	}
 
 	@GetMapping("/user-detail")
-	@AuditLog(title = "用户详情", operation = "'访问【'+#username+'】详情信息接口'")
-	public CommonResponse detail(String username) {
-		User user = userService.findByUsername(username);
+	@AuditLog(title = "用户详情", operation = "'访问【'+#id+'】详情信息接口'")
+	public CommonResponse detail(String id) {
+		User user = userService.findById(id);
 		Map<String, Object> data = MapUtil.newHashMap();
 		data.put("user", user);
-		data.put("isa", properties.getUser().isSuperAdmin(username));
+		data.put("isa", properties.getUser().isSuperAdmin(user.getUsername()));
 		return success(data);
 	}
+
+//	@GetMapping("/user-detail")
+//	@AuditLog(title = "用户详情", operation = "'访问【'+#username+'】详情信息接口'")
+//	public CommonResponse detail(String username) {
+//		User user = userService.findByUsername(username);
+//		Map<String, Object> data = MapUtil.newHashMap();
+//		data.put("user", user);
+//		data.put("isa", properties.getUser().isSuperAdmin(username));
+//		return success(data);
+//	}
 
 	@Validate({ @Field(name = "user.username", rules = { @Rule(message = "账号不能为空") }),
 			@Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
@@ -98,7 +121,11 @@ public class UserController extends BaseController {
 		if (eu != null) {
 			throw new IllegalArgumentException("用户 '" + eu.getUsername() + "' 已存在");
 		}
-		return success(userService.saveUserAndRoleIds(user, passwordEncoder.encode(user.getPassword())));
+		String userId = userService.saveUserAndRoleIds(user, passwordEncoder.encode(user.getPassword()));
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("result", StrUtil.isNotBlank(userId));
+		data.put("userId", userId);
+		return success(data);
 	}
 
 	@Validate({ @Field(name = "user.password", rules = { @Rule(message = "密码不能为空") }) })
@@ -148,7 +175,7 @@ public class UserController extends BaseController {
 		return success(userService.deleteUserRole(userRole));
 	}
 
-	@GetMapping("/user-menus")
+	@GetMapping("/user-menu-tree")
 	public CommonResponse userMenu(String userId) {
 		List<Menu> sourceList = menuService.findUserMenuList(userId);
 		List<MenuVo> menuVoList = menuService.findUserMenuVoList(sourceList, true);
@@ -161,12 +188,12 @@ public class UserController extends BaseController {
 	public CommonResponse logPage(Page<Log> page) {
 		return success(logService.findPage(page));
 	}
-	
+
 	@GetMapping("/user-policies")
 	public CommonResponse policies(String userId) {
 		return success(userService.findUserPolicy(userId));
 	}
-	
+
 	@PostMapping("/user-policies")
 	public CommonResponse policies(@RequestBody PolicyDTO policyDTO) {
 		return success(userService.saveUserPolicy(policyDTO));
