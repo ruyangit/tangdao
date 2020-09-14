@@ -48,7 +48,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-service-provider</artifactId>
+			<artifactId>tangdao-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
