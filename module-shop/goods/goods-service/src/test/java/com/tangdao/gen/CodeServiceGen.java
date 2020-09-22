@@ -39,7 +39,7 @@ public class CodeServiceGen {
 	
 	private static String serviceImplPackage = "service";
 	
-	private static String[] includeTables = {"goods_spec","goods_spec_item","goods_spec_value","goods_attribute_value"};
+	private static String[] includeTables = {"goods_album","goods_album_file"};
 	
 
 	/**
