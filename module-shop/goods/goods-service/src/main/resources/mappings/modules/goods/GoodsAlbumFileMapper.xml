@@ -30,7 +30,7 @@
     			AND album_id = #{et.albumId}
     		</if>
     	</where>
-    	ORDER BY t.created desc
+    	ORDER BY t.id desc,t.created desc
     </select>
 
 </mapper>
