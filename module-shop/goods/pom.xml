@@ -18,7 +18,6 @@
 	<modules>
 		<module>goods-model</module>
 		<module>goods-service</module>
-		<module>goods-service-proxy</module>
 		<module>goods-web</module>
 	</modules>
 
