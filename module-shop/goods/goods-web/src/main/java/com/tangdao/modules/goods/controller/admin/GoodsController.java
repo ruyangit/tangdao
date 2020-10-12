@@ -20,7 +20,6 @@ import com.tangdao.core.web.BaseController;
 import com.tangdao.core.web.validate.Field;
 import com.tangdao.core.web.validate.Rule;
 import com.tangdao.core.web.validate.Validate;
-import com.tangdao.model.domain.User;
 import com.tangdao.model.dto.FieldDTO;
 import com.tangdao.modules.goods.model.domain.Goods;
 import com.tangdao.modules.goods.model.dto.GoodsDTO;
