@@ -37,7 +37,7 @@ public class CodeDomainGen {
 	
 	private static String entityPackage = "model.domain";
 	
-	private static String[] includeTables = {"goods_album","goods_album_file"};
+	private static String[] includeTables = {"goods_image"};
 	
 
 	/**
