@@ -9,6 +9,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,13 +24,14 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@TableName("sys_log")
 public class Log implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@TableId
 	private String id;
 
@@ -52,7 +54,7 @@ public class Log implements Serializable {
 	 * 创建时间
 	 */
 	@TableField(fill = FieldFill.INSERT)
-	private Date created;
+	private Date createDate;
 
 	/**
 	 * 请求URI
@@ -63,7 +65,7 @@ public class Log implements Serializable {
 	 * 操作方式
 	 */
 	private String requestMethod;
-	
+
 	/**
 	 * 请求参数
 	 */
@@ -97,7 +99,7 @@ public class Log implements Serializable {
 	 * 是否异常
 	 */
 	private String isException;
-	
+
 	/**
 	 * 异常信息
 	 */
@@ -132,12 +134,22 @@ public class Log implements Serializable {
 	 * 服务名称
 	 */
 	private String serviceName;
-	
+
 	/**
 	 * 日志类型
 	 */
 	private String logType;
-	
+
+	/**
+	 * 租户代码
+	 */
+	private String corpCode;
+
+	/**
+	 * 租户名称
+	 */
+	private String corpName;
+
 	public static final String TYPE_ACCESS = "access";
 	public static final String TYPE_UPDATE = "update";
 	public static final String TYPE_SELECT = "select";
