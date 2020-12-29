@@ -8,9 +8,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Tangdao</name>
-	<inceptionYear>2020-Now</inceptionYear>
-
 	<modules>
 		<module>tangdao-parent</module>
 		<module>tangdao-common</module>

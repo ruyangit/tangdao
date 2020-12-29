@@ -12,8 +12,6 @@
 	</parent>
 
 	<artifactId>tangdao-service</artifactId>
-	<name>Tangdao Service</name>
-	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
 		<dependency>

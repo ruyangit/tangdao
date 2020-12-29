@@ -12,8 +12,6 @@
 	</parent>
 
 	<artifactId>tangdao-common</artifactId>
-	<name>Tangdao Common</name>
-	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
 		<dependency>

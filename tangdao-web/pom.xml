@@ -12,8 +12,6 @@
 	</parent>
 
 	<artifactId>tangdao-web</artifactId>
-	<name>Tangdao Web</name>
-	<inceptionYear>2020-Now</inceptionYear>
 	
 	<properties>
 		<start-class>com.tangdao.web.TangdaoApplication</start-class>

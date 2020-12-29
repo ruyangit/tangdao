@@ -12,8 +12,6 @@
 	</parent>
 
 	<artifactId>tangdao-core</artifactId>
-	<name>Tangdao Core</name>
-	<inceptionYear>2020-Now</inceptionYear>
 
 	<dependencies>
 		<dependency>
