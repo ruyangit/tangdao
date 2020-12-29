@@ -5,6 +5,8 @@ package com.tangdao.model.domain;
 
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +27,7 @@ public class RoleMenu implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	@TableId
 	private String roleCode;
 
 	private String menuCode;

@@ -5,6 +5,8 @@ package com.tangdao.model.domain;
 
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,5 +29,6 @@ public class UserRole implements Serializable {
 
 	private String roleCode;
 
+	@TableId
 	private String userCode;
 }
