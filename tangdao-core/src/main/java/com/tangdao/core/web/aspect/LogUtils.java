@@ -13,10 +13,10 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
 import com.tangdao.common.constant.CommonContext;
-import com.tangdao.common.utils.WebUtils;
+import com.tangdao.common.utils.ServletUtils;
+import com.tangdao.core.model.Log;
 import com.tangdao.core.session.SessionContext;
-import com.tangdao.core.session.TSession;
-import com.tangdao.core.web.aspect.model.Log;
+import com.tangdao.core.session.SessionUser;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -102,7 +102,7 @@ public class LogUtils {
 		}
 
 		// 从获取RequestAttributes中获取HttpServletRequest的信息
-		HttpServletRequest request = WebUtils.getRequest();
+		HttpServletRequest request = ServletUtils.getRequest();
 
 		Log audit = new Log();
 		
@@ -125,10 +125,10 @@ public class LogUtils {
 		// 获取请求的方法名
 		audit.setMethodName(methodName);
 
-		TSession session = SessionContext.getSession();
+		SessionUser session = SessionContext.getSession();
 		if (session != null) {
-			audit.setCreateBy((String) session.getUserId());
-			audit.setCreateByName((String) session.getUsername());
+			audit.setCreateBy(session.getId());
+			audit.setCreateByName(session.getUsername());
 		}
 
 		audit.setExecuteTime(executeTime);

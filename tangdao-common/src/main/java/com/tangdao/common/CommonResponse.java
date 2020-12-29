@@ -52,7 +52,7 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 		return this;
 	}
 	
-	public CommonResponse fail(String code, String message) {
+	public CommonResponse fail(int code, String message) {
 		this.put(CODE, code);
 		this.put(MESSAGE, message);
 		return this;

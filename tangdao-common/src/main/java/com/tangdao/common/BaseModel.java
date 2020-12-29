@@ -1,18 +1,25 @@
 /**
  *
  */
-package com.tangdao.core.constant;
+package com.tangdao.common;
+
+import java.io.Serializable;
 
 /**
  * <p>
  * TODO 描述
  * </p>
  *
- * @author ruyang@gmail.com
- * @since 2020年6月11日
+ * @author ruyang
+ * @since 2020年12月29日
  */
-public interface DataStatus {
+public class BaseModel implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * 正常
 	 */
@@ -41,4 +48,5 @@ public interface DataStatus {
 	 * 草稿
 	 */
 	public static final String DRAFT = "9";
+
 }

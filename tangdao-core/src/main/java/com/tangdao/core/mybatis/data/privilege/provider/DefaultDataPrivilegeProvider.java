@@ -24,7 +24,7 @@ public class DefaultDataPrivilegeProvider implements DataPrivilegeProvider {
 		// TODO Auto-generated method stub
 		try {
 			Map<String, Object> privilegeData = new HashMap<String, Object>();
-			privilegeData.put("createByKey", SessionContext.getUserId());
+			privilegeData.put("createByKey", SessionContext.getId());
 			if(DataPrivilegeContext.getDataPrivilegeProvider()!=null) {
 				privilegeData.putAll(DataPrivilegeContext.getDataPrivilegeProvider());
 			}

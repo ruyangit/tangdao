@@ -30,7 +30,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import com.alibaba.fastjson.JSON;
-import com.tangdao.core.annotation.AuditLog;
 
 import cn.hutool.core.thread.threadlocal.NamedThreadLocal;
 

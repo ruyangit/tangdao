@@ -13,7 +13,7 @@ package com.tangdao.core.session;
  */
 public class SessionContext {
 
-	private static final ThreadLocal<TSession> LOCAL = ThreadLocal.withInitial(TSession::new);
+	private static final ThreadLocal<SessionUser> LOCAL = ThreadLocal.withInitial(SessionUser::new);
 
 	private SessionContext() {
 	}
@@ -23,7 +23,7 @@ public class SessionContext {
 	 *
 	 * @return session
 	 */
-	public static TSession getSession() {
+	public static SessionUser getSession() {
 		return LOCAL.get();
 	}
 
@@ -32,11 +32,11 @@ public class SessionContext {
 	 *
 	 * @return id
 	 */
-	public static String getUserId() {
-		TSession session = getSession();
+	public static String getId() {
+		SessionUser session = getSession();
 		if (session == null)
 			return null;
-		return (String)session.getUserId();
+		return session.getId();
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class SessionContext {
 	 *
 	 * @param session session
 	 */
-	public static void setSession(TSession session) {
+	public static void setSession(SessionUser session) {
 		LOCAL.set(session);
 	}
 

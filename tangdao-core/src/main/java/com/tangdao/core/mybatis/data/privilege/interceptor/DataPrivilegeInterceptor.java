@@ -20,7 +20,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.SystemMetaObject;
 
 import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
-import com.tangdao.common.utils.WebUtils;
+import com.tangdao.common.utils.ServletUtils;
 import com.tangdao.core.mybatis.data.privilege.annotation.DataPrivilege;
 import com.tangdao.core.mybatis.data.privilege.filter.DataPrivilegeFilter;
 import com.tangdao.core.mybatis.data.privilege.handler.DataPrivilegeAnnotationHandler;
@@ -53,7 +53,7 @@ public class DataPrivilegeInterceptor implements Interceptor {
 		MetaObject metaObject = SystemMetaObject.forObject(statementHandler);
 		MappedStatement mappedStatement = (MappedStatement) metaObject.getValue("delegate.mappedStatement");
 		// 用于日志处理
-		HttpServletRequest request = WebUtils.getRequest();
+		HttpServletRequest request = ServletUtils.getRequest();
 		if (request != null) {
 			request.setAttribute(SqlCommandType.class.getName(), mappedStatement.getSqlCommandType());
 		}

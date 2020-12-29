@@ -17,10 +17,10 @@ import org.springframework.stereotype.Component;
 import com.tangdao.common.constant.CommonApiCode;
 import com.tangdao.common.exception.BusinessException;
 import com.tangdao.common.utils.WebUtils;
+import com.tangdao.core.model.Log;
 import com.tangdao.core.session.SessionContext;
-import com.tangdao.core.session.TSession;
+import com.tangdao.core.session.SessionUser;
 import com.tangdao.core.web.aspect.LogUtils;
-import com.tangdao.core.web.aspect.model.Log;
 import com.tangdao.modules.sys.service.UserService;
 import com.tangdao.web.security.user.SecurityUser;
 import com.tangdao.web.security.user.SecurityUserDetails;
@@ -94,7 +94,7 @@ public class AuthManager {
 			// 认证信息
 			SecurityUserDetails securityUserDetails = (SecurityUserDetails) authentication.getPrincipal();
 			
-			TSession session = new TSession();
+			SessionUser session = new SessionUser();
 			session.setUsername(securityUserDetails.getUsername());
 			session.setUserId(securityUserDetails.getSecurityUser().getId());
 			SessionContext.setSession(session);

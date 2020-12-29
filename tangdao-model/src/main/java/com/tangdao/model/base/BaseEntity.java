@@ -3,12 +3,12 @@
  */
 package com.tangdao.model.base;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.tangdao.common.BaseModel;
 
 /**
  * <p>
@@ -18,7 +18,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
  * @author ruyang@gmail.com
  * @since 2020年6月5日
  */
-public class BaseEntity implements Serializable {
+public class BaseEntity extends BaseModel {
 
 	/**
 	 * 

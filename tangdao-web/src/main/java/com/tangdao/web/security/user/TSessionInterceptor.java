@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.common.constant.CommonContext;
 import com.tangdao.common.utils.WebUtils;
 import com.tangdao.core.session.SessionContext;
-import com.tangdao.core.session.TSession;
+import com.tangdao.core.session.SessionUser;
 import com.tangdao.model.domain.User;
 import com.tangdao.modules.sys.service.UserService;
 
@@ -50,7 +50,7 @@ public class TSessionInterceptor implements HandlerInterceptor {
 			UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) userPrincipal;
 
 			SecurityUser securityUser = (SecurityUser) authentication.getPrincipal();
-			TSession session = new TSession();
+			SessionUser session = new SessionUser();
 			session.setUsername(securityUser.getUsername());
 			session.setUserId(securityUser.getId());
 

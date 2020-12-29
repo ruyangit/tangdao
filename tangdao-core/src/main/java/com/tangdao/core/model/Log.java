@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.web.aspect.model;
+package com.tangdao.core.model;
 
 import java.io.Serializable;
 import java.util.Date;

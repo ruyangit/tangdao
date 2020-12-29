@@ -51,11 +51,6 @@
 			<artifactId>tangdao-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.tangdao</groupId>
-			<artifactId>module-goods-web</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		
 	</dependencies>
 

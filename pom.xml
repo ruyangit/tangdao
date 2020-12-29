@@ -17,7 +17,6 @@
 		<module>tangdao-core</module>
 		<module>tangdao-model</module>
 		<module>tangdao-service</module>
-		<module>module-shop/goods</module>
 		<module>tangdao-web</module>
 	</modules>
 

@@ -22,20 +22,20 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class TSession implements Serializable {
+public class SessionUser implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Serializable userId;
+	private String id;
 
-	private Serializable username;
+	private String username;
 
 	private Map<String, Object> claims;
 
-	public TSession() {
+	public SessionUser() {
 		claims = new HashMap<>();
 	}
 

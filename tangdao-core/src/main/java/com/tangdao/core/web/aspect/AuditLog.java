@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.annotation;
+package com.tangdao.core.web.aspect;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,15 +9,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.commons.lang3.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 
 /**
  * <p>
- * TODO 审计日志注解， 保存请求信息
+ * TODO 描述
  * </p>
  *
- * @author ruyangit@gmail.com
- * @since 2020年2月24日
+ * @author ruyang
+ * @since 2020年12月29日
  */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
@@ -33,4 +33,5 @@ public @interface AuditLog {
 	 * TODO 操作信息
 	 */
 	String operation() default StringUtils.EMPTY;
+
 }
