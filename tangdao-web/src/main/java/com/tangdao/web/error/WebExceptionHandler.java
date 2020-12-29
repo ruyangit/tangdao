@@ -5,7 +5,6 @@ package com.tangdao.web.error;
 
 import java.util.Objects;
 
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,13 +42,6 @@ public class WebExceptionHandler {
 		return commonResponse;
 	}
 
-	@ExceptionHandler(AccessDeniedException.class)
-	private @ResponseBody Object accessDeniedException(AccessDeniedException e) {
-		CommonResponse commonResponse = CommonResponse.createCommonResponse();
-		commonResponse.fail(CommonApiCode.FORBIDDEN.getCode(), e.getMessage());
-		return commonResponse;
-	}
-	
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
 		e.printStackTrace();
@@ -58,7 +50,7 @@ public class WebExceptionHandler {
 		if (Objects.equals(MissingServletRequestParameterException.class, e.getClass())) {
 			commonResponse.fail(CommonApiCode.BAD_REQUEST);
 		}else if (Objects.equals(HttpRequestMethodNotSupportedException.class, e.getClass())) {
-			commonResponse.fail(CommonApiCode.METHOD_NOT_ALLOWED);
+			commonResponse.fail(CommonApiCode.BAD_METHOD);
 		}
 		// 异常描述
 		commonResponse.put("message_description", ExceptionUtil.getMessage(e));

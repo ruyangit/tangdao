@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.modules.sys.mapper;
+package com.tangdao.modules.sys.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -27,8 +27,4 @@ import com.tangdao.model.domain.Log;
 @Mapper
 public interface LogMapper extends BaseMapper<Log> {
 
-	@DataPrivilege(conditions = { @DataCondition(reference = @DataObject(name = "log", alias = "t"), columns = {
-			@DataColumn(categoryKey = "createByKey", name = "create_by", columnType = ColumnType.String, object = @DataObject(name = "log", alias = "t")) }) })
-	@Select("select t.* from log t order by t.created desc")
-	IPage<Log> findPage(Page<Log> page);
 }

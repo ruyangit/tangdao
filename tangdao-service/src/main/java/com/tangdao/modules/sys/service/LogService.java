@@ -15,7 +15,7 @@ import com.tangdao.core.mybatis.data.privilege.DataPrivilegeContext;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.web.aspect.AuditLogService;
 import com.tangdao.model.domain.Log;
-import com.tangdao.modules.sys.mapper.LogMapper;
+import com.tangdao.modules.sys.dao.LogMapper;
 
 /**
  * <p>
@@ -34,12 +34,4 @@ public class LogService extends BaseService<LogMapper, Log> implements AuditLogS
 		// TODO Auto-generated method stub
 		this.baseMapper.insert(log);
 	}
-
-	public IPage<Log> findPage(Page<Log> page) {
-		Map<String, Boolean> dataPrivilegeFilter = new HashMap<String, Boolean>();
-		dataPrivilegeFilter.put("createByKey", Boolean.FALSE);
-		DataPrivilegeContext.setDataPrivilegeFilter(dataPrivilegeFilter);
-		return this.baseMapper.findPage(page);
-	}
-
 }

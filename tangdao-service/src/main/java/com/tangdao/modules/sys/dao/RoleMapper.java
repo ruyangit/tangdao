@@ -1,12 +1,12 @@
 /**
  *
  */
-package com.tangdao.modules.sys.mapper;
+package com.tangdao.modules.sys.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.model.domain.RolePolicy;
+import com.tangdao.model.domain.Role;
 
 /**
  * <p>
@@ -14,9 +14,9 @@ import com.tangdao.model.domain.RolePolicy;
  * </p>
  *
  * @author ruyang@gmail.com
- * @since 2020年6月5日
+ * @since 2020年5月28日
  */
 @Mapper
-public interface RolePolicyMapper extends BaseMapper<RolePolicy> {
+public interface RoleMapper extends BaseMapper<Role> {
 
 }

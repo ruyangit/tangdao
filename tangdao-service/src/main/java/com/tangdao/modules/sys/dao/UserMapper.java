@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.modules.sys.mapper;
+package com.tangdao.modules.sys.dao;
 
 import java.util.Map;
 
@@ -25,6 +25,5 @@ import com.tangdao.model.dto.UserDTO;
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
 
-	public IPage<Map<String, Object>> findMapsPage(Pageinfo page, @Param("user") UserDTO user);
 	
 }

@@ -1,12 +1,14 @@
 /**
  *
  */
-package com.tangdao.modules.sys.mapper;
+package com.tangdao.modules.sys.dao;
+
+import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.model.domain.Role;
+import com.tangdao.model.domain.Menu;
 
 /**
  * <p>
@@ -14,9 +16,9 @@ import com.tangdao.model.domain.Role;
  * </p>
  *
  * @author ruyang@gmail.com
- * @since 2020年5月28日
+ * @since 2020年6月5日
  */
 @Mapper
-public interface RoleMapper extends BaseMapper<Role> {
+public interface MenuMapper extends BaseMapper<Menu> {
 
 }

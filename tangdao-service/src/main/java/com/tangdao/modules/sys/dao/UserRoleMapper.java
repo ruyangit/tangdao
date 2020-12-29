@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.modules.sys.mapper;
+package com.tangdao.modules.sys.dao;
 
 import java.util.List;
 import java.util.Map;
@@ -24,5 +24,4 @@ import com.tangdao.model.dto.UserRoleDTO;
 @Mapper
 public interface UserRoleMapper extends BaseMapper<UserRole>{
 	
-	public List<Map<String, Object>> findUserRoleMapsList(@Param("userRole") UserRoleDTO userRole);
 }

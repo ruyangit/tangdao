@@ -1,12 +1,12 @@
 /**
  *
  */
-package com.tangdao.modules.file.mapper;
+package com.tangdao.modules.sys.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.model.domain.FileInfo;
+import com.tangdao.model.domain.RoleMenu;
 
 /**
  * <p>
@@ -17,6 +17,6 @@ import com.tangdao.model.domain.FileInfo;
  * @since 2020年6月5日
  */
 @Mapper
-public interface FileInfoMapper extends BaseMapper<FileInfo> {
-	
+public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
+
 }

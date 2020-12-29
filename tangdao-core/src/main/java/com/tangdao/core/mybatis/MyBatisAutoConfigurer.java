@@ -26,7 +26,7 @@ import com.tangdao.core.mybatis.injector.DateMetaObjectHandler;
  * @since 2020年6月5日
  */
 @Configuration
-@MapperScan("com.tangdao.modules.*.mapper")
+@MapperScan("com.tangdao.modules.*.dao")
 public class MyBatisAutoConfigurer {
 
 	/**
