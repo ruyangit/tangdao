@@ -3,7 +3,7 @@
  */
 package com.tangdao.model.domain;
 
-import com.tangdao.model.base.BaseEntity;
+import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,14 +18,14 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UserRole extends BaseEntity {
+public class UserRole implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String roleId;
-	
-	private String userId;
+	private String roleCode;
+
+	private String userCode;
 }

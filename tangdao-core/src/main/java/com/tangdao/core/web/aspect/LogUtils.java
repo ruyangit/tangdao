@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 
 import com.tangdao.common.constant.CommonContext;
 import com.tangdao.common.utils.ServletUtils;
-import com.tangdao.core.model.Log;
 import com.tangdao.core.session.SessionContext;
 import com.tangdao.core.session.SessionUser;
+import com.tangdao.model.domain.Log;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;

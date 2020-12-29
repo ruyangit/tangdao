@@ -29,6 +29,6 @@ public class RoleDTO extends Role {
 	
 	private String oldRoleName;
 	
-	private List<String> menuIds;
+	private List<String> menuCodes;
 
 }

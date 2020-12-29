@@ -27,9 +27,9 @@ public class UserDTO extends User{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private String roleId;
+	private String roleCode;
 	
-	private List<String> roleIds;
+	private List<String> roleCodes;
 	
 	private String oldUsername;
 	

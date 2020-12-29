@@ -20,13 +20,13 @@ public class UserRoleDTO {
 
 	private String id;
 
-	private String userId;
+	private String userCode;
 	
 	private String username;
 
-	private String roleId;
+	private String roleCode;
 
-	private List<String> userIds;
+	private List<String> userCodes;
 
-	private List<String> roleIds;
+	private List<String> roleCodes;
 }

@@ -3,40 +3,31 @@
  */
 package com.tangdao.model.domain;
 
-import java.util.Date;
-
-import com.tangdao.model.base.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.tangdao.common.BaseModel;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * <p>
- * TODO 描述
+ * TODO 角色
  * </p>
  *
- * @author ruyang@gmail.com
- * @since 2020年6月2日
+ * @author ruyang
+ * @since 2020年12月29日
  */
 @Getter
 @Setter
-public class Role extends BaseEntity{
+@TableName("sys_role")
+public class Role extends BaseModel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String roleName;
-	
-	private String roleNameCn;
-	
-	private String roleType;
-	
-	private String remark;
-	
-	private String status;
-	
-	private Date modified;
-	
+	@TableId
+	private String roleCode;
 }

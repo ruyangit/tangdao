@@ -16,14 +16,15 @@ import lombok.Data;
  * @since 2020年9月11日
  */
 @Data
-public class FieldDTO implements Serializable {/**
-	 * 
-	 */
+public class FieldDTO implements Serializable {
+	/**
+	* 
+	*/
 	private static final long serialVersionUID = 1L;
 
 	private String id;
-	
+
 	private String name;
-	
+
 	private Object value;
 }
