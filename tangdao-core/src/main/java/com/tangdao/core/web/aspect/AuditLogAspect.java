@@ -6,6 +6,7 @@ package com.tangdao.core.web.aspect;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,14 +19,12 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 
@@ -42,7 +41,6 @@ import cn.hutool.core.thread.threadlocal.NamedThreadLocal;
  * @since 2020年6月29日
  */
 @Aspect
-@Component
 @ConditionalOnClass({ HttpServletRequest.class, RequestContextHolder.class })
 public class AuditLogAspect {
 
@@ -65,10 +63,13 @@ public class AuditLogAspect {
 	 * 用于获取方法参数定义名字.
 	 */
 	private DefaultParameterNameDiscoverer nameDiscoverer = new DefaultParameterNameDiscoverer();
-
-	@Autowired
+	
+	/**
+	 * 审计日志服务
+	 */
+	@Resource
 	private LogUtils logUtils;
-
+	
 	/**
 	 * 解析spEL表达式
 	 */
@@ -143,7 +144,6 @@ public class AuditLogAspect {
 		}
 
 		try {
-			
 			logUtils.saveLog(auditLog.title(), null, operation, JSON.toJSONString(argsMap), signature.getDeclaringTypeName(),
 					signature.getName(), throwable, executeTime);
 		} catch (Exception e) {

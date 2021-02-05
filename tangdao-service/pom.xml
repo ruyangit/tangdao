@@ -16,16 +16,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-model</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.tangdao</groupId>
 			<artifactId>tangdao-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>

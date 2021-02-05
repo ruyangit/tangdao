@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.tangdao.common.CommonResponse;
-import com.tangdao.common.constant.CommonApiCode;
-import com.tangdao.common.exception.BusinessException;
+import com.tangdao.core.CommonResponse;
+import com.tangdao.core.constant.CommonApiCode;
+import com.tangdao.core.exception.BusinessException;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 

@@ -31,7 +31,7 @@
 		<maven.test.skip>true</maven.test.skip>
 
 		<!-- Spring versions -->
-		<spring-boot.version>2.2.6.RELEASE</spring-boot.version>
+		<spring-boot.version>2.3.8.RELEASE</spring-boot.version>
 
 		<jjwt.veersion>0.9.1</jjwt.veersion>
 		<guava.version>28.2-jre</guava.version>
@@ -40,7 +40,7 @@
 		<oshi.version>5.2.0</oshi.version>
 
 		<!-- Mybatis -->
-		<mybatis-plus.version>3.3.1</mybatis-plus.version>
+		<mybatis-plus.version>3.4.2</mybatis-plus.version>
 
 	</properties>
 

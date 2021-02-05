@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
-import com.tangdao.common.constant.CommonContext;
-import com.tangdao.common.utils.ServletUtils;
-import com.tangdao.core.session.SessionContext;
-import com.tangdao.core.session.SessionUser;
-import com.tangdao.model.domain.Log;
+import com.tangdao.core.constant.CommonContext;
+import com.tangdao.core.context.SessionContext;
+import com.tangdao.core.context.SessionUser;
+import com.tangdao.core.model.Log;
+import com.tangdao.core.web.ServletUtils;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;

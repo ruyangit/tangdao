@@ -14,16 +14,7 @@
 	<artifactId>tangdao-model</artifactId>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.tangdao</groupId>
-			<artifactId>tangdao-common</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.baomidou</groupId>
-			<artifactId>mybatis-plus</artifactId>
-			<version>${mybatis-plus.version}</version>
-		</dependency>
+		
 	</dependencies>
 
 </project>

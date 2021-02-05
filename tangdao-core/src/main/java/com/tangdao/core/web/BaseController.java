@@ -2,8 +2,8 @@ package com.tangdao.core.web;
 
 import java.util.Map;
 
-import com.tangdao.common.CommonResponse;
-import com.tangdao.common.constant.ErrorCode;
+import com.tangdao.core.CommonResponse;
+import com.tangdao.core.constant.ErrorCode;
 
 import cn.hutool.core.map.MapUtil;
 

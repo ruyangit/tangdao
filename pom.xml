@@ -10,7 +10,6 @@
 
 	<modules>
 		<module>tangdao-parent</module>
-		<module>tangdao-common</module>
 		<module>tangdao-core</module>
 		<module>tangdao-model</module>
 		<module>tangdao-service</module>
@@ -34,7 +33,7 @@
 		<developer>
 			<id>ruyang</id>
 			<name>RuYang</name>
-			<email>ruyangit at 163.com</email>
+			<email>ruyangit at gmail.com</email>
 			<roles>
 				<role>Project</role>
 			</roles>

@@ -12,8 +12,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
  * TODO 描述
  * </p>
  *
- * @author ruyang@gmail.com
- * @since 2020年6月5日
+ * @author ruyang
+ * @since 2021年2月5日
  */
 public abstract class BaseService<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements IService<T> {
 
