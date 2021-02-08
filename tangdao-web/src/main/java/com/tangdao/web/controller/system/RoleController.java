@@ -5,6 +5,7 @@ package com.tangdao.web.controller.system;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -26,6 +27,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 2020年6月5日
  */
 @RestController
+@RequestMapping("v1/system")
 public class RoleController extends BaseController {
 
 	@Autowired
