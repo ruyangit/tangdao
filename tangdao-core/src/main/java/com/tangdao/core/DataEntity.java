@@ -5,7 +5,6 @@ package com.tangdao.core;
 
 import java.util.Date;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -55,17 +54,4 @@ public class DataEntity<T> extends BaseModel {
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(fill = FieldFill.INSERT_UPDATE)
 	protected Date updateDate; // 更新时间
-
-	/**
-	 * 
-	 */
-	@TableField(fill = FieldFill.INSERT)
-	protected String status; // 状态
-
-	/**
-	 * 
-	 */
-	@JSONField(serialize = false)
-	protected String remarks; // 备注
-
 }

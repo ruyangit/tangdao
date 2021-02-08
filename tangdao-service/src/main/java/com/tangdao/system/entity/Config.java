@@ -30,5 +30,14 @@ public class Config extends DataEntity<Config> {
 
 	@TableId
 	private String id;
-
+	
+	private String configName;
+	
+	private String configKey;
+	
+	private String configValue;
+	
+	private String isInner;
+	
+	private String remarks;
 }
