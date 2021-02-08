@@ -3,6 +3,7 @@
  */
 package com.tangdao.system.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.core.DataEntity;
@@ -30,4 +31,36 @@ public class Role extends DataEntity<DictType> {
 
 	@TableId
 	private String roleCode;
+	
+	private String roleName;
+	
+	private String roleType;
+	
+	private Integer roleSort;
+	
+	private String isInner;
+	
+	private String userType;
+	
+	private String dataScope;
+	
+	private String remarks;
+	
+	private String status;
+	
+	private String tenantCode;
+	
+	private String tenantName;
+	
+	// 未设置
+	public static final String DATA_SCOPE_NONE = "0";
+	
+	// 全部数据
+	public static final String DATA_SCOPE_ALL = "1";
+	
+	// 自定义数据
+	public static final String DATA_SCOPE_CUSTOM = "2";
+	
+	@TableField(exist = false)
+	private String userCode;
 }
