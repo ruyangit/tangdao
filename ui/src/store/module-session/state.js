@@ -9,7 +9,7 @@ const gettingComponent = [
   {
     id: 'user',
     name: '权限',
-    icon: 'supervised_user_circle',
+    icon: 'security',
     path: '/system/user',
     children: [
       {
@@ -20,13 +20,11 @@ const gettingComponent = [
       {
         id: 'role',
         name: '角色',
-        icon: 'view_list',
         path: '/system/role'
       },
       {
         id: 'admin',
         name: '管理员',
-        icon: 'widgets',
         path: '/system/dashboard/workplace'
       }
     ]
@@ -34,7 +32,7 @@ const gettingComponent = [
   {
     id: 'setting',
     name: '系统设置',
-    icon: 'library_books',
+    icon: 'settings',
     path: '/system/setting',
     children: [
       {
