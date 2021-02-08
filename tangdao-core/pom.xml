@@ -6,9 +6,9 @@
 
 	<parent>
 		<groupId>com.tangdao</groupId>
-		<artifactId>tangdao-parent</artifactId>
+		<artifactId>tangdao</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../tangdao-parent</relativePath>
+		<relativePath>../</relativePath>
 	</parent>
 
 	<artifactId>tangdao-core</artifactId>
