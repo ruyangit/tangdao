@@ -3,10 +3,12 @@
  */
 package com.tangdao.web.controller.system;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tangdao.core.web.BaseController;
+import com.tangdao.system.service.MenuService;
 
 /**
  * <p>
@@ -17,12 +19,12 @@ import com.tangdao.core.web.BaseController;
  * @since 2020年6月23日
  */
 @RestController
-@RequestMapping(value = { "/admin" })
+@RequestMapping(value = { "v1/system" })
 public class MenuController extends BaseController {
 
-//	@Autowired
-//	private MenuService menuService;
-//
+	@Autowired
+	private MenuService menuService;
+
 //	@GetMapping("/menu-tree")
 //	public CommonResponse tree() {
 //		return success(menuService.findMenuVoChildList());

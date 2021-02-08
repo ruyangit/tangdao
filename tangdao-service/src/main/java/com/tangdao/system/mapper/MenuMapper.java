@@ -3,8 +3,10 @@
  */
 package com.tangdao.system.mapper;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.system.entity.Menu;
+import com.tangdao.system.model.domain.Menu;
 
 /**
  * <p>
@@ -16,4 +18,7 @@ import com.tangdao.system.entity.Menu;
  */
 public interface MenuMapper extends BaseMapper<Menu> {
 
+	public List<Menu> findByRoleMenu(Menu menu);
+	
+	public List<Menu> findByUserMenu(Menu menu);
 }

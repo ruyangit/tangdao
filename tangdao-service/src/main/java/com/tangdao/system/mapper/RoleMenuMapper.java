@@ -4,7 +4,7 @@
 package com.tangdao.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.system.entity.RoleMenu;
+import com.tangdao.system.model.domain.RoleMenu;
 
 /**
  * <p>

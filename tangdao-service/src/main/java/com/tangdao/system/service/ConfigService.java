@@ -6,8 +6,8 @@ package com.tangdao.system.service;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.service.BaseService;
-import com.tangdao.system.entity.Config;
 import com.tangdao.system.mapper.ConfigMapper;
+import com.tangdao.system.model.domain.Config;
 
 /**
  * <p>

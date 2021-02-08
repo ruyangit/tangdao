@@ -4,7 +4,7 @@
 package com.tangdao.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.system.entity.Config;
+import com.tangdao.system.model.domain.Config;
 
 /**
  * <p>

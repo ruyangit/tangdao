@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.system.entity;
+package com.tangdao.system.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -12,7 +12,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * TODO 菜单
+ * TODO 描述
  * </p>
  *
  * @author ruyang
@@ -20,8 +20,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_menu")
-public class Menu extends DataEntity<DictType> {
+@TableName("sys_dict_data")
+public class DictData extends DataEntity<DictData> {
 
 	/**
 	 * 
@@ -29,5 +29,5 @@ public class Menu extends DataEntity<DictType> {
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private String menuCode;
+	private String dictCode;
 }

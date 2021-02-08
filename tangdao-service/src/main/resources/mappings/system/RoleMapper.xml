@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.tangdao.system.mapper.RoleMapper">
+<mapper namespace="com.tangdao.system.mapper.RoleMapper">
 
 	<sql id="selectColumns">
 		t.role_code AS "roleCode",
@@ -20,7 +20,7 @@
 		t.tenant_name AS "tenantName"
 	</sql>
 
-	<select id="findByUserCode" resultType="com.tangdao.system.entity.Role">
+	<select id="findByUserCode" resultType="com.tangdao.system.model.domain.Role">
 		SELECT 
 		<include refid="selectColumns"/>
 		FROM sys_role t

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tangdao.system.mapper.MenuMapper">
+
+	<sql id="selectColumns">
+		t.menu_code AS "menuCode",
+		t.parent_code AS "parentCode",
+		t.parent_codes AS "parentCodes",
+		t.tree_sort AS "treeSort",
+		t.tree_names AS "treeNames",
+		t.menu_name AS "menuName",
+		t.menu_type AS "menuType",
+		t.menu_href AS "menuHref",
+		t.menu_target AS "menuTarget",
+		t.menu_icon AS "menuIcon",
+		t.permission AS "permission",
+		t.weight AS "weight",
+		t.is_show AS "isShow",
+		t.status AS "status",
+		t.create_by AS "createBy",
+		t.create_date AS "createDate",
+		t.update_by AS "updateBy",
+		t.update_date AS "updateDate",
+		t.remarks AS "remarks"
+	</sql>
+	
+	<select id="findByRoleMenu" resultType="com.tangdao.system.model.domain.Menu">
+		SELECT DISTINCT 
+		<include refid="selectColumns"/>
+		FROM sys_menu t
+		JOIN sys_role_menu rm ON rm.menu_code = t.menu_code
+		WHERE t.status = #{STATUS_NORMAL}
+			AND t.weight &lt; #{WEIGHT_SUPER_ADMIN}
+			AND rm.role_code = #{roleCode}
+			<if test="parentCode != null and parentCode != ''">
+				AND t.parent_id = #{parentCode}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND t.is_show = #{isShow}
+			</if>
+			<if test="menuType != null and menuType != ''">
+				AND t.menu_type = #{menuType}
+			</if>
+		ORDER BY t.tree_sort
+	</select>
+	
+	<select id="findByUserMenu" resultType="com.tangdao.system.model.domain.Menu">
+		SELECT DISTINCT 
+		<include refid="selectColumns"/>
+		FROM sys_menu t
+		JOIN sys_role_menu rm ON rm.menu_code = t.menu_code
+		JOIN sys_role r ON r.role_code = rm.role_code
+		LEFT JOIN sys_user_role ur ON ur.role_code = r.role_code
+		LEFT JOIN sys_user u ON u.user_code = ur.user_code
+		WHERE t.status = #{STATUS_NORMAL}
+			AND t.weight &lt; #{WEIGHT_SUPER_ADMIN}
+			AND ((u.status = #{STATUS_NORMAL} AND u.user_code = #{userCode})
+				<if test="defaultRoleCodes != null and defaultRoleCodes.size gt 0">
+					or r.role_code in 
+					<foreach collection="defaultRoleCodes" item="roleCode" open="(" separator="," close=")">  
+	         			#{roleCode}
+	    			</foreach>
+			    </if>
+			)
+			<if test="parentCode != null and parentCode != ''">
+				AND t.parent_id = #{parentCode}
+			</if>
+			<if test="isShow != null and isShow != ''">
+				AND t.is_show = #{isShow}
+			</if>
+			<if test="menuType != null and menuType != ''">
+				AND t.menu_type = #{menuType}
+			</if>
+		ORDER BY t.tree_sort ASC
+	</select>
+</mapper>

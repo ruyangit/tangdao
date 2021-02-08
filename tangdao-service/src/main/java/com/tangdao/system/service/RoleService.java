@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.system.entity.Role;
 import com.tangdao.system.mapper.RoleMapper;
+import com.tangdao.system.model.domain.Role;
 
 import cn.hutool.core.util.StrUtil;
 

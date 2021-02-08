@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.web.BaseController;
-import com.tangdao.system.entity.Role;
+import com.tangdao.system.model.domain.Role;
 import com.tangdao.system.service.MenuService;
 import com.tangdao.system.service.RoleService;
 
