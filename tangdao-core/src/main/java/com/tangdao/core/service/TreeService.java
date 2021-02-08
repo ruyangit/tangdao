@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.tangdao.core.TreeEntity;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -49,14 +50,14 @@ public class TreeService<M extends BaseMapper<T>, T extends TreeEntity<T>> exten
 
 	/**
 	 * 
-	 * TODO 查找节点和子节点
+	 * TODO 查找节点和所有子节点
 	 * 
 	 * @param sourceList
 	 * @param targetList
-	 * @param parentCode
+	 * @param treeCode
 	 */
-	public void findNodeAndChildNodeList(List<T> sourceList, List<T> targetList, String parentCode) {
-		sourceList.stream().filter(tree -> tree.getParentCode() != null && tree.getParentCode().equals(parentCode))
+	public void findNodeAndChildNodeList(List<T> sourceList, List<T> targetList, String treeCode) {
+		sourceList.stream().filter(tree -> tree.getParentCode() != null && tree.getParentCode().equals(treeCode))
 				.forEach(tree -> {
 					targetList.add(tree);
 					String idVal = ObjectUtil.toString(this.getIdVal(tree));
@@ -69,21 +70,39 @@ public class TreeService<M extends BaseMapper<T>, T extends TreeEntity<T>> exten
 
 	/**
 	 * 
+	 * TODO 查找节点和所有父节点
+	 * 
+	 * @param sourceList
+	 * @param targetList
+	 * @param treeCode
+	 */
+	public void findNodeAndParentNodeList(List<T> sourceList, List<T> targetList, String treeCode) {
+		sourceList.stream().filter(tree -> {
+			String idVal = ObjectUtil.toString(this.getIdVal(tree));
+			return StrUtil.isNotBlank(treeCode) && StrUtil.equals(treeCode, idVal);
+		}).forEach(tree -> {
+			findNodeAndParentNodeList(sourceList, targetList, tree.getParentCode());
+			targetList.add(tree);
+		});
+	}
+
+	/**
+	 * 
 	 * TODO 转换dataList 为 treeList
 	 * 
 	 * @param sourceList
 	 * @param targetList
-	 * @param parentCode
 	 */
-	public void convertChildNodeTree(List<T> sourceList, List<T> targetList, String parentCode) {
+	public void convertChildNodeTree(List<T> sourceList, List<T> targetList) {
 		Map<String, T> dtoMap = new LinkedHashMap<String, T>();
 		for (T tree : sourceList) {
 			// 原始数据对象为Node，放入dtoMap中。
 			tree.setChildren(null);
 			String idVal = ObjectUtil.toString(this.getIdVal(tree));
-			dtoMap.put(idVal, tree);
+			if (StrUtil.isNotBlank(idVal)) {
+				dtoMap.put(idVal, tree);
+			}
 		}
-
 		for (Map.Entry<String, T> entry : dtoMap.entrySet()) {
 			T node = entry.getValue();
 			String tParentId = node.getParentCode();

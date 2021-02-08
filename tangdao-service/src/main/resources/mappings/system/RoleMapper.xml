@@ -20,7 +20,7 @@
 		t.tenant_name AS "tenantName"
 	</sql>
 
-	<select id="findByUserCode" resultType="com.tangdao.system.model.domain.Role">
+	<select id="findByUserRole" resultType="com.tangdao.system.model.domain.Role">
 		SELECT 
 		<include refid="selectColumns"/>
 		FROM sys_role t

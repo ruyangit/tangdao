@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.system.mapper.RoleMapper;
@@ -32,9 +33,10 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	 * @return
 	 */
 	public List<Role> findByUserCode(String userCode) {
+		Assert.notEmpty(userCode, "异常：userCode 不可以为空!");
 		Role role = new Role();
 		role.setUserCode(userCode);
-		return baseMapper.findByUserCode(role);
+		return baseMapper.findByUserRole(role);
 	}
 
 	/**

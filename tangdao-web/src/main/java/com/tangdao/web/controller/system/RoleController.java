@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.system.model.domain.Role;
-import com.tangdao.system.service.MenuService;
 import com.tangdao.system.service.RoleService;
 
 import cn.hutool.core.util.StrUtil;
@@ -33,8 +32,8 @@ public class RoleController extends BaseController {
 	@Autowired
 	private RoleService roleService;
 
-	@Autowired
-	private MenuService menuService;
+//	@Autowired
+//	private MenuService menuService;
 
 	@GetMapping("/findRolePage")
 	public CommonResponse findRolePage(Page<Role> page, Role role) {
@@ -45,8 +44,8 @@ public class RoleController extends BaseController {
 		return success(roleService.page(page, queryWrapper));
 	}
 
-	@GetMapping("/findRoleList")
-	public CommonResponse findRoleList(Role role) {
+	@GetMapping("/queryRoleList")
+	public CommonResponse queryRoleList(Role role) {
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<Role>();
 		if (StrUtil.isNotBlank(role.getRoleName())) {
 			queryWrapper.like("role_name", role.getRoleName());

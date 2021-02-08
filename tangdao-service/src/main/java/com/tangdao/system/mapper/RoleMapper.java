@@ -20,7 +20,7 @@ import com.tangdao.system.model.domain.Role;
  */
 public interface RoleMapper extends BaseMapper<Role> {
 
-	public List<Role> findByUserCode(Role role);
+	public List<Role> findByUserRole(Role role);
 
 	public int deleteRoleUser(@Param("roleCode") String roleCode, @Param("userCode") String userCode);
 
