@@ -56,37 +56,31 @@
                 :props="props"
               >
                 <router-link
-                  :to="`roles/form/${props.row.id}`"
+                  :to="`role/form/${props.row.roleCode}`"
                   class="text-primary"
                 >{{ props.row.roleName|| '-' }}</router-link>
               </q-td>
               <q-td
-                key="roleNameCn"
-                :props="props"
-                class="text--line2-f"
-              >{{ props.row.roleNameCn }}</q-td>
-              <q-td
                 key="remark"
                 :props="props"
                 class="text--line2-f"
-              >{{ props.row.remark }}</q-td>
+              >{{ props.row.remarks }}</q-td>
               <q-td
                 key="status"
                 :props="props"
               >
-                <q-sys-status :value="props.row.status" />
               </q-td>
               <q-td
-                key="created"
+                key="createDate"
                 :props="props"
-              >{{ props.row.created }}</q-td>
+              >{{ props.row.createDate }}</q-td>
               <q-td
                 key="action"
                 :props="props"
                 class="q-gutter-xs action"
               >
                 <router-link
-                  :to="`roles/form/${props.row.id}`"
+                  :to="`role/form/${props.row.roleCode}`"
                   class="text-primary"
                 >编辑</router-link>
                 <a
@@ -97,7 +91,6 @@
                 <a
                   class="text-primary"
                   href="javascript:;"
-                  v-del:refresh="{id:props.row.id, url:'/admin/role-delete'}"
                 >删除</a>
               </q-td>
             </q-tr>
@@ -147,11 +140,10 @@ export default {
         rowsNumber: 10
       },
       columns: [
-        { name: 'roleName', label: '角色', align: 'left', field: 'roleName', style: 'width: 200px' },
-        { name: 'roleNameCn', label: '角色名称', align: 'left', field: 'roleNameCn' },
-        { name: 'remark', label: '备注', align: 'left', field: 'remark' },
+        { name: 'roleName', label: '角色名称', align: 'left', field: 'roleName', style: 'width: 200px' },
+        { name: 'remark', label: '角色描述', align: 'left', field: 'remark' },
         { name: 'status', label: '状态', align: 'center', field: 'status', sortable: true, style: 'width: 100px' },
-        { name: 'created', label: '创建时间', align: 'center', field: 'created', style: 'width: 180px' },
+        { name: 'createDate', label: '创建时间', align: 'center', field: 'createDate', style: 'width: 180px' },
         { name: 'action', label: '操作', field: 'action', align: 'center', style: 'width: 100px' }
       ],
       role: {},

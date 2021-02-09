@@ -124,7 +124,7 @@ export default {
         return h(QList, { staticClass: this.value ? 'app-menu' : 'app-menu minimize' }, this.menus.map(
           item => this.getDrawerMenu(h, item, item.path, 0)
         ))
-      } else {
+      } else if (this.menus && this.menus.length === 1) {
         return h(QList, { staticClass: this.value ? 'app-menu' : 'app-menu minimize' }, this.menus[0].children.map(
           item => this.getDrawerMenu(h, item, item.path, 0)
         ))

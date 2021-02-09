@@ -39,7 +39,7 @@
           >
             <q-card-section class="q-pa-xl">
               <div class="row q-col-gutter-md">
-                <div class="col-12  col-sm-6 col-lg-4">
+                <div class="col-12 col-md-6 col-lg-4">
                   <label for="roleName"> 角色名称</label>
                   <q-input
                     outlined
@@ -52,60 +52,10 @@
                   >
                   </q-input>
                 </div>
-                <div class="col-12  col-sm-6 col-lg-4 offset-lg-1">
-                  <label for="roleCode"> 角色编码</label>
-                  <q-input
-                    outlined
-                    dense
-                    no-error-icon
-                    v-model.trim="form.roleCode"
-                    placeholder="请输入角色编码"
-                    class="q-mt-sm"
-                  >
-                  </q-input>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4">
-                  <label for="roleCode"> 角色排序</label>
-                  <q-input
-                    outlined
-                    dense
-                    no-error-icon
-                    v-model.trim="form.roleSort"
-                    placeholder="请输入排序号"
-                    class="q-mt-sm"
-                  >
-                  </q-input>
-                </div>
-                <div class="col-12">
-                  <label for="userType"> 用户类型 </label>
-                  <div class="q-gutter-sm q-mt-xs">
-                    <q-radio
-                      v-model="form.userType"
-                      val="1"
-                      label="员工"
-                      dense
-                    />
-                  </div>
-                </div>
-                <div class="col-12">
-                  <label for="isInner"> 是否内置 </label>
-                  <div class="q-gutter-sm q-mt-xs">
-                    <q-radio
-                      v-model="form.isInner"
-                      val="1"
-                      label="是"
-                      dense
-                    />
-                    <q-radio
-                      v-model="form.isInner"
-                      val="0"
-                      label="否"
-                      dense
-                    />
-                  </div>
-                </div>
-                <div class="col-12">
-                  <label for="remark"> 备注 </label>
+              </div>
+              <div class="row q-col-gutter-md q-mt-xs">
+                <div class="col-12 col-md-6 col-lg-4">
+                  <label for="remark"> 角色描述 </label>
                   <div class="q-mt-sm">
                     <q-input
                       dense
@@ -117,6 +67,8 @@
                     />
                   </div>
                 </div>
+              </div>
+              <div class="row q-col-gutter-md q-mt-xs">
                 <div class="col-12">
                   <label for=""> 权限分配 </label>
                   <div
@@ -125,12 +77,12 @@
                   >
                     <q-tree
                       :nodes="treeData"
-                      node-key="id"
-                      label-key="name"
-                      :tick-strategy="'strict'"
+                      node-key="menuCode"
+                      label-key="menuName"
+                      tick-strategy="leaf-filtered"
                       :ticked.sync="ticked"
-                      :expanded.sync="expanded"
-                      default-expand-all
+                      :duration="0"
+                      no-connectors
                     />
                   </div>
                 </div>
@@ -170,21 +122,17 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'RoleForm',
   data () {
     return {
       loading: false,
       form: {
-        id: this.$route.params.id,
-        userType: '1',
-        isInner: '0'
+        id: this.$route.params.id
       },
       oldRoleName: null,
       treeData: [],
-      ticked: [],
-      expanded: ['1']
+      ticked: []
     }
   },
   mounted () {
@@ -198,12 +146,16 @@ export default {
   methods: {
     async onRequest () {
       this.loading = true
-      await axios.get('/admin/role-detail', { params: { id: this.form.id } }).then(response => {
+      await this.$fetchData({
+        url: '/v1/system/getRole',
+        method: 'GET',
+        params: { roleCode: this.form.id }
+      }).then(response => {
         const { code, data } = response.data
-        if (code === '200' && data) {
+        if (code === 0 && data) {
           this.form = data.role
           this.oldRoleName = this.form.roleName
-          this.ticked = data.menuIds
+          this.ticked = data.menuCodes
         }
       }).catch(error => {
         console.error(error)
@@ -213,9 +165,12 @@ export default {
       }, 200)
     },
     async onMenuTree () {
-      await axios.get('/admin/menu-tree', {}).then(response => {
+      await this.$fetchData({
+        url: '/v1/system/queryMenuTreeData',
+        method: 'GET'
+      }).then(response => {
         const { code, data } = response.data
-        if (code === '200' && data) {
+        if (code === 0 && data) {
           this.treeData = data
         }
       }).catch(error => {
@@ -227,19 +182,21 @@ export default {
     },
     async onSubmit () {
       this.loading = true
-      delete this.form.created
+      delete this.form.createDate
       delete this.form.status
       this.form.oldRoleName = this.oldRoleName
-      this.form.menuIds = this.ticked
-      await axios.post(`/admin/role${this.form.id ? '-update' : 's'}`, this.form).then(response => {
+      this.form.menuCodes = this.ticked
+      await this.$fetchData({
+        url: '/v1/system/saveOrUpdateRole',
+        data: this.form
+      }).then(response => {
         const { code, message, data } = response.data
-        if (code === '200' && data) {
+        if (code === 0 && data) {
           this.$q.notify({
             type: 'positive',
             message: '保存成功.'
           })
-
-          this.$router.go(-1)
+          // this.$router.go(-1)
         } else {
           this.$q.notify({
             message

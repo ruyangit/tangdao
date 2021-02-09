@@ -19,7 +19,8 @@ module.exports = function (ctx) {
     // --> boot files are part of "main.js"
     // https://quasar.dev/quasar-cli/boot-files
     boot: [
-
+      'components-api',
+      'directives-api',
       'i18n',
       'axios'
     ],
@@ -211,7 +212,7 @@ module.exports = function (ctx) {
       }
     },
     vendor: {
-    /* 禁用vendor块: */
+      /* 禁用vendor块: */
       // disable: true,
       remove: ['lottie-web', 'highcharts']
     }

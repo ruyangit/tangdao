@@ -41,7 +41,7 @@
         />
       </q-tabs>
       <q-space />
-      <div>Quasar v{{ $q.version }}</div>
+      <div>Quasar v{{ $q.version }}， {{ $q.lang.getLocale() }}</div>
     </q-toolbar>
   </q-header>
 </template>
