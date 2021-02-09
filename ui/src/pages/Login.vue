@@ -5,7 +5,9 @@
       bordered
     >
       <q-card-section horizontal>
-        <div class="col-6 q-pl-xs"><q-lottie-web :path="'json/coding.json'"></q-lottie-web></div>
+        <div class="col-6 q-pl-xs">
+          <q-lottie-web :path="'json/coding.json'"></q-lottie-web>
+        </div>
         <q-card-section :class="`${$q.screen.gt.xs?'col-6':'col'} q-mt-xs q-pa-xl`">
           <div class="text-h5 text-primary q-mb-xs">用户登录</div>
           <div class="text-h6 q-mt-sm q-mb-xs">欢迎回来，请登录后继续</div>
@@ -57,7 +59,9 @@
       <q-separator />
 
       <q-card-actions v-if="$q.screen.gt.sm">
-        <div class="q-pl-xs"><q-brand-color/></div>
+        <div class="q-pl-xs">
+          <q-brand-color />
+        </div>
         <q-space />
         <q-btn
           flat
@@ -78,9 +82,6 @@
 <script>
 export default {
   name: 'UserLogin',
-  meta: {
-    title: '用户登录'
-  },
   components: {
     QBrandColor: () => import('components/BrandColor/BrandColor'),
     QLottieWeb: () => import('components/LottieWeb/LottieWeb')

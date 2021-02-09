@@ -174,7 +174,7 @@ export default {
       const filter = props.filter
       this.loading = true
       await this.$fetchData({
-        url: '/v1/system/findRolePage',
+        url: '/v1/system/queryRolePage',
         method: 'GET',
         params: { current: page, size: rowsPerPage, roleName: filter }
       }).then(response => {

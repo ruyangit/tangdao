@@ -22,12 +22,12 @@ public interface RoleMapper extends BaseMapper<Role> {
 
 	public List<Role> findByUserRole(Role role);
 
-	public int deleteRoleUser(@Param("roleCode") String roleCode, @Param("userCode") String userCode);
+	public int deleteRoleUser(@Param("roleCode") String roleCode);
 
-	public int insertRoleUser(@Param("roleCode") String roleCode, @Param("userCode") String userCode);
+	public int insertRoleUser(@Param("roleCode") String roleCode, @Param("userCodes") List<String> userCode);
 
 	public int deleteRoleMenu(@Param("roleCode") String roleCode);
 
-	public int insertRoleMenu(@Param("roleCode") String roleCode, @Param("menuCodes") String[] menuCodes);
+	public int insertRoleMenu(@Param("roleCode") String roleCode, @Param("menuCodes") List<String> menuCodes);
 
 }

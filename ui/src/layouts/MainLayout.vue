@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR lfr">
-    <q-header/>
+    <q-header />
     <q-page-container class="main-page-container">
       <div
         class="main-page-sidebar full-height"
@@ -10,7 +10,10 @@
       >
         <div class="sidebar-body">
           <q-scroll-area class="fit">
-            <q-menu v-model="sidebarLeftOpen" :menus="menus"/>
+            <q-menu
+              v-model="sidebarLeftOpen"
+              :menus="menus"
+            />
           </q-scroll-area>
         </div>
         <div
@@ -40,7 +43,10 @@
       </div>
     </q-page-container>
     <q-inner-loading :showing="globalLoading">
-      <q-spinner-oval size="28px" color="primary" />
+      <q-spinner-oval
+        size="28px"
+        color="primary"
+      />
       <span class="text-primary text-overline">正在加载请稍后 ...</span>
     </q-inner-loading>
   </q-layout>
@@ -101,10 +107,13 @@ export default {
 
   methods: {
     sidebarMenusFn (route) {
-      this.sidebarVisibility = route.meta.sidebar
-      if (this.sidebarVisibility) {
+      if (route.meta && route.meta.sidebar === undefined) {
+        this.sidebarVisibility = true
         const { path } = route.matched[1]
         this.menus = this.sidebarMenus.filter(item => item.children && item.path === path)
+      } else {
+        this.sidebarVisibility = false
+        this.menus = []
       }
     },
     async onRequest () {

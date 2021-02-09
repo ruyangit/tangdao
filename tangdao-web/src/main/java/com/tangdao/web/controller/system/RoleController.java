@@ -3,8 +3,14 @@
  */
 package com.tangdao.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,9 +37,14 @@ public class RoleController extends BaseController {
 
 	@Autowired
 	private RoleService roleService;
-
-//	@Autowired
-//	private MenuService menuService;
+	
+	@GetMapping("/getRole")
+	public CommonResponse getRole(String roleCode) {
+		Map<String, Object> data = new HashMap<String, Object>();
+		data.put("role", roleService.getById(roleCode));
+		data.put("menuCodes", new ArrayList<>());
+		return success(data);
+	}
 
 	@GetMapping("/queryRolePage")
 	public CommonResponse findRolePage(Page<Role> page, Role role) {
@@ -53,4 +64,16 @@ public class RoleController extends BaseController {
 		queryWrapper.eq("status", Role.NORMAL);
 		return success(roleService.list(queryWrapper));
 	}
+
+	@PostMapping("/saveOrUpdateRole")
+	public CommonResponse saveRole(@RequestBody Role role) {
+		if (!roleService.checkRoleNameExists(role.getOldRoleName(), role.getRoleName())) {
+			throw new IllegalArgumentException("角色 '" + role.getRoleName() + "' 已存在");
+		}
+		if (StrUtil.isNotBlank(role.getRoleCode())) {
+			roleService.insertRoleMenu(role);
+		}
+		return success(roleService.saveOrUpdate(role));
+	}
+
 }

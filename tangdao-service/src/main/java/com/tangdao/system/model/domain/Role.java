@@ -3,6 +3,8 @@
  */
 package com.tangdao.system.model.domain;
 
+import java.util.List;
+
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -63,4 +65,13 @@ public class Role extends DataEntity<DictType> {
 	
 	@TableField(exist = false)
 	private String userCode;
+	
+	@TableField(exist = false)
+	private String oldRoleName;
+	
+	@TableField(exist = false)
+	private List<String> userCodes;
+	
+	@TableField(exist = false)
+	private List<String> menuCodes;
 }

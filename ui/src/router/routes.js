@@ -13,16 +13,16 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', redirect: { path: 'dashboard' } },
-      { path: 'dashboard', meta: { auth: true }, component: () => import('pages/Index.vue') },
+      { path: 'dashboard', meta: { sidebar: false, title: '控制台' }, component: () => import('pages/Index.vue') },
       {
         path: 'system',
         component: () => import('layouts/BlankLayout.vue'),
         children: [
           { path: '', redirect: { path: 'overview' } },
-          { path: 'overview', meta: { sidebar: true, auth: true }, component: () => import('pages/Index.vue') },
-          { path: 'role', meta: { sidebar: true, auth: true }, component: () => import('pages/system/Role.vue') },
-          { path: 'role/form', meta: { sidebar: true, auth: true }, component: () => import('pages/system/RoleForm.vue') },
-          { path: 'role/form/:id', meta: { sidebar: true, auth: true }, component: () => import('pages/system/RoleForm.vue') }
+          { path: 'overview', meta: {}, component: () => import('pages/Index.vue') },
+          { path: 'role', meta: { title: '角色' }, component: () => import('pages/system/RoleList.vue') },
+          { path: 'role/form', meta: {}, component: () => import('pages/system/RoleForm.vue') },
+          { path: 'role/form/:id', meta: {}, component: () => import('pages/system/RoleForm.vue') }
 
         ]
       }

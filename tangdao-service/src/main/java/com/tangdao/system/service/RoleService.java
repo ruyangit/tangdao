@@ -6,6 +6,7 @@ package com.tangdao.system.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -13,6 +14,7 @@ import com.tangdao.core.service.BaseService;
 import com.tangdao.system.mapper.RoleMapper;
 import com.tangdao.system.model.domain.Role;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -29,6 +31,7 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	/**
 	 * 
 	 * TODO 根据用户编码查询角色信息
+	 * 
 	 * @param userCode
 	 * @return
 	 */
@@ -42,6 +45,7 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	/**
 	 * 
 	 * TODO 检查角色名称是否存在
+	 * 
 	 * @param oldRoleName
 	 * @param roleName
 	 * @return 是：true；否：false
@@ -58,45 +62,35 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	/**
 	 * 
 	 * TODO 保存角色与菜单数据
+	 * 
 	 * @param role
 	 * @param menuCodes
 	 */
-	public void insertRoleMenu(Role role, String[] menuCodes) {
-		// 删除原有角色的所有权限
+	@Transactional(rollbackFor = Exception.class)
+	public boolean insertRoleMenu(Role role) {
+		Assert.notEmpty(role.getRoleCode(), "异常：roleCode 不可以为空!");
 		this.baseMapper.deleteRoleMenu(role.getRoleCode());
-		// 新增角色授权
-		if (menuCodes != null && menuCodes.length > 0 && StrUtil.isNotBlank(role.getRoleCode())) {
-			this.baseMapper.insertRoleMenu(role.getRoleCode(), menuCodes);
+		if (CollUtil.isNotEmpty(role.getMenuCodes()) && StrUtil.isNotBlank(role.getRoleCode())) {
+			this.baseMapper.insertRoleMenu(role.getRoleCode(), role.getMenuCodes());
 		}
-	}
-
-	/**
-	 * 
-	 * TODO 刪除角色与用户数据
-	 * @param roleCode
-	 * @param userCode
-	 * @return
-	 */
-	public int deleteRoleUser(String roleCode, String userCode) {
-		// TODO Auto-generated method stub
-		return this.baseMapper.deleteRoleUser(roleCode, userCode);
+		return true;
 	}
 
 	/**
 	 * 
 	 * TODO 保存角色与用户数据
+	 * 
 	 * @param roleCode
 	 * @param userCodes
 	 * @return
 	 */
-	public int insertRoleUser(String roleCode, String[] userCodes) {
-		int count = 0;
-		if (userCodes != null && roleCode != null) {
-			for (String userCode : userCodes) {
-				this.baseMapper.deleteRoleUser(roleCode, userCode);
-				count += this.baseMapper.insertRoleUser(roleCode, userCode);
-			}
+	@Transactional(rollbackFor = Exception.class)
+	public boolean insertRoleUser(Role role) {
+		Assert.notEmpty(role.getRoleCode(), "异常：roleCode 不可以为空!");
+		this.baseMapper.deleteRoleUser(role.getRoleCode());
+		if (CollUtil.isNotEmpty(role.getUserCodes()) && StrUtil.isNotBlank(role.getRoleCode())) {
+			this.baseMapper.insertRoleUser(role.getRoleCode(), role.getUserCodes());
 		}
-		return count;
+		return true;
 	}
 }

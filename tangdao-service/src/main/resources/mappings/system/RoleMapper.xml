@@ -31,11 +31,14 @@
 	</select>
 	
 	<delete id="deleteRoleUser">
-        DELETE FROM sys_user_role WHERE role_code = #{roleCode} and user_code = #{userCode}
+        DELETE FROM sys_user_role WHERE role_code = #{roleCode}
 	</delete>
 
 	<delete id="insertRoleUser">
-        INSERT INTO sys_user_role(role_code, user_code)values(#{roleCode}, #{userCode})
+        INSERT INTO sys_user_role(role_code, user_code)
+        <foreach collection="userCodes" item="userCode" separator=" union all ">
+            SELECT #{roleCode}, #{userCode} FROM dual
+        </foreach>
 	</delete>
 	
 	<delete id="deleteRoleMenu">
