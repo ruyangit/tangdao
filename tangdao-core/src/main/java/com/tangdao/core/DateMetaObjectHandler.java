@@ -10,6 +10,8 @@ import org.apache.ibatis.reflection.MetaObject;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.tangdao.core.context.SessionContext;
 
+import cn.hutool.core.util.StrUtil;
+
 /**
  * <p>
  * TODO 描述
@@ -20,11 +22,11 @@ import com.tangdao.core.context.SessionContext;
  */
 public class DateMetaObjectHandler implements MetaObjectHandler {
 
-	private static final String CREATE_BY_FIELD = "create_by";
-	private static final String CREATE_DATE_FIELD = "create_date";
-	private static final String UPDATE_BY_FIELD = "update_by";
-	private static final String UPDATE_DATE_FIELD = "update_date";
-	private static final String STATUS_FIELD = "status";
+	private String CREATE_BY_FIELD = "createBy";
+	private String CREATE_DATE_FIELD = "createDate";
+	private String UPDATE_BY_FIELD = "updateBy";
+	private String UPDATE_DATE_FIELD = "updateDate";
+	private String STATUS_FIELD = "status";
 
 	@Override
 	public void insertFill(MetaObject metaObject) {
@@ -34,13 +36,15 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
 			setFieldValByName(CREATE_DATE_FIELD, new Date(), metaObject);
 		}
 		Object createBy = getFieldValByName(CREATE_BY_FIELD, metaObject);
-		if (createBy == null && SessionContext.getId() != null) {
-			setFieldValByName(CREATE_DATE_FIELD, SessionContext.getId(), metaObject);
+		if (createBy == null && StrUtil.isNotBlank(SessionContext.getId())) {
+			setFieldValByName(CREATE_BY_FIELD, SessionContext.getId(), metaObject);
 		}
 		Object status = getFieldValByName(STATUS_FIELD, metaObject);
 		if (status == null) {
 			setFieldValByName(STATUS_FIELD, BaseModel.NORMAL, metaObject);
 		}
+		
+		this.updateFill(metaObject);
 	}
 
 	@Override
@@ -51,7 +55,7 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
 			setFieldValByName(UPDATE_DATE_FIELD, new Date(), metaObject);
 		}
 		Object updateBy = getFieldValByName(UPDATE_BY_FIELD, metaObject);
-		if (updateBy == null && SessionContext.getId() != null) {
+		if (updateBy == null && StrUtil.isNotBlank(SessionContext.getId())) {
 			setFieldValByName(UPDATE_BY_FIELD, SessionContext.getId(), metaObject);
 		}
 	}

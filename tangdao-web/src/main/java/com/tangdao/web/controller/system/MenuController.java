@@ -3,13 +3,15 @@
  */
 package com.tangdao.web.controller.system;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +42,17 @@ public class MenuController extends BaseController {
 	/**
 	 * 
 	 * TODO
+	 * @param menu
+	 * @return
+	 */
+	@PostMapping("/saveOrUpdateMenu")
+	public CommonResponse saveOrUpdateMenu(@RequestBody Menu menu) {
+		return success(menuService.saveOrUpdate(menu));
+	}
+
+	/**
+	 * 
+	 * TODO 
 	 * 
 	 * @param excludeCode 排除的节点
 	 * @param isShowCode  是否显示编码
@@ -59,14 +72,14 @@ public class MenuController extends BaseController {
 		queryWrapper.ne("status", Menu.DELETE);
 		queryWrapper.orderByAsc("tree_sort");
 		List<Menu> sourceList = menuService.list(queryWrapper);
-		Map<String, Menu> menuMap = new HashMap<String, Menu>();
+		Map<String, Menu> menuMap = new LinkedHashMap<String, Menu>();
 		sourceList.stream().forEach(tree -> {
 			tree.setMenuName(tree.getTreeNodeName(isShowCode, tree.getMenuCode(), tree.getMenuName()));
 			tree.setChildren(null);
 			menuMap.put(tree.getMenuCode(), tree);
 		});
 		// 转换为 treeData
-		List<Menu> targetList = new LinkedList<Menu>();
+		List<Menu> targetList = new ArrayList<Menu>();
 		menuMap.entrySet().forEach(tree -> {
 			Menu temp = tree.getValue();
 			if (menuMap.get(temp.getParentCode()) == null) {
@@ -74,12 +87,12 @@ public class MenuController extends BaseController {
 			} else {
 				Menu tempParent = menuMap.get(temp.getParentCode());
 				if (CollUtil.isEmpty(tempParent.getChildren())) {
-					tempParent.setChildren(new LinkedList<Menu>());
+					tempParent.setChildren(new ArrayList<Menu>());
 				}
 				tempParent.addChild(temp);
 			}
 		});
-
 		return success(targetList);
 	}
+
 }

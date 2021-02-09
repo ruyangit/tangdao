@@ -5,6 +5,7 @@ package com.tangdao.system.model.domain;
 
 import java.util.List;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -73,6 +74,12 @@ public class Menu extends TreeEntity<Menu> {
 	 * 是否显示（1显示 0隐藏）
 	 */
 	private String isShow;
+	
+	/**
+	 * 状态
+	 */
+	@TableField(fill = FieldFill.INSERT)
+	private String status;
 
 	// 超级管理员访问的最低权重
 	public static Integer SUPER_ADMIN_GET_MENU_MIN_WEIGHT = 40;

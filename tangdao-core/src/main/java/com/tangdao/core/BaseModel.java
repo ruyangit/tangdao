@@ -6,6 +6,8 @@ package com.tangdao.core;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import lombok.Data;
 
 /**
@@ -52,6 +54,7 @@ public abstract class BaseModel implements Serializable {
 	 */
 	public static final String DRAFT = "9";
 
+	@TableField(exist = false)
 	private LinkedHashMap<String, Object> dataSqlMap;
 
 	public void setDataSqlMap(String key, Object value) {

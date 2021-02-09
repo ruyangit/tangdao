@@ -35,7 +35,7 @@ public class RoleController extends BaseController {
 //	@Autowired
 //	private MenuService menuService;
 
-	@GetMapping("/findRolePage")
+	@GetMapping("/queryRolePage")
 	public CommonResponse findRolePage(Page<Role> page, Role role) {
 		QueryWrapper<Role> queryWrapper = new QueryWrapper<Role>();
 		if (StrUtil.isNotBlank(role.getRoleName())) {

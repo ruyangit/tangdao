@@ -14,8 +14,11 @@ package com.tangdao.core.context;
 public class SessionContext {
 
 	private static final ThreadLocal<SessionUser> LOCAL = ThreadLocal.withInitial(SessionUser::new);
-
-	private SessionContext() {
+	static {
+		SessionUser session = new SessionUser();
+		session.setId("system");
+		session.setUsername("system");
+		SessionContext.setSession(session);
 	}
 
 	/**
@@ -35,7 +38,7 @@ public class SessionContext {
 	public static String getId() {
 		SessionUser session = getSession();
 		if (session == null)
-			return null;
+			return null; // 临时模拟数据
 		return session.getId();
 	}
 
