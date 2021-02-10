@@ -91,6 +91,7 @@
                 <a
                   class="text-primary"
                   href="javascript:;"
+                  v-biz-delete:refresh="{data:{ roleCode: props.row.roleCode }, url:'/v1/system/deleteRole'}"
                 >删除</a>
               </q-td>
             </q-tr>

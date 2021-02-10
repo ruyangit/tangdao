@@ -6,21 +6,21 @@ export default {
         if (vnode.context && binding.value.url) {
           const _that = vnode.context
           _that.$q.dialog({
-            title: vnode.context.$t('dialog.delete.title'),
-            message: vnode.context.$t('dialog.delete.message'),
+            title: '操作提示',
+            message: '确定要删除吗？',
             cancel: true
           }).onOk(() => {
             vnode.context.loading = true
-            const url = binding.value.url
-            const form = binding.value
-
-            axios.post(url, form).then(response => {
+            _that.$fetchData({
+              url: binding.value.url,
+              data: binding.value.data
+            }).then(response => {
               vnode.context.loading = false
               const { code, message, data } = response.data
-              if (code === '200' && data) {
+              if (code === 0 && data) {
                 _that.$q.notify({
                   type: 'positive',
-                  message: vnode.context.$t('dialog.delete.success')
+                  message: '删除成功'
                 })
                 if (binding.arg === 'refresh' && vnode.context.onRefresh) {
                   vnode.context.onRefresh()
@@ -41,11 +41,11 @@ export default {
       }
     }
 
-    if (el.__qcomdelclick !== void 0) {
-      el.__qcomdelclick_old = el.__qcomdelclick
+    if (el.__qbiz_deleteclick !== undefined) {
+      el.__qbiz_deleteclick_old = el.__qbiz_deleteclick
     }
 
-    el.__qcomdelclick = ctx
+    el.__qbiz_deleteclick = ctx
 
     el.addEventListener('click', ctx.handler)
   },
@@ -54,10 +54,10 @@ export default {
   // },
 
   unbind (el) {
-    const ctx = el.__qcomdelclick_old || el.__qcomdelclick
-    if (ctx !== void 0) {
+    const ctx = el.__qbiz_deleteclick_old || el.__qbiz_deleteclick
+    if (ctx !== undefined) {
       el.removeEventListener('click', ctx.handler)
-      delete el[el.__qcomdelclick_old ? '__qcomdelclick_old' : '__qcomdelclick']
+      delete el[el.__qbiz_deleteclick_old ? '__qbiz_deleteclick_old' : '__qbiz_deleteclick']
     }
   }
 }

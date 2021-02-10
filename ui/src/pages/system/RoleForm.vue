@@ -25,7 +25,7 @@
           indicator-color="primary"
         >
           <q-route-tab to="/system/role">角色列表</q-route-tab>
-          <q-route-tab :to="`/system/role/form${form.id!=null?'/'+form.id:''}`">{{form.id!=null?'编辑':'新增'}}角色</q-route-tab>
+          <q-route-tab :to="`/system/role/form${form.roleCode!=null?'/'+form.roleCode:''}`">{{form.roleCode!=null?'编辑':'新增'}}角色</q-route-tab>
         </q-tabs>
       </div>
       <q-card
@@ -104,8 +104,8 @@
               <q-btn
                 color="negative"
                 class="wd-80"
-                v-if="form.id"
-                v-del:goback="{id:form.id, url:'/admin/role-delete'}"
+                v-if="form.roleCode"
+                v-biz-delete:goback="{data:{ roleCode: form.roleCode }, url:'/v1/system/deleteRole'}"
               >删除</q-btn>
             </q-card-actions>
           </q-form>
@@ -128,7 +128,7 @@ export default {
     return {
       loading: false,
       form: {
-        id: this.$route.params.id
+        roleCode: this.$route.params.id
       },
       oldRoleName: null,
       treeData: [],
@@ -136,7 +136,7 @@ export default {
     }
   },
   mounted () {
-    if (this.form.id) {
+    if (this.form.roleCode) {
       this.onMenuTree()
       this.onRequest()
     } else {
@@ -149,7 +149,7 @@ export default {
       await this.$fetchData({
         url: '/v1/system/getRole',
         method: 'GET',
-        params: { roleCode: this.form.id }
+        params: { roleCode: this.form.roleCode }
       }).then(response => {
         const { code, data } = response.data
         if (code === 0 && data) {
@@ -182,10 +182,10 @@ export default {
     },
     async onSubmit () {
       this.loading = true
-      delete this.form.createDate
-      delete this.form.status
       this.form.oldRoleName = this.oldRoleName
       this.form.menuCodes = this.ticked
+      delete this.form.createDate
+      delete this.form.status
       await this.$fetchData({
         url: '/v1/system/saveOrUpdateRole',
         data: this.form
@@ -196,7 +196,7 @@ export default {
             type: 'positive',
             message: '保存成功.'
           })
-          // this.$router.go(-1)
+          this.$router.go(-1)
         } else {
           this.$q.notify({
             message

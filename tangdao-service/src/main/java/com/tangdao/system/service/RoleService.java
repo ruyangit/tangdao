@@ -36,7 +36,7 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	 * @return
 	 */
 	public List<Role> findByUserCode(String userCode) {
-		Assert.notEmpty(userCode, "异常：userCode 不可以为空!");
+		Assert.notEmpty(userCode, "异常：userCode 不可以为空");
 		Role role = new Role();
 		role.setUserCode(userCode);
 		return baseMapper.findByUserRole(role);
@@ -68,7 +68,7 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public boolean insertRoleMenu(Role role) {
-		Assert.notEmpty(role.getRoleCode(), "异常：roleCode 不可以为空!");
+		Assert.notEmpty(role.getRoleCode(), "异常：roleCode 不可以为空");
 		this.baseMapper.deleteRoleMenu(role.getRoleCode());
 		if (CollUtil.isNotEmpty(role.getMenuCodes()) && StrUtil.isNotBlank(role.getRoleCode())) {
 			this.baseMapper.insertRoleMenu(role.getRoleCode(), role.getMenuCodes());
@@ -86,11 +86,26 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public boolean insertRoleUser(Role role) {
-		Assert.notEmpty(role.getRoleCode(), "异常：roleCode 不可以为空!");
+		Assert.notEmpty(role.getRoleCode(), "异常：roleCode 不可以为空");
 		this.baseMapper.deleteRoleUser(role.getRoleCode());
 		if (CollUtil.isNotEmpty(role.getUserCodes()) && StrUtil.isNotBlank(role.getRoleCode())) {
 			this.baseMapper.insertRoleUser(role.getRoleCode(), role.getUserCodes());
 		}
+		return true;
+	}
+	
+	/**
+	 * 
+	 * TODO
+	 * @param role
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean deleteRole(Role role) {
+		Assert.notEmpty(role.getRoleCode(), "异常：roleCode 不可以为空");
+		this.baseMapper.deleteRoleUser(role.getRoleCode());
+		this.baseMapper.deleteRoleMenu(role.getRoleCode());
+		this.baseMapper.deleteById(role.getRoleCode());
 		return true;
 	}
 }

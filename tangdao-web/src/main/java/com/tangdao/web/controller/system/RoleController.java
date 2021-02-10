@@ -75,5 +75,10 @@ public class RoleController extends BaseController {
 		}
 		return success(roleService.saveOrUpdate(role));
 	}
+	
+	@PostMapping("/deleteRole")
+	public CommonResponse deleteRole(@RequestBody Role role) {
+		return success(roleService.deleteRole(role));
+	}
 
 }

@@ -1,5 +1,5 @@
 export default {
-  isoName: 'zh-cn',
+  isoName: 'en-us',
   nativeName: '中文(简体)',
   label: {
     clear: '清空',
