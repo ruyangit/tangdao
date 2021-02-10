@@ -69,6 +69,7 @@
                 key="status"
                 :props="props"
               >
+                <!-- <q-badge color='positive'>{{props.row.status}}</q-badge> -->
               </q-td>
               <q-td
                 key="createDate"
@@ -83,11 +84,6 @@
                   :to="`role/form/${props.row.roleCode}`"
                   class="text-primary"
                 >编辑</router-link>
-                <a
-                  class="text-primary"
-                  href="javascript:;"
-                  @click="onRolePolicy(props.row)"
-                >授权</a>
                 <a
                   class="text-primary"
                   href="javascript:;"

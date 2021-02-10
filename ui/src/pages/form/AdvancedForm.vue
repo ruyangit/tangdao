@@ -19,112 +19,128 @@
     </div>
     <div class="my-page-body">
       <q-form
-            class="my-form"
-            @submit="onSubmit"
-          >
-        <q-card flat class="fit">
+        class="my-form"
+        @submit="onSubmit"
+      >
+        <q-card
+          flat
+          class="fit"
+        >
           <q-card-section>仓库管理</q-card-section>
           <q-separator />
           <q-card-section class="row q-col-gutter-md">
-              <div class="col-12 col-sm-6 col-lg-3">
-                 <label for="name">仓库名称</label>
-                  <q-input
-                    outlined
-                    dense
-                    no-error-icon
-                    v-model.trim="form.name"
-                    placeholder="请输入仓库名称"
-                    :rules="[ val => val && val.length > 0 || '请设置仓库名称']"
-                    class="q-mt-sm"
-                  >
-                  </q-input>
-              </div>
-              <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
-                <label for="name">仓库域名</label>
-                  <q-input
-                    outlined
-                    dense
-                    no-error-icon
-                    v-model.trim="form.name"
-                    placeholder="请输入仓库域名"
-                    :rules="[ val => val && val.length > 0 || '请设置仓库域名']"
-                    class="q-mt-sm"
-                    prefix="https:// " suffix=".com"
-                  >
-                  </q-input>
-              </div>
-              <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
-                <label for="name">仓库管理员</label>
-                  <q-select
-                        outlined
-                        dense
-                        options-dense
-                        v-model="form.name"
-                        :options="['AAA','BBB','CCC']"
-                        emit-value
-                        map-options
-                        class="q-mt-sm"
-                      />
-              </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label for="name">仓库名称</label>
+              <q-input
+                outlined
+                dense
+                no-error-icon
+                v-model.trim="form.name"
+                placeholder="请输入仓库名称"
+                :rules="[ val => val && val.length > 0 || '请设置仓库名称']"
+                class="q-mt-sm"
+              >
+              </q-input>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
+              <label for="name">仓库域名</label>
+              <q-input
+                outlined
+                dense
+                no-error-icon
+                v-model.trim="form.name"
+                placeholder="请输入仓库域名"
+                :rules="[ val => val && val.length > 0 || '请设置仓库域名']"
+                class="q-mt-sm"
+                prefix="https:// "
+                suffix=".com"
+              >
+              </q-input>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
+              <label for="name">仓库管理员</label>
+              <q-select
+                outlined
+                dense
+                options-dense
+                v-model="form.name"
+                :options="['AAA','BBB','CCC']"
+                emit-value
+                map-options
+                class="q-mt-sm"
+              />
+            </div>
           </q-card-section>
           <q-card-section class="row q-col-gutter-md ">
-              <div class="col-12 col-sm-6 col-lg-3">
-                 <label for="name">审批人</label>
-                  <q-select
-                        outlined
-                        dense
-                        options-dense
-                        v-model="form.name"
-                        :options="['EEE','FFF']"
-                        emit-value
-                        map-options
-                        class="q-mt-sm"
-                      />
-              </div>
-              <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
-                <label for="name">生效日期</label>
-                  <q-input
-                    outlined
-                    dense
-                    no-error-icon
-                    v-model.trim="form.ranges.from"
-                    placeholder="请选择生效日期"
-                    :rules="[ val => val && val.length > 0 || '请选择生效日期']"
-                    class="q-mt-sm"
-                  >
-                    <q-popup-proxy :cover="false"  anchor="top left" :offset="[0,-42]">
-                      <q-date v-model="form.ranges" landscape range></q-date>
-                    </q-popup-proxy>
-                  </q-input>
-              </div>
-              <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
-                <label for="name">仓库类型</label>
-                  <q-input
-                    outlined
-                    dense
-                    no-error-icon
-                    v-model.trim="form.poolId"
-                    placeholder="请选择仓库类型"
-                    :rules="[ val => val && val.length > 0 || '请选择仓库类型']"
-                    class="q-mt-sm"
-                  >
-                    <q-popup-proxy :cover="false"  anchor="top left" :offset="[0,-42]">
-                      <q-card class="fit">
-                          <q-card-section class="q-pa-none">
-                            <q-tabs
-                              align="left"
-                              narrow-indicator
-                            >
-                              <q-tab
-                                label="全部"
-                                name="0"
-                              />
-                            </q-tabs>
-                          </q-card-section>
-                      </q-card>
-                    </q-popup-proxy>
-                  </q-input>
-              </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label for="name">审批人</label>
+              <q-select
+                outlined
+                dense
+                options-dense
+                v-model="form.name"
+                :options="['EEE','FFF']"
+                emit-value
+                map-options
+                class="q-mt-sm"
+              />
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
+              <label for="name">生效日期</label>
+              <q-input
+                outlined
+                dense
+                no-error-icon
+                v-model.trim="form.ranges.from"
+                placeholder="请选择生效日期"
+                :rules="[ val => val && val.length > 0 || '请选择生效日期']"
+                class="q-mt-sm"
+              >
+                <q-popup-proxy
+                  :cover="false"
+                  anchor="top left"
+                  :offset="[0,-42]"
+                >
+                  <q-date
+                    v-model="form.ranges"
+                    landscape
+                    range
+                  ></q-date>
+                </q-popup-proxy>
+              </q-input>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
+              <label for="name">仓库类型</label>
+              <q-input
+                outlined
+                dense
+                no-error-icon
+                v-model.trim="form.poolId"
+                placeholder="请选择仓库类型"
+                :rules="[ val => val && val.length > 0 || '请选择仓库类型']"
+                class="q-mt-sm"
+              >
+                <q-popup-proxy
+                  :cover="false"
+                  anchor="top left"
+                  :offset="[0,-42]"
+                >
+                  <q-card class="fit">
+                    <q-card-section class="q-pa-none">
+                      <q-tabs
+                        align="left"
+                        narrow-indicator
+                      >
+                        <q-tab
+                          label="全部"
+                          name="0"
+                        />
+                      </q-tabs>
+                    </q-card-section>
+                  </q-card>
+                </q-popup-proxy>
+              </q-input>
+            </div>
           </q-card-section>
         </q-card>
         <!-- <q-card flat class="fit q-mt-md">
@@ -216,86 +232,92 @@
               </div>
           </q-card-section>
         </q-card> -->
-        <q-card flat class="fit q-mt-md">
+        <q-card
+          flat
+          class="fit q-mt-md"
+        >
           <q-card-section>组件测试</q-card-section>
           <q-separator />
           <q-card-section class="row q-col-gutter-md">
-              <div class="col-12 col-sm-6 col-lg-3">
-                 <label for="name">Tree</label>
-                  <q-tree class="col-12 col-sm-6"
-                    :nodes="tree.simple"
-                    node-key="label"
-                    tick-strategy="leaf-filtered"
-                    :selected.sync="tree.selected"
-                    :ticked.sync="tree.ticked"
-                    :expanded.sync="tree.expanded"
-                    :duration="0"
-                    no-connectors
-                  />
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label for="name">Tree</label>
+              <q-tree
+                class="col-12 col-sm-6"
+                :nodes="tree.simple"
+                node-key="label"
+                tick-strategy="leaf-filtered"
+                :selected.sync="tree.selected"
+                :ticked.sync="tree.ticked"
+                :expanded.sync="tree.expanded"
+                :duration="0"
+                no-connectors
+              />
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
+              <label for="name">Ticked</label>
+              <div
+                v-for="tick in tree.ticked"
+                :key="`ticked-${tick}`"
+              >
+                {{ tick }}
               </div>
-              <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
-                <label for="name">Ticked</label>
-                  <div v-for="tick in tree.ticked" :key="`ticked-${tick}`">
-                    {{ tick }}
-                  </div>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
+              <label for="name">类型选择</label>
+              <div>
               </div>
-              <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
-                <label for="name">类型选择</label>
-                <div>
-                  <QTest
-                    :nodes="tree.simple"
-                    node-key="label"
-                    :selected.sync="tree.selected"
-                    :ticked.sync="tree.ticked"
-                    :expanded.sync="tree.expanded"
-                    :duration="0"
-                    />
-                </div>
-              </div>
+            </div>
           </q-card-section>
           <q-card-section class="row q-col-gutter-md ">
-              <div class="col-12 col-sm-6 col-lg-3">
-                 <label for="name">责任人</label>
-                  <q-select
-                        outlined
-                        dense
-                        options-dense
-                        v-model="form.name"
-                        :options="['EEE','FFF']"
-                        emit-value
-                        map-options
-                        class="q-mt-sm"
-                      />
-              </div>
-              <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
-                <label for="name">生效日期</label>
-                  <q-input
-                    outlined
-                    dense
-                    no-error-icon
-                    v-model.trim="form.date"
-                    placeholder="请选择生效日期"
-                    :rules="[ val => val && val.length > 0 || '请选择生效日期']"
-                    class="q-mt-sm"
-                  >
-                    <q-popup-proxy :cover="false"  anchor="top left" :offset="[0,-42]">
-                      <q-date v-model="form.date" landscape></q-date>
-                    </q-popup-proxy>
-                  </q-input>
-              </div>
-              <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
-                <label for="name">任务类型</label>
-                  <q-select
-                        outlined
-                        dense
-                        options-dense
-                        v-model="form.name"
-                        :options="['OOO','DDDDD','SSSSS','B','B']"
-                        emit-value
-                        map-options
-                        class="q-mt-sm"
-                      />
-              </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label for="name">责任人</label>
+              <q-select
+                outlined
+                dense
+                options-dense
+                v-model="form.name"
+                :options="['EEE','FFF']"
+                emit-value
+                map-options
+                class="q-mt-sm"
+              />
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
+              <label for="name">生效日期</label>
+              <q-input
+                outlined
+                dense
+                no-error-icon
+                v-model.trim="form.date"
+                placeholder="请选择生效日期"
+                :rules="[ val => val && val.length > 0 || '请选择生效日期']"
+                class="q-mt-sm"
+              >
+                <q-popup-proxy
+                  :cover="false"
+                  anchor="top left"
+                  :offset="[0,-42]"
+                >
+                  <q-date
+                    v-model="form.date"
+                    landscape
+                  ></q-date>
+                </q-popup-proxy>
+              </q-input>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
+              <label for="name">任务类型</label>
+              <q-select
+                outlined
+                dense
+                options-dense
+                v-model="form.name"
+                :options="['OOO','DDDDD','SSSSS','B','B']"
+                emit-value
+                map-options
+                class="q-mt-sm"
+              />
+            </div>
           </q-card-section>
         </q-card>
       </q-form>
@@ -307,7 +329,6 @@
 export default {
   name: 'AdvancedForm',
   components: {
-    QTest: () => import('components/Test')
   },
   meta: {
     title: '高级表单'

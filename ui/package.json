@@ -2,7 +2,7 @@
   "name": "tangdao",
   "version": "0.0.1",
   "description": "TangDao Service",
-  "productName": "管理系统",
+  "productName": "云通信 - 管理系统",
   "author": "ruyang <ruyangit@163.com>",
   "private": true,
   "scripts": {

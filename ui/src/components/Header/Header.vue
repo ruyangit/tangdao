@@ -5,19 +5,20 @@
     height-hint="98"
   >
     <q-toolbar>
-      <q-btn
-        flat
-        dense
-        round
-        icon="menu"
-        aria-label="Menu"
+      <q-avatar
+        rounded
+        color="blue"
+        text-color="white"
+        size="32px"
       >
-      </q-btn>
+        <img src="~assets/ms-logo-full.svg" />
+      </q-avatar>
+
       <q-toolbar-title
         shrink
         class="text-bold logo-text-primary"
       >
-        Quasar App <span
+        云通信 <span
           class="q-ml-xs"
           style="letter-spacing: 0.1em;font-size:12px;font-weight:500;"
         >CLOUD PRO5</span>
@@ -67,13 +68,6 @@ export default {
 
 <style lang="sass">
 .my-header
-  // background: linear-gradient(145deg,$primary 11%,$primary 75%) !important
-.q-logo
-  img
-    transform: rotate(0deg)
-    transition: transform .8s ease-in-out
-  &:hover img
-    transform: rotate(-360deg)
 .q-tab__content
   min-width: auto !important
 </style>

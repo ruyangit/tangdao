@@ -194,7 +194,7 @@ export default {
         if (code === 0 && data) {
           this.$q.notify({
             type: 'positive',
-            message: '保存成功.'
+            message: '保存成功'
           })
           this.$router.go(-1)
         } else {
