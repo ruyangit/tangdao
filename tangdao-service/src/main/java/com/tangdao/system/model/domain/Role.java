@@ -24,7 +24,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_role")
-public class Role extends DataEntity<DictType> {
+public class Role extends DataEntity<Role> {
 
 	/**
 	 * 

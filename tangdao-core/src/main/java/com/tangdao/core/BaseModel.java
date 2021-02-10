@@ -28,31 +28,31 @@ public abstract class BaseModel implements Serializable {
 	/**
 	 * 正常
 	 */
-	public static final String NORMAL = "0";
+	public static final String STATUS_NORMAL = "0";
 	/**
 	 * 已删除
 	 */
-	public static final String DELETE = "1";
+	public static final String STATUS_DELETE = "1";
 	/**
 	 * 停用
 	 */
-	public static final String DISABLE = "2";
+	public static final String STATUS_DISABLE = "2";
 	/**
 	 * 冻结
 	 */
-	public static final String FREEZE = "3";
+	public static final String STATUS_FREEZE = "3";
 	/**
 	 * 审核
 	 */
-	public static final String AUDIT = "4";
+	public static final String STATUS_AUDIT = "4";
 	/**
 	 * 回退
 	 */
-	public static final String AUDIT_BACK = "5";
+	public static final String STATUS_AUDIT_BACK = "5";
 	/**
 	 * 草稿
 	 */
-	public static final String DRAFT = "9";
+	public static final String STATUS_DRAFT = "9";
 
 	@TableField(exist = false)
 	private LinkedHashMap<String, Object> dataSqlMap;

@@ -21,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_user")
-public class User extends DataEntity<DictType> {
+public class User extends DataEntity<User> {
 
 	/**
 	 * 

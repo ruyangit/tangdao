@@ -3,8 +3,8 @@
  */
 package com.tangdao.web.controller.system;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +18,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.system.model.domain.Menu;
 import com.tangdao.system.model.domain.Role;
+import com.tangdao.system.service.MenuService;
 import com.tangdao.system.service.RoleService;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -38,11 +41,15 @@ public class RoleController extends BaseController {
 	@Autowired
 	private RoleService roleService;
 	
+	@Autowired
+	private MenuService menuService;
+	
 	@GetMapping("/getRole")
 	public CommonResponse getRole(String roleCode) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		data.put("role", roleService.getById(roleCode));
-		data.put("menuCodes", new ArrayList<>());
+		List<Menu> menuList = menuService.findByRoleCode(roleCode);
+		data.put("menuCodes", CollUtil.getFieldValues(menuList, "menuCode"));
 		return success(data);
 	}
 
@@ -61,7 +68,7 @@ public class RoleController extends BaseController {
 		if (StrUtil.isNotBlank(role.getRoleName())) {
 			queryWrapper.like("role_name", role.getRoleName());
 		}
-		queryWrapper.eq("status", Role.NORMAL);
+		queryWrapper.eq("status", Role.STATUS_NORMAL);
 		return success(roleService.list(queryWrapper));
 	}
 

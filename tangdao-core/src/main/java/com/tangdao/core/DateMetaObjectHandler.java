@@ -41,7 +41,7 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
 		}
 		Object status = getFieldValByName(STATUS_FIELD, metaObject);
 		if (status == null) {
-			setFieldValByName(STATUS_FIELD, BaseModel.NORMAL, metaObject);
+			setFieldValByName(STATUS_FIELD, BaseModel.STATUS_NORMAL, metaObject);
 		}
 		
 		this.updateFill(metaObject);
