@@ -29,6 +29,24 @@
           <q-route-tab to="/system/role/form">新增角色</q-route-tab>
         </q-tabs>
       </div>
+      <q-banner
+        dense
+        inline-actions
+        class="q-mb-md bg-amber-1"
+      >
+        You have lost connection to the internet. This app is offline.
+
+        <template v-slot:action>
+          <q-btn
+            flat
+            label="Turn ON Wifi"
+          />
+          <q-btn
+            flat
+            label="Dismiss"
+          />
+        </template>
+      </q-banner>
       <div class="my-table">
         <q-table
           :data="data"
@@ -41,6 +59,19 @@
           binary-state-sort
           square
         >
+          <template v-slot:top-right>
+            <q-input
+              outlined
+              dense
+              v-model.trim="roleName"
+              placeholder="请输入角色名称搜索"
+              class="q-mt-sm"
+            >
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
           <template v-slot:no-data="{ message }">
             <div class="full-width row flex-center q-gutter-sm q-pa-lg">
               <span>
@@ -69,12 +100,16 @@
                 key="status"
                 :props="props"
               >
-                <!-- <q-badge color='positive'>{{props.row.status}}</q-badge> -->
+                <q-badge
+                  outline
+                  color="positive"
+                  label="正常"
+                />
               </q-td>
               <q-td
                 key="createDate"
                 :props="props"
-              >{{ props.row.createDate }}</q-td>
+              >{{ props.row.createDate || '-' }}</q-td>
               <q-td
                 key="action"
                 :props="props"
@@ -95,36 +130,12 @@
         </q-table>
       </div>
     </div>
-    <!-- <role-form
-      v-model="fixed"
-      v-on:refresh="onRefresh"
-    />
-    <role-edit
-      v-model="fixedEdit"
-      v-on:refresh="onRefresh"
-      :role="role"
-    /> -->
-    <!-- <policy-selected
-      v-model="fixedPolicyEdit"
-      :id="role.id"
-      :label="role.roleName"
-      :data="rolePolicyList"
-      url="/admin/role-policies"
-    /> -->
   </q-page>
 </template>
 
 <script>
-// import RoleForm from './RoleForm.vue'
-// import RoleEdit from './RoleEdit.vue'
-// import PolicySelected from './PolicySelected.vue'
 export default {
   name: 'RoleList',
-  components: {
-    // RoleForm,
-    // RoleEdit,
-    // PolicySelected
-  },
   data () {
     return {
       loading: false,
@@ -139,7 +150,7 @@ export default {
       columns: [
         { name: 'roleName', label: '角色名称', align: 'left', field: 'roleName', style: 'width: 200px' },
         { name: 'remark', label: '角色描述', align: 'left', field: 'remark' },
-        { name: 'status', label: '状态', align: 'center', field: 'status', sortable: true, style: 'width: 100px' },
+        { name: 'status', label: '状态', align: 'left', field: 'status', sortable: true, style: 'width: 100px' },
         { name: 'createDate', label: '创建时间', align: 'center', field: 'createDate', style: 'width: 180px' },
         { name: 'action', label: '操作', field: 'action', align: 'center', style: 'width: 100px' }
       ],
