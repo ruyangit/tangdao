@@ -41,10 +41,11 @@
         />
       </q-tabs>
       <q-space />
+
       <q-btn
         stretch
         flat
-        :label="`Quasar v${ $q.version }`"
+        icon="select_all"
       />
       <q-btn-dropdown
         stretch
@@ -222,7 +223,7 @@
       <q-btn
         stretch
         flat
-        :label="`${ $q.lang.getLocale() }`"
+        :label="`${ $q.lang.getLocale() }， v${ $q.version }`"
       />
     </q-toolbar>
   </q-header>

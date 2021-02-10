@@ -35,7 +35,6 @@
         class="q-mb-md bg-amber-1"
       >
         You have lost connection to the internet. This app is offline.
-
         <template v-slot:action>
           <q-btn
             flat
@@ -100,11 +99,7 @@
                 key="status"
                 :props="props"
               >
-                <q-badge
-                  outline
-                  color="positive"
-                  label="正常"
-                />
+                <q-status v-model="props.row.status" />
               </q-td>
               <q-td
                 key="createDate"
