@@ -97,6 +97,8 @@
                 type="submit"
               >保存</q-btn>
               <q-btn
+                outline
+                color="primary"
                 class="wd-80"
                 type="reset"
               >重置</q-btn>

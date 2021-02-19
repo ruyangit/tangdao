@@ -34,6 +34,7 @@ const gettingComponent = [
     name: '系统设置',
     icon: 'settings',
     path: '/system/setting',
+    opened: true,
     children: [
       {
         id: 'account-center',

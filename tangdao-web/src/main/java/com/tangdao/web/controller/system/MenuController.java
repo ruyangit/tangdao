@@ -81,7 +81,6 @@ public class MenuController extends BaseController {
 		if (StrUtil.isNotBlank(menu.getIsShow())) {
 			queryWrapper.eq("is_show", menu.getIsShow());
 		}
-		queryWrapper.ne("status", Menu.STATUS_DELETE);
 		queryWrapper.orderByAsc("tree_sort");
 		List<Menu> sourceList = menuService.list(queryWrapper);
 		Map<String, Menu> menuMap = new LinkedHashMap<String, Menu>();

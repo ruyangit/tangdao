@@ -23,7 +23,7 @@ const routes = [
           { path: 'role', meta: { title: '角色' }, component: () => import('pages/system/RoleList.vue') },
           { path: 'role/form', meta: {}, component: () => import('pages/system/RoleForm.vue') },
           { path: 'role/form/:id', meta: {}, component: () => import('pages/system/RoleForm.vue') },
-          { path: 'menu', meta: {}, component: () => import('pages/system/MenuIndex.vue') }
+          { path: 'menu', meta: {}, component: () => import('pages/system/Menu.vue') }
 
         ]
       }

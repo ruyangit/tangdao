@@ -1,9 +1,13 @@
 // app global css in Sass form
+@import "./util/_width.sass"
 
 body.body--light
   background: #EEF0F8
   height: 100%
   overflow: hidden
+
+a
+  text-decoration: none
 
 .q-scrollarea__bar--v,
 .q-scrollarea__thumb--v
@@ -64,7 +68,7 @@ body.body--light
         padding: 12px 0
       & thead
         & tr
-          background: $grey-2
+          background: $grey-3
       & tbody
         & td
           height: 38px
