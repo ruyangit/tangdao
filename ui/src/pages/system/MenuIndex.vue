@@ -16,15 +16,17 @@
       </div>
     </div>
     <div class="my-page-body">
-      <q-splitter v-model="50">
+      <q-splitter v-model="splitterModel">
         <template v-slot:before>
           <div class="q-pa-md">
             <div class="text-h4 q-mb-md">Before</div>
-            <div
-              v-for="n in 40"
-              :key="n"
-              class="q-my-md"
-            >{{ n }}. Lorem ipsum dolor sit</div>
+            <q-scroll-area class="fit">
+              <div
+                v-for="n in 40"
+                :key="n"
+                class="q-my-md"
+              >{{ n }}. Lorem ipsum dolor sit</div>
+            </q-scroll-area>
           </div>
         </template>
 
@@ -46,7 +48,12 @@
 
 <script>
 export default {
-  name: 'MenuIndex'
+  name: 'MenuIndex',
+  data () {
+    return {
+      splitterModel: 50
+    }
+  }
 }
 </script>
 
