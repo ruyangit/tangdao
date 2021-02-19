@@ -17,7 +17,7 @@ import com.tangdao.core.web.BaseController;
  * @since 2021年2月5日
  */
 @RestController
-@RequestMapping(value = { "/admin" })
+@RequestMapping(value = { "v1/system" })
 public class AdminController extends BaseController {
-
+	
 }

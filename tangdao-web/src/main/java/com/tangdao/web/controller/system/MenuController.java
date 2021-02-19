@@ -38,6 +38,18 @@ public class MenuController extends BaseController {
 
 	@Autowired
 	private MenuService menuService;
+	
+	/**
+	 * 
+	 * TODO
+	 * @param menu
+	 * @return
+	 */
+	@GetMapping("/queryMenuTreeList")
+	public CommonResponse queryMenuTreeList(Menu menu) {
+		QueryWrapper<Menu> queryWrapper = new QueryWrapper<Menu>();
+		return success(menuService.list(queryWrapper));
+	}
 
 	/**
 	 * 
