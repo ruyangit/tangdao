@@ -42,11 +42,11 @@
       </q-tabs>
       <q-space />
 
-      <q-btn
+      <!-- <q-btn
         stretch
         flat
         icon="select_all"
-      />
+      /> -->
       <q-btn-dropdown
         stretch
         flat
@@ -249,7 +249,6 @@ export default {
 </script>
 
 <style lang="sass">
-.my-header
 .q-tab__content
   min-width: auto !important
 </style>

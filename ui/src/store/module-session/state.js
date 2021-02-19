@@ -38,7 +38,7 @@ const gettingComponent = [
       {
         id: 'account-center',
         name: '菜单管理',
-        path: '/component/18'
+        path: '/system/menu'
       },
       {
         id: 'account-seting',
