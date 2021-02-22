@@ -12,6 +12,8 @@
 		<module>tangdao-core</module>
 		<module>tangdao-service</module>
 		<module>tangdao-web</module>
+		<module>tangdao-developer</module>
+		<module>tangdao-exchanger</module>
 	</modules>
 
 	<properties>
