@@ -63,6 +63,9 @@
                 dense
                 label="请输入菜单名称搜索"
               >
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
               </q-input>
             </q-card-section>
             <q-scroll-area
@@ -94,12 +97,39 @@
               /> 编辑菜单
             </q-card-section>
             <q-separator />
-            <q-card-section>
-              123
-            </q-card-section>
-            <q-card-actions>
-              111
-            </q-card-actions>
+            <q-form
+              class="my-form"
+              @submit="onSubmit"
+            >
+              <q-card-section class="row q-col-gutter-md">
+                <div class="col-12 col-md-6 col-lg-4">
+                  <label for="name">菜单名称</label>
+                  <q-input
+                    outlined
+                    dense
+                    no-error-icon
+                    v-model.trim="form.name"
+                    placeholder="请输入菜单名称"
+                    :rules="[ val => val && val.length > 0 || '请设置菜单名称']"
+                    class="q-mt-sm"
+                  >
+                  </q-input>
+                </div>
+              </q-card-section>
+              <q-card-actions class="q-pa-md">
+                <q-btn
+                  color="primary"
+                  class="wd-80"
+                  type="submit"
+                >保存</q-btn>
+                <q-btn
+                  outline
+                  color="primary"
+                  class="wd-80"
+                  type="reset"
+                >重置</q-btn>
+              </q-card-actions>
+            </q-form>
           </q-card>
 
         </div>
@@ -114,6 +144,8 @@ export default {
   data () {
     return {
       loading: false,
+      form: {
+      },
       treeData: [],
       ticked: []
     }
@@ -142,6 +174,9 @@ export default {
       setTimeout(() => {
         this.loading = false
       }, 1000)
+    },
+    onSubmit () {
+
     }
   }
 }
