@@ -20,7 +20,7 @@ import com.tangdao.core.DateMetaObjectHandler;
  * @since 2021年2月5日
  */
 @Configuration
-@MapperScan("com.tangdao.*.mapper")
+@MapperScan("com.tangdao.portal.dao")
 public class MybatisConfig {
 
 	/**

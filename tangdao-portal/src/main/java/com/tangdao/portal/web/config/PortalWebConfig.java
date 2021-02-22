@@ -4,7 +4,6 @@
 package com.tangdao.portal.web.config;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,11 +25,10 @@ import com.tangdao.core.web.aspect.DemoAspect;
  */
 @Configuration
 @EnableCaching
-@EnableConfigurationProperties(TangdaoProperties.class)
-public class TangdaoConfig implements WebMvcConfigurer {
+public class PortalWebConfig implements WebMvcConfigurer {
 	
 	@Bean
-	@ConditionalOnProperty(prefix = "tangdao", name = "demo", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnProperty(prefix = "portal", name = "demo", havingValue = "true", matchIfMissing = true)
 	public DemoAspect demoAspect() {
 		return new DemoAspect();
 	}
