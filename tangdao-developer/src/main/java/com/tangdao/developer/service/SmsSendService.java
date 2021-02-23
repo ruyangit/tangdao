@@ -3,8 +3,11 @@
  */
 package com.tangdao.developer.service;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.constant.CommonApiCode;
@@ -24,6 +27,9 @@ import com.tangdao.developer.model.vo.SmsSendVo;
 public class SmsSendService {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
+
+	@Resource(name = "smsRabbitTemplate")
+	private RabbitTemplate smsRabbitTemplate;
 
 	/**
 	 * 

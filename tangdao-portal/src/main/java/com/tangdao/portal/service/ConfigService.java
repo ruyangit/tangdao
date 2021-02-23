@@ -5,9 +5,9 @@ package com.tangdao.portal.service;
 
 import org.springframework.stereotype.Service;
 
+import com.tangdao.core.model.domain.Config;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.portal.dao.ConfigMapper;
-import com.tangdao.portal.model.domain.Config;
 
 /**
  * <p>

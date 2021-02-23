@@ -24,7 +24,7 @@ public abstract class BaseModel implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * 正常
 	 */
@@ -53,6 +53,11 @@ public abstract class BaseModel implements Serializable {
 	 * 草稿
 	 */
 	public static final String STATUS_DRAFT = "9";
+
+	/**
+	 * db
+	 */
+	public static final String DB_PREFIX_ = "td_";
 
 	@TableField(exist = false)
 	private LinkedHashMap<String, Object> dataSqlMap;

@@ -13,8 +13,8 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
 import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.context.SessionUser;
-import com.tangdao.core.model.Log;
+import com.tangdao.core.model.domain.Log;
+import com.tangdao.core.model.vo.SessionUser;
 import com.tangdao.core.web.ServletUtils;
 
 import cn.hutool.core.util.ObjectUtil;

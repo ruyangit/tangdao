@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
+import com.tangdao.core.model.domain.Menu;
+import com.tangdao.core.model.domain.Role;
 import com.tangdao.core.web.BaseController;
-import com.tangdao.portal.model.domain.Menu;
-import com.tangdao.portal.model.domain.Role;
 import com.tangdao.portal.service.MenuService;
 import com.tangdao.portal.service.RoleService;
 

@@ -3,8 +3,6 @@
  */
 package com.tangdao.developer.web.api;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,7 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.exception.BusinessException;
-import com.tangdao.developer.model.domain.SmsApiFailedRecord;
+import com.tangdao.core.model.domain.SmsApiFailedRecord;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.service.SmsApiFaildRecordService;
 import com.tangdao.developer.service.SmsSendService;
@@ -58,8 +56,8 @@ public class SmsApi extends BaseApi {
 			SmsApiFailedRecord record = new SmsApiFailedRecord();
 			try {
 				JSONObject jsonObj = JSON.parseObject(e.getMessage());
-				record.setCode(jsonObj.getString("code"));
-				commonResponse.fail(jsonObj.getIntValue("code"), jsonObj.getString("message"));
+				record.setCode(jsonObj.getString("status"));
+				commonResponse.fail(jsonObj.getIntValue("status"), jsonObj.getString("message"));
 			} catch (Exception e2) {
 				commonResponse.fail(CommonApiCode.INTERNAL_ERROR);
 			}

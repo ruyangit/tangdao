@@ -7,6 +7,12 @@
 	<artifactId>tangdao</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.3.8.RELEASE</version>
+	</parent>
 
 	<modules>
 		<module>tangdao-core</module>
@@ -26,7 +32,8 @@
 		<maven.test.skip>true</maven.test.skip>
 
 		<!-- Spring versions -->
-		<spring-boot.version>2.3.8.RELEASE</spring-boot.version>
+		<spring-cloud-dependencies.version>Hoxton.SR1</spring-cloud-dependencies.version>
+		<spring-boot-dependencies.version>2.3.8.RELEASE</spring-boot-dependencies.version>
 
 		<jjwt.veersion>0.9.1</jjwt.veersion>
 		<guava.version>28.2-jre</guava.version>
@@ -44,7 +51,7 @@
 			<artifactId>lombok</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
@@ -57,65 +64,104 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>${spring-boot.version}</version>
+				<version>${spring-boot-dependencies.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud-dependencies.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<property>
+					<name>env.type</name>
+					<value>dev</value>
+				</property>
+			</activation>
+			<properties>
+				<package.environment>env/dev</package.environment>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<properties>
+				<package.environment>env/prod</package.environment>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>${basedir}/src/main/resources</directory>
-				<includes>
-					<include>**/application*.yml</include>
-					<include>**/application*.yaml</include>
-					<include>**/application*.properties</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>${basedir}/src/main/resources</directory>
-				<excludes>
-					<exclude>**/application*.yml</exclude>
-					<exclude>**/application*.yaml</exclude>
-					<exclude>**/application*.properties</exclude>
-				</excludes>
-			</resource>
-		</resources>
 		<plugins>
-			<!-- Compiler 插件, 设定JDK版本 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<showWarnings>true</showWarnings>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<!-- 检测依赖最新版本：mvn versions:display-dependency-updates -->
+			<!-- 统一修改版本号：mvn versions:set -DnewVersion=3.0 -->
+			<!-- mvn -N versions:update-child-modules -->
+			<!-- mvn versions:set -DnewVersion=2.0 -DprocessAllModules=true -DallowSnapshots=true -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
 
-	<developers>
-		<developer>
-			<id>ruyang</id>
-			<name>RuYang</name>
-			<email>ruyangit at gmail.com</email>
-			<roles>
-				<role>Project</role>
-			</roles>
-			<timezone>+8</timezone>
-		</developer>
-	</developers>
+		<pluginManagement>
+			<plugins>
+				<!-- 打包插件, war包名称不带版本号 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<configuration>
+						<webappDirectory>${project.build.directory}/${project.artifactId}</webappDirectory>
+						<warName>${project.artifactId}</warName>
+						<archive>
+							<addMavenDescriptor>false</addMavenDescriptor>
+						</archive>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+		<resources>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
 	
 	<repositories>
 		<repository>

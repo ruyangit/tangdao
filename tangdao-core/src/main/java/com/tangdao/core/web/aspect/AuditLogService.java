@@ -3,7 +3,7 @@
  */
 package com.tangdao.core.web.aspect;
 
-import com.tangdao.core.model.Log;
+import com.tangdao.core.model.domain.Log;
 
 /**
  * <p>

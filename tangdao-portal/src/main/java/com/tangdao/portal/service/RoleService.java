@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.model.domain.Role;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.portal.dao.RoleMapper;
-import com.tangdao.portal.model.domain.Role;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

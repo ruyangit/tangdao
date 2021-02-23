@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.tangdao.core.model.domain.Menu;
 import com.tangdao.core.service.TreeService;
 import com.tangdao.portal.dao.MenuMapper;
-import com.tangdao.portal.model.domain.Menu;
 
 import cn.hutool.core.util.StrUtil;
 

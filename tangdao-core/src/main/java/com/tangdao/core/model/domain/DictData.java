@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.model.domain;
+package com.tangdao.core.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,8 +20,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_dict_type")
-public class DictType extends DataEntity<DictType> {
+@TableName("sys_dict_data")
+public class DictData extends DataEntity<DictData> {
 
 	/**
 	 * 
@@ -29,5 +29,5 @@ public class DictType extends DataEntity<DictType> {
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private String id;
+	private String dictCode;
 }

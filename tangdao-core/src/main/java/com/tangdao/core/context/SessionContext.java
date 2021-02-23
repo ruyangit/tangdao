@@ -3,6 +3,8 @@
  */
 package com.tangdao.core.context;
 
+import com.tangdao.core.model.vo.SessionUser;
+
 /**
  * <p>
  * TODO 描述

@@ -4,7 +4,7 @@
 package com.tangdao.developer.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.developer.model.domain.UserBalance;
+import com.tangdao.core.model.domain.UserBalance;
 
 /**
  * <p>

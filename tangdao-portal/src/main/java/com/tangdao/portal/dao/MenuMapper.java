@@ -6,7 +6,7 @@ package com.tangdao.portal.dao;
 import java.util.List;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.portal.model.domain.Menu;
+import com.tangdao.core.model.domain.Menu;
 
 /**
  * <p>

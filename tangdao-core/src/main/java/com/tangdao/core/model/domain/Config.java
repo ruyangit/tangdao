@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.developer.model.domain;
+package com.tangdao.core.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,12 +16,12 @@ import lombok.Setter;
  * </p>
  *
  * @author ruyang
- * @since 2021年2月23日
+ * @since 2020年12月29日
  */
 @Getter
 @Setter
-@TableName("td_host_whitelist")
-public class HostWhitelist extends DataEntity<HostWhitelist> {
+@TableName("sys_config")
+public class Config extends DataEntity<Config> {
 
 	/**
 	 * 
@@ -30,8 +30,14 @@ public class HostWhitelist extends DataEntity<HostWhitelist> {
 
 	@TableId
 	private String id;
-
-	private String ip;
-
-	private String userCode;
+	
+	private String configName;
+	
+	private String configKey;
+	
+	private String configValue;
+	
+	private String isInner;
+	
+	private String remarks;
 }

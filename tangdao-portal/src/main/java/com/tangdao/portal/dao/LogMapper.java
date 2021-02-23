@@ -4,7 +4,7 @@
 package com.tangdao.portal.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.Log;
+import com.tangdao.core.model.domain.Log;
 
 /**
  * <p>

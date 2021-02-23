@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.developer.model.constant;
+package com.tangdao.core.constant;
 
 /**
  * <p>

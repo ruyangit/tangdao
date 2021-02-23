@@ -5,9 +5,9 @@ package com.tangdao.portal.service;
 
 import org.springframework.stereotype.Service;
 
+import com.tangdao.core.model.domain.DictType;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.portal.dao.DictTypeMapper;
-import com.tangdao.portal.model.domain.DictType;
 
 /**
  * <p>

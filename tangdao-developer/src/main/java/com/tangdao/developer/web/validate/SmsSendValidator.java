@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tangdao.core.constant.CommonApiCode;
-import com.tangdao.core.constant.CommonContext.PlatformType;
+import com.tangdao.core.constant.UserBalanceConstant;
+import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.exception.BusinessException;
-import com.tangdao.developer.model.constant.UserBalanceConstant;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.service.UserBalanceService;
 

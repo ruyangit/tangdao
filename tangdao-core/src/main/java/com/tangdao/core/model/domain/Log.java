@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model;
+package com.tangdao.core.model.domain;
 
 import java.io.Serializable;
 import java.util.Date;

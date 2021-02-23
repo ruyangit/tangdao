@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.model.domain;
+package com.tangdao.core.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,8 +20,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_config")
-public class Config extends DataEntity<Config> {
+@TableName("sys_dict_type")
+public class DictType extends DataEntity<DictType> {
 
 	/**
 	 * 
@@ -30,14 +30,4 @@ public class Config extends DataEntity<Config> {
 
 	@TableId
 	private String id;
-	
-	private String configName;
-	
-	private String configKey;
-	
-	private String configValue;
-	
-	private String isInner;
-	
-	private String remarks;
 }

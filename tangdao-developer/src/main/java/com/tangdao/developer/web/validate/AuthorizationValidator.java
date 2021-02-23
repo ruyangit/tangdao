@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 
 import com.tangdao.core.BaseModel;
 import com.tangdao.core.constant.CommonApiCode;
+import com.tangdao.core.constant.PassportConstant;
 import com.tangdao.core.exception.BusinessException;
-import com.tangdao.developer.model.constant.PassportConstant;
-import com.tangdao.developer.model.domain.UserDeveloper;
+import com.tangdao.core.model.domain.UserDeveloper;
 import com.tangdao.developer.model.dto.AuthorizationDTO;
 import com.tangdao.developer.service.HostWhitelistService;
 import com.tangdao.developer.service.UserDeveloperService;

@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.portal.model.domain.Role;
+import com.tangdao.core.model.domain.Role;
 
 /**
  * <p>

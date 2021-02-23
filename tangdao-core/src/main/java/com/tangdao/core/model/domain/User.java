@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.model.domain;
+package com.tangdao.core.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -12,7 +12,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * TODO 描述
+ * TODO 用户
  * </p>
  *
  * @author ruyang
@@ -20,8 +20,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_dict_data")
-public class DictData extends DataEntity<DictData> {
+@TableName("sys_user")
+public class User extends DataEntity<User> {
 
 	/**
 	 * 
@@ -29,5 +29,5 @@ public class DictData extends DataEntity<DictData> {
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private String dictCode;
+	private String userCode;
 }

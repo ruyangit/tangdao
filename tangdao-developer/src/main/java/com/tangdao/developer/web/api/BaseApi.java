@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tangdao.core.constant.CommonContext.AppType;
+import com.tangdao.core.context.CommonContext.AppType;
 
 import cn.hutool.core.util.StrUtil;
 

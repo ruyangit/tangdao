@@ -5,7 +5,7 @@ package com.tangdao.developer.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.constant.CommonContext.PlatformType;
+import com.tangdao.core.context.CommonContext.PlatformType;
 
 /**
  * <p>

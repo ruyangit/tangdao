@@ -5,9 +5,9 @@ package com.tangdao.developer.service;
 
 import org.springframework.stereotype.Service;
 
+import com.tangdao.core.model.domain.SmsApiFailedRecord;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.developer.dao.SmsApiFailedRecordMapper;
-import com.tangdao.developer.model.domain.SmsApiFailedRecord;
 
 /**
  * <p>

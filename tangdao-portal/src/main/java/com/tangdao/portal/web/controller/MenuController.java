@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.CommonResponse;
+import com.tangdao.core.model.domain.Menu;
 import com.tangdao.core.web.BaseController;
-import com.tangdao.portal.model.domain.Menu;
 import com.tangdao.portal.service.MenuService;
 
 import cn.hutool.core.collection.CollUtil;
