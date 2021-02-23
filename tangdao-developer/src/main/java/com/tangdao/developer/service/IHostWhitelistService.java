@@ -11,7 +11,7 @@ package com.tangdao.developer.service;
  * @author ruyang
  * @since 2021年2月22日
  */
-public interface IHostWhiteListService {
+public interface IHostWhitelistService {
 
 	public boolean ipAllowedPass(String userCode, String ip);
 }

@@ -14,7 +14,7 @@ import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.constant.PassportConstant;
 import com.tangdao.developer.model.domain.UserDeveloper;
 import com.tangdao.developer.model.dto.AuthorizationDTO;
-import com.tangdao.developer.service.IHostWhiteListService;
+import com.tangdao.developer.service.IHostWhitelistService;
 import com.tangdao.developer.service.IUserDeveloperService;
 
 import cn.hutool.core.util.StrUtil;
@@ -37,7 +37,7 @@ public class AuthorizationValidator {
 	private IUserDeveloperService userDeveloperService;
 
 	@Autowired
-	private IHostWhiteListService hostWhiteListService;
+	private IHostWhitelistService hostWhitelistService;
 
 	/**
 	 * TODO 校验开发者身份的有效性（接口账号，签名，状态信息）
@@ -67,7 +67,7 @@ public class AuthorizationValidator {
 		}
 
 		// 服务器IP未报备
-		if (!hostWhiteListService.ipAllowedPass(developer.getUserCode(), ip)) {
+		if (!hostWhitelistService.ipAllowedPass(developer.getUserCode(), ip)) {
 			throw new ValidateException(CommonApiCode.DEV7100105);
 		}
 
