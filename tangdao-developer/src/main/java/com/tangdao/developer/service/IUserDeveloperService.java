@@ -3,6 +3,8 @@
  */
 package com.tangdao.developer.service;
 
+import com.tangdao.developer.model.domain.UserDeveloper;
+
 /**
  * <p>
  * TODO 描述
@@ -13,4 +15,5 @@ package com.tangdao.developer.service;
  */
 public interface IUserDeveloperService {
 
+	public UserDeveloper getByAppkey(String appKey);
 }

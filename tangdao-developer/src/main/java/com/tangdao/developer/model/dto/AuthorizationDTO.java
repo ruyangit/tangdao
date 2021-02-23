@@ -18,7 +18,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class BaseDTO implements Serializable {
+public class AuthorizationDTO implements Serializable {
 
 	/**
 	 * 

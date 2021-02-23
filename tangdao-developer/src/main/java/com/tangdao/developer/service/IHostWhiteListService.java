@@ -13,4 +13,5 @@ package com.tangdao.developer.service;
  */
 public interface IHostWhiteListService {
 
+	public boolean ipAllowedPass(String userCode, String ip);
 }

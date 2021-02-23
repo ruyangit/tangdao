@@ -16,7 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class SmsSendDTO extends BaseDTO {
+public class SmsSendDTO extends AuthorizationDTO {
 
 	/**
 	 * 
@@ -47,4 +47,10 @@ public class SmsSendDTO extends BaseDTO {
 	 * 回调URL
 	 */
 	private String callback;
+
+	private transient String userCode;
+	private transient Integer fee;
+	private transient Integer totalFee;
+	private transient String ip;
+	private transient Integer appType;
 }

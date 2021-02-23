@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
-import com.tangdao.core.constant.CommonContext;
 import com.tangdao.core.context.SessionContext;
 import com.tangdao.core.context.SessionUser;
 import com.tangdao.core.model.Log;
@@ -94,8 +93,8 @@ public class LogUtils {
 	 * @param throwable
 	 * @param executeTime
 	 */
-	public void saveLog(String title, String logType, String operation, String requestParams, String className, String methodName,
-			Throwable throwable, long executeTime) {
+	public void saveLog(String title, String logType, String operation, String requestParams, String className,
+			String methodName, Throwable throwable, long executeTime) {
 		if (auditLogService == null) {
 			log.warn("AuditLogAspect - AuditLogService is null");
 			return;
@@ -105,7 +104,7 @@ public class LogUtils {
 		HttpServletRequest request = ServletUtils.getRequest();
 
 		Log audit = new Log();
-		
+
 		if (StrUtil.isEmpty(logType)) {
 			String sqlCommandTypes = ObjectUtil.toString(request.getAttribute(SqlCommandType.class.getName()));
 			if (StrUtil.containsAny("," + sqlCommandTypes + ",", ",INSERT,", ",UPDATE,", ",DELETE,")) {
@@ -133,7 +132,7 @@ public class LogUtils {
 
 		audit.setExecuteTime(executeTime);
 
-		audit.setIsException(throwable != null ? CommonContext.YES : CommonContext.NO);
+		audit.setIsException(throwable != null ? "1" : "0");
 		if (throwable != null) {
 			audit.setExceptionName(throwable.getClass().getName());
 			audit.setExceptionInfo(stackTraceToString(throwable.getClass().getName(), throwable.getMessage(),
