@@ -21,7 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("tds_user_developer")
+@TableName("td_user_developer")
 public class UserDeveloper implements Serializable {
 
 	private static final long serialVersionUID = 1652989610979690232L;

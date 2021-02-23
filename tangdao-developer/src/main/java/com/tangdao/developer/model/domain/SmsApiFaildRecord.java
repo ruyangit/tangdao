@@ -5,7 +5,6 @@ package com.tangdao.developer.model.domain;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Getter;
@@ -21,28 +20,12 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("td_user_balance")
-public class UserBalance implements Serializable {
+@TableName("td_sms_api_faild_record")
+public class SmsApiFaildRecord implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	@TableId
-	private String id;
-
-	private String userCode;
-
-	private String mobile;
-
-	private Integer type;
-
-	private Double balance;
-
-	// 告警阀值
-	private Integer threshold;
-
-	private Integer payType;
 
 }
