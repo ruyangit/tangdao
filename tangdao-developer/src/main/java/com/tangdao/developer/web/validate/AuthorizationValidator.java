@@ -14,8 +14,8 @@ import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.constant.PassportConstant;
 import com.tangdao.developer.model.domain.UserDeveloper;
 import com.tangdao.developer.model.dto.AuthorizationDTO;
-import com.tangdao.developer.service.IHostWhitelistService;
-import com.tangdao.developer.service.IUserDeveloperService;
+import com.tangdao.developer.service.HostWhitelistService;
+import com.tangdao.developer.service.UserDeveloperService;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -34,10 +34,10 @@ public class AuthorizationValidator {
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private IUserDeveloperService userDeveloperService;
+	private UserDeveloperService userDeveloperService;
 
 	@Autowired
-	private IHostWhitelistService hostWhitelistService;
+	private HostWhitelistService hostWhitelistService;
 
 	/**
 	 * TODO 校验开发者身份的有效性（接口账号，签名，状态信息）
@@ -50,7 +50,7 @@ public class AuthorizationValidator {
 	 */
 	public String checkIdentityValidity(AuthorizationDTO authorizationDTO, String ip, String mobile) throws ValidateException {
 		// 判断开发者是否存在
-		UserDeveloper developer = userDeveloperService.getByAppkey(authorizationDTO.getAppkey());
+		UserDeveloper developer = userDeveloperService.getById(authorizationDTO.getAppkey());
 		if (developer == null) {
 			throw new ValidateException(CommonApiCode.DEV7100106);
 		}

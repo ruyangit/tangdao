@@ -3,10 +3,9 @@
  */
 package com.tangdao.developer.model.domain;
 
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.tangdao.core.DataEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("td_host_whitelist")
-public class HostWhitelist implements Serializable {
+public class HostWhitelist extends DataEntity<HostWhitelist> {
 
 	/**
 	 * 

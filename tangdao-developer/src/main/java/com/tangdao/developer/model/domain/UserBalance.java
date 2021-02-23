@@ -3,10 +3,9 @@
  */
 package com.tangdao.developer.model.domain;
 
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.tangdao.core.DataEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("td_user_balance")
-public class UserBalance implements Serializable {
+public class UserBalance extends DataEntity<UserBalance> {
 
 	/**
 	 * 
@@ -40,7 +39,6 @@ public class UserBalance implements Serializable {
 
 	private Double balance;
 
-	// 告警阀值
 	private Integer threshold;
 
 	private Integer payType;

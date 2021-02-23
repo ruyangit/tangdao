@@ -4,7 +4,7 @@
 package com.tangdao.developer.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.developer.model.domain.SmsApiFaildRecord;
+import com.tangdao.developer.model.domain.SmsApiFailedRecord;
 
 /**
  * <p>
@@ -14,6 +14,6 @@ import com.tangdao.developer.model.domain.SmsApiFaildRecord;
  * @author ruyang
  * @since 2021年2月23日
  */
-public interface SmsApiFaildRecordMapper extends BaseMapper<SmsApiFaildRecord>{
+public interface SmsApiFailedRecordMapper extends BaseMapper<SmsApiFailedRecord>{
 
 }

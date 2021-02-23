@@ -11,7 +11,7 @@ import com.tangdao.core.constant.CommonContext.PlatformType;
 import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.constant.UserBalanceConstant;
 import com.tangdao.developer.model.dto.SmsSendDTO;
-import com.tangdao.developer.service.IUserBalanceService;
+import com.tangdao.developer.service.UserBalanceService;
 
 /**
  * <p>
@@ -28,7 +28,7 @@ public class SmsSendValidator {
 	private AuthorizationValidator authorizationValidator;
 
 	@Autowired
-	private IUserBalanceService userBalanceService;
+	private UserBalanceService userBalanceService;
 
 	/**
 	 * TODO 短信校验

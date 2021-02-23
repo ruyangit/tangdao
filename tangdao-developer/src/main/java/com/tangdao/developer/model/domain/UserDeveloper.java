@@ -3,10 +3,9 @@
  */
 package com.tangdao.developer.model.domain;
 
-import java.io.Serializable;
-
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.tangdao.core.DataEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("td_user_developer")
-public class UserDeveloper implements Serializable {
+public class UserDeveloper extends DataEntity<UserDeveloper> {
 
 	private static final long serialVersionUID = 1652989610979690232L;
 
@@ -36,5 +35,5 @@ public class UserDeveloper implements Serializable {
 	private String userCode;
 
 	private String status;
-
+	
 }
