@@ -3,18 +3,25 @@
  */
 package com.tangdao.developer.web.api;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.constant.CommonApiCode;
-import com.tangdao.developer.exception.ValidateException;
+import com.tangdao.core.exception.BusinessException;
+import com.tangdao.developer.model.domain.SmsApiFailedRecord;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.service.SmsApiFaildRecordService;
 import com.tangdao.developer.service.SmsSendService;
 import com.tangdao.developer.web.validate.SmsSendValidator;
+
+import cn.hutool.core.bean.BeanUtil;
 
 /**
  * <p>
@@ -30,10 +37,10 @@ public class SmsApi extends BaseApi {
 
 	@Autowired
 	private SmsSendValidator smsValidator;
-	
+
 	@Autowired
 	private SmsApiFaildRecordService smsApiFaildRecordService;
-	
+
 	@Autowired
 	private SmsSendService smsSendService;
 
@@ -41,12 +48,32 @@ public class SmsApi extends BaseApi {
 	public CommonResponse send(SmsSendDTO smsSendDTO) {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
 		try {
+			// 填充ip和应用类型
+			smsSendDTO.setIp(getClientIp());
 			smsSendDTO.setAppType(getAppType());
-			smsSendDTO = this.smsValidator.validate(smsSendDTO, getClientIp());
+			// 前置校验
+			smsSendDTO = this.smsValidator.validate(smsSendDTO);
 			return commonResponse.setData(smsSendService.sendMessage(smsSendDTO));
-		} catch (ValidateException e) {
-			smsApiFaildRecordService.save(null);
-			return null;
+		} catch (BusinessException e) {
+			SmsApiFailedRecord record = new SmsApiFailedRecord();
+			try {
+				JSONObject jsonObj = JSON.parseObject(e.getMessage());
+				record.setCode(jsonObj.getString("code"));
+				commonResponse.fail(jsonObj.getIntValue("code"), jsonObj.getString("message"));
+			} catch (Exception e2) {
+				commonResponse.fail(CommonApiCode.INTERNAL_ERROR);
+			}
+
+			try {
+				BeanUtil.copyProperties(smsSendDTO, record);
+
+				record.setSubmitUrl(request.getRequestURL().toString());
+				record.setRemarks(JSON.toJSONString(request.getParameterMap()));
+				// save
+				smsApiFaildRecordService.save(record);
+			} catch (Exception e2) {
+			}
+			return commonResponse.fail(CommonApiCode.INTERNAL_ERROR);
 		} catch (Exception e) {
 			log.error("用户短信发送失败", e);
 			return commonResponse.fail(CommonApiCode.INTERNAL_ERROR);

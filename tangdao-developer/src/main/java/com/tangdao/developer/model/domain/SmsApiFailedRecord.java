@@ -51,7 +51,7 @@ public class SmsApiFailedRecord implements Serializable {
 	private String ip; // 提交IP
 	private String code; // 错误码
 
-	private String remark;
+	private String remarks;
 
 	@TableField(fill = FieldFill.INSERT)
 	protected Date createDate; // 新增时间

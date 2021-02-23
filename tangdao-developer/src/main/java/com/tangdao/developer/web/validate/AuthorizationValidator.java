@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.tangdao.core.BaseModel;
 import com.tangdao.core.constant.CommonApiCode;
-import com.tangdao.developer.exception.ValidateException;
+import com.tangdao.core.exception.BusinessException;
 import com.tangdao.developer.model.constant.PassportConstant;
 import com.tangdao.developer.model.domain.UserDeveloper;
 import com.tangdao.developer.model.dto.AuthorizationDTO;
@@ -46,29 +46,29 @@ public class AuthorizationValidator {
 	 * @param ip
 	 * @param mobile 手机号码信息（基础校验此值为空）
 	 * 
-	 * @throws ValidateException
+	 * @throws BusinessException
 	 */
-	public String checkIdentityValidity(AuthorizationDTO authorizationDTO, String ip, String mobile) throws ValidateException {
+	public String checkIdentityValidity(AuthorizationDTO authorizationDTO, String ip, String mobile){
 		// 判断开发者是否存在
 		UserDeveloper developer = userDeveloperService.getById(authorizationDTO.getAppkey());
 		if (developer == null) {
-			throw new ValidateException(CommonApiCode.DEV7100106);
+			throw new BusinessException(CommonApiCode.DEV7100106);
 		}
 
 		String signature = signature(developer.getAppSecret(), mobile, authorizationDTO.getTimestamp());
 		// 判断用户签名信息是否正确
 		if (StrUtil.isEmpty(signature) || !signature.equals(authorizationDTO.getAppsecret())) {
-			throw new ValidateException(CommonApiCode.DEV7100108);
+			throw new BusinessException(CommonApiCode.DEV7100108);
 		}
 
 		// 账号冻结
 		if (!BaseModel.STATUS_NORMAL.equals(developer.getStatus())) {
-			throw new ValidateException(CommonApiCode.DEV7100107);
+			throw new BusinessException(CommonApiCode.DEV7100107);
 		}
 
 		// 服务器IP未报备
 		if (!hostWhitelistService.ipAllowedPass(developer.getUserCode(), ip)) {
-			throw new ValidateException(CommonApiCode.DEV7100105);
+			throw new BusinessException(CommonApiCode.DEV7100105);
 		}
 
 		return developer.getUserCode();
@@ -95,17 +95,17 @@ public class AuthorizationValidator {
 	 * @param timestamp
 	 * @return
 	 */
-	public void validateTimestampExpired(String timestamp) throws ValidateException {
+	public void validateTimestampExpired(String timestamp) throws BusinessException {
 		try {
 			boolean isSuccess = System.currentTimeMillis()
 					- Long.valueOf(timestamp) <= PassportConstant.DEFAULT_EXPIRE_TIMESTAMP_MILLISECOND;
 			if (isSuccess) {
 				return;
 			}
-			throw new ValidateException(CommonApiCode.DEV7100104);
+			throw new BusinessException(CommonApiCode.DEV7100104);
 		} catch (Exception e) {
 			logger.error("时间戳验证异常，{}", timestamp, e);
-			throw new ValidateException(CommonApiCode.DEV7100104);
+			throw new BusinessException(CommonApiCode.DEV7100104);
 		}
 	}
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.constant.CommonContext.PlatformType;
-import com.tangdao.developer.exception.ValidateException;
+import com.tangdao.core.exception.BusinessException;
 import com.tangdao.developer.model.constant.UserBalanceConstant;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.service.UserBalanceService;
@@ -35,17 +35,16 @@ public class SmsSendValidator {
 	 * @param smsSendDTO
 	 * @param ip
 	 * @return
-	 * @throws ValidateException
+	 * @throws BusinessException
 	 */
-	public SmsSendDTO validate(SmsSendDTO smsSendDTO, String ip) throws ValidateException {
+	public SmsSendDTO validate(SmsSendDTO smsSendDTO) throws BusinessException {
 		// 校验时间戳是否失效
 		this.authorizationValidator.validateTimestampExpired(smsSendDTO.getTimestamp());
 		// 校验开发者身份的有效性
-		String userCode = this.authorizationValidator.checkIdentityValidity(smsSendDTO, ip, smsSendDTO.getMobile());
+		String userCode = this.authorizationValidator.checkIdentityValidity(smsSendDTO, smsSendDTO.getIp(), smsSendDTO.getMobile());
 		// 校验用户短信余额是否满足
 		this.checkBalanceAvaiable(userCode, smsSendDTO);
-		// 写入IP
-		smsSendDTO.setIp(ip);
+		// 写入用户编码
 		smsSendDTO.setUserCode(userCode);
 		return smsSendDTO;
 	}
@@ -56,13 +55,13 @@ public class SmsSendValidator {
 	 * @param smsSendRequest
 	 * @param passportModel
 	 * @return
-	 * @throws ValidateException
+	 * @throws BusinessException
 	 */
-	private void checkBalanceAvaiable(String userCode, SmsSendDTO smsSendDTO) throws ValidateException {
+	private void checkBalanceAvaiable(String userCode, SmsSendDTO smsSendDTO) throws BusinessException {
 		// 获取本次短信内容计费条数
 		int fee = userBalanceService.calculateSmsAmount(userCode, smsSendDTO.getContent());
 		if (UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE == fee) {
-			throw new ValidateException(CommonApiCode.DEV7100111);
+			throw new BusinessException(CommonApiCode.DEV7100111);
 		}
 
 		// 总手机号码数量
@@ -76,7 +75,7 @@ public class SmsSendValidator {
 		boolean balanceEnough = userBalanceService.isBalanceEnough(userCode,
 				PlatformType.SEND_MESSAGE_SERVICE, (double) totalFee);
 		if (!balanceEnough) {
-			throw new ValidateException(CommonApiCode.DEV7100111);
+			throw new BusinessException(CommonApiCode.DEV7100111);
 		}
 		
 		smsSendDTO.setFee(fee);

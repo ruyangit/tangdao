@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.constant.CommonApiCode;
-import com.tangdao.developer.exception.QueueProcessException;
+import com.tangdao.core.exception.BusinessException;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.model.vo.SmsSendVo;
 
@@ -37,7 +37,7 @@ public class SmsSendService {
 			return new SmsSendVo(0, "1");
 		} catch (Exception e) {
 			log.error("发送短信至队列错误， {}", e);
-			throw new QueueProcessException(CommonApiCode.INTERNAL_ERROR);
+			throw new BusinessException(CommonApiCode.INTERNAL_ERROR);
 		}
 	}
 }

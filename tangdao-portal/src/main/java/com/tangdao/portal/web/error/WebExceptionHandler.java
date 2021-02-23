@@ -31,7 +31,7 @@ public class WebExceptionHandler {
 	@ExceptionHandler(BusinessException.class)
 	public @ResponseBody Object businessException(BusinessException e) {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
-		commonResponse.fail(e.getErrorCode().getCode(), e.getMessage());
+		commonResponse.fail(e.getStatus(), e.getMessage());
 		return commonResponse;
 	}
 
