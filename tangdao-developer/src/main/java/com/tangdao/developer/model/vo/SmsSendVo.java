@@ -29,11 +29,20 @@ public class SmsSendVo implements Serializable {
 	/**
 	 * 扣费条数
 	 */
-	private String fee = "0";
+	private int fee = 0;
 
 	/**
 	 * 消息ID，用于后续的状态匹配
 	 */
 	private String sid = StrUtil.EMPTY;
 
+	/**
+	 * @param fee
+	 * @param sid
+	 */
+	public SmsSendVo(int fee, String sid) {
+		super();
+		this.fee = fee;
+		this.sid = sid;
+	}
 }

@@ -12,7 +12,8 @@ import com.tangdao.core.CommonResponse;
 import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.dto.SmsSendDTO;
-import com.tangdao.developer.model.vo.SmsSendVo;
+import com.tangdao.developer.service.SmsApiFaildRecordService;
+import com.tangdao.developer.service.SmsSendService;
 import com.tangdao.developer.web.validate.SmsSendValidator;
 
 /**
@@ -29,16 +30,22 @@ public class SmsApi extends BaseApi {
 
 	@Autowired
 	private SmsSendValidator smsValidator;
+	
+	@Autowired
+	private SmsApiFaildRecordService smsApiFaildRecordService;
+	
+	@Autowired
+	private SmsSendService smsSendService;
 
 	@RequestMapping(value = "/send", method = { RequestMethod.POST, RequestMethod.GET })
 	public CommonResponse send(SmsSendDTO smsSendDTO) {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
 		try {
-			smsSendDTO = this.smsValidator.validate(smsSendDTO, getClientIp());
 			smsSendDTO.setAppType(getAppType());
-			SmsSendVo sendVo = new SmsSendVo();
-			return commonResponse.setData(sendVo);
+			smsSendDTO = this.smsValidator.validate(smsSendDTO, getClientIp());
+			return commonResponse.setData(smsSendService.sendMessage(smsSendDTO));
 		} catch (ValidateException e) {
+			smsApiFaildRecordService.save(null);
 			return null;
 		} catch (Exception e) {
 			log.error("用户短信发送失败", e);
