@@ -57,7 +57,7 @@ public class SmsSendService {
 		BeanUtil.copyProperties(smsSendDTO, task);
 		task.setAppType(smsSendDTO.getAppType());
 		try {
-			long sid = joinTask2Queue(task, smsSendDTO.getUserCode());
+			long sid = joinTask2Queue(task, smsSendDTO.getUserId());
 			if (sid != 0L) {
 				return new SmsSendVo(smsSendDTO.getTotalFee(), sid);
 			}
@@ -73,13 +73,13 @@ public class SmsSendService {
 	 * @param task 主任务
 	 * @return 消息ID
 	 */
-	private long joinTask2Queue(SmsMtTask task, String userCode) {
+	private long joinTask2Queue(SmsMtTask task, String userId) {
 		try {
 			// 更新用户余额
-			boolean isSuccess = userBalanceService.deductBalance(userCode, -task.getTotalFee(),
+			boolean isSuccess = userBalanceService.deductBalance(userId, -task.getTotalFee(),
 					PlatformType.SEND_MESSAGE_SERVICE.getCode(), "developer call");
 			if (!isSuccess) {
-				log.error("用户: [" + userCode + "] 应用:[" + task.getAppId() + "]扣除短信余额 " + task.getTotalFee() + " 失败");
+				log.error("用户: [" + userId + "] 应用:[" + task.getAppId() + "]扣除短信余额 " + task.getTotalFee() + " 失败");
 				throw new QueueProcessException("发送短信扣除短信余额失败");
 			}
 

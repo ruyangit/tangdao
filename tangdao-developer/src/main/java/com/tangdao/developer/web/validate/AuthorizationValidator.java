@@ -67,11 +67,11 @@ public class AuthorizationValidator {
 		}
 
 		// 服务器IP未报备
-		if (!hostWhitelistService.ipAllowedPass(developer.getUserCode(), ip)) {
+		if (!hostWhitelistService.ipAllowedPass(developer.getUserId(), ip)) {
 			throw new ValidateException(CommonApiCode.DEV7100105);
 		}
 		authorizationDTO.setAppId(developer.getId());
-		return developer.getUserCode();
+		return developer.getUserId();
 	}
 
 	/**

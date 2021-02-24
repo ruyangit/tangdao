@@ -48,7 +48,7 @@ public class SmsSendDTO extends AuthorizationDTO {
 	 */
 	private String callback;
 
-	private transient String userCode;
+	private transient String userId;
 	private transient Integer fee;
 	private transient Integer totalFee;
 	private transient String ip;

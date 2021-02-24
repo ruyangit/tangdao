@@ -33,6 +33,7 @@ public class SmsSendValidator {
 
 	/**
 	 * TODO 短信校验
+	 * 
 	 * @param smsSendDTO
 	 * @return
 	 * @throws BusinessException
@@ -41,11 +42,12 @@ public class SmsSendValidator {
 		// 校验时间戳是否失效
 		this.authorizationValidator.validateTimestampExpired(smsSendDTO.getTimestamp());
 		// 校验开发者身份的有效性
-		String userCode = this.authorizationValidator.checkIdentityValidity(smsSendDTO, smsSendDTO.getIp(), smsSendDTO.getMobile());
+		String userId = this.authorizationValidator.checkIdentityValidity(smsSendDTO, smsSendDTO.getIp(),
+				smsSendDTO.getMobile());
 		// 校验用户短信余额是否满足
-		this.checkBalanceAvaiable(userCode, smsSendDTO);
+		this.checkBalanceAvaiable(userId, smsSendDTO.getAppId(), smsSendDTO);
 		// 写入用户编码
-		smsSendDTO.setUserCode(userCode);
+		smsSendDTO.setUserId(userId);
 		return smsSendDTO;
 	}
 
@@ -57,9 +59,9 @@ public class SmsSendValidator {
 	 * @return
 	 * @throws BusinessException
 	 */
-	private void checkBalanceAvaiable(String userCode, SmsSendDTO smsSendDTO) throws BusinessException {
+	private void checkBalanceAvaiable(String userId, String appId, SmsSendDTO smsSendDTO) throws BusinessException {
 		// 获取本次短信内容计费条数
-		int fee = userBalanceService.calculateSmsAmount(userCode, smsSendDTO.getContent());
+		int fee = userBalanceService.calculateSmsAmount(appId, smsSendDTO.getContent());
 		if (UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE == fee) {
 			throw new ValidateException(CommonApiCode.DEV7100111);
 		}
@@ -72,12 +74,12 @@ public class SmsSendValidator {
 
 		// 此处需加入是否为后付款，如果为后付则不需判断余额
 		// f.用户余额不足（通过计费微服务判断，结合4.1.6中的用户计费规则）
-		boolean balanceEnough = userBalanceService.isBalanceEnough(userCode,
-				PlatformType.SEND_MESSAGE_SERVICE, (double) totalFee);
+		boolean balanceEnough = userBalanceService.isBalanceEnough(userId, PlatformType.SEND_MESSAGE_SERVICE,
+				(double) totalFee);
 		if (!balanceEnough) {
 			throw new ValidateException(CommonApiCode.DEV7100111);
 		}
-		
+
 		smsSendDTO.setFee(fee);
 		smsSendDTO.setTotalFee(totalFee);
 	}

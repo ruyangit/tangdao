@@ -35,7 +35,7 @@ public class UserDeveloper extends DataEntity<UserDeveloper> {
 
 	private String salt;
 
-	private String userCode;
+	private String userId;
 
 	private String status;
 	

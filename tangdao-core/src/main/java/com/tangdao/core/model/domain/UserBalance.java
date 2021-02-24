@@ -32,7 +32,7 @@ public class UserBalance extends DataEntity<UserBalance> {
 	@TableId
 	private String id;
 
-	private String userCode;
+	private String userId;
 
 	private String mobile;
 

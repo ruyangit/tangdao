@@ -19,11 +19,11 @@ public class HostWhitelistService {
 	/**
 	 * 
 	 * TODO 服务器IP是否允许通过
-	 * @param userCode
+	 * @param userId
 	 * @param ip
 	 * @return
 	 */
-	public boolean ipAllowedPass(String userCode, String ip) {
+	public boolean ipAllowedPass(String userId, String ip) {
 		
 		return true;
 	}

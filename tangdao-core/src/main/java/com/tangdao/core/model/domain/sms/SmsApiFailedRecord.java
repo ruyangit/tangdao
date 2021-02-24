@@ -3,14 +3,12 @@
  */
 package com.tangdao.core.model.domain.sms;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.core.BaseModel;
+import com.tangdao.core.DataEntity;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
@@ -27,7 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_api_failed_record")
-public class SmsApiFailedRecord implements Serializable {
+public class SmsApiFailedRecord extends DataEntity<SmsApiFailedRecord> {
 
 	/**
 	 * 
@@ -53,9 +51,8 @@ public class SmsApiFailedRecord implements Serializable {
 	private String code; // 错误码
 
 	private String remarks;
-
-	@TableField(fill = FieldFill.INSERT)
-	protected Date createDate; // 新增时间
+	
+	private String status;
 
 	public String[] getMobiles() {
 		if (StrUtil.isNotBlank(mobile)) {

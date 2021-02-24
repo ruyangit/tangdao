@@ -41,13 +41,13 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 	 * 
 	 * TODO 获取用户余额
 	 * 
-	 * @param userCode
+	 * @param userId
 	 * @param type
 	 * @return
 	 */
-	public UserBalance getByUserCode(String userCode, int type) {
+	public UserBalance getByUserId(String userId, int type) {
 		QueryWrapper<UserBalance> queryWrapper = new QueryWrapper<UserBalance>();
-		queryWrapper.eq("user_code", userCode);
+		queryWrapper.eq("user_id", userId);
 		queryWrapper.eq("type", type);
 		return this.getOne(queryWrapper);
 	}
@@ -60,13 +60,13 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 	 * @param content
 	 * @return
 	 */
-	public int calculateSmsAmount(String userCode, String content) {
-		if (StrUtil.isEmpty(userCode) || StrUtil.isEmpty(content)) {
-			log.error("userCode :{} 短信报文为空，无法计算计费条数", userCode);
+	public int calculateSmsAmount(String appId, String content) {
+		if (StrUtil.isEmpty(appId) || StrUtil.isEmpty(content)) {
+			log.error("用户 :{} 短信报文为空，无法计算计费条数", appId);
 			return UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE;
 		}
 		// 获取短信单条计费字数
-		int wordsPerNum = this.userSmsConfigService.getSingleChars(userCode);
+		int wordsPerNum = this.userSmsConfigService.getSingleChars(appId);
 		return calculateGroupSizeByContent(wordsPerNum, content);
 	}
 
@@ -79,20 +79,20 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 	 * @param totalFee
 	 * @return
 	 */
-	public boolean isBalanceEnough(String userCode, PlatformType platformType, double fee) {
-		UserBalance userBalance = getByUserCode(userCode, platformType.getCode());
+	public boolean isBalanceEnough(String userId, PlatformType platformType, double fee) {
+		UserBalance userBalance = getByUserId(userId, platformType.getCode());
 		if (userBalance == null) {
-			log.error("用户：{} ，平台类型：{} 余额数据异常，请检修", userCode, platformType);
+			log.error("用户：{} ，平台类型：{} 余额数据异常，请检修", userId, platformType);
 			return false;
 		}
 		// 如果用户付费类型为后付费则不判断 余额是否不足
 		if (BalancePayType.POSTPAY.getValue() == userBalance.getPayType()) {
-			log.info("用户：{} ，平台类型：{} 付费类型为后付费，不检验可用余额", userCode, platformType);
+			log.info("用户：{} ，平台类型：{} 付费类型为后付费，不检验可用余额", userId, platformType);
 			return true;
 		}
 		//
 		if (userBalance.getBalance() < fee) {
-			log.warn("用户额度不足：用户：{} 平台类型：{} 可用余额：{} 本次计费：{}，", userCode, platformType, userBalance.getBalance(), fee);
+			log.warn("用户额度不足：用户：{} 平台类型：{} 可用余额：{} 本次计费：{}，", userId, platformType, userBalance.getBalance(), fee);
 			return false;
 		}
 
@@ -108,15 +108,15 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 	 * @param remark
 	 * @return
 	 */
-	public boolean deductBalance(String userCode, int amount, int platformType, String remarks) {
+	public boolean deductBalance(String userId, int amount, int platformType, String remarks) {
         try {
-            UserBalance userBalance = getByUserCode(userCode, platformType);
+            UserBalance userBalance = getByUserId(userId, platformType);
             userBalance.setBalance(userBalance.getBalance() + amount);
-            userBalance.setUserCode(userCode);
+            userBalance.setUserId(userId);
             if (StrUtil.isNotEmpty(remarks)) {
                 userBalance.setRemarks(remarks);
             }
-            userBalance.setUpdateBy(userCode);
+            userBalance.setUpdateBy(userId);
             userBalance.setUpdateDate(new Date());
             return SqlHelper.retBool(this.getBaseMapper().updateById(userBalance));
         } catch (Exception e) {
