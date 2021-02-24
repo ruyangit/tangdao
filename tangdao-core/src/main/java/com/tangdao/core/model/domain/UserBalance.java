@@ -45,5 +45,7 @@ public class UserBalance extends DataEntity<UserBalance> {
 	private Integer payType;
 	
 	private String remarks;
+	
+	private String status;
 
 }

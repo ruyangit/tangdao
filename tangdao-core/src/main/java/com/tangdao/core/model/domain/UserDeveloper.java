@@ -39,4 +39,6 @@ public class UserDeveloper extends DataEntity<UserDeveloper> {
 
 	private String status;
 	
+	private String remarks;
+	
 }

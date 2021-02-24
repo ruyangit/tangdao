@@ -55,5 +55,9 @@ public class UserSmsConfig extends DataEntity<UserSmsConfig> {
 	private Integer submitInterval; // 短信提交时间间隔（同一号码）
 
 	private Integer limitTimes; // 短信每天提交次数上限（同一号码）
+	
+	private String status;
+	
+	private String remarks;
 
 }
