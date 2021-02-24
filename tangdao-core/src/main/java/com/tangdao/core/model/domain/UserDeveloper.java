@@ -27,6 +27,8 @@ public class UserDeveloper extends DataEntity<UserDeveloper> {
 	private static final long serialVersionUID = 1652989610979690232L;
 
 	@TableId
+	private String id;
+	
 	private String appKey;
 
 	private String appSecret;

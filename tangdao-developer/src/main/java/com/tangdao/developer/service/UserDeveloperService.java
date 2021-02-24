@@ -5,6 +5,7 @@ package com.tangdao.developer.service;
 
 import org.springframework.stereotype.Service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.model.domain.UserDeveloper;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.developer.dao.UserDeveloperMapper;
@@ -20,4 +21,10 @@ import com.tangdao.developer.dao.UserDeveloperMapper;
 @Service
 public class UserDeveloperService extends BaseService<UserDeveloperMapper, UserDeveloper> {
 
+	public UserDeveloper getByAppKey(String appKey) {
+		QueryWrapper<UserDeveloper> queryWrapper = new QueryWrapper<UserDeveloper>();
+		queryWrapper.eq("app_key", appKey);
+		queryWrapper.eq("status", UserDeveloper.STATUS_NORMAL);
+		return this.getBaseMapper().selectOne(queryWrapper);
+	}
 }

@@ -50,7 +50,7 @@ public class AuthorizationValidator {
 	 */
 	public String checkIdentityValidity(AuthorizationDTO authorizationDTO, String ip, String mobile){
 		// 判断开发者是否存在
-		UserDeveloper developer = userDeveloperService.getById(authorizationDTO.getAppkey());
+		UserDeveloper developer = userDeveloperService.getByAppKey(authorizationDTO.getAppkey());
 		if (developer == null) {
 			throw new BusinessException(CommonApiCode.DEV7100106);
 		}
@@ -70,7 +70,7 @@ public class AuthorizationValidator {
 		if (!hostWhitelistService.ipAllowedPass(developer.getUserCode(), ip)) {
 			throw new BusinessException(CommonApiCode.DEV7100105);
 		}
-
+		authorizationDTO.setAppId(developer.getId());
 		return developer.getUserCode();
 	}
 
@@ -93,6 +93,7 @@ public class AuthorizationValidator {
 	 * TODO 判断用户时间戳是否过期
 	 * 
 	 * @param timestamp
+	 * 
 	 * @return
 	 */
 	public void validateTimestampExpired(String timestamp) throws BusinessException {

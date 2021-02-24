@@ -24,6 +24,8 @@ public class AuthorizationDTO implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private String appId;
 
 	/**
 	 * 开发者接口唯一标识
