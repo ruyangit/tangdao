@@ -12,8 +12,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.constant.CommonApiCode;
-import com.tangdao.core.exception.QueueProcessException;
 import com.tangdao.core.model.domain.sms.SmsApiFailedRecord;
+import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.model.vo.SmsSendVo;
 import com.tangdao.developer.service.SmsApiFaildRecordService;
@@ -55,7 +55,7 @@ public class SmsApi extends BaseApi {
 
 			SmsSendVo smsSendVo = smsSendService.sendMessage(smsSendDTO);
 			return commonResponse.setData(smsSendVo);
-		} catch (QueueProcessException e) {
+		} catch (ValidateException e) {
 			SmsApiFailedRecord record = new SmsApiFailedRecord();
 			try {
 				JSONObject jsonObj = JSON.parseObject(e.getMessage());

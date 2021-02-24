@@ -10,6 +10,7 @@ import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.exception.BusinessException;
+import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.service.UserBalanceService;
 
@@ -60,7 +61,7 @@ public class SmsSendValidator {
 		// 获取本次短信内容计费条数
 		int fee = userBalanceService.calculateSmsAmount(userCode, smsSendDTO.getContent());
 		if (UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE == fee) {
-			throw new BusinessException(CommonApiCode.DEV7100111);
+			throw new ValidateException(CommonApiCode.DEV7100111);
 		}
 
 		// 总手机号码数量
@@ -74,7 +75,7 @@ public class SmsSendValidator {
 		boolean balanceEnough = userBalanceService.isBalanceEnough(userCode,
 				PlatformType.SEND_MESSAGE_SERVICE, (double) totalFee);
 		if (!balanceEnough) {
-			throw new BusinessException(CommonApiCode.DEV7100111);
+			throw new ValidateException(CommonApiCode.DEV7100111);
 		}
 		
 		smsSendDTO.setFee(fee);

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import com.tangdao.core.BaseModel;
 import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.constant.PassportConstant;
-import com.tangdao.core.exception.BusinessException;
 import com.tangdao.core.model.domain.UserDeveloper;
+import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.dto.AuthorizationDTO;
 import com.tangdao.developer.service.HostWhitelistService;
 import com.tangdao.developer.service.UserDeveloperService;
@@ -52,23 +52,23 @@ public class AuthorizationValidator {
 		// 判断开发者是否存在
 		UserDeveloper developer = userDeveloperService.getByAppKey(authorizationDTO.getAppkey());
 		if (developer == null) {
-			throw new BusinessException(CommonApiCode.DEV7100106);
+			throw new ValidateException(CommonApiCode.DEV7100106);
 		}
 
 		String signature = signature(developer.getAppSecret(), mobile, authorizationDTO.getTimestamp());
 		// 判断用户签名信息是否正确
 		if (StrUtil.isEmpty(signature) || !signature.equals(authorizationDTO.getAppsecret())) {
-			throw new BusinessException(CommonApiCode.DEV7100108);
+			throw new ValidateException(CommonApiCode.DEV7100108);
 		}
 
 		// 账号冻结
 		if (!BaseModel.STATUS_NORMAL.equals(developer.getStatus())) {
-			throw new BusinessException(CommonApiCode.DEV7100107);
+			throw new ValidateException(CommonApiCode.DEV7100107);
 		}
 
 		// 服务器IP未报备
 		if (!hostWhitelistService.ipAllowedPass(developer.getUserCode(), ip)) {
-			throw new BusinessException(CommonApiCode.DEV7100105);
+			throw new ValidateException(CommonApiCode.DEV7100105);
 		}
 		authorizationDTO.setAppId(developer.getId());
 		return developer.getUserCode();
@@ -96,17 +96,17 @@ public class AuthorizationValidator {
 	 * 
 	 * @return
 	 */
-	public void validateTimestampExpired(String timestamp) throws BusinessException {
+	public void validateTimestampExpired(String timestamp) throws ValidateException {
 		try {
 			boolean isSuccess = System.currentTimeMillis()
 					- Long.valueOf(timestamp) <= PassportConstant.DEFAULT_EXPIRE_TIMESTAMP_MILLISECOND;
 			if (isSuccess) {
 				return;
 			}
-			throw new BusinessException(CommonApiCode.DEV7100104);
+			throw new ValidateException(CommonApiCode.DEV7100104);
 		} catch (Exception e) {
 			logger.error("时间戳验证异常，{}", timestamp, e);
-			throw new BusinessException(CommonApiCode.DEV7100104);
+			throw new ValidateException(CommonApiCode.DEV7100104);
 		}
 	}
 }
