@@ -33,7 +33,6 @@ public class SmsSendValidator {
 	/**
 	 * TODO 短信校验
 	 * @param smsSendDTO
-	 * @param ip
 	 * @return
 	 * @throws BusinessException
 	 */
@@ -52,8 +51,8 @@ public class SmsSendValidator {
 	/**
 	 * TODO 验证签名（携带手机号码签名模式）
 	 * 
-	 * @param smsSendRequest
-	 * @param passportModel
+	 * @param userCode
+	 * @param smsSendDTO
 	 * @return
 	 * @throws BusinessException
 	 */

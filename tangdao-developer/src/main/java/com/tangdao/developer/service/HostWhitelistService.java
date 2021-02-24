@@ -16,7 +16,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class HostWhitelistService {
 
+	/**
+	 * 
+	 * TODO 服务器IP是否允许通过
+	 * @param userCode
+	 * @param ip
+	 * @return
+	 */
 	public boolean ipAllowedPass(String userCode, String ip) {
-		return false;
+		
+		return true;
 	}
 }
