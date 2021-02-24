@@ -29,7 +29,7 @@ public class SmsSendVo implements Serializable {
 	/**
 	 * 扣费条数
 	 */
-	private int fee = 0;
+	private Integer fee = 0;
 
 	/**
 	 * 消息ID，用于后续的状态匹配
@@ -40,9 +40,9 @@ public class SmsSendVo implements Serializable {
 	 * @param fee
 	 * @param sid
 	 */
-	public SmsSendVo(int fee, String sid) {
+	public SmsSendVo(Integer fee, Long sid) {
 		super();
 		this.fee = fee;
-		this.sid = sid;
+		this.sid = sid + StrUtil.EMPTY;
 	}
 }

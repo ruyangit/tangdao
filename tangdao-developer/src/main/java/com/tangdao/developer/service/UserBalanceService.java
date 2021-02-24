@@ -3,12 +3,15 @@
  */
 package com.tangdao.developer.service;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.context.UserContext.BalancePayType;
@@ -95,6 +98,31 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 
 		return true;
 	}
+	
+	/**
+	 * 
+	 * TODO
+	 * @param userCode
+	 * @param amount
+	 * @param platformType
+	 * @param remark
+	 * @return
+	 */
+	public boolean deductBalance(String userCode, int amount, int platformType, String remarks) {
+        try {
+            UserBalance userBalance = getByUserCode(userCode, platformType);
+            userBalance.setBalance(userBalance.getBalance() + amount);
+            userBalance.setUserCode(userCode);
+            if (StrUtil.isNotEmpty(remarks)) {
+                userBalance.setRemarks(remarks);
+            }
+            userBalance.setUpdateBy(userCode);
+            userBalance.setUpdateDate(new Date());
+            return SqlHelper.retBool(this.getBaseMapper().updateById(userBalance));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 	/**
 	 * TODO 根据短信内容和每条计费字数 计算总费用

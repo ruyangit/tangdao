@@ -43,5 +43,7 @@ public class UserBalance extends DataEntity<UserBalance> {
 	private Integer threshold;
 
 	private Integer payType;
+	
+	private String remarks;
 
 }
