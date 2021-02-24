@@ -13,7 +13,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.exception.BusinessException;
-import com.tangdao.core.model.domain.SmsApiFailedRecord;
+import com.tangdao.core.model.domain.sms.SmsApiFailedRecord;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.service.SmsApiFaildRecordService;
 import com.tangdao.developer.service.SmsSendService;

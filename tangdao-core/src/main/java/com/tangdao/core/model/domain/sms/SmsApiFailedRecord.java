@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.domain;
+package com.tangdao.core.model.domain.sms;
 
 import java.io.Serializable;
 import java.util.Date;
