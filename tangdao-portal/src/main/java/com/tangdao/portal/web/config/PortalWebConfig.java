@@ -45,7 +45,7 @@ public class PortalWebConfig implements WebMvcConfigurer {
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}
-
+	
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
