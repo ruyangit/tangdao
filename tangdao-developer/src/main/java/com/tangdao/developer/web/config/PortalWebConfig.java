@@ -23,27 +23,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableCaching
 public class PortalWebConfig implements WebMvcConfigurer {
-	
-    @Bean
-    public Jackson2JsonMessageConverter messageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
 
-    @Bean
-    public RetryTemplate retryTemplate() {
-        RetryTemplate retryTemplate = new RetryTemplate();
-        ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
-        backOffPolicy.setInitialInterval(500);
-        backOffPolicy.setMultiplier(10.0);
-        backOffPolicy.setMaxInterval(10000);
-        retryTemplate.setBackOffPolicy(backOffPolicy);
-        return retryTemplate;
-    }
+	@Bean
+	public Jackson2JsonMessageConverter messageConverter() {
+		return new Jackson2JsonMessageConverter();
+	}
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
+	@Bean
+	public RetryTemplate retryTemplate() {
+		RetryTemplate retryTemplate = new RetryTemplate();
+		ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
+		backOffPolicy.setInitialInterval(500);
+		backOffPolicy.setMultiplier(10.0);
+		backOffPolicy.setMaxInterval(10000);
+		retryTemplate.setBackOffPolicy(backOffPolicy);
+		return retryTemplate;
+	}
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
 
 }

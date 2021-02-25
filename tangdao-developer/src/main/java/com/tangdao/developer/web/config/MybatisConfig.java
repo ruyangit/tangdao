@@ -6,6 +6,7 @@ package com.tangdao.developer.web.config;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
@@ -20,6 +21,7 @@ import com.tangdao.core.DateMetaObjectHandler;
  * @since 2021年2月5日
  */
 @Configuration
+@EnableTransactionManagement
 @MapperScan("com.tangdao.developer.dao")
 public class MybatisConfig {
 

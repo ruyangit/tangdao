@@ -23,8 +23,8 @@ public class SmsTest {
 		params.put("mobile", mobile);
 		params.put("content", content);
 		params.put("timestamp", timestamps);
-//		params.put("extNumber", extNumber == null ? "" : extNumber);
-//		params.put("attach", attach);
+		params.put("extNumber", extNumber == null ? "" : extNumber);
+		params.put("attach", attach);
 		
 		String ret = HttpUtil.post(url, params);
 		System.out.println("ret:" + ret);

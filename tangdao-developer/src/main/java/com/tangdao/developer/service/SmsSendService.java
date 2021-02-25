@@ -13,7 +13,9 @@ import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
@@ -52,6 +54,7 @@ public class SmsSendService {
 	 * @param smsSendDTO
 	 * @return
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public SmsSendVo sendMessage(SmsSendDTO smsSendDTO) {
 		SmsMtTask task = new SmsMtTask();
 		BeanUtil.copyProperties(smsSendDTO, task);
@@ -73,7 +76,8 @@ public class SmsSendService {
 	 * @param task 主任务
 	 * @return 消息ID
 	 */
-	private long joinTask2Queue(SmsMtTask task, String userId) {
+	@Transactional(rollbackFor = Exception.class)
+	public long joinTask2Queue(SmsMtTask task, String userId) {
 		try {
 			// 更新用户余额
 			boolean isSuccess = userBalanceService.deductBalance(userId, -task.getTotalFee(),
@@ -83,10 +87,8 @@ public class SmsSendService {
 				throw new QueueProcessException("发送短信扣除短信余额失败");
 			}
 
-			task.setSid(0L);
+			task.setSid(IdWorker.getId());
 			task.setCreateDate(new Date());
-
-			// 插入TASK任务（异步）
 
 			// 判断队列的优先级别
 			int priority = WordsPriority.getLevel(task.getContent());
