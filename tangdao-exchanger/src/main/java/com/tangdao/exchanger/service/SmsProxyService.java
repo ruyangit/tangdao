@@ -3,6 +3,7 @@
  */
 package com.tangdao.exchanger.service;
 
+import java.net.BindException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,11 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tangdao.modules.exchanger.resolver.sms.cmpp.v2.CmppManageProxy;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.util.concurrent.RateLimiter;
+import com.tangdao.core.exception.DataEmptyException;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ProxySender;
+import com.tangdao.exchanger.resolver.sms.sgip.SgipManageProxy;
 import com.tangdao.exchanger.resolver.sms.sgip.SgipProxySender;
+import com.tangdao.exchanger.resolver.sms.sgip.constant.SgipConstant;
 import com.tangdao.exchanger.resolver.sms.smgp.SmgpProxySender;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -34,13 +42,13 @@ public class SmsProxyService {
 
 	@Autowired
 	private CmppProxySender cmppProxySender;
-	
+
 	@Autowired
 	private Cmpp3ProxySender cmpp3ProxySender;
 
 	@Autowired
 	private SgipProxySender sgipProxySender;
-	
+
 	@Autowired
 	private SmgpProxySender smgpProxySender;
 
@@ -77,7 +85,7 @@ public class SmsProxyService {
 			}
 
 			TParameter tparameter = RequestTemplateHandler.parse(parameter.getParams());
-			if (MapUtils.isEmpty(tparameter)) {
+			if (CollUtil.isEmpty(tparameter)) {
 				throw new IllegalArgumentException("SmsPassageParameter's params are empty");
 			}
 
@@ -96,7 +104,7 @@ public class SmsProxyService {
 	 * @return
 	 */
 	private ProtocolType getPassageProtocolType(SmsPassageParameter parameter) {
-		if (StringUtils.isEmpty(parameter.getProtocol())) {
+		if (StrUtil.isEmpty(parameter.getProtocol())) {
 			throw new IllegalArgumentException("SmsPassageParameter's protocolType is empty");
 		}
 
@@ -292,7 +300,6 @@ public class SmsProxyService {
 		}
 	}
 
-	@Override
 	public boolean isProxyAvaiable(Integer passageId) {
 		Object passage = getManageProxy(passageId);
 		if (passage == null) {
@@ -315,7 +322,7 @@ public class SmsProxyService {
 				return false;
 			}
 
-			if (StringUtils.isNotEmpty(passageProxy.getConnState())) {
+			if (StrUtil.isNotEmpty(passageProxy.getConnState())) {
 				logger.error("SGIP连接错误，错误信息：{} ", passageProxy.getConnState());
 				return false;
 			}
@@ -341,7 +348,6 @@ public class SmsProxyService {
 		return GLOBAL_PROXIES.get(passageId);
 	}
 
-	@Override
 	public boolean stopProxy(Integer passageId) {
 		logger.info("stopProxy, passageId : {} ", passageId);
 		if (!isProxyAvaiable(passageId)) {
@@ -365,7 +371,6 @@ public class SmsProxyService {
 		}
 	}
 
-	@Override
 	public void plusSendErrorTimes(Integer passageId) {
 		synchronized (GLOBAL_PROXIES_ERROR_COUNTER) {
 			Integer counter = GLOBAL_PROXIES_ERROR_COUNTER.get(passageId);
@@ -378,7 +383,6 @@ public class SmsProxyService {
 		}
 	}
 
-	@Override
 	public void clearSendErrorTimes(Integer passageId) {
 		synchronized (GLOBAL_PROXIES_ERROR_COUNTER) {
 			Integer counter = GLOBAL_PROXIES_ERROR_COUNTER.get(passageId);
