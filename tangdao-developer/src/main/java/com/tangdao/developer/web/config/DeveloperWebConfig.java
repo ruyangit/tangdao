@@ -22,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @EnableCaching
-public class PortalWebConfig implements WebMvcConfigurer {
+public class DeveloperWebConfig implements WebMvcConfigurer {
 
 	@Bean
 	public Jackson2JsonMessageConverter messageConverter() {
