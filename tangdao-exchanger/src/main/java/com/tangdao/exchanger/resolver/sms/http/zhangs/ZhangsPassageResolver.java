@@ -14,7 +14,7 @@ import org.tangdao.common.constant.CommonContext.CMCP;
 import org.tangdao.common.lang.DateUtils;
 import org.tangdao.modules.exchanger.model.response.ProviderSendResponse;
 import org.tangdao.modules.exchanger.resolver.HttpClientManager;
-import org.tangdao.modules.exchanger.resolver.handler.RequestHandler;
+import org.tangdao.modules.exchanger.resolver.handler.RequestTemplateHandler;
 import org.tangdao.modules.exchanger.resolver.sms.http.AbstractPassageResolver;
 import org.tangdao.modules.exchanger.template.vo.TParameter;
 import org.tangdao.modules.sms.model.domain.SmsMoMessageReceive;
@@ -41,7 +41,7 @@ public class ZhangsPassageResolver extends AbstractPassageResolver{
 			String extNumber) {
 		
 		try {
-			TParameter tparameter = RequestHandler.parse(parameter.getParams());
+			TParameter tparameter = RequestTemplateHandler.parse(parameter.getParams());
 			
 			// 转换参数，并调用网关接口，接收返回结果
 			String result = HttpClientManager.post(parameter.getUrl(), sendRequest(tparameter, mobile, content, extNumber));

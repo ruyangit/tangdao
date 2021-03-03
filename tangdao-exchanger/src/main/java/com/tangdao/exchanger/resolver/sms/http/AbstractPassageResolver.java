@@ -8,14 +8,15 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.tangdao.common.lang.DateUtils;
-import org.tangdao.modules.exchanger.template.vo.TParameter;
-import org.tangdao.modules.sms.model.domain.SmsMoMessageReceive;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageDeliver;
+
+import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
+import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
+import com.tangdao.exchanger.template.vo.TParameter;
+
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * TODO HTTP基础处理器
@@ -150,15 +151,15 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @return
 	 */
 	protected static String unixtimeStamp2Date(Object timestampString) {
-		if (timestampString == null || StringUtils.isEmpty(timestampString.toString())) {
-			return DateUtils.getDateTime();
+		if (timestampString == null || StrUtil.isEmpty(timestampString.toString())) {
+			return DateUtil.now();
 		}
 
 		try {
 			Long timestamp = Long.parseLong(timestampString.toString()) * 1000;
 			return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(timestamp));
 		} catch (Exception e) {
-			return DateUtils.getDateTime();
+			return DateUtil.now();
 		}
 	}
 
@@ -173,16 +174,16 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	}
 
 	protected static String dateNumberFormat(Object dataNumber, String format) {
-		if (dataNumber == null || StringUtils.isEmpty(dataNumber.toString())) {
-			return DateUtils.getDateTime();
+		if (dataNumber == null || StrUtil.isEmpty(dataNumber.toString())) {
+			return DateUtil.now();
 		}
 
 		try {
 			SimpleDateFormat ff = new java.text.SimpleDateFormat(
-					StringUtils.isEmpty(format) ? "yyyyMMddHHmmss" : format);
+					StrUtil.isEmpty(format) ? "yyyyMMddHHmmss" : format);
 			return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(ff.parse(dataNumber.toString()));
 		} catch (Exception e) {
-			return DateUtils.getDateTime();
+			return DateUtil.now();
 		}
 	}
 
