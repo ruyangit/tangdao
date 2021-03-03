@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tangdao.core.model.domain.passage.SmsPassageParameter;
 import com.tangdao.exchanger.service.SmsProxyService;
 
 /**
@@ -48,19 +49,19 @@ public abstract class AbstractSmsProxySender {
 		addPassageLockMonitor(parameter.getPassageId());
 
 		synchronized (passageLockMonitor.get(parameter.getPassageId())) {
-			if (smsProxyManageService.isProxyAvaiable(parameter.getPassageId())) {
-				return SmsProxyManagerTemplate.getManageProxy(parameter.getPassageId());
+			if (smsProxyService.isProxyAvaiable(parameter.getPassageId())) {
+				return SmsProxyService.getManageProxy(parameter.getPassageId());
 			}
 
-			boolean isOk = smsProxyManageService.startProxy(parameter);
+			boolean isOk = smsProxyService.startProxy(parameter);
 			if (!isOk) {
 				return null;
 			}
 
 			// 重新初始化后将错误计数器归零
-			smsProxyManageService.clearSendErrorTimes(parameter.getPassageId());
+			smsProxyService.clearSendErrorTimes(parameter.getPassageId());
 
-			return SmsProxyManagerTemplate.GLOBAL_PROXIES.get(parameter.getPassageId());
+			return SmsProxyService.GLOBAL_PROXIES.get(parameter.getPassageId());
 		}
 	}
 
@@ -70,6 +71,6 @@ public abstract class AbstractSmsProxySender {
 	 * @param passageId
 	 */
 	public void onTerminate(String passageId) {
-		smsProxyManageService.stopProxy(passageId);
+		smsProxyService.stopProxy(passageId);
 	}
 }

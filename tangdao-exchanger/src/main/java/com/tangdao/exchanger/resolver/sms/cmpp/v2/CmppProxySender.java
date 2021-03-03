@@ -15,12 +15,23 @@ import com.huawei.insa2.comm.cmpp.message.CMPPDeliverMessage;
 import com.huawei.insa2.comm.cmpp.message.CMPPMessage;
 import com.huawei.insa2.comm.cmpp.message.CMPPSubmitMessage;
 import com.huawei.insa2.comm.cmpp.message.CMPPSubmitRepMessage;
+import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.context.CommonContext.CMCP;
+import com.tangdao.core.context.PassageContext.DeliverStatus;
+import com.tangdao.core.context.TaskContext.MessageSubmitStatus;
+import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
+import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
+import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.exchanger.model.response.ProviderSendResponse;
 import com.tangdao.exchanger.resolver.sms.AbstractSmsProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.constant.CmppConstant;
+import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
+import com.tangdao.exchanger.template.vo.TParameter;
+import com.tangdao.exchanger.utils.MobileNumberCatagoryUtil;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 
 @Component
 public class CmppProxySender extends AbstractSmsProxySender {
@@ -234,7 +245,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 
 			if (submitRepMsg == null) {
 				logger.error("CMPPSubmitRepMessage 网关提交信息为空");
-				smsProxyManageService.plusSendErrorTimes(parameter.getPassageId());
+				smsProxyService.plusSendErrorTimes(parameter.getPassageId());
 				return null;
 			}
 
@@ -243,7 +254,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 
 			if (submitRepMsg.getResult() == MessageSubmitStatus.SUCCESS.getCode()) {
 				// 发送成功清空
-				smsProxyManageService.clearSendErrorTimes(parameter.getPassageId());
+				smsProxyService.clearSendErrorTimes(parameter.getPassageId());
 				response.setMobile(mobile);
 				response.setStatusCode(submitRepMsg.getResult() + "");
 				response.setSid(getMsgId(submitRepMsg.getMsgId()));
@@ -266,7 +277,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 			return list;
 		} catch (Exception e) {
 			// 累加发送错误次数
-			smsProxyManageService.plusSendErrorTimes(parameter.getPassageId());
+			smsProxyService.plusSendErrorTimes(parameter.getPassageId());
 
 			logger.error("CMPP发送失败", e);
 			throw new RuntimeException("CMCP发送失败");
@@ -314,7 +325,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 		CMPPSubmitRepMessage submitRepMsg = null;
 		for (int index = 1; index <= contentList.size(); index++) {
 			submitMsg = getCMPPSubmitMessage(contentList.size(), index, serviceId, tpUdhi, msgFmt, spid, validTime,
-					atTime, chargeNumber, srcTerminalId, mobile.split(MobileNumberCatagoryUtils.DATA_SPLIT_CHARCATOR),
+					atTime, chargeNumber, srcTerminalId, mobile.split(MobileNumberCatagoryUtil.DATA_SPLIT_CHARCATOR),
 					contentList.get(index - 1), reserve);
 
 			CMPPSubmitRepMessage repMsg = (CMPPSubmitRepMessage) cmppManageProxy.send(submitMsg);
@@ -399,10 +410,10 @@ public class CmppProxySender extends AbstractSmsProxySender {
 			response.setStatusCode(report.getStat());
 			response.setStatus((StringUtils.isNotEmpty(report.getStat())
 					&& CmppConstant.COMMON_MT_STATUS_SUCCESS_CODE.equalsIgnoreCase(report.getStat())
-							? DeliverStatus.SUCCESS.getValue()
-							: DeliverStatus.FAILED.getValue()));
-			response.setDeliverTime(DateUtils.getDate());
-			response.setCreateTime(new Date());
+							? DeliverStatus.SUCCESS.getValue()+""
+							: DeliverStatus.FAILED.getValue()+""));
+			response.setDeliverTime(DateUtil.now());
+			response.setCreateDate(new Date());
 			response.setRemarks(
 					String.format("DestnationId:%s,ServiceId:%s", report.getDestnationId(), report.getServiceId()));
 
@@ -467,8 +478,8 @@ public class CmppProxySender extends AbstractSmsProxySender {
 			response.setMsgId(getMsgId(report.getMsgId()));
 			response.setMobile(mobile);
 			response.setDestnationNo(report.getDestnationId());
-			response.setReceiveTime(DateUtils.getDate());
-			response.setCreateTime(new Date());
+			response.setReceiveTime(DateUtil.now());
+			response.setCreateDate(new Date());
 			// 编号方式
 			if (CmppConstant.MSG_FMT_UCS2 == report.getMsgFmt()) {
 				response.setContent(new String(report.getMsgContent(), "UTF-16"));

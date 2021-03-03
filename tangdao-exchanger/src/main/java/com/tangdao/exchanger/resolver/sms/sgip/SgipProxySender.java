@@ -224,7 +224,7 @@ public class SgipProxySender extends AbstractSmsProxySender {
             msgFmt = SgipConstant.MSG_FMT_UCS2;
         }
 
-        String[] mobiles = mobile.split(MobileNumberCatagoryUtils.DATA_SPLIT_CHARCATOR);
+        String[] mobiles = mobile.split(MobileNumberCatagoryUtil.DATA_SPLIT_CHARCATOR);
         for (int i = 0; i < mobiles.length; i++) {
             mobiles[i] = MOBILE_PREFIX_NUMBER + mobiles[i];
         }

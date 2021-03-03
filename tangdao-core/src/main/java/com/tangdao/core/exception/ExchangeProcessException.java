@@ -1,3 +1,6 @@
+/**
+ *
+ */
 package com.tangdao.core.exception;
 
 import com.tangdao.core.constant.ErrorCode;
@@ -6,24 +9,28 @@ import cn.hutool.core.exceptions.StatefulException;
 
 /**
  * <p>
- * TODO 描述
+ * TODO 列队处理异常
  * </p>
  *
  * @author ruyang
- * @since 2021年3月3日
+ * @since 2021年2月24日
  */
-public class BusinessException extends StatefulException {
+public class ExchangeProcessException extends StatefulException {
 
 	private static final long serialVersionUID = 1L;
 
-	public BusinessException(ErrorCode errorCode) {
+	public ExchangeProcessException(ErrorCode errorCode) {
 		super(errorCode.getCode(), errorCode.getMessage());
 	}
 
 	/**
 	 * @param string
 	 */
-	public BusinessException(String message) {
+	public ExchangeProcessException(String message) {
 		super(message);
+	}
+	
+	public ExchangeProcessException(Throwable throwable) {
+		super(throwable);
 	}
 }

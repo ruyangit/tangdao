@@ -174,4 +174,73 @@ public class CommonContext {
 		}
 
 	}
+
+	/**
+	 * TODO 通道调用协议
+	 * <p>
+	 * 1、与CMPP/SGIP协议的差异 1）协议定义比CMPP和SGIP严谨和规范，虽然CMPP和SGIP都是从SMPP派生出来的。
+	 * 2）CMPP和SGIP中有大量的关于计费的定义，SMPP没有考虑这部分内容。这完全反映了通过短信实现的移动增值业务模式在国内的成熟和流行。
+	 * 3）SMPP的网络承载层可以是TCP/IP和X.25。
+	 * 2、SMPP协议解决的是移动网络之外的短消息实体与短消息中心的交互问题。即允许移动网络之外的短消息实体（External Short Message
+	 * Entities,ESMEs）连接短消息中心（SMSC）来提交和接受短消息。
+	 * 3、SMPP协议定义的是1）ESME和SMSC之间交互的一组操作和2）ESMS与SMSC交互操作中的数据格式。
+	 * 4、任何SMPP操作都包含请求PDU（Request Protocol Data Unit）和与之对应的回应PDU（Response Protocol
+	 * Data Unit）。
+	 * 5、SMPP把ESMEs分类为Transmitter/Receiver/Transceiver三种交互方式，分别对应仅提交短消息/仅接收短消息/提交和接收短消息三种形态。
+	 * 6、SMPP会话有5种状态：OPEN / BOUND_TX / BOUND_RX / BOUND_TRX / CLOSED
+	 * 7、SMPP定义的PDUs包括：
+	 * 
+	 */
+	public enum ProtocolType {
+		// HTTP连接
+		HTTP,
+
+		WEBSERVICE,
+
+		// 中国移动通信互联网短信网关接口协议，目前分为2.0 和 3.0版本（China Mobile Peer to Peer）
+		CMPP2, CMPP3,
+
+		// 中国联合通信公司短消息网关系统接口协议（Short Message Gateway Interface Protocol0）V1.2
+		SGIP,
+
+		// SMGW 与其它网元设备（除SMC 外）进行短消息传输的接口协议 （Short Message Gateway Protocol）
+		SMGP,
+
+		// 中国网通CNGP协议2.0版
+		// ，本标准描述了PHS短消息网关（SMGW）和服务提供商（SP）之间、短消息网关（SMGW）和短消息网关（SMGW）之间的通信协议（China Netcom
+		// Short Message
+		// Gateway Protocol）
+		CNGP,
+
+		// SMPP（short message peer to peer）协议是一个开放的消息转换协议
+		SMPP;
+
+		public static ProtocolType parse(String name) {
+			if (StrUtil.isEmpty(name)) {
+				return null;
+			}
+
+			for (ProtocolType pt : ProtocolType.values()) {
+				if (pt.name().equals(name)) {
+					return pt;
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * TODO 是否属于直连协议
+		 *
+		 * @param protocol
+		 * @return
+		 */
+		public static boolean isBelongtoDirect(String protocol) {
+			if (StrUtil.isEmpty(protocol)) {
+				return false;
+			}
+
+			return !protocol.equalsIgnoreCase(ProtocolType.HTTP.name())
+					&& !protocol.equalsIgnoreCase(ProtocolType.WEBSERVICE.name());
+		}
+	}
 }

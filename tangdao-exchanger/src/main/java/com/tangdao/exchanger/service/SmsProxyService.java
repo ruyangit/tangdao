@@ -12,17 +12,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tangdao.modules.exchanger.resolver.sms.cmpp.v2.CmppManageProxy;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.util.concurrent.RateLimiter;
+import com.huawei.insa2.util.Args;
+import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.exception.DataEmptyException;
+import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppManageProxy;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
+import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ManageProxy;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ProxySender;
 import com.tangdao.exchanger.resolver.sms.sgip.SgipManageProxy;
 import com.tangdao.exchanger.resolver.sms.sgip.SgipProxySender;
 import com.tangdao.exchanger.resolver.sms.sgip.constant.SgipConstant;
+import com.tangdao.exchanger.resolver.sms.smgp.SmgpManageProxy;
 import com.tangdao.exchanger.resolver.sms.smgp.SmgpProxySender;
+import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
+import com.tangdao.exchanger.template.vo.TParameter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -55,17 +62,17 @@ public class SmsProxyService {
 	/**
 	 * CMPP/SGIP/SMGP通道代理发送实例
 	 */
-	public static volatile Map<Integer, Object> GLOBAL_PROXIES = new ConcurrentHashMap<>();
+	public static volatile Map<String, Object> GLOBAL_PROXIES = new ConcurrentHashMap<>();
 
 	/**
 	 * 通道PROXY 发送错误次数计数器
 	 */
-	private static final Map<Integer, Integer> GLOBAL_PROXIES_ERROR_COUNTER = new HashMap<>();
+	private static final Map<String, Integer> GLOBAL_PROXIES_ERROR_COUNTER = new HashMap<>();
 
 	/**
 	 * 通道对应的限流器容器
 	 */
-	public static final Map<Integer, RateLimiter> GLOBAL_RATE_LIMITERS = new HashMap<>();
+	public static final Map<String, RateLimiter> GLOBAL_RATE_LIMITERS = new HashMap<>();
 
 	/**
 	 * 默认限流速度
@@ -77,7 +84,6 @@ public class SmsProxyService {
 	 */
 	private static final int SGIP_RECONNECT_TIMEOUT = 60 * 1000;
 
-	@Override
 	public boolean startProxy(SmsPassageParameter parameter) {
 		try {
 			if (parameter == null) {
@@ -125,7 +131,7 @@ public class SmsProxyService {
 	 * @param speed      限速
 	 * @return
 	 */
-	private boolean setupPassageProxyIfNecessary(ProtocolType protocolType, Integer passageId, TParameter tparameter,
+	private boolean setupPassageProxyIfNecessary(ProtocolType protocolType, String passageId, TParameter tparameter,
 			Integer speed) {
 		// 如果协议非直连协议（如HTTP，WebService等）
 		if (!ProtocolType.isBelongtoDirect(protocolType.name())) {
@@ -148,7 +154,7 @@ public class SmsProxyService {
 	 * @param passageId
 	 * @param speed
 	 */
-	private void bindPassageRateLimiter(Integer passageId, Integer speed) {
+	private void bindPassageRateLimiter(String passageId, Integer speed) {
 		RateLimiter limiter = RateLimiter.create((speed == null || speed == 0) ? DEFAULT_LIMIT_SPEED : speed);
 		GLOBAL_RATE_LIMITERS.put(passageId, limiter);
 	}
@@ -159,7 +165,7 @@ public class SmsProxyService {
 	 * @param passageId
 	 * @return
 	 */
-	private void closeProxyIfAlive(Integer passageId) {
+	private void closeProxyIfAlive(String passageId) {
 		Object manageProxy = getManageProxy(passageId);
 		if (manageProxy == null) {
 			// ignored if proxy is null
@@ -193,7 +199,7 @@ public class SmsProxyService {
 	 * @param protocolType
 	 * @return
 	 */
-	private Object newProxy(Integer passageId, TParameter tparameter, ProtocolType protocolType) {
+	private Object newProxy(String passageId, TParameter tparameter, ProtocolType protocolType) {
 		Object proxy = null;
 		switch (protocolType) {
 		case CMPP2: {
@@ -229,7 +235,7 @@ public class SmsProxyService {
 	 * @param protocolType
 	 * @return
 	 */
-	private boolean loadManageProxy(Integer passageId, TParameter tparameter, ProtocolType protocolType) {
+	private boolean loadManageProxy(String passageId, TParameter tparameter, ProtocolType protocolType) {
 
 		closeProxyIfAlive(passageId);
 
@@ -262,7 +268,7 @@ public class SmsProxyService {
 	 * @param attrs
 	 * @return
 	 */
-	private SgipManageProxy loadSgipManageProxy(Integer passageId, Map<String, Object> attrs) {
+	private SgipManageProxy loadSgipManageProxy(String passageId, Map<String, Object> attrs) {
 		SgipManageProxy sgipManageProxy = null;
 		try {
 			// 如果代理类为空则重新初始化
@@ -300,7 +306,7 @@ public class SmsProxyService {
 		}
 	}
 
-	public boolean isProxyAvaiable(Integer passageId) {
+	public boolean isProxyAvaiable(String passageId) {
 		Object passage = getManageProxy(passageId);
 		if (passage == null) {
 			return false;
@@ -344,11 +350,11 @@ public class SmsProxyService {
 	 * @param passageId
 	 * @return
 	 */
-	public static Object getManageProxy(Integer passageId) {
+	public static Object getManageProxy(String passageId) {
 		return GLOBAL_PROXIES.get(passageId);
 	}
 
-	public boolean stopProxy(Integer passageId) {
+	public boolean stopProxy(String passageId) {
 		logger.info("stopProxy, passageId : {} ", passageId);
 		if (!isProxyAvaiable(passageId)) {
 			logger.warn("PassageId [" + passageId + "] has shutdown ");
@@ -371,7 +377,7 @@ public class SmsProxyService {
 		}
 	}
 
-	public void plusSendErrorTimes(Integer passageId) {
+	public void plusSendErrorTimes(String passageId) {
 		synchronized (GLOBAL_PROXIES_ERROR_COUNTER) {
 			Integer counter = GLOBAL_PROXIES_ERROR_COUNTER.get(passageId);
 			if (counter == null) {
@@ -383,7 +389,7 @@ public class SmsProxyService {
 		}
 	}
 
-	public void clearSendErrorTimes(Integer passageId) {
+	public void clearSendErrorTimes(String passageId) {
 		synchronized (GLOBAL_PROXIES_ERROR_COUNTER) {
 			Integer counter = GLOBAL_PROXIES_ERROR_COUNTER.get(passageId);
 			if (counter == null) {

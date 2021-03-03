@@ -6,27 +6,25 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.tangdao.modules.exchanger.constant.ParameterFilterContext;
-import org.tangdao.modules.exchanger.model.response.ProviderSendResponse;
-import org.tangdao.modules.exchanger.resolver.HttpClientManager;
-import org.tangdao.modules.exchanger.resolver.handler.DeliverHandler;
-import org.tangdao.modules.exchanger.resolver.handler.RequestHandler;
-import org.tangdao.modules.exchanger.resolver.handler.ResponseHandler;
-import org.tangdao.modules.exchanger.template.vo.TParameter;
-import org.tangdao.modules.sms.model.domain.SmsMoMessageReceive;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageDeliver;
-import org.tangdao.modules.sms.model.domain.SmsPassageAccess;
-import org.tangdao.modules.sms.model.domain.SmsPassageParameter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tangdao.core.context.ParameterFilterContext;
+import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
+import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
+import com.tangdao.core.model.domain.passage.SmsPassageAccess;
+import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.exchanger.model.response.ProviderSendResponse;
+import com.tangdao.exchanger.resolver.HttpClientManager;
+import com.tangdao.exchanger.template.vo.TParameter;
 
 /**
  * 
- * TODO http 自定义处理器
- * 
+ * <p>
+ * TODO 自定义处理器
+ * </p>
+ *
  * @author ruyang
- * @version V1.0
- * @date 2017年12月28日 上午10:00:17
+ * @since 2021年3月3日
  */
 @Component
 public class SmsHttpSender {
@@ -138,7 +136,6 @@ public class SmsHttpSender {
 	 * @return
 	 */
 	public List<SmsMtMessageDeliver> deliver(SmsPassageAccess access) {
-
 		TParameter tparameter = RequestHandler.parse(access.getParams());
 		if (StringUtils.isNotEmpty(tparameter.customPassage())) {
 			return customStatusTranslate(access, tparameter);

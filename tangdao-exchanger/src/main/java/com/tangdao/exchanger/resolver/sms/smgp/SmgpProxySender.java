@@ -239,7 +239,7 @@ public class SmgpProxySender extends AbstractSmsProxySender {
 		SMGPSubmitRespMessage submitRepMsg = null;
 		for (int index = 1; index <= contentList.size(); index++) {
 			submitMsg = getSMGPSubmitMessage(tpUdhi, msgFmt, spid, validTime, atTime, chargeNumber, srcTerminalId,
-					mobile.split(MobileNumberCatagoryUtils.DATA_SPLIT_CHARCATOR), contentList.get(index - 1), reserve);
+					mobile.split(MobileNumberCatagoryUtil.DATA_SPLIT_CHARCATOR), contentList.get(index - 1), reserve);
 
 			SMGPSubmitRespMessage repMsg = (SMGPSubmitRespMessage) smgpManageProxy.send(submitMsg);
 			if (index == 1) {

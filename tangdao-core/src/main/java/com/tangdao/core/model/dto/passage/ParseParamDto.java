@@ -1,0 +1,26 @@
+/**
+ *
+ */
+package com.tangdao.core.model.dto.passage;
+
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月3日
+ */
+@Getter
+@Setter
+public class ParseParamDto {
+
+	private String showName;
+
+	private String parseName;
+
+	private String position;
+}
