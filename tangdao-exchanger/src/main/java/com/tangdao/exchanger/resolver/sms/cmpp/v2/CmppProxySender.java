@@ -259,7 +259,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 				response.setStatusCode(submitRepMsg.getResult() + "");
 				response.setSid(getMsgId(submitRepMsg.getMsgId()));
 				response.setSuccess(true);
-				response.setRemark(String.format("{msgId:%s, sequenceId:%d, commandId:%d}", response.getSid(),
+				response.setRemarks(String.format("{msgId:%s, sequenceId:%d, commandId:%d}", response.getSid(),
 						submitRepMsg.getSequenceId(), submitRepMsg.getCommandId()));
 
 				list.add(response);
@@ -268,7 +268,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 				response.setStatusCode(submitRepMsg.getResult() + "");
 				response.setSid(getMsgId(submitRepMsg.getMsgId()));
 				response.setSuccess(false);
-				response.setRemark(String.format("{result:%d, sequenceId:%d, commandId:%d}", submitRepMsg.getResult(),
+				response.setRemarks(String.format("{result:%d, sequenceId:%d, commandId:%d}", submitRepMsg.getResult(),
 						submitRepMsg.getSequenceId(), submitRepMsg.getCommandId()));
 
 				list.add(response);

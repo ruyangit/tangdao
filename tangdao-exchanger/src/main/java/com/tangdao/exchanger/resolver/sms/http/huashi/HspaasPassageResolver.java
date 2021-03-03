@@ -12,7 +12,20 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.tangdao.core.context.CommonContext.CMCP;
+import com.tangdao.core.context.PassageContext.DeliverStatus;
+import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
+import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
+import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.exchanger.model.response.ProviderSendResponse;
+import com.tangdao.exchanger.resolver.HttpClientManager;
 import com.tangdao.exchanger.resolver.sms.http.AbstractPassageResolver;
+import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
+import com.tangdao.exchanger.template.vo.TParameter;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 
@@ -81,11 +94,11 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 	 * @return
 	 */
 	private static List<ProviderSendResponse> sendResponse(String result, String successCode) {
-		if (StringUtils.isEmpty(result)) {
+		if (StrUtil.isEmpty(result)) {
 			return null;
 		}
 
-		successCode = StringUtils.isEmpty(successCode) ? COMMON_MT_STATUS_SUCCESS_CODE : successCode;
+		successCode = StrUtil.isEmpty(successCode) ? COMMON_MT_STATUS_SUCCESS_CODE : successCode;
 
 		JSONObject jsonObject = JSON.parseObject(result);
 		if (jsonObject == null) {
@@ -98,8 +111,8 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 		response.setStatusCode(jsonObject.getString("code"));
 		response.setSid(jsonObject.getString("sid"));
 		response.setSuccess(
-				StringUtils.isNotEmpty(response.getStatusCode()) && successCode.equals(response.getStatusCode()));
-		response.setRemark(result);
+				StrUtil.isNotEmpty(response.getStatusCode()) && successCode.equals(response.getStatusCode()));
+		response.setRemarks(result);
 
 		list.add(response);
 		return list;
@@ -111,7 +124,7 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 			logger.info("下行状态报告简码：{} =========={}", code(), report);
 
 			JSONArray array = JSON.parseArray(report);
-			if (CollectionUtils.isEmpty(array)) {
+			if (CollUtil.isEmpty(array)) {
 				return null;
 			}
 
@@ -128,11 +141,12 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 				response.setMobile(jsonobj.getString("mobile"));
 				response.setCmcp(CMCP.local(jsonobj.getString("mobile")).getCode());
 				response.setStatusCode(jsonobj.getString("status"));
-				response.setStatus((StringUtils.isNotEmpty(response.getStatusCode())
-						&& response.getStatusCode().equalsIgnoreCase(successCode) ? DeliverStatus.SUCCESS.getValue()
-								: DeliverStatus.FAILED.getValue()));
-				response.setDeliverTime(DateUtils.getDateTime());
-				response.setCreateTime(new Date());
+				response.setStatus((StrUtil.isNotEmpty(response.getStatusCode())
+						&& response.getStatusCode().equalsIgnoreCase(successCode)
+								? DeliverStatus.SUCCESS.getValue() + ""
+								: DeliverStatus.FAILED.getValue() + ""));
+				response.setDeliverTime(DateUtil.now());
+				response.setCreateDate(new Date());
 				response.setRemarks(jsonobj.toJSONString());
 
 				list.add(response);
@@ -166,8 +180,8 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 			response.setMobile(mobile);
 			response.setContent(content);
 			response.setDestnationNo(destId);
-			response.setReceiveTime(DateUtils.getDateTime());
-			response.setCreateTime(new Date());
+			response.setReceiveTime(DateUtil.now());
+			response.setCreateDate(new Date());
 			list.add(response);
 
 			// 解析返回结果并返回

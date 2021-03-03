@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
 import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
