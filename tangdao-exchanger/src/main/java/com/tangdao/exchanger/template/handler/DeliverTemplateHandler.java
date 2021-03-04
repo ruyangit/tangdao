@@ -13,8 +13,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.ParameterFilterContext;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
-import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
-import com.tangdao.core.model.domain.passage.SmsPassageAccess;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.model.domain.sms.PassageAccess;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
@@ -33,9 +33,9 @@ public class DeliverTemplateHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(DeliverTemplateHandler.class);
 
-	public static List<SmsMtMessageDeliver> translate(SmsPassageAccess access, JSONObject report) {
+	public static List<MtMessageDeliver> translate(PassageAccess access, JSONObject report) {
 
-		List<SmsMtMessageDeliver> list = new ArrayList<>();
+		List<MtMessageDeliver> list = new ArrayList<>();
 		try {
 //			JSONObject paramDefination = JSON.parseObject(access.getParams());
 //			if (!paramDefination.keySet().contains(TPosition.MSGID_NODE_NAME)
@@ -56,7 +56,7 @@ public class DeliverTemplateHandler {
 				return null;
 			}
 
-			SmsMtMessageDeliver response;
+			MtMessageDeliver response;
 			for (JSONObject prameterReport : array) {
 
 				// 消息ID
@@ -66,7 +66,7 @@ public class DeliverTemplateHandler {
 				// 状态码
 				String statusCode = prameterReport.getString("Status");
 
-				response = new SmsMtMessageDeliver();
+				response = new MtMessageDeliver();
 
 				response.setMsgId(msgId);
 				response.setMobile(mobile);

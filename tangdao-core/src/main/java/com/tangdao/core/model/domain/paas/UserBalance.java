@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.domain;
+package com.tangdao.core.model.domain.paas;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,8 +21,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "host_whitelist")
-public class HostWhitelist extends DataEntity<HostWhitelist> {
+@TableName(BaseModel.DB_PREFIX_ + "user_balance")
+public class UserBalance extends DataEntity<UserBalance> {
 
 	/**
 	 * 
@@ -32,7 +32,20 @@ public class HostWhitelist extends DataEntity<HostWhitelist> {
 	@TableId
 	private String id;
 
-	private String ip;
+	private String userId;
 
-	private String userCode;
+	private String mobile;
+
+	private Integer type;
+
+	private Double balance;
+
+	private Integer threshold;
+
+	private Integer payType;
+	
+	private String remarks;
+	
+	private String status;
+
 }

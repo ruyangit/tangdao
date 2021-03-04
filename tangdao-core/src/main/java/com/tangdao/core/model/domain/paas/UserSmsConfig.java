@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.domain;
+package com.tangdao.core.model.domain.paas;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

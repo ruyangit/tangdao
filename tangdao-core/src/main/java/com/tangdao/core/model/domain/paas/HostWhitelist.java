@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.domain;
+package com.tangdao.core.model.domain.paas;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,24 +21,18 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "user_developer")
-public class UserDeveloper extends DataEntity<UserDeveloper> {
+@TableName(BaseModel.DB_PREFIX_ + "host_whitelist")
+public class HostWhitelist extends DataEntity<HostWhitelist> {
 
-	private static final long serialVersionUID = 1652989610979690232L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	@TableId
 	private String id;
-	
-	private String appKey;
 
-	private String appSecret;
+	private String ip;
 
-	private String salt;
-
-	private String userId;
-
-	private String status;
-	
-	private String remarks;
-	
+	private String userCode;
 }

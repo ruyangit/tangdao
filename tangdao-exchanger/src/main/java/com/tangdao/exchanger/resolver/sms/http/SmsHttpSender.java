@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tangdao.core.context.ParameterFilterContext;
-import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
-import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
-import com.tangdao.core.model.domain.passage.SmsPassageAccess;
-import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.core.model.domain.sms.MoMessageReceive;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.model.domain.sms.PassageAccess;
+import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.exchanger.model.response.ProviderSendResponse;
 import com.tangdao.exchanger.resolver.HttpClientManager;
 import com.tangdao.exchanger.template.handler.DeliverTemplateHandler;
@@ -43,7 +43,7 @@ public class SmsHttpSender {
 	 * @param extNumber
 	 * @return
 	 */
-	public List<ProviderSendResponse> post(SmsPassageParameter parameter, String mobile, String content,
+	public List<ProviderSendResponse> post(PassageParameter parameter, String mobile, String content,
 			String extNumber) {
 		TParameter tparameter = RequestTemplateHandler.parse(parameter.getParams());
 		if (StringUtils.isNotEmpty(tparameter.customPassage())) {
@@ -108,7 +108,7 @@ public class SmsHttpSender {
 	 * @param tparameter
 	 * @return
 	 */
-	private List<ProviderSendResponse> sendCustomTranslate(SmsPassageParameter parameter, String mobile, String content,
+	private List<ProviderSendResponse> sendCustomTranslate(PassageParameter parameter, String mobile, String content,
 			String extNumber, TParameter tparameter) {
 
 		return AbstractPassageResolver.getInstance(tparameter.customPassage()).send(parameter, mobile, content,
@@ -122,7 +122,7 @@ public class SmsHttpSender {
 	 * @param report
 	 * @return
 	 */
-	public List<SmsMtMessageDeliver> deliver(SmsPassageAccess access, JSONObject report) {
+	public List<MtMessageDeliver> deliver(PassageAccess access, JSONObject report) {
 
 		TParameter tparameter = RequestTemplateHandler.parse(access.getParams());
 		if (StringUtils.isNotEmpty(tparameter.customPassage())) {
@@ -138,7 +138,7 @@ public class SmsHttpSender {
 	 * @param access
 	 * @return
 	 */
-	public List<SmsMtMessageDeliver> deliver(SmsPassageAccess access) {
+	public List<MtMessageDeliver> deliver(PassageAccess access) {
 		TParameter tparameter = RequestTemplateHandler.parse(access.getParams());
 		if (StringUtils.isNotEmpty(tparameter.customPassage())) {
 			return customStatusTranslate(access, tparameter);
@@ -154,7 +154,7 @@ public class SmsHttpSender {
 	 * @param tparameter
 	 * @return
 	 */
-	private List<SmsMtMessageDeliver> customStatusTranslate(SmsPassageAccess access, TParameter tparameter) {
+	private List<MtMessageDeliver> customStatusTranslate(PassageAccess access, TParameter tparameter) {
 		return AbstractPassageResolver.getInstance(tparameter.customPassage()).mtDeliver(tparameter, access.getUrl(),
 				access.getSuccessCode());
 	}
@@ -167,7 +167,7 @@ public class SmsHttpSender {
 	 * @param successCode
 	 * @return
 	 */
-	private List<SmsMtMessageDeliver> customStatusTranslate(JSONObject report, TParameter tparameter,
+	private List<MtMessageDeliver> customStatusTranslate(JSONObject report, TParameter tparameter,
 			String successCode) {
 		return AbstractPassageResolver.getInstance(tparameter.customPassage())
 				.mtDeliver(report.getString(ParameterFilterContext.PARAMETER_NAME_IN_STREAM), successCode);
@@ -180,7 +180,7 @@ public class SmsHttpSender {
 	 * @param tparameter
 	 * @return
 	 */
-	private List<SmsMoMessageReceive> customMoTranslate(SmsPassageAccess access, TParameter tparameter) {
+	private List<MoMessageReceive> customMoTranslate(PassageAccess access, TParameter tparameter) {
 		return AbstractPassageResolver.getInstance(tparameter.customPassage()).moReceive(tparameter, access.getUrl(),
 				access.getPassageId());
 	}
@@ -193,7 +193,7 @@ public class SmsHttpSender {
 	 * @param passageId
 	 * @return
 	 */
-	private List<SmsMoMessageReceive> customMoTranslate(JSONObject report, TParameter tparameter, String passageId) {
+	private List<MoMessageReceive> customMoTranslate(JSONObject report, TParameter tparameter, String passageId) {
 		return AbstractPassageResolver.getInstance(tparameter.customPassage())
 				.moReceive(report.getString(ParameterFilterContext.PARAMETER_NAME_IN_STREAM), passageId);
 	}
@@ -205,7 +205,7 @@ public class SmsHttpSender {
 	 * @param report
 	 * @return
 	 */
-	public List<SmsMoMessageReceive> mo(SmsPassageAccess access, JSONObject report) {
+	public List<MoMessageReceive> mo(PassageAccess access, JSONObject report) {
 		TParameter tparameter = RequestTemplateHandler.parse(access.getParams());
 		if (StringUtils.isNotEmpty(tparameter.customPassage())) {
 			return customMoTranslate(report, tparameter, access.getPassageId());
@@ -220,7 +220,7 @@ public class SmsHttpSender {
 	 * @param access
 	 * @return
 	 */
-	public List<SmsMoMessageReceive> mo(SmsPassageAccess access) {
+	public List<MoMessageReceive> mo(PassageAccess access) {
 		TParameter tparameter = RequestTemplateHandler.parse(access.getParams());
 		if (StringUtils.isNotEmpty(tparameter.customPassage())) {
 			return customMoTranslate(access, tparameter);

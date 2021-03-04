@@ -25,7 +25,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_api_failed_record")
-public class SmsApiFailedRecord extends DataEntity<SmsApiFailedRecord> {
+public class ApiFailedRecord extends DataEntity<ApiFailedRecord> {
 
 	/**
 	 * 

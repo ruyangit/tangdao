@@ -18,7 +18,7 @@ import com.google.common.util.concurrent.RateLimiter;
 import com.huawei.insa2.util.Args;
 import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.exception.DataEmptyException;
-import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppManageProxy;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ManageProxy;
@@ -84,7 +84,7 @@ public class SmsProxyService {
 	 */
 	private static final int SGIP_RECONNECT_TIMEOUT = 60 * 1000;
 
-	public boolean startProxy(SmsPassageParameter parameter) {
+	public boolean startProxy(PassageParameter parameter) {
 		try {
 			if (parameter == null) {
 				throw new IllegalArgumentException("SmsPassageParameter is empty");
@@ -109,7 +109,7 @@ public class SmsProxyService {
 	 * @param parameter
 	 * @return
 	 */
-	private ProtocolType getPassageProtocolType(SmsPassageParameter parameter) {
+	private ProtocolType getPassageProtocolType(PassageParameter parameter) {
 		if (StrUtil.isEmpty(parameter.getProtocol())) {
 			throw new IllegalArgumentException("SmsPassageParameter's protocolType is empty");
 		}

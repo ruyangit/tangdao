@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.exchanger.service.SmsProxyService;
 
 /**
@@ -45,7 +45,7 @@ public abstract class AbstractSmsProxySender {
 	 * @param parameter
 	 * @return
 	 */
-	protected Object getSmManageProxy(SmsPassageParameter parameter) {
+	protected Object getSmManageProxy(PassageParameter parameter) {
 		addPassageLockMonitor(parameter.getPassageId());
 
 		synchronized (passageLockMonitor.get(parameter.getPassageId())) {

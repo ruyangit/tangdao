@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.domain.task;
+package com.tangdao.core.model.domain.sms;
 
 import java.beans.Transient;
 
@@ -29,7 +29,7 @@ import lombok.Getter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_mt_task_packets")
-public class SmsMtTaskPackets extends DataEntity<SmsMtTaskPackets> {
+public class MtTaskPackets extends DataEntity<MtTaskPackets> {
 	/**
 	 * 
 	 */
@@ -151,7 +151,7 @@ public class SmsMtTaskPackets extends DataEntity<SmsMtTaskPackets> {
 		return false;
 	}
 
-	public SmsMtTaskPackets() {
+	public MtTaskPackets() {
 		super();
 	}
 

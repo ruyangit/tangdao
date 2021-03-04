@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.passage;
+package com.tangdao.core.model.domain.sms;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_passage_area")
-public class SmsPassageArea extends DataEntity<SmsPassageArea> {
+public class PassageArea extends DataEntity<PassageArea> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -25,11 +25,11 @@ public class SmsPassageArea extends DataEntity<SmsPassageArea> {
 	private String passageId;		// 通道ID
 	private String araCode;		// 省份代码
 	
-	public SmsPassageArea() {
+	public PassageArea() {
 		super();
 	}
 	
-	public SmsPassageArea(String passageId,String araCode){
+	public PassageArea(String passageId,String araCode){
         this.passageId = passageId;
         this.araCode = araCode;
     }

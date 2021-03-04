@@ -17,10 +17,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.util.concurrent.RateLimiter;
 import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.exception.ExchangeProcessException;
-import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
-import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
-import com.tangdao.core.model.domain.passage.SmsPassageAccess;
-import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.core.model.domain.sms.MoMessageReceive;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.model.domain.sms.PassageAccess;
+import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.exchanger.model.response.ProviderSendResponse;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ProxySender;
@@ -70,7 +70,7 @@ public class SmsProviderService {
 	// @Value("${gateway.mobiles-per-sencond:10}")
 	// private int gatewayMobilesPerSecond;
 
-	public List<ProviderSendResponse> sendSms(SmsPassageParameter parameter, String mobile, String content, Integer fee,
+	public List<ProviderSendResponse> sendSms(PassageParameter parameter, String mobile, String content, Integer fee,
 			String extNumber) throws ExchangeProcessException {
 
 		validate(parameter);
@@ -151,7 +151,7 @@ public class SmsProviderService {
 	 * @param extNumber
 	 * @return
 	 */
-	private List<ProviderSendResponse> submitData2Gateway(SmsPassageParameter parameter, String mobile, String content,
+	private List<ProviderSendResponse> submitData2Gateway(PassageParameter parameter, String mobile, String content,
 			String extNumber) {
 
 		ProtocolType pt = ProtocolType.parse(parameter.getProtocol());
@@ -241,7 +241,7 @@ public class SmsProviderService {
 	 * 
 	 * @param parameter
 	 */
-	private void validate(SmsPassageParameter parameter) {
+	private void validate(PassageParameter parameter) {
 		if (StrUtil.isEmpty(parameter.getUrl())) {
 			throw new IllegalArgumentException("SmsPassageParameter's url is empty");
 		}
@@ -252,7 +252,7 @@ public class SmsProviderService {
 
 	}
 
-	public List<SmsMtMessageDeliver> receiveMtReport(SmsPassageAccess access, JSONObject report) {
+	public List<MtMessageDeliver> receiveMtReport(PassageAccess access, JSONObject report) {
 		try {
 			return httpResolver.deliver(access, report);
 		} catch (Exception e) {
@@ -262,7 +262,7 @@ public class SmsProviderService {
 		}
 	}
 
-	public List<SmsMtMessageDeliver> pullMtReport(SmsPassageAccess access) {
+	public List<MtMessageDeliver> pullMtReport(PassageAccess access) {
 		try {
 			return httpResolver.deliver(access);
 		} catch (Exception e) {
@@ -271,7 +271,7 @@ public class SmsProviderService {
 		}
 	}
 
-	public List<SmsMoMessageReceive> receiveMoReport(SmsPassageAccess access, JSONObject report) {
+	public List<MoMessageReceive> receiveMoReport(PassageAccess access, JSONObject report) {
 		try {
 			return httpResolver.mo(access, report);
 		} catch (Exception e) {
@@ -281,7 +281,7 @@ public class SmsProviderService {
 		}
 	}
 
-	public List<SmsMoMessageReceive> pullMoReport(SmsPassageAccess access) {
+	public List<MoMessageReceive> pullMoReport(PassageAccess access) {
 		try {
 			return httpResolver.mo(access);
 		} catch (Exception e) {

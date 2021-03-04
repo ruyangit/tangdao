@@ -14,9 +14,9 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
-import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
-import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
-import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.core.model.domain.sms.MoMessageReceive;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.exchanger.model.response.ProviderSendResponse;
 import com.tangdao.exchanger.resolver.HttpClientManager;
 import com.tangdao.exchanger.resolver.sms.http.AbstractPassageResolver;
@@ -38,7 +38,7 @@ import cn.hutool.core.util.StrUtil;
 public class ZhangsPassageResolver extends AbstractPassageResolver{
 	
 	@Override
-	public List<ProviderSendResponse> send(SmsPassageParameter parameter,String mobile, String content,
+	public List<ProviderSendResponse> send(PassageParameter parameter,String mobile, String content,
 			String extNumber) {
 		
 		try {
@@ -117,7 +117,7 @@ public class ZhangsPassageResolver extends AbstractPassageResolver{
 	}
 
 	@Override
-	public List<SmsMtMessageDeliver> mtDeliver(String report, String successCode) {
+	public List<MtMessageDeliver> mtDeliver(String report, String successCode) {
 		try {
 			logger.info("下行状态报告简码：{} =========={}", code(), report);
 			
@@ -126,15 +126,15 @@ public class ZhangsPassageResolver extends AbstractPassageResolver{
                 return null;
             }
 			
-			List<SmsMtMessageDeliver> list = new ArrayList<>();
-			SmsMtMessageDeliver response;
+			List<MtMessageDeliver> list = new ArrayList<>();
+			MtMessageDeliver response;
 			for(Object object : array) {
 				if(object == null) {
                     continue;
                 }
 				
 				JSONObject jsonobj = (JSONObject)object;
-				response = new SmsMtMessageDeliver();
+				response = new MtMessageDeliver();
 				response.setMsgId(jsonobj.getString("sid"));
 				response.setMobile(jsonobj.getString("mobile"));
 				response.setCmcp(CMCP.local(jsonobj.getString("mobile")).getCode());
@@ -158,7 +158,7 @@ public class ZhangsPassageResolver extends AbstractPassageResolver{
 	}
 
 	@Override
-	public List<SmsMoMessageReceive> moReceive(String report, String passageId) {
+	public List<MoMessageReceive> moReceive(String report, String passageId) {
 		try {
 			
 			logger.info("上行报告简码：{} =========={}", code(), report);
@@ -169,9 +169,9 @@ public class ZhangsPassageResolver extends AbstractPassageResolver{
 			String mobile = jsonobj.getString("mobile");
 			String content = jsonobj.getString("content");
 
-			List<SmsMoMessageReceive> list = new ArrayList<>();
+			List<MoMessageReceive> list = new ArrayList<>();
 
-			SmsMoMessageReceive response = new SmsMoMessageReceive();
+			MoMessageReceive response = new MoMessageReceive();
 			response.setPassageId(passageId);
 			response.setMsgId(msgId);
 			response.setMobile(mobile);

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.domain.task;
+package com.tangdao.core.model.domain.sms;
 
 import java.util.Date;
 import java.util.List;
@@ -16,7 +16,6 @@ import com.tangdao.core.DataEntity;
 import com.tangdao.core.context.TaskContext.PacketsActionActor;
 import com.tangdao.core.context.TaskContext.PacketsActionPosition;
 import com.tangdao.core.context.TaskContext.TaskSubmitType;
-import com.tangdao.core.model.domain.sms.SmsForbiddenWords;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
@@ -33,7 +32,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_mt_task")
-public class SmsMtTask extends DataEntity<SmsMtTask> {
+public class MtTask extends DataEntity<MtTask> {
 
 	/**
 	 * 
@@ -71,7 +70,7 @@ public class SmsMtTask extends DataEntity<SmsMtTask> {
 	private String messageTemplateId; // 短信模板ID
 	private String forbiddenWords; // 敏感词
 
-	public SmsMtTask() {
+	public MtTask() {
 		super();
 	}
 
@@ -90,10 +89,10 @@ public class SmsMtTask extends DataEntity<SmsMtTask> {
 
 	// 敏感词标签
 	@TableField(exist = false)
-	private List<SmsForbiddenWords> forbiddenWordLabels;
+	private List<ForbiddenWords> forbiddenWordLabels;
 
 	@TableField(exist = false)
-	private List<SmsMtTaskPackets> packets;
+	private List<MtTaskPackets> packets;
 
 	// 汇总错误信息
 	private transient StringBuilder errorMessageReport = new StringBuilder();

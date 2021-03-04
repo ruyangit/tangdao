@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.constant.UserBalanceConstant;
-import com.tangdao.core.model.domain.UserSmsConfig;
+import com.tangdao.core.model.domain.paas.UserSmsConfig;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.developer.dao.UserSmsConfigMapper;
 

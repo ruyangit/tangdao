@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.domain;
+package com.tangdao.core.model.domain.paas;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,31 +21,24 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "user_balance")
-public class UserBalance extends DataEntity<UserBalance> {
+@TableName(BaseModel.DB_PREFIX_ + "user_developer")
+public class UserDeveloper extends DataEntity<UserDeveloper> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1652989610979690232L;
 
 	@TableId
 	private String id;
+	
+	private String appKey;
+
+	private String appSecret;
+
+	private String salt;
 
 	private String userId;
 
-	private String mobile;
-
-	private Integer type;
-
-	private Double balance;
-
-	private Integer threshold;
-
-	private Integer payType;
+	private String status;
 	
 	private String remarks;
 	
-	private String status;
-
 }

@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.message;
+package com.tangdao.core.model.domain.sms;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_mt_message_submit")
-public class SmsMtMessageSubmit extends DataEntity<SmsMtMessageSubmit> {
+public class MtMessageSubmit extends DataEntity<MtMessageSubmit> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -40,10 +40,10 @@ public class SmsMtMessageSubmit extends DataEntity<SmsMtMessageSubmit> {
 	private String msgId;		// 调用接口回执ID，默认与SID一致
 	
 	@TableField(exist = false)
-    private SmsMtMessageDeliver messageDeliver;
+    private MtMessageDeliver messageDeliver;
 
 	@TableField(exist = false)
-    private SmsMtMessagePush    messagePush;
+    private MtMessagePush    messagePush;
 
 	@TableField(exist = false)
     private String              passageName;
@@ -66,7 +66,7 @@ public class SmsMtMessageSubmit extends DataEntity<SmsMtMessageSubmit> {
 	@TableField(exist = false)
 	private User              user;
 	
-	public SmsMtMessageSubmit() {
+	public MtMessageSubmit() {
 		super();
 	}
 }

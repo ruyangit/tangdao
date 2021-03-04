@@ -20,9 +20,9 @@ import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
 import com.tangdao.core.context.TaskContext.MessageSubmitStatus;
-import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
-import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
-import com.tangdao.core.model.domain.passage.SmsPassageParameter;
+import com.tangdao.core.model.domain.sms.MoMessageReceive;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.exchanger.model.response.ProviderSendResponse;
 import com.tangdao.exchanger.resolver.sms.AbstractSmsProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.constant.CmppConstant;
@@ -211,7 +211,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 	 * @param content   短信内容
 	 * @return
 	 */
-	public List<ProviderSendResponse> send(SmsPassageParameter parameter, String extNumber, String mobile,
+	public List<ProviderSendResponse> send(PassageParameter parameter, String extNumber, String mobile,
 			String content) {
 		try {
 
@@ -401,9 +401,9 @@ public class CmppProxySender extends AbstractSmsProxySender {
 				mobile = mobile.substring(2);
 			}
 
-			List<SmsMtMessageDeliver> list = new ArrayList<>();
+			List<MtMessageDeliver> list = new ArrayList<>();
 
-			SmsMtMessageDeliver response = new SmsMtMessageDeliver();
+			MtMessageDeliver response = new MtMessageDeliver();
 			response.setMsgId(msgId);
 			response.setMobile(mobile);
 			response.setCmcp(CMCP.local(response.getMobile()).getCode());
@@ -465,7 +465,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 
 			logger.info("CMPP上行报告数据: {}", report);
 
-			List<SmsMoMessageReceive> list = new ArrayList<>();
+			List<MoMessageReceive> list = new ArrayList<>();
 
 			// 发送时手机号码拼接86，回执需去掉86前缀
 			String mobile = report.getSrcterminalId();
@@ -473,7 +473,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 				mobile = mobile.substring(2);
 			}
 
-			SmsMoMessageReceive response = new SmsMoMessageReceive();
+			MoMessageReceive response = new MoMessageReceive();
 			response.setPassageId(null);
 			response.setMsgId(getMsgId(report.getMsgId()));
 			response.setMobile(mobile);

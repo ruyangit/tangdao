@@ -4,7 +4,7 @@
 package com.tangdao.developer.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.UserSmsConfig;
+import com.tangdao.core.model.domain.paas.UserSmsConfig;
 
 /**
  * <p>

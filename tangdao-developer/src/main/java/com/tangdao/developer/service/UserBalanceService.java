@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.context.UserContext.BalancePayType;
-import com.tangdao.core.model.domain.UserBalance;
+import com.tangdao.core.model.domain.paas.UserBalance;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.developer.dao.UserBalanceMapper;
 

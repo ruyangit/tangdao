@@ -11,6 +11,6 @@ package com.tangdao.core.model.domain.sms;
  * @author ruyang
  * @since 2021年2月24日
  */
-public class SmsForbiddenWords {
+public class ForbiddenWords {
 
 }

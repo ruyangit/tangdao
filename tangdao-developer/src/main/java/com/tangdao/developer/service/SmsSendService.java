@@ -22,7 +22,7 @@ import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.context.RabbitContext.WordsPriority;
 import com.tangdao.core.context.TaskContext.TaskSubmitType;
 import com.tangdao.core.exception.QueueProcessException;
-import com.tangdao.core.model.domain.task.SmsMtTask;
+import com.tangdao.core.model.domain.sms.MtTask;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.model.vo.SmsSendVo;
 
@@ -56,7 +56,7 @@ public class SmsSendService {
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	public SmsSendVo sendMessage(SmsSendDTO smsSendDTO) {
-		SmsMtTask task = new SmsMtTask();
+		MtTask task = new MtTask();
 		BeanUtil.copyProperties(smsSendDTO, task);
 		task.setAppType(smsSendDTO.getAppType());
 		try {
@@ -77,7 +77,7 @@ public class SmsSendService {
 	 * @return 消息ID
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public long joinTask2Queue(SmsMtTask task, String userId) {
+	public long joinTask2Queue(MtTask task, String userId) {
 		try {
 			// 更新用户余额
 			boolean isSuccess = userBalanceService.deductBalance(userId, -task.getTotalFee(),

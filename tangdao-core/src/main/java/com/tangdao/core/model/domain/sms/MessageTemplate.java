@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.message;
+package com.tangdao.core.model.domain.sms;
 
 import java.util.Date;
 
@@ -22,7 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_message_template")
-public class SmsMessageTemplate extends DataEntity<SmsMessageTemplate> {
+public class MessageTemplate extends DataEntity<MessageTemplate> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +54,7 @@ public class SmsMessageTemplate extends DataEntity<SmsMessageTemplate> {
 	 */
 	private Integer ignoreForbiddenWords = IgnoreForbiddenWords.NO.getValue();
 
-	public SmsMessageTemplate() {
+	public MessageTemplate() {
 		super();
 	}
 }

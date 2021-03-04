@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.message;
+package com.tangdao.core.model.domain.sms;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_mo_message_receive")
-public class SmsMoMessageReceive extends DataEntity<SmsMoMessageReceive> {
+public class MoMessageReceive extends DataEntity<MoMessageReceive> {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -39,14 +39,14 @@ public class SmsMoMessageReceive extends DataEntity<SmsMoMessageReceive> {
 
 	//短信上行推送
 	@TableField(exist = false)
-	private SmsMoMessagePush messagePush;
+	private MoMessagePush messagePush;
 	
 	@TableField(exist = false)
 	private String sid;
 	@TableField(exist = false)
 	private Integer retryTimes;
 	
-	public SmsMoMessageReceive() {
+	public MoMessageReceive() {
 		super();
 	}
 }

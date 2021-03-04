@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.passage;
+package com.tangdao.core.model.domain.sms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_passage_parameter")
-public class SmsPassageParameter extends DataEntity<SmsPassageParameter> {
+public class PassageParameter extends DataEntity<PassageParameter> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class SmsPassageParameter extends DataEntity<SmsPassageParameter> {
 	private String successCode; // success_code
 	private String position; // 返回值的具体位置，json存储
 
-	public SmsPassageParameter() {
+	public PassageParameter() {
 		super();
 	}
 

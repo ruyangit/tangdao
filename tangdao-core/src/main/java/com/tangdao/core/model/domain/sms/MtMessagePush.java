@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.message;
+package com.tangdao.core.model.domain.sms;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_mt_message_push")
-public class SmsMtMessagePush extends DataEntity<SmsMtMessagePush> {
+public class MtMessagePush extends DataEntity<MtMessagePush> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +31,7 @@ public class SmsMtMessagePush extends DataEntity<SmsMtMessagePush> {
 	private Long responseMilliseconds; // 推送相应时间
 	private String responseContent; // 响应内容
 
-	public SmsMtMessagePush() {
+	public MtMessagePush() {
 		super();
 	}
 }

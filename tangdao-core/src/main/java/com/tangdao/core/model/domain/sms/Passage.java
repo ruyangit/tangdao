@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.passage;
+package com.tangdao.core.model.domain.sms;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_passage")
-public class SmsPassage extends DataEntity<SmsPassage> {
+public class Passage extends DataEntity<Passage> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,15 +56,15 @@ public class SmsPassage extends DataEntity<SmsPassage> {
 	 * 参数集合信息
 	 */
 	@TableField(exist = false)
-	private List<SmsPassageParameter> parameterList = new ArrayList<>();
+	private List<PassageParameter> parameterList = new ArrayList<>();
 
 	/**
 	 * 省份集合信息
 	 */
 	@TableField(exist = false)
-	private List<SmsPassageArea> areaList = new ArrayList<>();
+	private List<PassageArea> areaList = new ArrayList<>();
 
-	public SmsPassage() {
+	public Passage() {
 		super();
 	}
 

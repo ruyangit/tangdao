@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.passage;
+package com.tangdao.core.model.domain.sms;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -18,7 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(BaseModel.DB_PREFIX_ + "sms_passage_access")
-public class SmsPassageAccess extends DataEntity<SmsPassageAccess> {
+public class PassageAccess extends DataEntity<PassageAccess> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -56,7 +56,7 @@ public class SmsPassageAccess extends DataEntity<SmsPassageAccess> {
 	@TableField(exist = false)
 	private String routeTypeText;
 
-	public SmsPassageAccess() {
+	public PassageAccess() {
 		super();
 	}
 }

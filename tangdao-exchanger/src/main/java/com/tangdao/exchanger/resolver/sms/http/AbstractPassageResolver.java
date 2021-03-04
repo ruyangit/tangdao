@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import com.tangdao.core.model.domain.message.SmsMoMessageReceive;
-import com.tangdao.core.model.domain.message.SmsMtMessageDeliver;
+import com.tangdao.core.model.domain.sms.MoMessageReceive;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.exchanger.template.vo.TParameter;
 
 import cn.hutool.core.date.DateUtil;
@@ -100,7 +100,7 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @param report
 	 * @return
 	 */
-	public List<SmsMtMessageDeliver> mtDeliver(String report, String successCode) {
+	public List<MtMessageDeliver> mtDeliver(String report, String successCode) {
 		throw new UnsupportedOperationException("It needs implement by child class");
 	}
 
@@ -112,7 +112,7 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @param successCode
 	 * @return
 	 */
-	public List<SmsMtMessageDeliver> mtDeliver(TParameter tparameter, String url, String successCode) {
+	public List<MtMessageDeliver> mtDeliver(TParameter tparameter, String url, String successCode) {
 		throw new UnsupportedOperationException("It needs implement by child class");
 	}
 
@@ -122,7 +122,7 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @param report
 	 * @return
 	 */
-	public List<SmsMoMessageReceive> moReceive(String report, String passageId) {
+	public List<MoMessageReceive> moReceive(String report, String passageId) {
 		throw new UnsupportedOperationException("It needs implement by child class");
 	}
 
@@ -134,7 +134,7 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @param passageId
 	 * @return
 	 */
-	public List<SmsMoMessageReceive> moReceive(TParameter tparameter, String url, String passageId) {
+	public List<MoMessageReceive> moReceive(TParameter tparameter, String url, String passageId) {
 		throw new UnsupportedOperationException("It needs implement by child class");
 	}
 

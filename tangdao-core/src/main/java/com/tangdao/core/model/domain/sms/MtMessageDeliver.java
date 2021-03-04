@@ -1,4 +1,4 @@
-package com.tangdao.core.model.domain.message;
+package com.tangdao.core.model.domain.sms;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,7 +17,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @TableName(BaseModel.DB_PREFIX_ + "sms_mt_message_deliver")
-public class SmsMtMessageDeliver extends DataEntity<SmsMtMessageDeliver> {
+public class MtMessageDeliver extends DataEntity<MtMessageDeliver> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -33,7 +33,7 @@ public class SmsMtMessageDeliver extends DataEntity<SmsMtMessageDeliver> {
 	private String status;
 	private String remarks;
 
-	public SmsMtMessageDeliver() {
+	public MtMessageDeliver() {
 		super();
 	}
 }
