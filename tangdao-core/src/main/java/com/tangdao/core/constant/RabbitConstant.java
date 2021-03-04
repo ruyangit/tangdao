@@ -40,15 +40,29 @@ public class RabbitConstant {
      */
     public static final String MQ_SMS_MO_RECEIVE      = "mq_sms_mo_receive";
 
-	/**
-	 * TODO 关键词优先级
-	 *
-	 * @author zhengying
-	 * @version V1.0.0
-	 * @date 2016年10月4日 下午10:20:05
-	 */
+    public enum WaitProcessStatus {
+        WAITING_REFORMED(0, "待归正"), COMPLETE(1, "归正完成，已提交"), WAITING_APPROVE(2, "归正完成，待审核"), REFORMED_FAILED(3, "归正失败");
+
+        private int    code;
+        private String message;
+
+        WaitProcessStatus(int code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+    }
+    
 	public enum WordsPriority {
-		L10(10, new String[] { "验证码", "动态码", "校验码" }), L5(5, new String[] { "分钟", "" }), L1(1, new String[] { "回复TD" }),
+		L10(10, new String[] { "验证码", "动态码", "校验码" }), L5(5, new String[] { "分钟", "[中国移动]" }), L1(1, new String[] { "回复TD" }),
 		DEFAULT(3, new String[] { "" });
 
 		private int level;
