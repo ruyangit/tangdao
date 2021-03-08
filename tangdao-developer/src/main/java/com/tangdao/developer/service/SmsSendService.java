@@ -83,7 +83,7 @@ public class SmsSendService {
 			boolean isSuccess = userBalanceService.deductBalance(userId, -task.getTotalFee(),
 					PlatformType.SEND_MESSAGE_SERVICE.getCode(), "developer call");
 			if (!isSuccess) {
-				log.error("用户: [" + userId + "] 应用:[" + task.getAppId() + "]扣除短信余额 " + task.getTotalFee() + " 失败");
+				log.error("用户: [" + userId + "] 扣除短信余额 " + task.getTotalFee() + " 失败");
 				throw new QueueProcessException("发送短信扣除短信余额失败");
 			}
 

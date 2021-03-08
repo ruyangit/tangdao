@@ -29,8 +29,8 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	private String getAssistKey(String userCode, int type) {
-		return String.format("%s:%s:%d", CommonRedisConstant.RED_USER_PUSH_CONFIG, userCode, type);
+	private String getAssistKey(String userId, int type) {
+		return String.format("%s:%s:%d", CommonRedisConstant.RED_USER_PUSH_CONFIG, userId, type);
 	}
 
 	public boolean update(PushConfig record) {
@@ -38,20 +38,20 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 			return false;
 		}
 
-		pushToRedis(record.getAppId(), record.getType(), record);
+		pushToRedis(record.getUserId(), record.getType(), record);
 
 		return this.baseMapper.updateById(record) > 0;
 	}
 
 	public List<PushConfig> findByAppId(String appId) {
-		return this.list(Wrappers.<PushConfig>lambdaQuery().eq(PushConfig::getAppId, appId));
+		return this.list(Wrappers.<PushConfig>lambdaQuery().eq(PushConfig::getUserId, appId));
 	}
 
 	public boolean save(PushConfig record) {
 		int id = this.baseMapper.insert(record);
-		PushConfig c = selectByAppIdAndType(record.getAppId(), record.getType());
+		PushConfig c = selectByAppIdAndType(record.getUserId(), record.getType());
 		record.setId(c.getId());
-		pushToRedis(record.getAppId(), record.getType(), record);
+		pushToRedis(record.getUserId(), record.getType(), record);
 		return id > 0;
 	}
 
@@ -108,7 +108,7 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 			connection.openPipeline();
 			for (PushConfig config : list) {
-				byte[] key = serializer.serialize(getAssistKey(config.getAppId(), config.getType()));
+				byte[] key = serializer.serialize(getAssistKey(config.getUserId(), config.getType()));
 				connection.set(key, serializer.serialize(JSON.toJSONString(config)));
 			}
 
@@ -123,21 +123,21 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 		int result = 0;
 		try {
 			// 判断如果用户推送记录中没有数据，则插入推送信息
-			PushConfig pushConfig = selectByAppIdAndType(pushConFig.getAppId(), pushConFig.getType());
+			PushConfig pushConfig = selectByAppIdAndType(pushConFig.getUserId(), pushConFig.getType());
 			if (pushConfig == null) {
 				result = this.baseMapper.insert(pushConFig);
 			}
 			result = this.baseMapper.updateByUserCode(pushConFig);
 
 			// 查询修改后数据存储到缓存中
-			PushConfig cf = selectByAppIdAndType(pushConFig.getAppId(), pushConFig.getType());
+			PushConfig cf = selectByAppIdAndType(pushConFig.getUserId(), pushConFig.getType());
 			if (cf == null) {
 				{
 					return 0;
 				}
 			}
 
-			pushToRedis(cf.getAppId(), cf.getType(), cf);
+			pushToRedis(cf.getUserId(), cf.getType(), cf);
 		} catch (Exception e) {
 			logger.error("更新用户推送信息失败：{}", JSON.toJSONString(pushConFig), e);
 		}
@@ -147,7 +147,7 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 
 	public PushConfig selectByAppIdAndType(String appId, int type) {
 		QueryWrapper<PushConfig> queryWrapper = new QueryWrapper<PushConfig>();
-		queryWrapper.eq("app_id", appId);
+		queryWrapper.eq("user_id", appId);
 		queryWrapper.eq("type", type);
 		queryWrapper.orderByDesc("id");
 		queryWrapper.last("limit 1");

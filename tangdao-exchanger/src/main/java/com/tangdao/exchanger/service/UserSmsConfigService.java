@@ -19,47 +19,45 @@ import com.tangdao.exchanger.dao.UserSmsConfigMapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 public class UserSmsConfigService extends BaseService<UserSmsConfigMapper, UserSmsConfig> {
 
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 
-	private static String getKey(String userCode) {
-		return CommonRedisConstant.RED_USER_SMS_CONFIG + ":" + userCode;
+	private static String getKey(String userId) {
+		return CommonRedisConstant.RED_USER_SMS_CONFIG + ":" + userId;
 	}
 
-	public UserSmsConfig getByAppId(String appId) {
-		if (StrUtil.isEmpty(appId)) {
+	public UserSmsConfig getByUserId(String userId) {
+		if (StrUtil.isEmpty(userId)) {
 			return null;
 		}
 
 		try {
-			String text = stringRedisTemplate.opsForValue().get(getKey(appId));
+			String text = stringRedisTemplate.opsForValue().get(getKey(userId));
 			if (StrUtil.isNotEmpty(text)) {
 				return JSON.parseObject(text, UserSmsConfig.class);
 			}
 
 		} catch (Exception e) {
-			log.warn("REDIS获取用户短信配置失败", e);
+			logger.warn("REDIS获取用户短信配置失败", e);
 		}
 
-		return this.getOne(Wrappers.<UserSmsConfig>lambdaQuery().eq(UserSmsConfig::getAppId, appId));
+		return this.getOne(Wrappers.<UserSmsConfig>lambdaQuery().eq(UserSmsConfig::getUserId, userId));
 	}
 
-	public int getSingleChars(String appId) {
+	public int getSingleChars(String userId) {
 		int wordsPerNum = UserBalanceConstant.WORDS_SIZE_PER_NUM;
 		try {
-			UserSmsConfig userSmsConfig = getByAppId(appId);
+			UserSmsConfig userSmsConfig = getByUserId(userId);
 			if (userSmsConfig != null) {
 				wordsPerNum = userSmsConfig.getSmsWords();
 			}
 
 		} catch (Exception e) {
-			log.warn("appId：{} 短信字数配置失败，将以默认每条字数：{}计费", appId, wordsPerNum, e);
+			logger.warn("用戶：{} 短信字数配置失败，将以默认每条字数：{}计费", userId, wordsPerNum, e);
 		}
 		return wordsPerNum;
 	}
@@ -76,9 +74,9 @@ public class UserSmsConfigService extends BaseService<UserSmsConfigMapper, UserS
 		return userSmsConfig;
 	}
 
-	public boolean save(String appId, int words, String extNumber) {
+	public boolean save(String userId, int words, String extNumber) {
 		UserSmsConfig userSmsConfig = defaultConfig();
-		userSmsConfig.setAppId(appId);
+		userSmsConfig.setUserId(userId);
 		userSmsConfig.setExtNumber(extNumber);
 		userSmsConfig.setSmsWords(words);
 
@@ -100,16 +98,16 @@ public class UserSmsConfigService extends BaseService<UserSmsConfigMapper, UserS
 	 */
 	private void pushToRedis(UserSmsConfig userSmsConfig) {
 		try {
-			stringRedisTemplate.opsForValue().set(getKey(userSmsConfig.getAppId()), JSON.toJSONString(userSmsConfig));
+			stringRedisTemplate.opsForValue().set(getKey(userSmsConfig.getUserId()), JSON.toJSONString(userSmsConfig));
 		} catch (Exception e) {
-			log.warn("REDIS 操作用户短信配置失败", e);
+			logger.warn("REDIS 操作用户短信配置失败", e);
 		}
 	}
 
 	public boolean reloadToRedis() {
 		List<UserSmsConfig> list = this.list();
 		if (CollUtil.isEmpty(list)) {
-			log.error("用户短信配置数据为空");
+			logger.error("用户短信配置数据为空");
 			return true;
 		}
 
@@ -118,7 +116,7 @@ public class UserSmsConfigService extends BaseService<UserSmsConfigMapper, UserS
 			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 			connection.openPipeline();
 			for (UserSmsConfig config : list) {
-				byte[] key = serializer.serialize(getKey(config.getAppId()));
+				byte[] key = serializer.serialize(getKey(config.getUserId()));
 				connection.set(key, serializer.serialize(JSON.toJSONString(config)));
 			}
 

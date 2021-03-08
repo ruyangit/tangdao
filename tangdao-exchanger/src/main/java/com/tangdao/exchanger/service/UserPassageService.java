@@ -31,22 +31,22 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 	private StringRedisTemplate stringRedisTemplate;
 
 	
-	public List<UserPassage> findByAppId(String appId) {
-		return this.list(Wrappers.<UserPassage>lambdaQuery().eq(UserPassage::getAppId, appId));
+	public List<UserPassage> findByUserId(String userId) {
+		return this.list(Wrappers.<UserPassage>lambdaQuery().eq(UserPassage::getUserId, userId));
 	}
 
-	private String getKey(String appId, int type) {
+	private String getKey(String userId, int type) {
 		return String.format("%s:%d:%d", CommonRedisConstant.RED_USER_SMS_PASSAGE, userId, type);
 	}
 
 	
-	public String getByUserCodeAndType(String userCode, int type) {
-		if (StrUtil.isEmpty(userCode) || type == 0) {
+	public String getByUserCodeAndType(String userId, int type) {
+		if (StrUtil.isEmpty(userId) || type == 0) {
 			return null;
 		}
 
 		try {
-			String passageGroupId = stringRedisTemplate.opsForValue().get(getKey(userCode, type));
+			String passageGroupId = stringRedisTemplate.opsForValue().get(getKey(userId, type));
 			if (StrUtil.isNotBlank(passageGroupId))
 				return passageGroupId;
 
@@ -54,7 +54,7 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 			logger.warn("REDIS中查询用户通道信息失败 ：{}", e.getMessage());
 		}
 		QueryWrapper<UserPassage> queryWrapper = new QueryWrapper<UserPassage>();
-		queryWrapper.eq("user_code", userCode);
+		queryWrapper.eq("user_id", userId);
 		queryWrapper.eq("type", type);
 		queryWrapper.orderByDesc("id").last(" limit 1");
 		UserPassage userPassage = this.getOne(queryWrapper);
@@ -71,9 +71,9 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 	}
 
 	
-	public boolean save(String userCode, UserPassage userPassage) {
+	public boolean save(String userId, UserPassage userPassage) {
 		try {
-			userPassage.setUserCode(userCode);
+			userPassage.setUserId(userId);
 			userPassage.setCreateDate(new Date());
 			return super.save(userPassage);
 		} catch (Exception e) {
@@ -89,16 +89,16 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 	 * @param userId         用户ID
 	 * @param type           平台类型：短信/语音/...
 	 */
-	private void save(String passageGroupId, String userCode, Integer type) {
+	private void save(String passageGroupId, String userId, Integer type) {
 		try {
-			if (passageGroupId == null || userCode == null || type == null) {
-				logger.error("插入用户通道失败，passageGroupId: {}, userCode:{}, type: {}", passageGroupId, userCode, type);
+			if (passageGroupId == null || userId == null || type == null) {
+				logger.error("插入用户通道失败，passageGroupId: {}, 用戶:{}, type: {}", passageGroupId, userId, type);
 				return;
 			}
 			UserPassage userPassage = new UserPassage();
 			userPassage.setPassageGroupId(passageGroupId);
 			userPassage.setType(type);
-			userPassage.setUserCode(userCode);
+			userPassage.setUserId(userId);
 			userPassage.setCreateDate(new Date());
 
 			boolean effect = super.save(userPassage);
