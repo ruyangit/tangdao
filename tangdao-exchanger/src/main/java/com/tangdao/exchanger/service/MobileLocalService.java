@@ -16,7 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.tangdao.core.constant.CommonRedisConstant;
 import com.tangdao.core.context.CommonContext.CMCP;
-import com.tangdao.core.model.domain.paas.Area;
+import com.tangdao.core.model.domain.Area;
 import com.tangdao.core.model.domain.paas.AreaLocal;
 import com.tangdao.core.model.vo.MobileCatagory;
 

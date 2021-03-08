@@ -1,8 +1,8 @@
-package com.tangdao.core.model.domain.paas;
+package com.tangdao.core.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.DataEntity;
+import com.tangdao.core.TreeEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,8 +15,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_area")
-public class Area extends DataEntity<Area> {
+@TableName("sys_area")
+public class Area extends TreeEntity<Area> {
 
 	private static final long serialVersionUID = 1L;
 

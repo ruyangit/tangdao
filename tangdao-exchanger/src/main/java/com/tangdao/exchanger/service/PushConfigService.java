@@ -38,26 +38,26 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 			return false;
 		}
 
-		pushToRedis(record.getUserCode(), record.getType(), record);
+		pushToRedis(record.getAppId(), record.getType(), record);
 
 		return this.baseMapper.updateById(record) > 0;
 	}
 
-	public List<PushConfig> findByUserCode(String userCode) {
-		return this.list(Wrappers.<PushConfig>lambdaQuery().eq(PushConfig::getUserCode, userCode));
+	public List<PushConfig> findByAppId(String appId) {
+		return this.list(Wrappers.<PushConfig>lambdaQuery().eq(PushConfig::getAppId, appId));
 	}
 
 	public boolean save(PushConfig record) {
 		int id = this.baseMapper.insert(record);
-		PushConfig c = selectByUserCodeAndType(record.getUserCode(), record.getType());
+		PushConfig c = selectByAppIdAndType(record.getAppId(), record.getType());
 		record.setId(c.getId());
-		pushToRedis(record.getUserCode(), record.getType(), record);
+		pushToRedis(record.getAppId(), record.getType(), record);
 		return id > 0;
 	}
 
-	public PushConfig getByUserCode(String userCode, int type) {
+	public PushConfig getByAppId(String appId, int type) {
 		try {
-			Object object = stringRedisTemplate.opsForValue().get(getAssistKey(userCode, type));
+			Object object = stringRedisTemplate.opsForValue().get(getAssistKey(appId, type));
 			if (object != null) {
 				return JSON.parseObject(object.toString(), PushConfig.class);
 			}
@@ -65,11 +65,11 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 		} catch (Exception e) {
 			logger.warn("REDIS 查询推送配置失败", e);
 		}
-		return selectByUserCodeAndType(userCode, type);
+		return selectByAppIdAndType(appId, type);
 	}
 
-	public PushConfig getPushUrl(String userCode, int callbackUrlType, String customUrl) {
-		PushConfig config = getByUserCode(userCode, callbackUrlType);
+	public PushConfig getPushUrl(String appId, int callbackUrlType, String customUrl) {
+		PushConfig config = getByAppId(appId, callbackUrlType);
 		if (config == null) {
 			return null;
 		}
@@ -88,9 +88,9 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 	 * @param type
 	 * @param pc
 	 */
-	private void pushToRedis(String userCode, int type, PushConfig pc) {
+	private void pushToRedis(String appId, int type, PushConfig pc) {
 		try {
-			stringRedisTemplate.opsForValue().set(getAssistKey(userCode, type), JSON.toJSONString(pc));
+			stringRedisTemplate.opsForValue().set(getAssistKey(appId, type), JSON.toJSONString(pc));
 		} catch (Exception e) {
 			logger.warn("REDIS 推送配置操作失败", e);
 		}
@@ -108,7 +108,7 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 			connection.openPipeline();
 			for (PushConfig config : list) {
-				byte[] key = serializer.serialize(getAssistKey(config.getUserCode(), config.getType()));
+				byte[] key = serializer.serialize(getAssistKey(config.getAppId(), config.getType()));
 				connection.set(key, serializer.serialize(JSON.toJSONString(config)));
 			}
 
@@ -123,21 +123,21 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 		int result = 0;
 		try {
 			// 判断如果用户推送记录中没有数据，则插入推送信息
-			PushConfig pushConfig = selectByUserCodeAndType(pushConFig.getUserCode(), pushConFig.getType());
+			PushConfig pushConfig = selectByAppIdAndType(pushConFig.getAppId(), pushConFig.getType());
 			if (pushConfig == null) {
 				result = this.baseMapper.insert(pushConFig);
 			}
 			result = this.baseMapper.updateByUserCode(pushConFig);
 
 			// 查询修改后数据存储到缓存中
-			PushConfig cf = selectByUserCodeAndType(pushConFig.getUserCode(), pushConFig.getType());
+			PushConfig cf = selectByAppIdAndType(pushConFig.getAppId(), pushConFig.getType());
 			if (cf == null) {
 				{
 					return 0;
 				}
 			}
 
-			pushToRedis(cf.getUserCode(), cf.getType(), cf);
+			pushToRedis(cf.getAppId(), cf.getType(), cf);
 		} catch (Exception e) {
 			logger.error("更新用户推送信息失败：{}", JSON.toJSONString(pushConFig), e);
 		}
@@ -145,9 +145,9 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 		return result;
 	}
 
-	public PushConfig selectByUserCodeAndType(String userCode, int type) {
+	public PushConfig selectByAppIdAndType(String appId, int type) {
 		QueryWrapper<PushConfig> queryWrapper = new QueryWrapper<PushConfig>();
-		queryWrapper.eq("user_code", userCode);
+		queryWrapper.eq("app_id", appId);
 		queryWrapper.eq("type", type);
 		queryWrapper.orderByDesc("id");
 		queryWrapper.last("limit 1");

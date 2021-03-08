@@ -22,23 +22,23 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 
-	private String getKey(String userCode) {
-		return String.format("%s:%d", CommonRedisConstant.RED_USER_WHITE_HOST, userCode);
+	private String getKey(String userId) {
+		return String.format("%s:%d", CommonRedisConstant.RED_USER_WHITE_HOST, userId);
 	}
 
 	public int updateByPrimaryKey(HostWhitelist record) {
 		int result = this
 				.count(Wrappers.<HostWhitelist>lambdaQuery().eq(HostWhitelist::getStatus, HostWhitelist.STATUS_NORMAL)
-						.eq(HostWhitelist::getUserCode, record).eq(HostWhitelist::getIp, record.getIp()));
+						.eq(HostWhitelist::getUserId, record).eq(HostWhitelist::getIp, record.getIp()));
 		if (result == 0) {
-			pushToRedis(record.getUserCode(), record.getIp());
+			pushToRedis(record.getUserId(), record.getIp());
 			return this.getBaseMapper().updateById(record);
 		} else {
 			return 2;
 		}
 	}
 
-	public boolean ipAllowedPass(String userCode, String ip) {
+	public boolean ipAllowedPass(String userId, String ip) {
 //      try {
 //      Set<String> set = stringRedisTemplate.opsForSet().members(getKey(userId));
 //      if(CollectionUtils.isNotEmpty(set) && set.contains(ip)) {
@@ -63,9 +63,9 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 	 * @param ip
 	 * @param userCode
 	 */
-	private void pushToRedis(String userCode, String ip) {
+	private void pushToRedis(String userId, String ip) {
 		try {
-			stringRedisTemplate.opsForSet().add(getKey(userCode), ip);
+			stringRedisTemplate.opsForSet().add(getKey(userId), ip);
 		} catch (Exception e) {
 			logger.warn("REDIS 操作用户服务器IP配置失败", e);
 		}
@@ -119,7 +119,7 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 					// 判断是否重复 重复则不保存
 					int exisCount = this.count(Wrappers.<HostWhitelist>lambdaQuery()
 							.eq(HostWhitelist::getStatus, HostWhitelist.STATUS_NORMAL)
-							.eq(HostWhitelist::getUserCode, record).eq(HostWhitelist::getIp, record.getIp()));
+							.eq(HostWhitelist::getUserId, record).eq(HostWhitelist::getIp, record.getIp()));
 					if (exisCount == 0) {
 						// flag = hostWhiteListMapper.batchInsert(record) > 0;
 					} else {
@@ -141,7 +141,7 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 					// 标记重复提示
 					// 去空格验证是否为空
 					if (!StrUtil.isEmpty(str[i].trim())) {
-						pushToRedis(record.getUserCode(), record.getIp());
+						pushToRedis(record.getUserId(), record.getIp());
 						this.save(record);
 					}
 				}
