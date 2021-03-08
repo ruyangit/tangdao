@@ -103,7 +103,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 						receive.getMsgId(), receive.getMobile(), receive.getDestnationNo());
 				if (submit != null) {
 					receive.setMsgId(submit.getMsgId());
-					receive.setUserCode(submit.getUserCode());
+					receive.setUserId(submit.getUserId());
 					receive.setSid(submit.getSid() + "");
 
 					// 如果上行回执内容为空，则置一个空格字符
@@ -120,7 +120,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 					joinBlacklistIfMatched(receive.getMobile(), receive.getContent(),
 							String.format("SID:%d,MSG_ID:%s", submit.getSid(), submit.getMsgId()));
 
-					PushConfig pushConfig = pushConfigService.getByUserCode(submit.getUserCode(),
+					PushConfig pushConfig = pushConfigService.getByUserId(submit.getUserId(),
 							CallbackUrlType.SMS_MO.getCode());
 					if (pushConfig == null || StrUtil.isEmpty(pushConfig.getUrl())) {
 						receive.setNeedPush(false);
@@ -160,8 +160,8 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 				return false;
 			}
 
-			receive.setUserCode(hundsunUserCode);
-			PushConfig pushConfig = pushConfigService.getByUserCode(hundsunUserCode, CallbackUrlType.SMS_MO.getCode());
+			receive.setUserId(hundsunUserCode);
+			PushConfig pushConfig = pushConfigService.getByUserId(hundsunUserCode, CallbackUrlType.SMS_MO.getCode());
 			if (pushConfig == null || StrUtil.isEmpty(pushConfig.getUrl())) {
 				receive.setNeedPush(false);
 				return true;

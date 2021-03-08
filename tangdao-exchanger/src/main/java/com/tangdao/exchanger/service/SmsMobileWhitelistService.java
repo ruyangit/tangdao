@@ -9,8 +9,6 @@ import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -33,13 +31,13 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMobileWhitelistService extends BaseService<SmsMobileWhitelistMapper, MobileWhitelist>{
+public class SmsMobileWhitelistService extends BaseService<SmsMobileWhitelistMapper, MobileWhitelist> {
+
 	@Autowired
 	private SmsMobileWhitelistMapper smsMobileWhitelistMapper;
+
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
-
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private static Map<String, Object> response(String code, String msg) {
 		Map<String, Object> resultMap = new HashMap<>();
@@ -64,14 +62,14 @@ public class SmsMobileWhitelistService extends BaseService<SmsMobileWhitelistMap
 				}
 
 				// 判断是否重复 重复则不保存
-				int statCount = selectByUserCodeAndMobile(white.getUserCode(), mobile.trim());
+				int statCount = selectByUserCodeAndMobile(white.getUserId(), mobile.trim());
 				if (statCount > 0) {
 					continue;
 				}
 
 				mwl = new MobileWhitelist();
 				mwl.setMobile(mobile.trim());
-				mwl.setUserCode(white.getUserCode());
+				mwl.setUserId(white.getUserId());
 
 				list.add(mwl);
 			}
@@ -92,18 +90,18 @@ public class SmsMobileWhitelistService extends BaseService<SmsMobileWhitelistMap
 		}
 	}
 
-	public List<MobileWhitelist> selectByUserCode(String userCode) {
-		return this.list(Wrappers.<MobileWhitelist>lambdaQuery().eq(MobileWhitelist::getUserCode, userCode));
+	public List<MobileWhitelist> selectByUserId(String userId) {
+		return this.list(Wrappers.<MobileWhitelist>lambdaQuery().eq(MobileWhitelist::getUserId, userId));
 	}
 
 	/**
 	 * 获取白名单手机号码KEY名称
 	 *
-	 * @param UserCode 用户ID
+	 * @param userId 用户ID
 	 * @return key
 	 */
-	private String getKey(String UserCode) {
-		return String.format("%s:%s", SmsRedisConstant.RED_MOBILE_WHITELIST, UserCode);
+	private String getKey(String userId) {
+		return String.format("%s:%s", SmsRedisConstant.RED_MOBILE_WHITELIST, userId);
 	}
 
 	public boolean reloadToRedis() {
@@ -120,7 +118,7 @@ public class SmsMobileWhitelistService extends BaseService<SmsMobileWhitelistMap
 				RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 				connection.openPipeline();
 				for (MobileWhitelist mwl : list) {
-					byte[] key = serializer.serialize(getKey(mwl.getUserCode()));
+					byte[] key = serializer.serialize(getKey(mwl.getUserId()));
 
 					connection.sAdd(key, serializer.serialize(mwl.getMobile()));
 				}
@@ -143,7 +141,7 @@ public class SmsMobileWhitelistService extends BaseService<SmsMobileWhitelistMap
 	 */
 	private void pushToRedis(MobileWhitelist mwl) {
 		try {
-			stringRedisTemplate.opsForSet().add(getKey(mwl.getUserCode()), mwl.getMobile());
+			stringRedisTemplate.opsForSet().add(getKey(mwl.getUserId()), mwl.getMobile());
 		} catch (Exception e) {
 			logger.error("REDIS加载手机白名单信息", e);
 		}

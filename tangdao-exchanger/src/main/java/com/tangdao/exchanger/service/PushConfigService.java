@@ -43,21 +43,21 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 		return this.baseMapper.updateById(record) > 0;
 	}
 
-	public List<PushConfig> findByAppId(String appId) {
-		return this.list(Wrappers.<PushConfig>lambdaQuery().eq(PushConfig::getUserId, appId));
+	public List<PushConfig> findByUserId(String userId) {
+		return this.list(Wrappers.<PushConfig>lambdaQuery().eq(PushConfig::getUserId, userId));
 	}
 
 	public boolean save(PushConfig record) {
 		int id = this.baseMapper.insert(record);
-		PushConfig c = selectByAppIdAndType(record.getUserId(), record.getType());
+		PushConfig c = selectByUserIdAndType(record.getUserId(), record.getType());
 		record.setId(c.getId());
 		pushToRedis(record.getUserId(), record.getType(), record);
 		return id > 0;
 	}
 
-	public PushConfig getByAppId(String appId, int type) {
+	public PushConfig getByUserId(String userId, int type) {
 		try {
-			Object object = stringRedisTemplate.opsForValue().get(getAssistKey(appId, type));
+			Object object = stringRedisTemplate.opsForValue().get(getAssistKey(userId, type));
 			if (object != null) {
 				return JSON.parseObject(object.toString(), PushConfig.class);
 			}
@@ -65,11 +65,11 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 		} catch (Exception e) {
 			logger.warn("REDIS 查询推送配置失败", e);
 		}
-		return selectByAppIdAndType(appId, type);
+		return selectByUserIdAndType(userId, type);
 	}
 
-	public PushConfig getPushUrl(String appId, int callbackUrlType, String customUrl) {
-		PushConfig config = getByAppId(appId, callbackUrlType);
+	public PushConfig getPushUrl(String userId, int callbackUrlType, String customUrl) {
+		PushConfig config = getByUserId(userId, callbackUrlType);
 		if (config == null) {
 			return null;
 		}
@@ -88,9 +88,9 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 	 * @param type
 	 * @param pc
 	 */
-	private void pushToRedis(String appId, int type, PushConfig pc) {
+	private void pushToRedis(String userId, int type, PushConfig pc) {
 		try {
-			stringRedisTemplate.opsForValue().set(getAssistKey(appId, type), JSON.toJSONString(pc));
+			stringRedisTemplate.opsForValue().set(getAssistKey(userId, type), JSON.toJSONString(pc));
 		} catch (Exception e) {
 			logger.warn("REDIS 推送配置操作失败", e);
 		}
@@ -119,18 +119,18 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 		return CollUtil.isNotEmpty(con);
 	}
 
-	public int updateByUserCode(PushConfig pushConFig) {
+	public int updateByUserId(PushConfig pushConFig) {
 		int result = 0;
 		try {
 			// 判断如果用户推送记录中没有数据，则插入推送信息
-			PushConfig pushConfig = selectByAppIdAndType(pushConFig.getUserId(), pushConFig.getType());
+			PushConfig pushConfig = selectByUserIdAndType(pushConFig.getUserId(), pushConFig.getType());
 			if (pushConfig == null) {
 				result = this.baseMapper.insert(pushConFig);
 			}
 			result = this.baseMapper.updateByUserCode(pushConFig);
 
 			// 查询修改后数据存储到缓存中
-			PushConfig cf = selectByAppIdAndType(pushConFig.getUserId(), pushConFig.getType());
+			PushConfig cf = selectByUserIdAndType(pushConFig.getUserId(), pushConFig.getType());
 			if (cf == null) {
 				{
 					return 0;
@@ -145,9 +145,9 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 		return result;
 	}
 
-	public PushConfig selectByAppIdAndType(String appId, int type) {
+	public PushConfig selectByUserIdAndType(String userId, int type) {
 		QueryWrapper<PushConfig> queryWrapper = new QueryWrapper<PushConfig>();
-		queryWrapper.eq("user_id", appId);
+		queryWrapper.eq("user_id", userId);
 		queryWrapper.eq("type", type);
 		queryWrapper.orderByDesc("id");
 		queryWrapper.last("limit 1");

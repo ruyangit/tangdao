@@ -70,7 +70,7 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 		}
 
 		try {
-			removeRedis(signatureExtNo.getAppId(), id);
+			removeRedis(signatureExtNo.getUserId(), id);
 		} catch (Exception e) {
 			logger.error("移除REDIS用户签名失败， ID：{}", id, e);
 		}
@@ -98,8 +98,8 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 		return true;
 	}
 
-	private String getKey(String appId) {
-		return String.format("%s:%s", SmsRedisConstant.RED_USER_SIGNATURE_EXT_NO, appId);
+	private String getKey(String userId) {
+		return String.format("%s:%s", SmsRedisConstant.RED_USER_SIGNATURE_EXT_NO, userId);
 	}
 
 	private void pushToRedis(SignatureExtno signatureExtNo) {
@@ -108,9 +108,9 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 		}
 
 		try {
-			stringRedisTemplate.opsForHash().put(getKey(signatureExtNo.getAppId()), signatureExtNo.getId().toString(),
+			stringRedisTemplate.opsForHash().put(getKey(signatureExtNo.getUserId()), signatureExtNo.getId().toString(),
 					JSON.toJSONString(signatureExtNo,
-							new SimplePropertyPreFilter("id", "appId", "signature", "extNumber")));
+							new SimplePropertyPreFilter("id", "userId", "signature", "extNumber")));
 		} catch (Exception e) {
 			logger.error("签名扩展号加载到REDIS失败", e);
 		}
@@ -124,9 +124,9 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 	 * @param content
 	 * @return
 	 */
-	private String getFromDb(String appId, String content) {
+	private String getFromDb(String userId, String content) {
 		List<SignatureExtno> list = super.list(
-				Wrappers.<SignatureExtno>lambdaQuery().eq(SignatureExtno::getAppId, appId));
+				Wrappers.<SignatureExtno>lambdaQuery().eq(SignatureExtno::getUserId, userId));
 		if (CollUtil.isEmpty(list)) {
 			return null;
 		}
@@ -148,11 +148,11 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 	 * 
 	 * TODO 查询REDIS
 	 * 
-	 * @param appId
+	 * @param userId
 	 */
-	private String getFromRedis(String appId, String content) {
+	private String getFromRedis(String userId, String content) {
 		try {
-			Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(getKey(appId));
+			Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(getKey(userId));
 			if (CollUtil.isEmpty(map)) {
 				return null;
 			}
@@ -222,24 +222,24 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 		return String.format("【%s】", signature);
 	}
 
-	private void removeRedis(String appId, String id) {
+	private void removeRedis(String userId, String id) {
 		try {
-			stringRedisTemplate.opsForHash().delete(getKey(appId), id);
+			stringRedisTemplate.opsForHash().delete(getKey(userId), id);
 		} catch (Exception e) {
 			logger.warn("REDIS 用户签名移除失败", e);
 		}
 	}
 
-	public String getExtNumber(String appId, String content) {
-		if (StrUtil.isEmpty(content) || (!PatternUtil.isContainsSignature(content)) || StrUtil.isEmpty(appId)) {
+	public String getExtNumber(String userId, String content) {
+		if (StrUtil.isEmpty(content) || (!PatternUtil.isContainsSignature(content)) || StrUtil.isEmpty(userId)) {
 			return null;
 		}
 
 		try {
-			return getFromRedis(appId, content);
+			return getFromRedis(userId, content);
 		} catch (Exception e) {
 			// 如果出错则由数据库补偿
-			return getFromDb(appId, content);
+			return getFromDb(userId, content);
 		}
 	}
 }

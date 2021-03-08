@@ -208,7 +208,7 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 
 	private boolean pushToRedis(UserPassage userPassage) {
 		try {
-			stringRedisTemplate.opsForValue().set(getKey(userPassage.getUserCode(), userPassage.getType()),
+			stringRedisTemplate.opsForValue().set(getKey(userPassage.getUserId(), userPassage.getType()),
 					userPassage.getPassageGroupId());
 			return true;
 		} catch (Exception e) {
@@ -230,7 +230,7 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 			connection.openPipeline();
 			for (UserPassage userPassage : list) {
-				byte[] key = serializer.serialize(getKey(userPassage.getUserCode(), userPassage.getType()));
+				byte[] key = serializer.serialize(getKey(userPassage.getUserId(), userPassage.getType()));
 
 				connection.set(key, serializer.serialize(JSON.toJSONString(userPassage)));
 			}
