@@ -1,4 +1,4 @@
-package org.tangdao.modules.sms.config.rabbit.listener;
+package com.tangdao.exchanger.web.config.rabbit.listener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,60 +14,32 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.constant.CommonContext.CMCP;
-import org.tangdao.common.constant.CommonContext.CallbackUrlType;
-import org.tangdao.common.constant.OpenApiCode;
-import org.tangdao.common.constant.OpenApiCode.SmsPushCode;
-import org.tangdao.common.constant.RabbitConstant;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.modules.exchanger.model.response.ProviderSendResponse;
-import org.tangdao.modules.sms.config.rabbit.AbstartRabbitListener;
-import org.tangdao.modules.sms.constant.SmsTaskContext.MessageSubmitStatus;
-import org.tangdao.modules.sms.constant.SmsTaskContext.PacketsApproveStatus;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageSubmit;
-import org.tangdao.modules.sms.model.domain.SmsMtTask;
-import org.tangdao.modules.sms.model.domain.SmsMtTaskPackets;
-import org.tangdao.modules.sms.model.domain.SmsPassage;
-import org.tangdao.modules.sms.model.domain.SmsPassageMessageTemplate;
-import org.tangdao.modules.sms.model.domain.SmsPassageParameter;
-import org.tangdao.modules.sms.service.ISmsMtSubmitService;
-import org.tangdao.modules.sms.service.ISmsPassageMessageTemplateService;
-import org.tangdao.modules.sms.service.ISmsPassageService;
-import org.tangdao.modules.sms.service.ISmsProviderService;
-import org.tangdao.modules.sms.service.ISmsSignatureExtnoService;
-import org.tangdao.modules.sms.service.SmsPassageMessageTemplateServiceImpl;
-import org.tangdao.modules.sys.constant.UserBalanceConstant;
-import org.tangdao.modules.sys.constant.PassageContext.PassageSignMode;
-import org.tangdao.modules.sys.constant.PassageContext.PassageSmsTemplateParam;
-import org.tangdao.modules.sys.constant.SettingsContext.PushConfigStatus;
-import org.tangdao.modules.sys.model.domain.AreaLocal;
-import org.tangdao.modules.sys.model.domain.PushConfig;
-import org.tangdao.modules.sys.model.domain.UserSmsConfig;
-import org.tangdao.modules.sys.model.vo.MobileCatagory;
-import org.tangdao.modules.sys.service.IMobileLocalService;
-import org.tangdao.modules.sys.service.IPushConfigService;
-import org.tangdao.modules.sys.service.IUserSmsConfigService;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
+import com.tangdao.exchanger.service.SmsProviderService;
+import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
 
 /**
- * 短信待提交队列监听
+ * 
+ * <p>
+ * TODO 短信待提交队列监听
+ * </p>
  *
  * @author ruyang
- * @version V1.0
- * @date 2016年10月11日 下午1:20:14
+ * @since 2021年3月8日
  */
-//@Component
+@Component
 public class SmsWaitSubmitListener extends AbstartRabbitListener {
 
-	@Resource
+	@Autowired
 	private RabbitTemplate rabbitTemplate;
-	@Resource
+	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 	@Autowired
-	private ISmsProviderService smsProviderService;
+	private SmsProviderService smsProviderService;
 	@Autowired
 	private IPushConfigService pushConfigService;
 	@Autowired
@@ -84,8 +56,8 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	private Jackson2JsonMessageConverter messageConverter;
 	@Autowired
 	private ISmsPassageMessageTemplateService smsPassageMessageTemplateService;
-//    @Resource
-//    private ThreadPoolTaskExecutor            threadPoolTaskExecutor;
+	@Autowired
+    private ThreadPoolTaskExecutor            threadPoolTaskExecutor;
 
 	/**
 	 * 处理分包产生的数据，并调用上家通道接口

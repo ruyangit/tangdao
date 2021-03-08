@@ -1,4 +1,4 @@
-package org.tangdao.modules.sms.config.rabbit.listener;
+package com.tangdao.exchanger.web.config.rabbit.listener;
 
 import java.util.Date;
 
@@ -9,28 +9,24 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.tangdao.common.constant.RabbitConstant;
-import org.tangdao.common.web.http.HttpClientUtils;
-import org.tangdao.common.web.http.HttpClientUtils.RetryResponse;
-import org.tangdao.modules.sms.config.rabbit.AbstartRabbitListener;
-import org.tangdao.modules.sms.mapper.SmsMoMessagePushMapper;
-import org.tangdao.modules.sms.model.domain.SmsMoMessagePush;
-import org.tangdao.modules.sms.model.domain.SmsMoMessageReceive;
-import org.tangdao.modules.sys.constant.PassageContext.PushStatus;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.rabbitmq.client.Channel;
+import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
 
 /**
- * TODO 上行短信推送监听
  * 
+ * <p>
+ * TODO 上行短信推送监听
+ * </p>
+ *
  * @author ruyang
- * @version V1.0
- * @date 2016年12月1日 下午2:32:35
+ * @since 2021年3月8日
  */
-//@Component
+@Component
 public class SmsWaitMoPushListener extends AbstartRabbitListener {
 
     @Resource
