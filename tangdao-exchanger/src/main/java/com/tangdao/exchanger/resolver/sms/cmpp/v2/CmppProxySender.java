@@ -23,10 +23,10 @@ import com.tangdao.core.context.TaskContext.MessageSubmitStatus;
 import com.tangdao.core.model.domain.sms.MoMessageReceive;
 import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.core.model.domain.sms.PassageParameter;
-import com.tangdao.exchanger.model.response.ProviderSendResponse;
 import com.tangdao.exchanger.resolver.sms.AbstractSmsProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.constant.CmppConstant;
 import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
+import com.tangdao.exchanger.template.response.ProviderSendResponse;
 import com.tangdao.exchanger.template.vo.TParameter;
 import com.tangdao.exchanger.utils.MobileNumberCatagoryUtil;
 

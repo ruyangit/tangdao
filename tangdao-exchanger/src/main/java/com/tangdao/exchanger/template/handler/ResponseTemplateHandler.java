@@ -12,7 +12,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.tangdao.core.constant.ExchangerConstant;
 import com.tangdao.core.exception.DataEmptyException;
 import com.tangdao.core.exception.DataParseException;
-import com.tangdao.exchanger.model.response.ProviderSendResponse;
+import com.tangdao.exchanger.template.response.ProviderSendResponse;
 import com.tangdao.exchanger.template.vo.TPosition;
 
 import cn.hutool.core.collection.CollUtil;

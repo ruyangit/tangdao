@@ -21,12 +21,12 @@ import com.tangdao.core.model.domain.sms.MoMessageReceive;
 import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.core.model.domain.sms.PassageAccess;
 import com.tangdao.core.model.domain.sms.PassageParameter;
-import com.tangdao.exchanger.model.response.ProviderSendResponse;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ProxySender;
 import com.tangdao.exchanger.resolver.sms.http.SmsHttpSender;
 import com.tangdao.exchanger.resolver.sms.sgip.SgipProxySender;
 import com.tangdao.exchanger.resolver.sms.smgp.SmgpProxySender;
+import com.tangdao.exchanger.template.response.ProviderSendResponse;
 import com.tangdao.exchanger.utils.MobileNumberCatagoryUtil;
 
 import cn.hutool.core.collection.CollUtil;

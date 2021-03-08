@@ -5,7 +5,7 @@ import java.util.List;
 import com.tangdao.core.model.domain.sms.MoMessageReceive;
 import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.core.model.domain.sms.PassageParameter;
-import com.tangdao.exchanger.model.response.ProviderSendResponse;
+import com.tangdao.exchanger.template.response.ProviderSendResponse;
 import com.tangdao.exchanger.template.vo.TParameter;
 
 public interface SmsHttpPassageResolver {

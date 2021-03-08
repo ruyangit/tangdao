@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.model.response;
+package com.tangdao.exchanger.template.response;
 
 import java.io.Serializable;
 
