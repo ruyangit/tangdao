@@ -24,6 +24,7 @@ import org.tangdao.modules.sys.model.domain.PushConfig;
 import org.tangdao.modules.sys.service.IPushConfigService;
 
 import com.alibaba.fastjson.JSON;
+import com.tangdao.core.service.BaseService;
 
 /**
  * 上行消息回复ServiceImpl
@@ -32,8 +33,7 @@ import com.alibaba.fastjson.JSON;
  * @version 2019-09-06
  */
 @Service
-public class SmsMoMessageReceiveService extends CrudService<SmsMoMessageReceiveMapper, SmsMoMessageReceive>
-		implements ISmsMoReceiveService {
+public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveMapper, MoMessageReceive>{
 
 	@Autowired
 	private RabbitTemplate smsRabbitTemplate;
@@ -42,12 +42,12 @@ public class SmsMoMessageReceiveService extends CrudService<SmsMoMessageReceiveM
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
-	private IPushConfigService pushConfigService;
+	private PushConfigService pushConfigService;
 //    @Autowired
 //    private ISmsPassageService         smsPassageService;
 
 	@Autowired
-	private ISmsMtSubmitService smsMtSubmitService;
+	private SmsMtSubmitService smsMtSubmitService;
 //    @Autowired
 //    private SmsMoMessagePushMapper     smsMoMessagePushMapper;
 //    @Autowired

@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -20,11 +18,21 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.context.CommonContext.PassageCallType;
+import com.tangdao.core.context.CommonContext.PlatformType;
+import com.tangdao.core.context.CommonContext.ProtocolType;
+import com.tangdao.core.context.SettingsContext;
+import com.tangdao.core.context.SettingsContext.SystemConfigType;
+import com.tangdao.core.context.UserContext.UserStatus;
+import com.tangdao.core.model.domain.paas.UserDeveloper;
 import com.tangdao.core.model.domain.sms.Passage;
+import com.tangdao.core.model.domain.sms.PassageArea;
+import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsPassageMapper;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 通道管理ServiceImpl
@@ -58,13 +66,14 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	@Autowired
 	private UserPassageService userPassageService;
 //    @Autowired
-//    private ISmsPassageGroupService   passageGroupService;
+//    private IPassageGroupService   passageGroupService;
 //    @Autowired
 //    private ISmsMessageSendService       messageSendService;
 	@Autowired
 	private UserDeveloperService userDeveloperService;
+	
 	@Autowired
-	private SmsPassageAccessService smsPassageAccessService;
+	private SmsPassageAccessService PassageAccessService;
 
 	/**
 	 * 是否是中文字符
@@ -73,15 +82,15 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	 * @return 处理结果
 	 */
 	private static boolean isLetter(String code) {
-		if (StringUtils.isEmpty(code)) {
+		if (StrUtil.isEmpty(code)) {
 			return false;
 		}
 
 		return code.matches(NOT_CHINESS_REGEX);
 	}
 
-	private void validate(SmsPassage passage) {
-		if (StringUtils.isEmpty(passage.getCode())) {
+	private void validate(Passage passage) {
+		if (StrUtil.isEmpty(passage.getCode())) {
 			throw new IllegalArgumentException("通道代码为空，无法操作");
 		}
 
@@ -92,8 +101,8 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		if (passage.getId() != null) {
 			return;
 		}
-		SmsPassage originPassage = this
-				.getOne(Wrappers.<SmsPassage>lambdaQuery().eq(SmsPassage::getCode, passage.getCode()));
+		Passage originPassage = this
+				.getOne(Wrappers.<Passage>lambdaQuery().eq(Passage::getCode, passage.getCode()));
 		if (originPassage != null) {
 			throw new IllegalArgumentException("通道编码 [" + passage.getCode().trim() + "] 已存在，无法添加");
 		}
@@ -105,8 +114,8 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	 * @param passage       通道
 	 * @param provinceCodes 省份代码（半角分号分割）
 	 */
-	private void bindPassageProvince(SmsPassage passage, String areaCodes) {
-		if (StringUtils.isEmpty(areaCodes)) {
+	private void bindPassageProvince(Passage passage, String areaCodes) {
+		if (StrUtil.isEmpty(areaCodes)) {
 			return;
 		}
 
@@ -116,11 +125,11 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 
 		for (String code : codeArray) {
-			passage.getAreaList().add(new SmsPassageArea(passage.getId(), code));
+			passage.getAreaList().add(new PassageArea(passage.getId(), code));
 		}
 
-		if (ListUtils.isNotEmpty(passage.getAreaList())) {
-			smsPassageAreaService.saveBatch(passage.getAreaList());
+		if (CollUtil.isNotEmpty(passage.getAreaList())) {
+			PassageAreaService.saveBatch(passage.getAreaList());
 		}
 	}
 
@@ -130,15 +139,15 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	 * @param passage  通道
 	 * @param isModify 是否为修改模式
 	 */
-	private boolean bindPassageParameters(SmsPassage passage, boolean isModify) {
-		if (ListUtils.isEmpty(passage.getParameterList())) {
+	private boolean bindPassageParameters(Passage passage, boolean isModify) {
+		if (CollUtil.isEmpty(passage.getParameterList())) {
 			return false;
 		}
 
 		String passageSendProtocol = null;
-		for (SmsPassageParameter parameter : passage.getParameterList()) {
+		for (PassageParameter parameter : passage.getParameterList()) {
 			parameter.setPassageId(passage.getId());
-			parameter.setCreateTime(new Date());
+			parameter.setCreateDate(new Date());
 
 			if (passageSendProtocol != null) {
 				continue;
@@ -175,7 +184,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	 * @param isQueueCreateFinished 队列是否创建完成
 	 * @param isRedisPushFinished   是否发送至redis
 	 */
-	private void release(SmsPassage passage, boolean isQueueCreateFinished, boolean isRedisPushFinished) {
+	private void release(Passage passage, boolean isQueueCreateFinished, boolean isRedisPushFinished) {
 		if (isQueueCreateFinished) {
 			smsMtSubmitService.removeSubmitMessageQueue(passage.getCode().trim());
 		}
@@ -185,9 +194,9 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	@Override
+	
 	@Transactional
-	public Map<String, Object> create(SmsPassage passage, String provinceCodes) {
+	public Map<String, Object> create(Passage passage, String provinceCodes) {
 		boolean isQueueCreateFinished = false;
 		boolean isRedisPushFinished = false;
 		try {
@@ -224,13 +233,13 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	 * @param parameter   通道参数
 	 * @param packetsSize 手机号码拆包大小
 	 */
-	private void startProxyIfMatched(SmsPassageParameter parameter, Integer packetsSize) {
+	private void startProxyIfMatched(PassageParameter parameter, Integer packetsSize) {
 		try {
 			if (parameter.getCallType() != PassageCallType.DATA_SEND.getCode()) {
 				return;
 			}
 
-			if (StringUtils.isEmpty(parameter.getProtocol())) {
+			if (StrUtil.isEmpty(parameter.getProtocol())) {
 				return;
 			}
 
@@ -254,8 +263,8 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	 * @param passage 通道
 	 * @return 更新结果
 	 */
-	private boolean updatePassage(SmsPassage passage) {
-		SmsPassage originPassage = findById(passage.getId());
+	private boolean updatePassage(Passage passage) {
+		Passage originPassage = findById(passage.getId());
 		if (originPassage == null) {
 			throw new IllegalArgumentException("通道数据不存在");
 		}
@@ -268,9 +277,9 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return this.updateById(passage);
 	}
 
-	@Override
+	
 	@Transactional
-	public Map<String, Object> update(SmsPassage passage, String provinceCodes) {
+	public Map<String, Object> update(Passage passage, String provinceCodes) {
 		try {
 
 			validate(passage);
@@ -287,7 +296,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 			bindPassageProvince(passage, provinceCodes);
 
 			// 更新可用通道信息
-			smsPassageAccessService.updateByModifyPassage(passage.getId());
+			PassageAccessService.updateByModifyPassage(passage.getId());
 
 			pushToRedis(passage);
 
@@ -317,11 +326,11 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return report;
 	}
 
-	@Override
+	
 	@Transactional
 	public boolean deleteById(String id) {
 		try {
-			SmsPassage passage = this.get(id);
+			Passage passage = this.get(id);
 			if (passage == null) {
 				throw new RuntimeException("查询通道ID：" + id + "数据为空");
 			}
@@ -331,17 +340,17 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 				throw new RuntimeException("删除通道失败");
 			}
 
-			result = this.smsPassageParameterService.deleteByPassageId(id);
+			result = this.PassageParameterService.deleteByPassageId(id);
 			if (!result) {
 				throw new RuntimeException("删除通道参数失败");
 			}
 
-			result = smsPassageAreaService.deleteByPassageId(id);
+			result = PassageAreaService.deleteByPassageId(id);
 			if (!result) {
 				throw new RuntimeException("删除通道省份关系数据失败");
 			}
 
-			boolean isOk = smsPassageAccessService.deletePassageAccess(id);
+			boolean isOk = PassageAccessService.deletePassageAccess(id);
 			if (!isOk) {
 				throw new RuntimeException("删除可用通道失败");
 			}
@@ -356,24 +365,24 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return false;
 	}
 
-	@Override
+	
 	@Transactional
 	public boolean disabledOrActive(String passageId, String status) {
 		try {
-			SmsPassage passage = new SmsPassage();
+			Passage passage = new Passage();
 			passage.setId(passageId);
 			passage.setStatus(status);
 			boolean result = this.updateById(passage);
-//            int result = smsPassageMapper.updateByPrimaryKeySelective(passage);
+//            int result = PassageMapper.updateByPrimaryKeySelective(passage);
 			if (!result) {
 				throw new RuntimeException("更新通道状态失败");
 			}
 
 			// 更新REDIS资源数据
-			reloadSmsPassageInRedis(passageId, status);
+			reloadPassageInRedis(passageId, status);
 
 			// edit by 20180609 禁用/启用都需要重新筛查通道组相关信息（首选通道，备用通道需要及时切换回来）
-			boolean isOk = smsPassageAccessService.updateByModifyPassage(passageId);
+			boolean isOk = PassageAccessService.updateByModifyPassage(passageId);
 			if (!isOk) {
 				throw new RuntimeException("更新可用通道状态失败");
 			}
@@ -388,22 +397,22 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	@Override
-	public List<SmsPassage> findAll() {
+	
+	public List<Passage> findAll() {
 		try {
 			Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(SmsRedisConstant.RED_SMS_PASSAGE);
 			if (MapUtils.isNotEmpty(map)) {
-				List<SmsPassage> passages = new ArrayList<>();
+				List<Passage> passages = new ArrayList<>();
 
 				map.forEach((k, v) -> {
 
-//                    SmsPassage smsPassage = JSON.parseObject(v.toString(), SmsPassage.class);
-					SmsPassage smsPassage = (SmsPassage) v;
-					if (passages.contains(smsPassage)) {
+//                    Passage Passage = JSON.parseObject(v.toString(), Passage.class);
+					Passage Passage = (Passage) v;
+					if (passages.contains(Passage)) {
 						return;
 					}
 
-					passages.add(smsPassage);
+					passages.add(Passage);
 				});
 				return passages;
 			}
@@ -415,40 +424,40 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	}
 
 	public Passage findById(String id) {
-		Passage smsPassage = null;
+		Passage Passage = null;
 		try {
 			Object obj = stringRedisTemplate.opsForHash().get(SmsRedisConstant.RED_SMS_PASSAGE, id);
 			if (obj != null) {
-				smsPassage = (Passage) obj;
+				Passage = (Passage) obj;
 			}
 		} catch (Exception e) {
 			logger.warn("REDIS 加载失败，将于DB加载", e);
 		}
 
-		if (smsPassage == null) {
-			smsPassage = this.getById(id);
+		if (Passage == null) {
+			Passage = this.getById(id);
 		}
 
-		setPassageParamsIfEmpty(smsPassage);
+		setPassageParamsIfEmpty(Passage);
 
-		return smsPassage;
+		return Passage;
 	}
 
 	/**
 	 * 设置通道参数集合信息
 	 * 
-	 * @param smsPassage 通道
+	 * @param Passage 通道
 	 */
-	private void setPassageParamsIfEmpty(Passage smsPassage) {
-		if (smsPassage == null || smsPassage.getId() == null) {
+	private void setPassageParamsIfEmpty(Passage Passage) {
+		if (Passage == null || Passage.getId() == null) {
 			return;
 		}
 
-		if (CollUtil.isNotEmpty(smsPassage.getParameterList())) {
+		if (CollUtil.isNotEmpty(Passage.getParameterList())) {
 			return;
 		}
 
-		smsPassage.getParameterList().addAll(this.smsPassageParameterService.findByPassageId(smsPassage.getId()));
+		Passage.getParameterList().addAll(this.PassageParameterService.findByPassageId(Passage.getId()));
 
 	}
 
@@ -459,11 +468,11 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		if (CollUtil.isEmpty(list)) {
 			return null;
 		}
-		Passage smsPassage = list.iterator().next();
+		Passage Passage = list.iterator().next();
 
-		setPassageParamsIfEmpty(smsPassage);
+		setPassageParamsIfEmpty(Passage);
 
-		return CollUtil.isEmpty(list) ? null : smsPassage;
+		return CollUtil.isEmpty(list) ? null : Passage;
 	}
 
 	public List<Passage> getByCmcp(String cmcp) {
@@ -486,12 +495,12 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		List<Object> con = stringRedisTemplate.execute((connection) -> {
 			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 			connection.openPipeline();
-			for (Passage smsPassage : list) {
+			for (Passage Passage : list) {
 
 				byte[] mainKey = serializer.serialize(SmsRedisConstant.RED_SMS_PASSAGE);
-				byte[] assistKey = serializer.serialize(smsPassage.getId().toString());
+				byte[] assistKey = serializer.serialize(Passage.getId().toString());
 
-				connection.hSet(mainKey, assistKey, JSON.toJSONBytes(smsPassage));
+				connection.hSet(mainKey, assistKey, JSON.toJSONBytes(Passage));
 			}
 
 			return connection.closePipeline();
@@ -500,18 +509,18 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return CollUtil.isNotEmpty(con);
 	}
 
-	@Override
-	public List<SmsPassageArea> getPassageAreaById(String passageId) {
-		return this.smsPassageAreaService.selectSmsPassageAreaByPassageId(passageId);
+	
+	public List<PassageArea> getPassageAreaById(String passageId) {
+		return this.PassageAreaService.selectPassageAreaByPassageId(passageId);
 	}
 
-	private boolean pushToRedis(SmsPassage smsPassage) {
+	private boolean pushToRedis(Passage Passage) {
 		try {
-			stringRedisTemplate.opsForHash().put(SmsRedisConstant.RED_SMS_PASSAGE, smsPassage.getId(),
-					JSON.toJSONBytes(smsPassage));
+			stringRedisTemplate.opsForHash().put(SmsRedisConstant.RED_SMS_PASSAGE, Passage.getId(),
+					JSON.toJSONBytes(Passage));
 			return true;
 		} catch (Exception e) {
-			logger.warn("REDIS 加载短信通道[" + JSON.toJSONBytes(smsPassage) + "]数据失败", e);
+			logger.warn("REDIS 加载短信通道[" + JSON.toJSONBytes(Passage) + "]数据失败", e);
 			return false;
 		}
 	}
@@ -530,13 +539,13 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	 * @param passageId 通道ID
 	 * @param status    状态
 	 */
-	private void reloadSmsPassageInRedis(String passageId, String status) {
+	private void reloadPassageInRedis(String passageId, String status) {
 		try {
-			SmsPassage smsPassage = findById(passageId);
-			if (smsPassage != null) {
-				smsPassage.setStatus(status);
+			Passage Passage = findById(passageId);
+			if (Passage != null) {
+				Passage.setStatus(status);
 				stringRedisTemplate.opsForHash().put(SmsRedisConstant.RED_SMS_PASSAGE, passageId,
-						JSON.toJSONBytes(smsPassage));
+						JSON.toJSONBytes(Passage));
 			}
 
 		} catch (Exception e) {
@@ -544,12 +553,12 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	@Override
+	
 	@Transactional
 	public boolean doMonitorSmsSend(String mobile, String content) {
 		String userCode = DictUtils.getDictValue(SystemConfigType.SMS_ALARM_USER.name(),
 				SettingsContext.USER_CODE_KEY_NAME, null);
-		if (StringUtils.isEmpty(userCode)) {
+		if (StrUtil.isEmpty(userCode)) {
 			logger.error("告警用户数据为空，请配置");
 			return false;
 		}
@@ -579,7 +588,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	@Override
+	
 	@Transactional
 	public boolean doTestPassage(String passageId, String mobile, String content) {
 //        String  systemConfig = systemConfigService.findByTypeAndKey(SystemConfigType.PASSAGE_TEST_USER.name(),
@@ -587,7 +596,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		String userCode = DictUtils.getDictValue(SystemConfigType.PASSAGE_TEST_USER.name(),
 				SettingsContext.USER_CODE_KEY_NAME, null);
 
-		if (StringUtils.isEmpty(userCode)) {
+		if (StrUtil.isEmpty(userCode)) {
 			logger.error("通道测试用户数据为空，请配置");
 			return false;
 		}
@@ -595,7 +604,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		try {
 			String passageGroupId = userPassageService.getByUserCodeAndType(userCode,
 					PlatformType.SEND_MESSAGE_SERVICE.getCode());
-			if (StringUtils.isEmpty(passageGroupId)) {
+			if (StrUtil.isEmpty(passageGroupId)) {
 				logger.error("通道测试用户未配置短信通道组信息");
 				return false;
 			}
@@ -607,7 +616,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 //            }
 //
 //            // 更新通道组下 的可用通道相关
-//            result = smsPassageAccessService.updateByModifyPassageGroup(passageGroupId);
+//            result = PassageAccessService.updateByModifyPassageGroup(passageGroupId);
 //            if (!result) {
 //                logger.error("通道组ID：{}，切换可用通道失败", passageGroupId);
 //                return false;
@@ -631,23 +640,23 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	@Override
+	
 	public List<String> findPassageCodes() {
 		return this.getBaseMapper().selectAvaiableCodes();
 	}
 
-	@Override
+	
 	public boolean isPassageBelongtoDirect(String protocol, String passageCode) {
-		if (StringUtils.isNotEmpty(protocol)) {
+		if (StrUtil.isNotEmpty(protocol)) {
 			return ProtocolType.isBelongtoDirect(protocol);
 		}
 
-		SmsPassage passage = this.getBaseMapper().getPassageByCode(passageCode.trim());
+		Passage passage = this.getBaseMapper().getPassageByCode(passageCode.trim());
 		if (passage == null) {
 			return false;
 		}
 
-		SmsPassageParameter parameter = smsPassageParameterService.selectSendProtocol(passage.getId());
+		PassageParameter parameter = smsPassageParameterService.selectSendProtocol(passage.getId());
 		if (parameter == null) {
 			return false;
 		}

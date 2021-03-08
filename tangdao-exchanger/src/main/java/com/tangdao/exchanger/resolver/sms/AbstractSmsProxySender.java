@@ -11,7 +11,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tangdao.core.model.domain.sms.PassageParameter;
-import com.tangdao.exchanger.service.SmsProxyService;
+import com.tangdao.exchanger.service.SmsProxyManager;
 
 /**
  * TODO 直连抽象类
@@ -23,7 +23,7 @@ import com.tangdao.exchanger.service.SmsProxyService;
 public abstract class AbstractSmsProxySender {
 
 	@Autowired
-	protected SmsProxyService smsProxyService;
+	protected SmsProxyManager smsProxyService;
 
 	@Resource
 	protected RabbitTemplate rabbitTemplate;
@@ -50,7 +50,7 @@ public abstract class AbstractSmsProxySender {
 
 		synchronized (passageLockMonitor.get(parameter.getPassageId())) {
 			if (smsProxyService.isProxyAvaiable(parameter.getPassageId())) {
-				return SmsProxyService.getManageProxy(parameter.getPassageId());
+				return SmsProxyManager.getManageProxy(parameter.getPassageId());
 			}
 
 			boolean isOk = smsProxyService.startProxy(parameter);
@@ -61,7 +61,7 @@ public abstract class AbstractSmsProxySender {
 			// 重新初始化后将错误计数器归零
 			smsProxyService.clearSendErrorTimes(parameter.getPassageId());
 
-			return SmsProxyService.GLOBAL_PROXIES.get(parameter.getPassageId());
+			return SmsProxyManager.GLOBAL_PROXIES.get(parameter.getPassageId());
 		}
 	}
 

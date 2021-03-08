@@ -43,7 +43,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 2021年2月25日
  */
 @Service
-public class SmsProxyService {
+public class SmsProxyManager {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 

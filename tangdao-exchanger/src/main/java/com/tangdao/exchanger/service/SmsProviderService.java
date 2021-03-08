@@ -298,14 +298,14 @@ public class SmsProviderService {
 	 * @return
 	 */
 	private static RateLimiter getRateLimiter(String passageId, Integer speed) {
-		RateLimiter limiter = SmsProxyService.GLOBAL_RATE_LIMITERS.get(passageId);
+		RateLimiter limiter = SmsProxyManager.GLOBAL_RATE_LIMITERS.get(passageId);
 		if (limiter == null) {
 			ReentrantLock reentrantLock = new ReentrantLock();
 			reentrantLock.tryLock();
 			try {
 				limiter = RateLimiter
-						.create((speed == null || speed == 0) ? SmsProxyService.DEFAULT_LIMIT_SPEED : speed);
-				SmsProxyService.GLOBAL_RATE_LIMITERS.put(passageId, limiter);
+						.create((speed == null || speed == 0) ? SmsProxyManager.DEFAULT_LIMIT_SPEED : speed);
+				SmsProxyManager.GLOBAL_RATE_LIMITERS.put(passageId, limiter);
 			} finally {
 				reentrantLock.unlock();
 			}
