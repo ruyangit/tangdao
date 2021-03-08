@@ -3,9 +3,9 @@
  */
 package com.tangdao.core.model.domain.paas;
 
-import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
+
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.DataEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,24 +16,16 @@ import lombok.Setter;
  * </p>
  *
  * @author ruyang
- * @since 2021年2月23日
+ * @since 2021年3月8日
  */
 @Getter
 @Setter
-@TableName("paas_host_whitelist")
-public class HostWhitelist extends DataEntity<HostWhitelist> {
+@TableName("paas_user")
+public class User implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@TableId
-	private String id;
-
-	private String ip;
-
-	private String userId;
-
-	private String status;
 }

@@ -5,7 +5,6 @@ package com.tangdao.core.model.domain.paas;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
 
 import lombok.Getter;
@@ -21,7 +20,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "user_sms_config")
+@TableName("paas_user_sms_config")
 public class UserSmsConfig extends DataEntity<UserSmsConfig> {
 
 	/**

@@ -6,7 +6,7 @@ package com.tangdao.core.constant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tangdao.core.model.domain.paas.ProvinceLocal;
+import com.tangdao.core.model.domain.paas.AreaLocal;
 
 /**
  * <p>
@@ -76,10 +76,10 @@ public class CommonRedisConstant {
 	/**
 	 * 手机归属地
 	 */
-	public static final String RED_PROVINCE_MOBILES_LOCAL = "red_province_mobiles_local";
+	public static final String RED_AREA_MOBILES_LOCAL = "red_area_mobiles_local";
 
 	/**
 	 * 全局手机归属号码
 	 */
-	public static Map<String, ProvinceLocal> GLOBAL_MOBILES_LOCAL = new ConcurrentHashMap<>();
+	public static Map<String, AreaLocal> GLOBAL_MOBILES_LOCAL = new ConcurrentHashMap<>();
 }

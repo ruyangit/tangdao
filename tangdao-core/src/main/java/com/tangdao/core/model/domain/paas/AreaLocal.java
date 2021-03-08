@@ -20,25 +20,25 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_user_passage")
-public class UserPassage extends DataEntity<UserPassage> {
+@TableName("paas_area_local")
+public class AreaLocal extends DataEntity<AreaLocal> {
 
 	private static final long serialVersionUID = 1L;
 
 	@TableId
 	private String id;
 
-	private String userId; // 用户编码
-	private int type; // 类型 1-短信，2-流量，3-语音
-	private String passageGroupId; // 业务通道组ID，如短信通道组ID，流量通道组ID
+	private String areaCode; // 归属地代码
+	private String numberArea; // 号段
+	private int cmcp; // 运营商
 
-	public UserPassage() {
+	public AreaLocal() {
 		super();
 	}
 
-	public UserPassage(String userId, Integer type, String passageGroupId) {
-		this.userId = userId;
-		this.type = type;
-		this.passageGroupId = passageGroupId;
+	public AreaLocal(String areaCode, int cmcp) {
+		super();
+		this.areaCode = areaCode;
+		this.cmcp = cmcp;
 	}
 }

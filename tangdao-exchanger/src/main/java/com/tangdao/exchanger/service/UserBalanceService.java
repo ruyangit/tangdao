@@ -1,40 +1,25 @@
-package org.tangdao.modules.sys.service;
+package com.tangdao.exchanger.service;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.tangdao.common.constant.CommonContext.PlatformType;
-import org.tangdao.common.exception.ExchangeException;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.pay.constant.PayContext.PaySource;
-import org.tangdao.modules.pay.constant.PayContext.PayType;
-import org.tangdao.modules.sys.constant.UserBalanceConstant;
-import org.tangdao.modules.sys.constant.UserContext.BalancePayType;
-import org.tangdao.modules.sys.constant.UserContext.BalanceStatus;
-import org.tangdao.modules.sys.mapper.UserBalanceMapper;
-import org.tangdao.modules.sys.model.domain.UserBalance;
-import org.tangdao.modules.sys.model.domain.UserBalanceLog;
-import org.tangdao.modules.sys.model.vo.P2pBalanceResponse;
-import org.tangdao.modules.sys.service.IUserBalanceLogService;
-import org.tangdao.modules.sys.service.IUserBalanceService;
-import org.tangdao.modules.sys.service.IUserSmsConfigService;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.model.domain.paas.UserBalance;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.UserBalanceMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserBalance>
-		implements IUserBalanceService {
+public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalance>{
 
 	/**
 	 * 点对点模板参数
@@ -42,18 +27,18 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 	private static final Pattern PATTERN_P2P_ARGS = Pattern.compile("#args#");
 
 	@Autowired
-	private IUserSmsConfigService userSmsConfigService;
+	private UserSmsConfigService userSmsConfigService;
 
 	@Autowired
-	private IUserBalanceLogService userBalanceLogService;
+	private UserBalanceLogService userBalanceLogService;
 
-	@Override
+	
 	public List<UserBalance> findByUserCode(String userCode) {
 		// TODO Auto-generated method stub
 		return this.select(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getUserCode, userCode));
 	}
 
-	@Override
+	
 	public UserBalance getByUserCode(String userCode, PlatformType type) {
 		// TODO Auto-generated method stub
 		if (StringUtils.isEmpty(userCode)) {
@@ -63,7 +48,7 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 		return getByUserCode(userCode, type.getCode());
 	}
 
-	@Override
+	
 	public UserBalance getByUserCode(String userCode, int type) {
 		// TODO Auto-generated method stub
 		if (StringUtils.isEmpty(userCode)) {
@@ -74,7 +59,7 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 				.eq(UserBalance::getType, type));
 	}
 
-	@Override
+	
 	@Transactional(readOnly = false, rollbackFor = RuntimeException.class)
 	public boolean saveBalance(UserBalance balance) {
 		try {
@@ -98,7 +83,7 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 		}
 	}
 
-	@Override
+	
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
 	public boolean updateBalance(String userCode, int amount, int platformType, PaySource paySource, PayType payType,
 			Double price, Double totalPrice, String remarks, boolean isNotice) {
@@ -141,7 +126,7 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 		}
 	}
 
-	@Override
+	
 	public boolean deductBalance(String userCode, int amount, int type, String remarks) {
 		try {
 			UserBalance userBalance = getByUserCode(userCode, type);
@@ -160,7 +145,7 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 		}
 	}
 
-	@Override
+	
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
 	public boolean exchange(String userCode, String fromUserCode, int type, int amount) {
 		if (StringUtils.isEmpty(userCode)) {
@@ -202,7 +187,7 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 
 	}
 
-	@Override
+	
 	public boolean isBalanceEnough(String userCode, PlatformType type, Double fee) {
 		UserBalance userBalance = getByUserCode(userCode, type);
 		if (userBalance == null) {
@@ -224,13 +209,13 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 		return true;
 	}
 
-	@Override
+	
 	public UserBalance getById(int id) {
 		// TODO Auto-generated method stub
 		return this.get(id);
 	}
 
-	@Override
+	
 	public boolean updateBalanceWarning(UserBalance userBalance) {
 		if (userBalance == null) {
 			return false;
@@ -238,13 +223,13 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 		return this.getBaseMapper().updateWarning(userBalance) > 0;
 	}
 
-	@Override
+	
 	public List<UserBalance> findAvaibleUserBalace() {
 		// TODO Auto-generated method stub
 		return this.select(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getStatus, UserBalance.STATUS_NORMAL));
 	}
 
-	@Override
+	
 	public int calculateSmsAmount(String userCode, String content) {
 		if (StringUtils.isEmpty(content)) {
 			log.error("userCode :{} 短信报文为空，无法计算计费条数", userCode);
@@ -257,7 +242,7 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 		return calculateGroupSizeByContent(wordsPerNum, content);
 	}
 
-	@Override
+	
 	public P2pBalanceResponse calculateP2pSmsAmount(String userCode, List<JSONObject> p2pBodies) {
 		if (CollectionUtils.isEmpty(p2pBodies)) {
 			log.error("userCode :{} 点对点短信报文为空，无法计算计费条数", userCode);
@@ -276,7 +261,7 @@ public class UserBalanceServiceImpl extends CrudService<UserBalanceMapper, UserB
 		return new P2pBalanceResponse(smsTotalNum, p2pBodies);
 	}
 
-	@Override
+	
 	public P2pBalanceResponse calculateP2ptSmsAmount(String userCode, String content, List<JSONObject> p2pBody) {
 		if (CollectionUtils.isEmpty(p2pBody) || StringUtils.isEmpty(content)) {
 			log.error("userCode :{} 模板点对点短信内容或报文为空，无法计算计费条数", userCode);

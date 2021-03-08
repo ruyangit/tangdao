@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tangdao.core.model.domain.paas;
 
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -11,29 +8,26 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * <p>
- * TODO 描述
- * </p>
- *
+ * 行政区划Entity
+ * 
  * @author ruyang
- * @since 2021年2月23日
+ * @version 2019-09-27
  */
 @Getter
 @Setter
-@TableName("paas_host_whitelist")
-public class HostWhitelist extends DataEntity<HostWhitelist> {
+@TableName("paas_area")
+public class Area extends DataEntity<Area> {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private String id;
+	private String areaCode; // 区域编码
+	private String areaName; // 区域名称
+	private String areaType; // 区域类型
 
-	private String ip;
+	public static final Integer AREA_CODE_ALLOVER_COUNTRY = 0;
 
-	private String userId;
-
-	private String status;
+	public Area() {
+		super();
+	}
 }

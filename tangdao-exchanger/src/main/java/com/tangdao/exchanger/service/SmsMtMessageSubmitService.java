@@ -19,6 +19,9 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tangdao.core.model.domain.sms.MtMessageSubmit;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMtMessageSubmitMapper;
 
 /**
  * 下行短信提交ServiceImpl

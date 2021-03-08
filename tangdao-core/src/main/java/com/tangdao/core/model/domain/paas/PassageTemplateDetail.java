@@ -17,7 +17,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@TableName("sys_passage_template_detail")
+@TableName("paas_passage_template_detail")
 public class PassageTemplateDetail extends DataEntity<PassageTemplateDetail> {
 
 	private static final long serialVersionUID = 1L;

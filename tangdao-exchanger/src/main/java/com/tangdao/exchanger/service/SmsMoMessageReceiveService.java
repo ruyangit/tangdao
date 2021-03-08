@@ -9,22 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.constant.CommonContext.CallbackUrlType;
-import org.tangdao.common.constant.RabbitConstant;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.constant.SmsSettingsContext.MobileBlacklistType;
-import org.tangdao.modules.sms.mapper.SmsMoMessageReceiveMapper;
-import org.tangdao.modules.sms.model.domain.SmsMoMessageReceive;
-import org.tangdao.modules.sms.model.domain.SmsMobileBlacklist;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageSubmit;
-import org.tangdao.modules.sys.constant.SettingsContext.SystemConfigType;
-import org.tangdao.modules.sys.model.domain.PushConfig;
-import org.tangdao.modules.sys.service.IPushConfigService;
 
 import com.alibaba.fastjson.JSON;
+import com.tangdao.core.constant.RabbitConstant;
+import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.context.CommonContext.CallbackUrlType;
+import com.tangdao.core.context.SettingsContext.SystemConfigType;
+import com.tangdao.core.context.SmsSettingsContext.MobileBlacklistType;
+import com.tangdao.core.model.domain.paas.PushConfig;
+import com.tangdao.core.model.domain.sms.MoMessageReceive;
+import com.tangdao.core.model.domain.sms.MobileBlacklist;
+import com.tangdao.core.model.domain.sms.MtMessageSubmit;
 import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMoMessageReceiveMapper;
+
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 上行消息回复ServiceImpl
@@ -47,13 +46,13 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 //    private ISmsPassageService         smsPassageService;
 
 	@Autowired
-	private SmsMtSubmitService smsMtSubmitService;
+	private SmsMtMessageSubmitService smsMtSubmitService;
 //    @Autowired
 //    private SmsMoMessagePushMapper     smsMoMessagePushMapper;
 //    @Autowired
 //    private SmsMoMessageReceiveMapper  moMessageReceiveMapper;
 	@Autowired
-	private ISmsMobileBlackListService smsMobileBlackListService;
+	private SmsMobileBlacklistService smsMobileBlacklistService;
 
 	/**
 	 * 恒生电子定制服务状态是否开启 0：未开启，1:已开启
@@ -80,11 +79,10 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Override
-	public int doFinishReceive(List<SmsMoMessageReceive> list) {
+	public int doFinishReceive(List<MoMessageReceive> list) {
 		int count = 0;
 		try {
-			for (SmsMoMessageReceive receive : list) {
+			for (MoMessageReceive receive : list) {
 
 				// // 31省测试上行自动触发下行功能（测试后上线去掉此逻辑） add by 20170709
 				// if(StringUtils.isNotEmpty(receive.getDestnationNo()) &&
@@ -101,7 +99,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 				}
 
 				// 根据通道ID和消息ID
-				SmsMtMessageSubmit submit = smsMtSubmitService.getByMoMapping(receive.getPassageId(),
+				MtMessageSubmit submit = smsMtSubmitService.getByMoMapping(receive.getPassageId(),
 						receive.getMsgId(), receive.getMobile(), receive.getDestnationNo());
 				if (submit != null) {
 					receive.setMsgId(submit.getMsgId());
@@ -109,7 +107,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 					receive.setSid(submit.getSid() + "");
 
 					// 如果上行回执内容为空，则置一个空格字符
-					if (StringUtils.isEmpty(receive.getContent())) {
+					if (StrUtil.isEmpty(receive.getContent())) {
 						receive.setContent(" ");
 					}
 
@@ -124,7 +122,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 
 					PushConfig pushConfig = pushConfigService.getByUserCode(submit.getUserCode(),
 							CallbackUrlType.SMS_MO.getCode());
-					if (pushConfig == null || StringUtils.isEmpty(pushConfig.getUrl())) {
+					if (pushConfig == null || StrUtil.isEmpty(pushConfig.getUrl())) {
 						receive.setNeedPush(false);
 						continue;
 					}
@@ -155,16 +153,16 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 	 * @param receive
 	 * @return
 	 */
-	private boolean processIfHundsunMatched(SmsMoMessageReceive receive) {
+	private boolean processIfHundsunMatched(MoMessageReceive receive) {
 		try {
-			if (RUNNING_STATUS != hundsunRunStatus || receive == null || StringUtils.isEmpty(hundsunDestnationNo)
+			if (RUNNING_STATUS != hundsunRunStatus || receive == null || StrUtil.isEmpty(hundsunDestnationNo)
 					|| !receive.getDestnationNo().startsWith(hundsunDestnationNo)) {
 				return false;
 			}
 
 			receive.setUserCode(hundsunUserCode);
 			PushConfig pushConfig = pushConfigService.getByUserCode(hundsunUserCode, CallbackUrlType.SMS_MO.getCode());
-			if (pushConfig == null || StringUtils.isEmpty(pushConfig.getUrl())) {
+			if (pushConfig == null || StrUtil.isEmpty(pushConfig.getUrl())) {
 				receive.setNeedPush(false);
 				return true;
 			}
@@ -185,7 +183,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 	public String[] getBlacklistWords() {
 		try {
 			String value = stringRedisTemplate.opsForValue().get(SystemConfigType.WORDS_LIBRARY.name());
-			if (StringUtils.isEmpty(value)) {
+			if (StrUtil.isEmpty(value)) {
 				return null;
 			}
 
@@ -211,7 +209,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 
 		boolean isContains = false;
 		for (String wd : words) {
-			if (StringUtils.isEmpty(wd)) {
+			if (StrUtil.isEmpty(wd)) {
 				continue;
 			}
 
@@ -225,7 +223,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 			return;
 		}
 
-		SmsMobileBlacklist blacklist = new SmsMobileBlacklist();
+		MobileBlacklist blacklist = new MobileBlacklist();
 		blacklist.setMobile(mobile);
 		blacklist.setType(MobileBlacklistType.UNSUBSCRIBE.getCode());
 		blacklist.setRemarks(remarks);
@@ -238,7 +236,6 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 	 */
 	private static final String[] BLACKLIST_WORDS = { "TD", "T", "N" };
 
-	@Override
 	public boolean doReceiveToException(Object obj) {
 		try {
 			stringRedisTemplate.opsForList().rightPush(SmsRedisConstant.RED_MESSAGE_MO_RECEIPT_EXCEPTION_LIST,
@@ -256,7 +253,7 @@ public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveM
 	 * 
 	 * @param receive
 	 */
-	private void sendToPushQueue(SmsMoMessageReceive receive) {
+	private void sendToPushQueue(MoMessageReceive receive) {
 		try {
 			// 发送至待推送信息队列
 			smsRabbitTemplate.convertAndSend(RabbitConstant.EXCHANGE_SMS, RabbitConstant.MQ_SMS_MO_WAIT_PUSH, receive);

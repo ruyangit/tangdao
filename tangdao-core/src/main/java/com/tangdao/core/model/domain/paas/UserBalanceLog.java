@@ -21,7 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_user_balance_log")
+@TableName("paas_user_balance_log")
 public class UserBalanceLog extends DataEntity<UserBalanceLog> {
 
 	private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class UserBalanceLog extends DataEntity<UserBalanceLog> {
 	@TableId
 	private String id;
 
-	private String userCode; // 用户ID
+	private String userId; // 用户ID
 
 	private int platformType; // 平台类型：1-短信，2-流量，3-语音
 	private Double balance; // 充值额度

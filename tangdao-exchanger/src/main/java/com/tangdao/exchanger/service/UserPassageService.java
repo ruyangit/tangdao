@@ -1,4 +1,4 @@
-package org.tangdao.modules.sys.service;
+package com.tangdao.exchanger.service;
 
 import java.util.Date;
 import java.util.List;
@@ -10,50 +10,44 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.constant.CommonContext.PlatformType;
-import org.tangdao.common.constant.RedisConstant;
-import org.tangdao.common.lang.ObjectUtils;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sys.constant.SettingsContext.SystemConfigType;
-import org.tangdao.modules.sys.constant.SettingsContext.UserDefaultPassageGroupKey;
-import org.tangdao.modules.sys.mapper.UserPassageMapper;
-import org.tangdao.modules.sys.model.domain.DictData;
-import org.tangdao.modules.sys.model.domain.UserPassage;
-import org.tangdao.modules.sys.utils.DictUtils;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.context.CommonContext.PlatformType;
+import com.tangdao.core.context.SettingsContext.UserDefaultPassageGroupKey;
+import com.tangdao.core.model.domain.paas.UserPassage;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.UserPassageMapper;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 @Service
-public class UserPassageServiceImpl extends CrudService<UserPassageMapper, UserPassage>
-		implements IUserPassageService {
+public class UserPassageService extends BaseService<UserPassageMapper, UserPassage>{
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
-
-	@Override
+	
 	public List<UserPassage> findByUserCode(String userCode) {
-		return this.select(Wrappers.<UserPassage>lambdaQuery().eq(UserPassage::getUserCode, userCode));
+		return this.list(Wrappers.<UserPassage>lambdaQuery().eq(UserPassage::getUserCode, userCode));
 	}
 
 	private String getKey(String userCode, int type) {
-		return String.format("%s:%d:%d", RedisConstant.RED_USER_SMS_PASSAGE, userCode, type);
+		return String.format("%s:%d:%d", CommonRedisConstant.RED_USER_SMS_PASSAGE, userCode, type);
 	}
 
-	@Override
+	
 	public String getByUserCodeAndType(String userCode, int type) {
-		if (StringUtils.isEmpty(userCode) || type == 0) {
+		if (StrUtil.isEmpty(userCode) || type == 0) {
 			return null;
 		}
 
 		try {
 			String passageGroupId = stringRedisTemplate.opsForValue().get(getKey(userCode, type));
-			if (StringUtils.isNotBlank(passageGroupId))
+			if (StrUtil.isNotBlank(passageGroupId))
 				return passageGroupId;
 
 		} catch (Exception e) {
@@ -71,16 +65,16 @@ public class UserPassageServiceImpl extends CrudService<UserPassageMapper, UserP
 		return userPassage.getPassageGroupId();
 	}
 
-	@Override
+	
 	public List<UserPassage> getPassageGroupListByGroupId(String passageGroupId) {
-		return this.select(Wrappers.<UserPassage>lambdaQuery().eq(UserPassage::getPassageGroupId, passageGroupId));
+		return this.list(Wrappers.<UserPassage>lambdaQuery().eq(UserPassage::getPassageGroupId, passageGroupId));
 	}
 
-	@Override
+	
 	public boolean save(String userCode, UserPassage userPassage) {
 		try {
 			userPassage.setUserCode(userCode);
-			userPassage.setCreateTime(new Date());
+			userPassage.setCreateDate(new Date());
 			return super.save(userPassage);
 		} catch (Exception e) {
 			logger.error("添加用户通道错误，{}", e);
@@ -105,7 +99,7 @@ public class UserPassageServiceImpl extends CrudService<UserPassageMapper, UserP
 			userPassage.setPassageGroupId(passageGroupId);
 			userPassage.setType(type);
 			userPassage.setUserCode(userCode);
-			userPassage.setCreateTime(new Date());
+			userPassage.setCreateDate(new Date());
 
 			boolean effect = super.save(userPassage);
 			if (effect) {
@@ -117,14 +111,14 @@ public class UserPassageServiceImpl extends CrudService<UserPassageMapper, UserP
 		}
 	}
 
-	@Override
+	
 	public boolean initUserPassage(String userCode, List<UserPassage> passageList) {
 		try {
-			if (ListUtils.isEmpty(passageList)) {
+			if (CollUtil.isEmpty(passageList)) {
 				// 如果传递的用户通道集合为空，则根据系统参数配置查询平台所有业务的默认可用通道信息，插入值用户通道关系表中
 //                List<SystemConfig> systemConfigs = systemConfigService.findByType(SystemConfigType.USER_DEFAULT_PASSAGE_GROUP.name());
 				List<DictData> dictTypes = DictUtils.getDictList(SystemConfigType.USER_DEFAULT_PASSAGE_GROUP.name());
-				if (ListUtils.isEmpty(dictTypes)) {
+				if (CollUtil.isEmpty(dictTypes)) {
 					throw new RuntimeException("没有可用默认通道组，请配置");
 				}
 
@@ -154,14 +148,14 @@ public class UserPassageServiceImpl extends CrudService<UserPassageMapper, UserP
 			}
 
 			// busiCodes 为空则表明，传递的通道集合包含平台所有业务的通道信息，无需补齐
-			if (ListUtils.isEmpty(busiCodes)) {
+			if (CollUtil.isEmpty(busiCodes)) {
 				return true;
 			}
 
 			// 如果此值不为空，则表明该业务没有设置通道，需要查询是否存在默认通道
 			for (Integer code : busiCodes) {
 				String key = UserDefaultPassageGroupKey.key(code);
-				if (StringUtils.isEmpty(key)) {
+				if (StrUtil.isEmpty(key)) {
 					continue;
 				}
 
@@ -182,10 +176,10 @@ public class UserPassageServiceImpl extends CrudService<UserPassageMapper, UserP
 		}
 	}
 
-	@Override
+	
 	@Transactional(readOnly = false, rollbackFor = RuntimeException.class)
 	public boolean save(String userCode, List<UserPassage> userPassages) {
-		if (ListUtils.isEmpty(userPassages)) {
+		if (CollUtil.isEmpty(userPassages)) {
 			return false;
 		}
 
@@ -201,9 +195,8 @@ public class UserPassageServiceImpl extends CrudService<UserPassageMapper, UserP
 		}
 	}
 
-	@Override
+	
 	public boolean update(String userCode, int type, String passageGroupId) {
-
 		int effect = this.getBaseMapper().updateByUserCodeAndType(passageGroupId, userCode,
 				PlatformType.SEND_MESSAGE_SERVICE.getCode());
 		if (effect > 0) {
@@ -224,10 +217,10 @@ public class UserPassageServiceImpl extends CrudService<UserPassageMapper, UserP
 		}
 	}
 
-	@Override
+	
 	public boolean reloadModelToRedis() {
-		List<UserPassage> list = super.select();
-		if (ListUtils.isEmpty(list)) {
+		List<UserPassage> list = super.list();
+		if (CollUtil.isEmpty(list)) {
 			logger.warn("可用用户通道组数据为空");
 			return false;
 		}

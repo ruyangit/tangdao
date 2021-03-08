@@ -54,11 +54,6 @@ public abstract class BaseModel implements Serializable {
 	 */
 	public static final String STATUS_DRAFT = "9";
 
-	/**
-	 * db
-	 */
-	public static final String DB_PREFIX_ = "td_";
-
 	@TableField(exist = false)
 	private LinkedHashMap<String, Object> dataSqlMap;
 

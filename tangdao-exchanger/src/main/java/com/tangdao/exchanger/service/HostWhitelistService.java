@@ -9,25 +9,27 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.model.domain.paas.HostWhitelist;
 import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.HostWhitelistMapper;
 
-import lombok.extern.slf4j.Slf4j;
+import cn.hutool.core.util.StrUtil;
 
 @Service
-public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostWhitelist>{
+public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostWhitelist> {
 
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 
 	private String getKey(String userCode) {
-		return String.format("%s:%d", RedisConstant.RED_USER_WHITE_HOST, userCode);
+		return String.format("%s:%d", CommonRedisConstant.RED_USER_WHITE_HOST, userCode);
 	}
 
-	@Override
-	public int updateByPrimaryKey(HostWhiteList record) {
+	public int updateByPrimaryKey(HostWhitelist record) {
 		int result = this
-				.count(Wrappers.<HostWhiteList>lambdaQuery().eq(HostWhiteList::getStatus, HostWhiteList.STATUS_NORMAL)
-						.eq(HostWhiteList::getUserCode, record).eq(HostWhiteList::getIp, record.getIp()));
+				.count(Wrappers.<HostWhitelist>lambdaQuery().eq(HostWhitelist::getStatus, HostWhitelist.STATUS_NORMAL)
+						.eq(HostWhitelist::getUserCode, record).eq(HostWhitelist::getIp, record.getIp()));
 		if (result == 0) {
 			pushToRedis(record.getUserCode(), record.getIp());
 			return this.getBaseMapper().updateById(record);
@@ -36,7 +38,6 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 		}
 	}
 
-	@Override
 	public boolean ipAllowedPass(String userCode, String ip) {
 //      try {
 //      Set<String> set = stringRedisTemplate.opsForSet().members(getKey(userId));
@@ -93,14 +94,14 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 //		return CollectionUtils.isNotEmpty(con);
 //	}
 
-	public Map<String, Object> batchInsert(HostWhiteList record) {
+	public Map<String, Object> batchInsert(HostWhitelist record) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		int count = 0;
 		boolean is_successs = true;
 		// 重复标记
 		boolean is_flag = false;
 		String context = "";
-		if (StringUtils.isEmpty(record.getIp())) {
+		if (StrUtil.isEmpty(record.getIp())) {
 			resultMap.put("result_code", "-2");
 			resultMap.put("result_msg", "参数不能为空！");
 			return resultMap;
@@ -110,15 +111,15 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 			for (int i = 0; i < str.length; i++) {
 				count++;
 				record.setIp(str[i]);
-				record.setStatus(HostWhiteList.STATUS_NORMAL);
+				record.setStatus(HostWhitelist.STATUS_NORMAL);
 				// 标记重复提示
 				boolean codeFlag = false;
 				// 去空格验证是否为空
-				if (!StringUtils.isEmpty(str[i].trim())) {
+				if (!StrUtil.isEmpty(str[i].trim())) {
 					// 判断是否重复 重复则不保存
-					int exisCount = this.count(Wrappers.<HostWhiteList>lambdaQuery()
-							.eq(HostWhiteList::getStatus, HostWhiteList.STATUS_NORMAL)
-							.eq(HostWhiteList::getUserCode, record).eq(HostWhiteList::getIp, record.getIp()));
+					int exisCount = this.count(Wrappers.<HostWhitelist>lambdaQuery()
+							.eq(HostWhitelist::getStatus, HostWhitelist.STATUS_NORMAL)
+							.eq(HostWhitelist::getUserCode, record).eq(HostWhitelist::getIp, record.getIp()));
 					if (exisCount == 0) {
 						// flag = hostWhiteListMapper.batchInsert(record) > 0;
 					} else {
@@ -136,10 +137,10 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 				for (int i = 0; i < str.length; i++) {
 					count++;
 					record.setIp(str[i]);
-					record.setStatus(HostWhiteList.STATUS_NORMAL);
+					record.setStatus(HostWhitelist.STATUS_NORMAL);
 					// 标记重复提示
 					// 去空格验证是否为空
-					if (!StringUtils.isEmpty(str[i].trim())) {
+					if (!StrUtil.isEmpty(str[i].trim())) {
 						pushToRedis(record.getUserCode(), record.getIp());
 						this.save(record);
 					}

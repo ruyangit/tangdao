@@ -6,43 +6,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.constant.CommonContext.CMCP;
-import org.tangdao.common.constant.RedisConstant;
-import org.tangdao.modules.sys.constant.SettingsContext;
-import org.tangdao.modules.sys.model.domain.AreaLocal;
-import org.tangdao.modules.sys.model.vo.MobileCatagory;
-import org.tangdao.modules.sys.service.IAreaLocalService;
-import org.tangdao.modules.sys.service.IMobileLocalService;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.context.CommonContext.CMCP;
+import com.tangdao.core.model.domain.paas.Area;
+import com.tangdao.core.model.domain.paas.AreaLocal;
+import com.tangdao.core.model.vo.MobileCatagory;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 @Service
-public class MobileLocalService implements IMobileLocalService {
+public class MobileLocalService {
 
-	@Resource
-	private IAreaLocalService areaLocalService;
+	@Autowired
+	private AreaLocalService areaLocalService;
 
-	@Resource
+	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
-	@Resource
+	@Autowired
 	private AsyncService asyncService;
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Override
 	public MobileCatagory doCatagory(String mobile) {
-		if (StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(mobile)) {
 			return null;
 		}
 
@@ -54,9 +50,8 @@ public class MobileLocalService implements IMobileLocalService {
 		return doCatagory(Arrays.asList(numbers));
 	}
 
-	@Override
 	public MobileCatagory doCatagory(List<String> numbers) {
-		if (CollectionUtils.isEmpty(numbers)) {
+		if (CollUtil.isEmpty(numbers)) {
 			logger.error("手机号码为空,分流失败");
 			return null;
 		}
@@ -153,7 +148,7 @@ public class MobileLocalService implements IMobileLocalService {
 	 * @return
 	 */
 	private static String cutTail(String mobile) {
-		if (StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(mobile)) {
 			return "";
 		}
 
@@ -175,7 +170,7 @@ public class MobileLocalService implements IMobileLocalService {
 			logger.warn("手机号码[" + mobile + "]匹配运营商为'全网'");
 		}
 
-		return new AreaLocal(SettingsContext.AREA_CODE_ALLOVER_COUNTRY, cmcp.getCode());
+		return new AreaLocal(Area.AREA_CODE_ALLOVER_COUNTRY + "", cmcp.getCode());
 	}
 
 	/**
@@ -185,7 +180,7 @@ public class MobileLocalService implements IMobileLocalService {
 	 * @return 省份-运营商 归属信息
 	 */
 	private AreaLocal pickupMobileLocal(String mobile) {
-		if (StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(mobile)) {
 			return null;
 		}
 
@@ -193,7 +188,7 @@ public class MobileLocalService implements IMobileLocalService {
 			// 手机号码前7位确定归属地
 			String area = mobile.trim().substring(0, 7);
 
-			AreaLocal pl = RedisConstant.GLOBAL_MOBILES_LOCAL.get(area);
+			AreaLocal pl = CommonRedisConstant.GLOBAL_MOBILES_LOCAL.get(area);
 
 			return pl == null ? getAreaLocalIfNotFound(mobile) : pl;
 
@@ -210,7 +205,7 @@ public class MobileLocalService implements IMobileLocalService {
 	 * @return
 	 */
 	private boolean isInvalidMobile(String mobile) {
-		if (StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(mobile)) {
 			return true;
 		}
 
@@ -253,27 +248,26 @@ public class MobileLocalService implements IMobileLocalService {
 	 */
 	private void load2Cache(List<AreaLocal> list) {
 		for (AreaLocal pl : list) {
-			RedisConstant.GLOBAL_MOBILES_LOCAL.put(pl.getNumberArea(), pl);
+			CommonRedisConstant.GLOBAL_MOBILES_LOCAL.put(pl.getNumberArea(), pl);
 		}
 	}
 
 	private String getKey() {
-		return RedisConstant.RED_AREA_MOBILES_LOCAL;
+		return CommonRedisConstant.RED_AREA_MOBILES_LOCAL;
 	}
 
-	@Override
 	public boolean reload() {
 		try {
 			String value = stringRedisTemplate.opsForValue().get(getKey());
-			if (StringUtils.isNotEmpty(value)) {
-				RedisConstant.GLOBAL_MOBILES_LOCAL = JSON.parseObject(value,
+			if (StrUtil.isNotEmpty(value)) {
+				CommonRedisConstant.GLOBAL_MOBILES_LOCAL = JSON.parseObject(value,
 						new TypeReference<Map<String, AreaLocal>>() {
 						});
 				return true;
 			}
 
-			List<AreaLocal> list = this.areaLocalService.select();
-			if (CollectionUtils.isEmpty(list)) {
+			List<AreaLocal> list = this.areaLocalService.list();
+			if (CollUtil.isEmpty(list)) {
 				logger.error("省份手机号码归属地数据为空，加载失败");
 				return false;
 			}
@@ -287,21 +281,20 @@ public class MobileLocalService implements IMobileLocalService {
 			logger.error("省份手机号码归属地加载异常", e);
 			return false;
 		} finally {
-			logger.info("Global mobiles local data[" + RedisConstant.GLOBAL_MOBILES_LOCAL.size() + "] has loaded");
+			logger.info(
+					"Global mobiles local data[" + CommonRedisConstant.GLOBAL_MOBILES_LOCAL.size() + "] has loaded");
 		}
 
 	}
 
-	@Override
 	public AreaLocal getByMobile(String mobile) {
-		if (StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(mobile)) {
 			return null;
 		}
 
 		return pickupMobileLocal(mobile);
 	}
 
-	@Override
 	public Map<String, AreaLocal> getByMobiles(String[] mobiles) {
 		if (mobiles == null || mobiles.length == 0) {
 			return null;
