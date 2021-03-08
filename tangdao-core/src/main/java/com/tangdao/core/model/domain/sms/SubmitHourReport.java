@@ -19,7 +19,7 @@ public class SubmitHourReport extends DataEntity<SubmitHourReport> {
 
 	private static final long serialVersionUID = 1L;
 
-	private String appId; // 用户编码
+	private String userId; // 用户编码
 	private String passageId; // 通道ID
 	private String provinceCode; // 省份代码
 	private String submitCount; // 提交数量

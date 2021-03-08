@@ -34,7 +34,7 @@ public class ApiFailedRecord extends DataEntity<ApiFailedRecord> {
 	@TableId
 	private String id;
 
-	private String appId; // 用户编码
+	private String userId; // 用户编码
 	private Integer appType; // 调用类型
 	private String submitType; // 请求类型
 	private String appKey; // 接口账号

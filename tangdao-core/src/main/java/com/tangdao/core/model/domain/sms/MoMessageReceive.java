@@ -23,7 +23,7 @@ public class MoMessageReceive extends DataEntity<MoMessageReceive> {
 	@TableId
 	private String id;
 	
-	private String userCode;		// 用户编码
+	private String userId;		// 用户编码
 	private String passageId;		// 通道标识
 	private String msgId;		// 短信标识
 	private String mobile;		// 用户手机号

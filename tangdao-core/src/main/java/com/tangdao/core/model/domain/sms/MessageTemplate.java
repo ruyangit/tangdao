@@ -28,7 +28,7 @@ public class MessageTemplate extends DataEntity<MessageTemplate> {
 	@TableId
 	private String id;
 
-	private String userCode; // 归属用户，如果为0，则表示为系统模板（使用所有人）
+	private String userId; // 归属用户，如果为0，则表示为系统模板（使用所有人）
 	private String content; // 模板内容
 	private Integer appType; // 操作方式，1:融合WEB平台,2:开发者平台,3:运营支撑系统
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

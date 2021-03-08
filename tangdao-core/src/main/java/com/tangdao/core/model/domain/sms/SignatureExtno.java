@@ -23,7 +23,7 @@ public class SignatureExtno extends DataEntity<SignatureExtno> {
 	@TableId
 	private String id;
 
-	private String appId; //
+	private String userId; //
 	private String signature; // 签名
 	private String extNumber; // 扩展号码
 

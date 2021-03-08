@@ -31,7 +31,7 @@ public class UserSmsConfig extends DataEntity<UserSmsConfig> {
 	@TableId
 	private String id;
 
-	private String appId;
+	private String userId;
 
 	private Integer smsWords; // 每条计费字数
 

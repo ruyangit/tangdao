@@ -22,7 +22,7 @@ public class PassageChangeLog extends DataEntity<PassageChangeLog> {
 	private String passageId; // 通道ID
 	private String oldPassageId; // 原通道ID
 	private String groupId; // 通道组id
-	private String appId; // 用户编码
+	private String userId; // 用户编码
 	private String routeType; // 路由类型
 	private String cmcp; // 运营商
 	private String operateType; // 操作方式

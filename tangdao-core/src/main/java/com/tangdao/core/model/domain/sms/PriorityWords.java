@@ -22,7 +22,7 @@ public class PriorityWords extends DataEntity<PriorityWords> {
 	@TableId
 	private String id;
 	
-	private String appId;		// 用户编码
+	private String userId;		// 用户编码
 	private String content;		// 内容
 	private String priority;		// 优先级
 	

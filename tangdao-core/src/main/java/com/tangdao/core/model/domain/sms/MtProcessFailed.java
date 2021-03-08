@@ -22,7 +22,7 @@ public class MtProcessFailed extends DataEntity<MtProcessFailed> {
 	private Long sid; // sid
 	private String appType; // 调用类型 1:融合WEB平台,2:开发者平台,3:运营支撑系统
 	private String ip; // 发送IP
-	private String userCode; // 用户编码
+	private String userId; // 用户编码
 	private String mobile; // 手机号
 	private String cmcp; // 运营商，参见cmcp枚举
 	private String templateId; // 模板编号

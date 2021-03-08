@@ -24,7 +24,7 @@ public class MobileWhitelist extends DataEntity<MobileWhitelist> {
 	private String id;
 
 	private String mobile; // mobile
-	private String userCode; // 用户编码
+	private String userId; // 用户编码
 
 	public MobileWhitelist() {
 		super();

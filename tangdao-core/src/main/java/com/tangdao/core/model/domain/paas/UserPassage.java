@@ -28,7 +28,7 @@ public class UserPassage extends DataEntity<UserPassage> {
 	@TableId
 	private String id;
 
-	private String appId; // 用户编码
+	private String userId; // 用户编码
 	private int type; // 类型 1-短信，2-流量，3-语音
 	private String passageGroupId; // 业务通道组ID，如短信通道组ID，流量通道组ID
 
@@ -36,8 +36,8 @@ public class UserPassage extends DataEntity<UserPassage> {
 		super();
 	}
 
-	public UserPassage(String appId, Integer type, String passageGroupId) {
-		this.appId = appId;
+	public UserPassage(String userId, Integer type, String passageGroupId) {
+		this.userId = userId;
 		this.type = type;
 		this.passageGroupId = passageGroupId;
 	}

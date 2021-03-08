@@ -20,7 +20,7 @@ public class MtManualHandling extends DataEntity<MtManualHandling> {
 	private static final long serialVersionUID = 1L;
 
 	private Long sid; // sid
-	private String appId; // 用户编码
+	private String userId; // 用户编码
 	private String appType; // 调用类型 1:融合WEB平台,2:开发者平台,3:运营支撑系统
 	private String ip; // 发送IP
 	private String mobile; // 手机号

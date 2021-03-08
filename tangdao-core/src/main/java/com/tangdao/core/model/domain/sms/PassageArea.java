@@ -22,15 +22,15 @@ public class PassageArea extends DataEntity<PassageArea> {
 	@TableId
 	private String id;
 	private String passageId;		// 通道ID
-	private String araCode;		// 省份代码
+	private String areaCode;		// 省份代码
 	
 	public PassageArea() {
 		super();
 	}
 	
-	public PassageArea(String passageId,String araCode){
+	public PassageArea(String passageId,String areaCode){
         this.passageId = passageId;
-        this.araCode = araCode;
+        this.areaCode = areaCode;
     }
 	
 }

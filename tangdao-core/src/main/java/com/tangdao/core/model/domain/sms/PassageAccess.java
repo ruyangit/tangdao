@@ -24,7 +24,7 @@ public class PassageAccess extends DataEntity<PassageAccess> {
 	@TableId
 	private String id;
 
-	private String appId; // 编码
+	private String userId; // 编码
 	private String groupId; // 通道组id
 	private int routeType; // 路由类型
 	private int cmcp; // 运营商

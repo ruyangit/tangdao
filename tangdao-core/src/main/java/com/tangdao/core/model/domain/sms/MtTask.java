@@ -41,7 +41,7 @@ public class MtTask extends DataEntity<MtTask> {
 	@TableId
 	private String id;
 
-	private String appId;
+	private String userId;
 
 	private Long sid; // 消息ID
 	private Integer appType; // 调用类型 1:融合WEB平台,2:开发者平台,3:运营支撑系统
