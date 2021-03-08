@@ -1,6 +1,5 @@
 package com.tangdao.exchanger.service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.CommonRedisConstant;
 import com.tangdao.core.model.domain.paas.UserDeveloper;
@@ -18,7 +16,7 @@ import com.tangdao.exchanger.dao.UserDeveloperMapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
+import cn.hutool.crypto.digest.BCrypt;
 
 @Service
 public class UserDeveloperService extends BaseService<UserDeveloperMapper, UserDeveloper> {
@@ -28,11 +26,6 @@ public class UserDeveloperService extends BaseService<UserDeveloperMapper, UserD
 
 	private String getKey(String appkey) {
 		return String.format("%s:%s", CommonRedisConstant.RED_DEVELOPER_LIST, appkey);
-	}
-
-	public UserDeveloper getByUserCode(String userCode) {
-		// TODO Auto-generated method stub
-		return this.getOne(Wrappers.<UserDeveloper>lambdaQuery().eq(UserDeveloper::getUserCode, userCode));
 	}
 
 	public UserDeveloper getByAppkey(String appkey) {
@@ -57,22 +50,12 @@ public class UserDeveloperService extends BaseService<UserDeveloperMapper, UserD
 				.eq(UserDeveloper::getAppSecret, appSecret));
 	}
 
-	/**
-	 * TODO 生成密钥密码
-	 * 
-	 * @return
-	 */
-	private byte[] genSalt() {
-		return DigestUtils.genSalt(12);
-	}
-
-	public UserDeveloper saveWithReturn(String userCode) {
+	public UserDeveloper saveWithReturn(String userId, String appKey) {
 		UserDeveloper developer = new UserDeveloper();
-		developer.setUserCode(userCode);
-		developer.setAppKey(IdWorker.getIdStr());
-		developer.setSalt(EncodeUtils.encodeHex(genSalt()));
-		developer.setAppSecret(EncodeUtils.encodeHex(
-				DigestUtils.digest(developer.getUserCode().getBytes(), "SHA-1", developer.getSalt().getBytes(), 1)));
+		developer.setUserId(userId);
+		developer.setAppKey(appKey);
+		developer.setSalt(BCrypt.gensalt());
+		developer.setAppSecret(BCrypt.hashpw(appKey, developer.getSalt()));
 		if (this.save(developer)) {
 			pushToRedis(developer);
 			return developer;
@@ -86,7 +69,6 @@ public class UserDeveloperService extends BaseService<UserDeveloperMapper, UserD
 			log.warn("可用开发者数据为空");
 			return false;
 		}
-
 		List<Object> con = stringRedisTemplate.execute((connection) -> {
 			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 			connection.openPipeline();
@@ -94,7 +76,6 @@ public class UserDeveloperService extends BaseService<UserDeveloperMapper, UserD
 				byte[] key = serializer.serialize(getKey(developer.getAppKey()));
 				connection.set(key, serializer.serialize(JSON.toJSONString(developer)));
 			}
-
 			return connection.closePipeline();
 
 		}, false, true);

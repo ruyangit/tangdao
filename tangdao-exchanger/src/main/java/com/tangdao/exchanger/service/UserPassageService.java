@@ -31,12 +31,12 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 	private StringRedisTemplate stringRedisTemplate;
 
 	
-	public List<UserPassage> findByUserCode(String userCode) {
-		return this.list(Wrappers.<UserPassage>lambdaQuery().eq(UserPassage::getUserCode, userCode));
+	public List<UserPassage> findByAppId(String appId) {
+		return this.list(Wrappers.<UserPassage>lambdaQuery().eq(UserPassage::getAppId, appId));
 	}
 
-	private String getKey(String userCode, int type) {
-		return String.format("%s:%d:%d", CommonRedisConstant.RED_USER_SMS_PASSAGE, userCode, type);
+	private String getKey(String appId, int type) {
+		return String.format("%s:%d:%d", CommonRedisConstant.RED_USER_SMS_PASSAGE, userId, type);
 	}
 
 	

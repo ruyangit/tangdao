@@ -11,15 +11,26 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.constant.UserBalanceConstant;
+import com.tangdao.core.context.CommonContext.PlatformType;
+import com.tangdao.core.context.PayContext.PaySource;
+import com.tangdao.core.context.PayContext.PayType;
+import com.tangdao.core.context.UserContext.BalancePayType;
+import com.tangdao.core.context.UserContext.BalanceStatus;
+import com.tangdao.core.exception.DataEmptyException;
 import com.tangdao.core.model.domain.paas.UserBalance;
+import com.tangdao.core.model.domain.paas.UserBalanceLog;
+import com.tangdao.core.model.vo.P2pBalance;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.UserBalanceMapper;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalance>{
+public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalance> {
 
 	/**
 	 * 点对点模板参数
@@ -32,44 +43,39 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 	@Autowired
 	private UserBalanceLogService userBalanceLogService;
 
-	
-	public List<UserBalance> findByUserCode(String userCode) {
+	public List<UserBalance> findByUserId(String userId) {
 		// TODO Auto-generated method stub
-		return this.select(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getUserCode, userCode));
+		return this.list(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getUserId, userId));
 	}
 
-	
-	public UserBalance getByUserCode(String userCode, PlatformType type) {
+	public UserBalance getByUserId(String userId, PlatformType type) {
 		// TODO Auto-generated method stub
-		if (StringUtils.isEmpty(userCode)) {
+		if (StrUtil.isEmpty(userId)) {
+			return null;
+		}
+		return getByUserId(userId, type.getCode());
+	}
+
+	public UserBalance getByUserId(String userId, int type) {
+		// TODO Auto-generated method stub
+		if (StrUtil.isEmpty(userId)) {
 			return null;
 		}
 
-		return getByUserCode(userCode, type.getCode());
+		return this.getOne(
+				Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getUserId, userId).eq(UserBalance::getType, type));
 	}
 
-	
-	public UserBalance getByUserCode(String userCode, int type) {
-		// TODO Auto-generated method stub
-		if (StringUtils.isEmpty(userCode)) {
-			return null;
-		}
-
-		return this.getOne(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getUserCode, userCode)
-				.eq(UserBalance::getType, type));
-	}
-
-	
 	@Transactional(readOnly = false, rollbackFor = RuntimeException.class)
 	public boolean saveBalance(UserBalance balance) {
 		try {
 			String id = balance.getId();
 			balance.setPayType(balance.getPayType() == null ? BalancePayType.PREPAY.getValue() : balance.getPayType());
-			if (this.saveOrUpdate(balance)&&StringUtils.isEmpty(id)) {
+			if (this.saveOrUpdate(balance) && StrUtil.isEmpty(id)) {
 				UserBalanceLog log = new UserBalanceLog();
 				log.setBalance(balance.getBalance());
 				log.setPayType(balance.getPayType());
-				log.setUserCode(balance.getUserCode());
+				log.setUserId(balance.getUserId());
 				log.setPlatformType(balance.getType());
 				log.setPaySource(balance.getPaySource().getValue());
 
@@ -78,30 +84,29 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 
 			return false;
 		} catch (Exception e) {
-			log.error("保存用户 [" + balance.getUserCode() + "]失败", e);
+			log.error("保存用户 [" + balance.getUserId() + "]失败", e);
 			throw new RuntimeException(e);
 		}
 	}
 
-	
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	public boolean updateBalance(String userCode, int amount, int platformType, PaySource paySource, PayType payType,
+	public boolean updateBalance(String userId, int amount, int platformType, PaySource paySource, PayType payType,
 			Double price, Double totalPrice, String remarks, boolean isNotice) {
 		try {
-			UserBalance userBalance = getByUserCode(userCode, platformType);
+			UserBalance userBalance = getByUserId(userId, platformType);
 			userBalance.setBalance(userBalance.getBalance() + amount);
-			userBalance.setUserCode(userCode);
+			userBalance.setUserId(userId);
 			userBalance.setRemarks(remarks);
 
 			// 冲扣值后统一将告警状态设置为 “正常” add by 20170827
-			userBalance.setStatus(BalanceStatus.AVAIABLE.getValue());
+			userBalance.setStatus(BalanceStatus.AVAIABLE.getValue() + "");
 			boolean result = super.updateById(userBalance);
 			if (result) {
 				UserBalanceLog log = new UserBalanceLog();
 				log.setBalance(Double.valueOf(amount));
 				log.setPaySource(paySource.getValue());
 				log.setPayType(payType == null ? null : payType.getValue());
-				log.setUserCode(userBalance.getUserCode());
+				log.setUserId(userBalance.getUserId());
 				log.setPlatformType(userBalance.getType());
 				log.setPrice(price);
 				log.setTotalPrice(totalPrice);
@@ -126,18 +131,17 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 		}
 	}
 
-	
-	public boolean deductBalance(String userCode, int amount, int type, String remarks) {
+	public boolean deductBalance(String userId, int amount, int type, String remarks) {
 		try {
-			UserBalance userBalance = getByUserCode(userCode, type);
+			UserBalance userBalance = getByUserId(userId, type);
 			userBalance.setBalance(userBalance.getBalance() + amount);
-			userBalance.setUserCode(userCode);
-			if (StringUtils.isNotEmpty(remarks)) {
+			userBalance.setUserId(userId);
+			if (StrUtil.isNotEmpty(remarks)) {
 				userBalance.setRemarks(remarks);
 			}
 
 			UpdateWrapper<UserBalance> updateWrapper = new UpdateWrapper<UserBalance>();
-			updateWrapper.eq("user_code", userCode);
+			updateWrapper.eq("user_id", userId);
 			updateWrapper.eq("type", type);
 			return this.update(userBalance, updateWrapper);
 		} catch (Exception e) {
@@ -145,11 +149,10 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 		}
 	}
 
-	
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
 	public boolean exchange(String userCode, String fromUserCode, int type, int amount) {
-		if (StringUtils.isEmpty(userCode)) {
-			throw new ExchangeException("用户ID为空");
+		if (StrUtil.isEmpty(userCode)) {
+			throw new DataEmptyException("用户ID为空");
 		}
 
 		validate(fromUserCode, type, amount);
@@ -167,55 +170,47 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 		}
 	}
 
-	private void validate(String fromUserCode, int type, int balance) {
-		if (StringUtils.isEmpty(fromUserCode)) {
-			throw new ExchangeException("转存人ID为空");
+	private void validate(String fromUserId, int type, int balance) {
+		if (StrUtil.isEmpty(fromUserId)) {
+			throw new DataEmptyException("转存人ID为空");
 		}
 
 		if (balance == 0d) {
-			throw new ExchangeException("转存额度为0");
+			throw new DataEmptyException("转存额度为0");
 		}
 
-		UserBalance userBalance = getByUserCode(fromUserCode, type);
+		UserBalance userBalance = getByUserId(fromUserId, type);
 		if (userBalance == null) {
-			throw new ExchangeException("用户平台额度数据为空");
+			throw new DataEmptyException("用户平台额度数据为空");
 		}
 
 		if (userBalance.getBalance() < balance) {
-			throw new ExchangeException(String.format("用户平台额度不足，当前余额 : %d ", balance));
+			throw new DataEmptyException(String.format("用户平台额度不足，当前余额 : %d ", balance));
 		}
 
 	}
 
-	
-	public boolean isBalanceEnough(String userCode, PlatformType type, Double fee) {
-		UserBalance userBalance = getByUserCode(userCode, type);
+	public boolean isBalanceEnough(String userId, PlatformType type, Double fee) {
+		UserBalance userBalance = getByUserId(userId, type);
 		if (userBalance == null) {
-			log.error("用户：{} ，平台类型：{} 余额数据异常，请检修", userCode, type);
+			log.error("用户：{} ，平台类型：{} 余额数据异常，请检修", userId, type);
 			return false;
 		}
 
 		// 如果用户付费类型为后付费则不判断 余额是否不足
 		if (BalancePayType.POSTPAY.getValue() == userBalance.getPayType()) {
-			log.info("用户：{} ，平台类型：{} 付费类型为后付费，不检验可用余额", userCode, type);
+			log.info("用户：{} ，平台类型：{} 付费类型为后付费，不检验可用余额", userId, type);
 			return true;
 		}
 
 		if (userBalance.getBalance() < fee) {
-			log.warn("用户额度不足：用户ID：{} 平台类型：{} 可用余额：{} 本次计费：{}，", userCode, type, userBalance.getBalance(), fee);
+			log.warn("用户额度不足：用户ID：{} 平台类型：{} 可用余额：{} 本次计费：{}，", userId, type, userBalance.getBalance(), fee);
 			return false;
 		}
 
 		return true;
 	}
 
-	
-	public UserBalance getById(int id) {
-		// TODO Auto-generated method stub
-		return this.get(id);
-	}
-
-	
 	public boolean updateBalanceWarning(UserBalance userBalance) {
 		if (userBalance == null) {
 			return false;
@@ -223,15 +218,13 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 		return this.getBaseMapper().updateWarning(userBalance) > 0;
 	}
 
-	
 	public List<UserBalance> findAvaibleUserBalace() {
 		// TODO Auto-generated method stub
-		return this.select(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getStatus, UserBalance.STATUS_NORMAL));
+		return this.list(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getStatus, UserBalance.STATUS_NORMAL));
 	}
 
-	
 	public int calculateSmsAmount(String userCode, String content) {
-		if (StringUtils.isEmpty(content)) {
+		if (StrUtil.isEmpty(content)) {
 			log.error("userCode :{} 短信报文为空，无法计算计费条数", userCode);
 			return UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE;
 		}
@@ -242,11 +235,10 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 		return calculateGroupSizeByContent(wordsPerNum, content);
 	}
 
-	
-	public P2pBalanceResponse calculateP2pSmsAmount(String userCode, List<JSONObject> p2pBodies) {
-		if (CollectionUtils.isEmpty(p2pBodies)) {
+	public P2pBalance calculateP2pSmsAmount(String userCode, List<JSONObject> p2pBodies) {
+		if (CollUtil.isEmpty(p2pBodies)) {
 			log.error("userCode :{} 点对点短信报文为空，无法计算计费条数", userCode);
-			return new P2pBalanceResponse(UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE, null);
+			return new P2pBalance(UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE, null);
 		}
 
 		// 总费用
@@ -258,14 +250,13 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 			smsTotalNum += num;
 		}
 
-		return new P2pBalanceResponse(smsTotalNum, p2pBodies);
+		return new P2pBalance(smsTotalNum, p2pBodies);
 	}
 
-	
-	public P2pBalanceResponse calculateP2ptSmsAmount(String userCode, String content, List<JSONObject> p2pBody) {
-		if (CollectionUtils.isEmpty(p2pBody) || StringUtils.isEmpty(content)) {
+	public P2pBalance calculateP2ptSmsAmount(String userCode, String content, List<JSONObject> p2pBody) {
+		if (CollUtil.isEmpty(p2pBody) || StrUtil.isEmpty(content)) {
 			log.error("userCode :{} 模板点对点短信内容或报文为空，无法计算计费条数", userCode);
-			return new P2pBalanceResponse(UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE, null);
+			return new P2pBalance(UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE, null);
 		}
 
 		// 总费用
@@ -282,7 +273,7 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 			smsTotalNum += num;
 		}
 
-		return new P2pBalanceResponse(smsTotalNum, p2pBody);
+		return new P2pBalance(smsTotalNum, p2pBody);
 	}
 
 	/**
@@ -318,7 +309,7 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 	 * @return
 	 */
 	private int calculateGroupSizeByContent(int wordsPerNum, String content) {
-		if (StringUtils.isEmpty(content)) {
+		if (StrUtil.isEmpty(content)) {
 			return UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE;
 		}
 

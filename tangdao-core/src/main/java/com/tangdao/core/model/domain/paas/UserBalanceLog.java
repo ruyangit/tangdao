@@ -39,6 +39,10 @@ public class UserBalanceLog extends DataEntity<UserBalanceLog> {
 	private String fromUserCode; // 划拨人ID
 	private Double price; // 单价
 	private Double totalPrice; // 总价
+	
+	private String status;
+	
+	private String remarks;
 
 	@TableField(exist = false)
 	private String customerName;
