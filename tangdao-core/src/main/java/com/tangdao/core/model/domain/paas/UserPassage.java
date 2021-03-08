@@ -1,0 +1,45 @@
+/**
+ * 
+ */
+package com.tangdao.core.model.domain.paas;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.tangdao.core.DataEntity;
+
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyangit@gmail.com
+ * @since 2020年3月11日
+ */
+@Getter
+@Setter
+@TableName("sys_user_passage")
+public class UserPassage extends DataEntity<UserPassage> {
+
+	private static final long serialVersionUID = 1L;
+
+	@TableId
+	private String id;
+
+	private String userCode; // 用户编码
+	private int type; // 类型 1-短信，2-流量，3-语音
+	private String passageGroupId; // 业务通道组ID，如短信通道组ID，流量通道组ID
+
+	public UserPassage() {
+		super();
+	}
+
+	public UserPassage(String userCode, Integer type, String passageGroupId) {
+
+		this.userCode = userCode;
+		this.type = type;
+		this.passageGroupId = passageGroupId;
+	}
+}
