@@ -51,6 +51,10 @@ public class Passage extends DataEntity<Passage> {
 	private int extNumber; // 拓展号长度,0表示不允许拓展
 	private String bornTerm; // 统计落地时限（小时）
 	private int smsTemplateParam; // 是否需要短信模板参数信息
+	
+	private String status;
+	
+	private String remarks;
 
 	/**
 	 * 参数集合信息

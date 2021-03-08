@@ -19,9 +19,12 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.model.domain.sms.Passage;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsPassageMapper;
+
+import cn.hutool.core.collection.CollUtil;
 
 /**
  * 通道管理ServiceImpl
@@ -411,21 +414,19 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return this.select();
 	}
 
-	@Override
-	public SmsPassage findById(String id) {
-		SmsPassage smsPassage = null;
+	public Passage findById(String id) {
+		Passage smsPassage = null;
 		try {
 			Object obj = stringRedisTemplate.opsForHash().get(SmsRedisConstant.RED_SMS_PASSAGE, id);
 			if (obj != null) {
-//                smsPassage = JSON.parseObject(obj.toString(), SmsPassage.class);
-				smsPassage = (SmsPassage) obj;
+				smsPassage = (Passage) obj;
 			}
 		} catch (Exception e) {
 			logger.warn("REDIS 加载失败，将于DB加载", e);
 		}
 
 		if (smsPassage == null) {
-			smsPassage = this.get(id);
+			smsPassage = this.getById(id);
 		}
 
 		setPassageParamsIfEmpty(smsPassage);
@@ -438,12 +439,12 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	 * 
 	 * @param smsPassage 通道
 	 */
-	private void setPassageParamsIfEmpty(SmsPassage smsPassage) {
+	private void setPassageParamsIfEmpty(Passage smsPassage) {
 		if (smsPassage == null || smsPassage.getId() == null) {
 			return;
 		}
 
-		if (ListUtils.isNotEmpty(smsPassage.getParameterList())) {
+		if (CollUtil.isNotEmpty(smsPassage.getParameterList())) {
 			return;
 		}
 
@@ -451,39 +452,33 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 
 	}
 
-	@Override
-	public SmsPassage getBestAvaiable(String groupId) {
-		List<SmsPassage> list = findByGroupId(groupId);
+	public Passage getBestAvaiable(String groupId) {
+		List<Passage> list = findByGroupId(groupId);
 
 		// 此逻辑需要结合REDIS判断
-
-		if (ListUtils.isEmpty(list)) {
+		if (CollUtil.isEmpty(list)) {
 			return null;
 		}
-
-		SmsPassage smsPassage = list.iterator().next();
+		Passage smsPassage = list.iterator().next();
 
 		setPassageParamsIfEmpty(smsPassage);
 
-		return ListUtils.isEmpty(list) ? null : smsPassage;
+		return CollUtil.isEmpty(list) ? null : smsPassage;
 	}
 
-	@Override
-	public List<SmsPassage> getByCmcp(String cmcp) {
-		return this.select(Wrappers.<SmsPassage>lambdaQuery().eq(SmsPassage::getStatus, SmsPassage.STATUS_NORMAL)
-				.eq(SmsPassage::getCmcp, cmcp).or().eq(SmsPassage::getCmcp, "4"));
+	public List<Passage> getByCmcp(String cmcp) {
+		return this.list(Wrappers.<Passage>lambdaQuery().eq(Passage::getStatus, Passage.STATUS_NORMAL)
+				.eq(Passage::getCmcp, cmcp).or().eq(Passage::getCmcp, "4"));
 	}
 
-	@Override
-	public List<SmsPassage> findByCmcpOrAll(String cmcp) {
-		return this.select(Wrappers.<SmsPassage>lambdaQuery().eq(SmsPassage::getStatus, SmsPassage.STATUS_NORMAL)
-				.eq(SmsPassage::getType, "0").eq(SmsPassage::getCmcp, cmcp).or().eq(SmsPassage::getCmcp, "4"));
+	public List<Passage> findByCmcpOrAll(String cmcp) {
+		return this.list(Wrappers.<Passage>lambdaQuery().eq(Passage::getStatus, Passage.STATUS_NORMAL)
+				.eq(Passage::getType, "0").eq(Passage::getCmcp, cmcp).or().eq(Passage::getCmcp, "4"));
 	}
 
-	@Override
 	public boolean reloadToRedis() {
-		List<SmsPassage> list = this.select();
-		if (ListUtils.isEmpty(list)) {
+		List<Passage> list = this.list();
+		if (CollUtil.isEmpty(list)) {
 			logger.warn("短信通道数据为空");
 			return false;
 		}
@@ -491,7 +486,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		List<Object> con = stringRedisTemplate.execute((connection) -> {
 			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 			connection.openPipeline();
-			for (SmsPassage smsPassage : list) {
+			for (Passage smsPassage : list) {
 
 				byte[] mainKey = serializer.serialize(SmsRedisConstant.RED_SMS_PASSAGE);
 				byte[] assistKey = serializer.serialize(smsPassage.getId().toString());
@@ -502,7 +497,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 			return connection.closePipeline();
 		}, false, true);
 
-		return ListUtils.isNotEmpty(con);
+		return CollUtil.isNotEmpty(con);
 	}
 
 	@Override
@@ -660,7 +655,6 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return ProtocolType.isBelongtoDirect(parameter.getProtocol());
 	}
 
-	@Override
 	public boolean kill(String id) {
 		try {
 			// 是否需要出发通道代理逻辑(目前主要针对CMPP,SGIP,SGMP等直连协议)
@@ -684,20 +678,17 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	@Override
-	public List<SmsPassage> findByGroupId(String groupId) {
+	public List<Passage> findByGroupId(String groupId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public List<SmsPassage> findAccessPassages(String groupId, String cmcp, int routeType) {
+	public List<Passage> findAccessPassages(String groupId, String cmcp, int routeType) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public List<SmsPassage> getByAreaAndCmcp(String areaCode, String cmcp) {
+	public List<Passage> getByAreaAndCmcp(String areaCode, String cmcp) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tangdao.core.model.domain.sms.MtTaskPackets;
+import com.tangdao.core.model.domain.sms.Passage;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsMtTaskPacketsMapper;
+
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 下行短信任务分包ServiceImpl
@@ -27,35 +30,34 @@ public class SmsMtTaskPacketsService extends BaseService<SmsMtTaskPacketsMapper,
 	@Autowired
 	private SmsPassageService smsPassageService;
 
-	public SmsMtTaskPackets getSmsMtTaskPackets(SmsMtTaskPackets smsMtTaskPackets) {
-		if (smsMtTaskPackets == null || StringUtils.isEmpty(smsMtTaskPackets.getId())) {
-			smsMtTaskPackets = super.get(smsMtTaskPackets);
+	public MtTaskPackets getSmsMtTaskPackets(MtTaskPackets smsMtTaskPackets) {
+		if (smsMtTaskPackets == null || StrUtil.isEmpty(smsMtTaskPackets.getId())) {
+			smsMtTaskPackets = super.getById(smsMtTaskPackets);
 		}
 		if (smsMtTaskPackets != null) {
 			// 组装省份信息
-			if (StringUtils.isNotBlank(smsMtTaskPackets.getAreaCode())) {
+			if (StrUtil.isNotBlank(smsMtTaskPackets.getAreaCode())) {
 				// 根据省份代码查询省份名称
 				Area area = areaService.get(smsMtTaskPackets.getAreaCode());
 				smsMtTaskPackets.setAreaName(area == null ? "未知" : area.getAreaName());
 			}
 
 			// 组装通道信息
-			if (StringUtils.isNotBlank(smsMtTaskPackets.getFinalPassageId())) {
-				SmsPassage passage = smsPassageService.findById(smsMtTaskPackets.getFinalPassageId());
+			if (StrUtil.isNotBlank(smsMtTaskPackets.getFinalPassageId())) {
+				Passage passage = smsPassageService.findById(smsMtTaskPackets.getFinalPassageId());
 				smsMtTaskPackets.setPassageName(passage == null ? "未知" : passage.getName());
 			}
 		}
 		return smsMtTaskPackets;
 	}
 
-	@Override
-	public IPage<SmsMtTaskPackets> page(IPage<SmsMtTaskPackets> page, Wrapper<SmsMtTaskPackets> queryWrapper) {
-		IPage<SmsMtTaskPackets> pageData = baseMapper.selectPage(page, queryWrapper);
+	public IPage<MtTaskPackets> page(IPage<MtTaskPackets> page, Wrapper<MtTaskPackets> queryWrapper) {
+		IPage<MtTaskPackets> pageData = baseMapper.selectPage(page, queryWrapper);
 		Map<String, String> areaMap = new HashMap<>();
 		Map<String, String> passageMap = new HashMap<>();
 		pageData.getRecords().stream().forEach(r -> {
 			// 组装省份信息
-			if (StringUtils.isNotBlank(r.getAreaCode())) {
+			if (StrUtil.isNotBlank(r.getAreaCode())) {
 				if (areaMap.containsKey(r.getAreaCode())) {
 					r.setAreaName(areaMap.get(r.getAreaCode()));
 				} else {
@@ -67,11 +69,11 @@ public class SmsMtTaskPacketsService extends BaseService<SmsMtTaskPacketsMapper,
 			}
 
 			// 组装通道信息
-			if (StringUtils.isNotBlank(r.getFinalPassageId())) {
+			if (StrUtil.isNotBlank(r.getFinalPassageId())) {
 				if (passageMap.containsKey(r.getFinalPassageId())) {
 					r.setPassageName(passageMap.get(r.getFinalPassageId()));
 				} else {
-					SmsPassage passage = smsPassageService.findById(r.getFinalPassageId());
+					Passage passage = smsPassageService.findById(r.getFinalPassageId());
 					r.setPassageName(passage == null ? "未知" : passage.getName());
 					passageMap.put(r.getFinalPassageId(), r.getPassageName());
 				}
