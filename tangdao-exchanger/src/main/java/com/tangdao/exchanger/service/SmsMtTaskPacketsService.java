@@ -5,18 +5,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.mapper.SmsMtTaskPacketsMapper;
-import org.tangdao.modules.sms.model.domain.SmsMtTaskPackets;
-import org.tangdao.modules.sms.model.domain.SmsPassage;
-import org.tangdao.modules.sms.service.ISmsMtTaskPacketsService;
-import org.tangdao.modules.sms.service.ISmsPassageService;
-import org.tangdao.modules.sys.model.domain.Area;
-import org.tangdao.modules.sys.service.IAreaService;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tangdao.core.model.domain.sms.MtTaskPackets;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMtTaskPacketsMapper;
 
 /**
  * 下行短信任务分包ServiceImpl
@@ -25,14 +19,13 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtTaskPacketsService extends CrudService<SmsMtTaskPacketsMapper, SmsMtTaskPackets>
-		implements ISmsMtTaskPacketsService {
+public class SmsMtTaskPacketsService extends BaseService<SmsMtTaskPacketsMapper, MtTaskPackets> {
 
 	@Autowired
 	private IAreaService areaService;
 
 	@Autowired
-	private ISmsPassageService smsPassageService;
+	private SmsPassageService smsPassageService;
 
 	public SmsMtTaskPackets getSmsMtTaskPackets(SmsMtTaskPackets smsMtTaskPackets) {
 		if (smsMtTaskPackets == null || StringUtils.isEmpty(smsMtTaskPackets.getId())) {

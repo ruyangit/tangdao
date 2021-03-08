@@ -29,6 +29,8 @@ public class PassageMessageTemplate extends DataEntity<PassageMessageTemplate> {
 	private String paramNames; // 参数名称，多个以,分割(有序)
 	private String passageId; // 通道ID
 
+	private String status;
+
 	public PassageMessageTemplate() {
 		super();
 	}

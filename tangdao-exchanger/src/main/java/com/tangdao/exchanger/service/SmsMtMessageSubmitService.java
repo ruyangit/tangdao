@@ -14,24 +14,6 @@ import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.constant.RabbitConstant;
-import org.tangdao.common.constant.RabbitConstant.WordsPriority;
-import org.tangdao.common.lang.DateUtils;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.config.rabbit.RabbitMessageQueueManager;
-import org.tangdao.modules.sms.config.rabbit.listener.SmsWaitSubmitListener;
-import org.tangdao.modules.sms.mapper.SmsMtMessageSubmitMapper;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageDeliver;
-import org.tangdao.modules.sms.model.domain.SmsMtMessagePush;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageSubmit;
-import org.tangdao.modules.sms.model.domain.SmsMtTaskPackets;
-import org.tangdao.modules.sms.model.domain.SmsPassage;
-import org.tangdao.modules.sys.constant.PassageContext;
-import org.tangdao.modules.sys.constant.PassageContext.DeliverStatus;
-import org.tangdao.modules.sys.model.domain.User;
-import org.tangdao.modules.sys.service.IUserService;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -45,8 +27,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtMessageSubmitService extends CrudService<SmsMtMessageSubmitMapper, SmsMtMessageSubmit>
-		implements ISmsMtSubmitService {
+public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMapper, MtMessageSubmit>{
 
 	@Autowired
 	private IUserService userService;

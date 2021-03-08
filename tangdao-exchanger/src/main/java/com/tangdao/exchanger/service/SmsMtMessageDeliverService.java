@@ -4,24 +4,22 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.mapper.SmsMtMessageDeliverMapper;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageDeliver;
-import org.tangdao.modules.sms.service.ISmsMtDeliverService;
-import org.tangdao.modules.sms.service.ISmsMtPushService;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMtMessageDeliverMapper;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 下行短信回执状态ServiceImpl
@@ -30,40 +28,37 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtMessageDeliverService extends CrudService<SmsMtMessageDeliverMapper, SmsMtMessageDeliver>
-		implements ISmsMtDeliverService {
+public class SmsMtMessageDeliverService extends BaseService<SmsMtMessageDeliverMapper, MtMessageDeliver>{
 
 	@Autowired
-	private ISmsMtPushService smsMtPushService;
-	@Resource
+	private SmsMtPushService smsMtPushService;
+	
+	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Override
-	public SmsMtMessageDeliver findByMobileAndMsgid(String mobile, String msgId) {
-		if (StringUtils.isEmpty(mobile) || StringUtils.isEmpty(msgId)) {
+	public MtMessageDeliver findByMobileAndMsgid(String mobile, String msgId) {
+		if (StrUtil.isEmpty(mobile) || StrUtil.isEmpty(msgId)) {
 			return null;
 		}
 
-		QueryWrapper<SmsMtMessageDeliver> queryWrapper = new QueryWrapper<SmsMtMessageDeliver>();
+		QueryWrapper<MtMessageDeliver> queryWrapper = new QueryWrapper<MtMessageDeliver>();
 		queryWrapper.eq("mobile", mobile);
 		queryWrapper.eq("msg_id", msgId);
 		queryWrapper.last(" limit 1");
 		return super.getOne(queryWrapper);
 	}
 
-	@Override
-	public void batchInsert(List<SmsMtMessageDeliver> list) {
-		if (ListUtils.isEmpty(list)) {
+	public void batchInsert(List<MtMessageDeliver> list) {
+		if (CollUtil.isEmpty(list)) {
 			return;
 		}
 		super.saveBatch(list);
 	}
 
-	@Override
-	public int doFinishDeliver(List<SmsMtMessageDeliver> delivers) {
-		if (CollectionUtils.isEmpty(delivers)) {
+	public int doFinishDeliver(List<MtMessageDeliver> delivers) {
+		if (CollUtil.isEmpty(delivers)) {
 			return 0;
 		}
 
@@ -83,7 +78,6 @@ public class SmsMtMessageDeliverService extends CrudService<SmsMtMessageDeliverM
 		}
 	}
 
-	@Override
 	public boolean doDeliverToException(JSONObject obj) {
 		try {
 			return stringRedisTemplate.opsForList()

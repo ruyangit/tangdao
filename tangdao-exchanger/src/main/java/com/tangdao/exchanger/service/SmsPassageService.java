@@ -16,31 +16,12 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.collect.MapUtils;
-import org.tangdao.common.constant.CommonContext.PassageCallType;
-import org.tangdao.common.constant.CommonContext.PlatformType;
-import org.tangdao.common.constant.CommonContext.ProtocolType;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.exchanger.service.ISmsProxyManager;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.mapper.SmsPassageMapper;
-import org.tangdao.modules.sms.model.domain.SmsPassage;
-import org.tangdao.modules.sms.model.domain.SmsPassageArea;
-import org.tangdao.modules.sms.model.domain.SmsPassageParameter;
-import org.tangdao.modules.sys.constant.SettingsContext;
-import org.tangdao.modules.sys.constant.SettingsContext.SystemConfigType;
-import org.tangdao.modules.sys.constant.UserContext.UserStatus;
-import org.tangdao.modules.sys.model.domain.UserDeveloper;
-import org.tangdao.modules.sys.service.IUserDeveloperService;
-import org.tangdao.modules.sys.service.IUserPassageService;
-import org.tangdao.modules.sys.utils.DictUtils;
 
 import com.alibaba.fastjson.JSON;
-//import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.model.domain.sms.Passage;
 import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsPassageMapper;
 
 /**
  * 通道管理ServiceImpl
@@ -60,27 +41,27 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
-	private ISmsPassageAreaService smsPassageAreaService;
+	private SmsPassageAreaService smsPassageAreaService;
 
 	@Autowired
-	private ISmsPassageParameterService smsPassageParameterService;
+	private SmsPassageParameterService smsPassageParameterService;
 
 	@Autowired
-	private ISmsMtSubmitService smsMtSubmitService;
+	private SmsMtSubmitService smsMtSubmitService;
 
 	@Autowired(required = false)
-	private ISmsProxyManager smsProxyManager;
+	private SmsProxyManager smsProxyManager;
 
 	@Autowired
-	private IUserPassageService userPassageService;
+	private UserPassageService userPassageService;
 //    @Autowired
 //    private ISmsPassageGroupService   passageGroupService;
 //    @Autowired
 //    private ISmsMessageSendService       messageSendService;
 	@Autowired
-	private IUserDeveloperService userDeveloperService;
+	private UserDeveloperService userDeveloperService;
 	@Autowired
-	private ISmsPassageAccessService smsPassageAccessService;
+	private SmsPassageAccessService smsPassageAccessService;
 
 	/**
 	 * 是否是中文字符

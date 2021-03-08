@@ -62,6 +62,85 @@ public class CommonContext {
 			return all;
 		}
 	}
+	
+	public enum CallbackUrlType {
+        SMS_STATUS(1, "短信状态报告"), SMS_MO(2, "短信上行报告"), FLUX_CHARGE_RESULT(3, "流量充值结果"),
+        VOICE_SEND_STATUS(4, "语音验证码发送报告"), MMS_STATUS(5, "彩信状态报告"), MMS_MO(6, "彩信上行报告");
+
+        private int    code;
+        private String name;
+
+        CallbackUrlType(int code, String name) {
+            this.code = code;
+            this.name = name;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public static PlatformType parse(int code) {
+            for (PlatformType pt : PlatformType.values()) {
+                if (pt.getCode() == code) {
+                    return pt;
+                }
+            }
+            return null;
+        }
+    }
+
+	public enum PassageCallType {
+
+		/**
+		 * 数据发送
+		 */
+		DATA_SEND(1, "数据发送"),
+
+		MT_STATUS_RECEIPT_WITH_PUSH(2, "状态报告网关推送"),
+
+		MT_STATUS_RECEIPT_WITH_SELF_GET(3, "状态回执自取"),
+
+		MO_REPORT_WITH_PUSH(4, "上行推送"),
+
+		MO_REPORT_WITH_SELF_GET(5, "上行自取"),
+
+		MODEL_REPORT_SUBMIT(6, "模板报备"),
+
+		MODEL_REPORT_CALLBACK_WITH_PUSH(7, "模板回执推送"),
+
+		MODEL_REPORT_CALLBACK_WITH_SELF_GET(8, "模板回执自取"),
+
+		PASSAGE_BALANCE_GET(100, "通道余额查询");
+
+		private int code;
+		private String name;
+
+		PassageCallType(int code, String name) {
+			this.code = code;
+			this.name = name;
+		}
+
+		public int getCode() {
+			return code;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public static PassageCallType parse(int code) {
+			for (PassageCallType pt : PassageCallType.values()) {
+				if (pt.getCode() == code) {
+					return pt;
+				}
+			}
+			return null;
+		}
+	}
 
 	public enum AppType {
 
