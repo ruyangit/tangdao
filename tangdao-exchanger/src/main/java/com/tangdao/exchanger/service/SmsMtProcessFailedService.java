@@ -1,10 +1,10 @@
 package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.mapper.SmsMtProcessFailedMapper;
-import org.tangdao.modules.sms.model.domain.SmsMtProcessFailed;
-import org.tangdao.modules.sms.service.ISmsMtProcessFailedService;
+
+import com.tangdao.core.model.domain.sms.MtProcessFailed;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMtProcessFailedMapper;
 
 /**
  * 下行短信处理失败ServiceImpl
@@ -12,6 +12,6 @@ import org.tangdao.modules.sms.service.ISmsMtProcessFailedService;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtProcessFailedService extends CrudService<SmsMtProcessFailedMapper, SmsMtProcessFailed> implements ISmsMtProcessFailedService{
+public class SmsMtProcessFailedService extends BaseService<SmsMtProcessFailedMapper, MtProcessFailed> {
 		
 }

@@ -1,4 +1,4 @@
-package org.tangdao.modules.sms.service;
+package com.tangdao.exchanger.service;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageAreaServiceImpl extends CrudService<SmsPassageAreaMapper, SmsPassageArea> implements ISmsPassageAreaService{
+public class SmsPassageAreaService extends CrudService<SmsPassageAreaMapper, SmsPassageArea> implements ISmsPassageAreaService{
 		
 	public List<SmsPassageArea> selectSmsPassageAreaByPassageId(String passageId){
 		return this.select(Wrappers.<SmsPassageArea>lambdaQuery().eq(SmsPassageArea::getPassageId, passageId));

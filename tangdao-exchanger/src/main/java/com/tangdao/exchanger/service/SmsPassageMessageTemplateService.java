@@ -1,4 +1,4 @@
-package org.tangdao.modules.sms.service;
+package com.tangdao.exchanger.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +32,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageMessageTemplateServiceImpl extends CrudService<SmsPassageMessageTemplateMapper, SmsPassageMessageTemplate> implements ISmsPassageMessageTemplateService{
+public class SmsPassageMessageTemplateService extends CrudService<SmsPassageMessageTemplateMapper, SmsPassageMessageTemplate> implements ISmsPassageMessageTemplateService{
 
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;

@@ -304,7 +304,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 		parameter.setVariableParamNames(smsPassageMessageTemplate.getParamNames().split(","));
 
 		// 根据表达式和参数数量获取本次具体的变量值
-		parameter.setVariableParamValues(SmsPassageMessageTemplateServiceImpl.pickupValuesByRegex(packets.getContent(),
+		parameter.setVariableParamValues(SmsPassageMessageTemplateService.pickupValuesByRegex(packets.getContent(),
 				smsPassageMessageTemplate.getRegexValue(),
 				smsPassageMessageTemplate.getParamNames().split(",").length));
 

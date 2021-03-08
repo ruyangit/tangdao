@@ -1,4 +1,4 @@
-package org.tangdao.modules.sms.service;
+package com.tangdao.exchanger.service;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import org.tangdao.modules.sms.service.ISmsPassageGroupDetailService;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageGroupDetailServiceImpl extends CrudService<SmsPassageGroupDetailMapper, SmsPassageGroupDetail> implements ISmsPassageGroupDetailService{
+public class SmsPassageGroupDetailService extends CrudService<SmsPassageGroupDetailMapper, SmsPassageGroupDetail> implements ISmsPassageGroupDetailService{
 
 	@Override
 	public List<String> findGroupIdByPassageId(String passageId) {
