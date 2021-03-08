@@ -39,4 +39,50 @@ public class AsyncConfig {
 
 		return executor;
 	}
+
+	@Bean(name = "threadPoolTaskExecutor")
+	public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
+
+		ThreadPoolTaskExecutor poolTaskExecutor = new ThreadPoolTaskExecutor();
+
+		poolTaskExecutor.setThreadNamePrefix("worker-executor-");
+		// 线程池所使用的缓冲队列
+		poolTaskExecutor.setQueueCapacity(200);
+		// 线程池维护线程的最少数量
+		poolTaskExecutor.setCorePoolSize(64);
+		// 线程池维护线程的最大数量
+		poolTaskExecutor.setMaxPoolSize(200);
+		// 线程池维护线程所允许的空闲时间
+		poolTaskExecutor.setKeepAliveSeconds(10000);
+
+		// rejection-policy：当pool已经达到max size的时候，如何处理新任务
+		// CALLER_RUNS：不在新线程中执行任务，而是由调用者所在的线程来执行
+		poolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+
+		poolTaskExecutor.initialize();
+
+		return poolTaskExecutor;
+	}
+
+	@Bean(name = "pushPoolTaskExecutor")
+	public ThreadPoolTaskExecutor pushPoolTaskExecutor() {
+
+		ThreadPoolTaskExecutor poolTaskExecutor = new ThreadPoolTaskExecutor();
+
+		poolTaskExecutor.setQueueCapacity(100);
+		// 线程池维护线程的最少数量
+		poolTaskExecutor.setCorePoolSize(10);
+		// 线程池维护线程的最大数量
+		poolTaskExecutor.setMaxPoolSize(80);
+		// 线程池维护线程所允许的空闲时间
+		poolTaskExecutor.setKeepAliveSeconds(10000);
+
+		// rejection-policy：当pool已经达到max size的时候，如何处理新任务
+		// CALLER_RUNS：不在新线程中执行任务，而是由调用者所在的线程来执行
+		poolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+
+		poolTaskExecutor.initialize();
+
+		return poolTaskExecutor;
+	}
 }

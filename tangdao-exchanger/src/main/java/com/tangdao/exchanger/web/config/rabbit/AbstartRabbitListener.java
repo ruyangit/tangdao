@@ -13,7 +13,7 @@ import com.tangdao.exchanger.web.config.SmsInitializeRunner;
 
 public abstract class AbstartRabbitListener implements ChannelAwareMessageListener {
 
-	protected Logger log = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	// 错误信息分隔符
 	protected static final String ERROR_MESSAGE_SEPERATOR = ";";
