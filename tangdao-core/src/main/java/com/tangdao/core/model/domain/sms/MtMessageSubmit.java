@@ -3,7 +3,6 @@ package com.tangdao.core.model.domain.sms;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
 import com.tangdao.core.model.domain.User;
 
@@ -17,7 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "sms_mt_message_submit")
+@TableName("sms_mt_message_submit")
 public class MtMessageSubmit extends DataEntity<MtMessageSubmit> {
 	
 	private static final long serialVersionUID = 1L;

@@ -5,7 +5,6 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
 import com.tangdao.core.context.SmsTemplateContext.IgnoreBlacklist;
 import com.tangdao.core.context.SmsTemplateContext.IgnoreForbiddenWords;
@@ -21,7 +20,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "sms_message_template")
+@TableName("sms_message_template")
 public class MessageTemplate extends DataEntity<MessageTemplate> {
 
 	private static final long serialVersionUID = 1L;

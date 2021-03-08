@@ -1,7 +1,6 @@
 package com.tangdao.core.model.domain.sms;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
 
 import lombok.Getter;
@@ -15,7 +14,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "sms_mt_message_deliver_log")
+@TableName("sms_mt_message_deliver_log")
 public class MtMessageDeliverLog extends DataEntity<MtMessageDeliverLog> {
 
 	private static final long serialVersionUID = 1L;

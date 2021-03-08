@@ -7,7 +7,6 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
 
 import cn.hutool.core.util.StrUtil;
@@ -24,7 +23,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "sms_api_failed_record")
+@TableName("sms_api_failed_record")
 public class ApiFailedRecord extends DataEntity<ApiFailedRecord> {
 
 	/**

@@ -3,7 +3,6 @@ package com.tangdao.core.model.domain.sms;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
 
 import lombok.Getter;
@@ -17,7 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "sms_passage_access")
+@TableName("sms_passage_access")
 public class PassageAccess extends DataEntity<PassageAccess> {
 
 	private static final long serialVersionUID = 1L;

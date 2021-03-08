@@ -11,7 +11,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
 import com.tangdao.core.context.TaskContext.PacketsActionActor;
 import com.tangdao.core.context.TaskContext.PacketsActionPosition;
@@ -31,7 +30,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "sms_mt_task")
+@TableName("sms_mt_task")
 public class MtTask extends DataEntity<MtTask> {
 
 	/**

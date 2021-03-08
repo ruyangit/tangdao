@@ -8,7 +8,6 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
 import com.tangdao.core.model.dto.ParseParamDto;
 import com.tangdao.core.model.dto.RequestParamDto;
@@ -28,7 +27,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName(BaseModel.DB_PREFIX_ + "sms_passage_parameter")
+@TableName("sms_passage_parameter")
 public class PassageParameter extends DataEntity<PassageParameter> {
 
 	private static final long serialVersionUID = 1L;
