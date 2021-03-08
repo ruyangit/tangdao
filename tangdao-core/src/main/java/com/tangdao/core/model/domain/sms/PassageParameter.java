@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.core.BaseModel;
 import com.tangdao.core.DataEntity;
-import com.tangdao.core.model.dto.passage.ParseParamDto;
-import com.tangdao.core.model.dto.passage.RequestParamDto;
+import com.tangdao.core.model.dto.ParseParamDto;
+import com.tangdao.core.model.dto.RequestParamDto;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;

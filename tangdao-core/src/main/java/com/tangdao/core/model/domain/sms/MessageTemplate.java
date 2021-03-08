@@ -44,13 +44,17 @@ public class MessageTemplate extends DataEntity<MessageTemplate> {
 	private Integer routeType; // 模板路由类型
 	private Integer priority; // 优先级（越大越优先）
 	private String extNumber; // 扩展号
+
+	private String status;
+	private String remarks;
+
 	/**
-	 * 忽略手机黑名单拦截 add by 2018-05-02
+	 * 忽略手机黑名单拦截
 	 */
 	private Integer ignoreBlacklist = IgnoreBlacklist.NO.getValue();
 
 	/**
-	 * 忽略手机敏感词拦截 add by 2018-08-18
+	 * 忽略手机敏感词拦截
 	 */
 	private Integer ignoreForbiddenWords = IgnoreForbiddenWords.NO.getValue();
 

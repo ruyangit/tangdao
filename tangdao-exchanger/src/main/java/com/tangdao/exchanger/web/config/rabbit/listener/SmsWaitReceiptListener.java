@@ -12,7 +12,15 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
 import com.rabbitmq.client.Channel;
+import com.tangdao.core.constant.RabbitConstant;
+import com.tangdao.core.context.CommonContext.CMCP;
+import com.tangdao.core.context.CommonContext.PassageCallType;
+import com.tangdao.core.context.ParameterFilterContext;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.model.domain.sms.MtMessageSubmit;
 import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
+
+import cn.hutool.core.collection.CollUtil;
 
 /**
  * 
@@ -27,15 +35,19 @@ import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
 public class SmsWaitReceiptListener extends AbstartRabbitListener {
 
 	@Autowired
-	private ISmsMtSubmitService smsMtSubmitService;
+	private SmsMtSubmitService smsMtSubmitService;
+	
 	@Reference
-	private ISmsProviderService smsProviderService;
+	private SmsProviderService smsProviderService;
+	
 	@Autowired
-	private ISmsMtDeliverService smsMtDeliverService;
+	private SmsMtDeliverService smsMtDeliverService;
+	
 	@Autowired
 	private Jackson2JsonMessageConverter messageConverter;
+	
 	@Autowired
-	private ISmsPassageAccessService smsPassageAccessService;
+	private SmsPassageAccessService smsPassageAccessService;
 
 	@Override
 	@RabbitListener(queues = RabbitConstant.MQ_SMS_MT_WAIT_RECEIPT)
@@ -51,7 +63,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 				return;
 			}
 
-			List<SmsMtMessageDeliver> delivers;
+			List<MtMessageDeliver> delivers;
 			if (object instanceof JSONObject) {
 				delivers = doDeliverMessage((JSONObject) object);
 			} else if (object instanceof List) {
@@ -63,7 +75,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 				return;
 			}
 
-			if (CollectionUtils.isEmpty(delivers)) {
+			if (CollUtil.isEmpty(delivers)) {
 				logger.error("状态回执报告解析为空 : {}", messageConverter.fromMessage(message));
 				return;
 			}
@@ -103,7 +115,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 	 * @param jsonObject
 	 * @return
 	 */
-	private List<SmsMtMessageDeliver> doDeliverMessage(JSONObject jsonObject) {
+	private List<MtMessageDeliver> doDeliverMessage(JSONObject jsonObject) {
 		// 提供商代码（通道）
 		String providerCode = jsonObject.getString(ParameterFilterContext.PASSAGE_PROVIDER_CODE_NODE);
 		if (StringUtils.isEmpty(providerCode)) {
@@ -113,7 +125,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 			return null;
 		}
 
-		SmsPassageAccess access = smsPassageAccessService.getByType(PassageCallType.MT_STATUS_RECEIPT_WITH_PUSH,
+		PassageAccess access = smsPassageAccessService.getByType(PassageCallType.MT_STATUS_RECEIPT_WITH_PUSH,
 				providerCode);
 		if (access == null) {
 			logger.warn("上家推送状态回执报告通道参数无法匹配：{}", jsonObject.toJSONString());
@@ -123,8 +135,8 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 		}
 
 		// 回执数据解析后的报文
-		List<SmsMtMessageDeliver> delivers = smsProviderService.receiveMtReport(access, jsonObject);
-		if (CollectionUtils.isEmpty(delivers)) {
+		List<MtMessageDeliver> delivers = smsProviderService.receiveMtReport(access, jsonObject);
+		if (CollUtil.isEmpty(delivers)) {
 			return null;
 		}
 
@@ -139,9 +151,9 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 	 *
 	 * @param delivers
 	 */
-	private void fillMobileWhenMobileMissed(List<SmsMtMessageDeliver> delivers) {
-		SmsMtMessageSubmit submit;
-		for (SmsMtMessageDeliver deliver : delivers) {
+	private void fillMobileWhenMobileMissed(List<MtMessageDeliver> delivers) {
+		MtMessageSubmit submit;
+		for (MtMessageDeliver deliver : delivers) {
 			if (StringUtils.isNotBlank(deliver.getMobile())) {
 				continue;
 			}

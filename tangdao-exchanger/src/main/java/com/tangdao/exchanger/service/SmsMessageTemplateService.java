@@ -7,10 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.Resource;
+
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -21,9 +20,16 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.context.CommonContext.AppType;
+import com.tangdao.core.context.SmsTemplateContext.ApproveStatus;
 import com.tangdao.core.model.domain.sms.MessageTemplate;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.core.utils.PatternUtil;
+import com.tangdao.exchanger.dao.SmsMessageTemplateMapper;
 
-import javax.annotation.Resource;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 消息模板ServiceImpl
@@ -63,7 +69,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	 * @param userCode  用户编号
 	 * @param templates 短信模板数据
 	 */
-	private void pushToRedis(String userCode, SmsMessageTemplate... templates) {
+	private void pushToRedis(String userCode, MessageTemplate... templates) {
 		try {
 
 			stringRedisTemplate.execute((connection) -> {
@@ -71,7 +77,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 				connection.openPipeline();
 				byte[] key = serializer.serialize(getKey(userCode));
 
-				for (SmsMessageTemplate template : templates) {
+				for (MessageTemplate template : templates) {
 					connection.zAdd(key, template.getPriority().doubleValue(), JSON.toJSONBytes(template));
 
 					// publish message for flush jvm map data
@@ -93,20 +99,20 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	 * @param userCode 用户ID
 	 * @return 模板集合数据
 	 */
-	private List<SmsMessageTemplate> getFromRedis(String userCode) {
+	private List<MessageTemplate> getFromRedis(String userCode) {
 		try {
 			Set<String> set = stringRedisTemplate.opsForZSet().reverseRangeByScore(getKey(userCode), 0, 1000);
-			if (ListUtils.isEmpty(set)) {
+			if (CollUtil.isEmpty(set)) {
 				return null;
 			}
 
-			List<SmsMessageTemplate> list = new ArrayList<>(set.size());
+			List<MessageTemplate> list = new ArrayList<>(set.size());
 			for (String s : set) {
-				if (StringUtils.isEmpty(s)) {
+				if (StrUtil.isEmpty(s)) {
 					continue;
 				}
 
-				list.add(JSON.parseObject(s, SmsMessageTemplate.class));
+				list.add(JSON.parseObject(s, MessageTemplate.class));
 			}
 
 			return list;
@@ -121,17 +127,17 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	 * 
 	 * @param template 模板信息
 	 */
-	private void removeRedis(SmsMessageTemplate template) {
+	private void removeRedis(MessageTemplate template) {
 		try {
 
 			Set<Object> set = redisTemplate.opsForZSet().reverseRangeByScore(getKey(template.getUserCode()), 0, 1000);
-			if (ListUtils.isEmpty(set)) {
+			if (CollUtil.isEmpty(set)) {
 				logger.warn("redis中未找到短信模板 userId[" + template.getUserCode() + "]信息");
 				return;
 			}
 
 			for (Object templateJson : set) {
-				SmsMessageTemplate messageTemplate = (SmsMessageTemplate) templateJson;
+				MessageTemplate messageTemplate = (MessageTemplate) templateJson;
 				if (messageTemplate == null) {
 					continue;
 				}
@@ -148,9 +154,8 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		}
 	}
 
-	@Override
-	public boolean update(SmsMessageTemplate template) {
-		SmsMessageTemplate originTemplate;
+	public boolean update(MessageTemplate template) {
+		MessageTemplate originTemplate;
 		try {
 			originTemplate = isAllowAccess(template.getUserCode(), template.getId());
 		} catch (IllegalArgumentException e) {
@@ -159,7 +164,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		}
 
 		template.setRegexValue(parseContent2Regex(template.getContent()));
-		template.setCreateTime(originTemplate.getCreateTime());
+		template.setCreateDate(originTemplate.getCreateDate());
 		boolean result = super.updateById(template);
 		if (result) {
 			updateTemplateInRedis(template);
@@ -174,8 +179,8 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	 * @param templateId 模板ID
 	 * @return 模板信息
 	 */
-	private SmsMessageTemplate isAllowAccess(String userCode, String templateId) {
-		SmsMessageTemplate template = get(templateId);
+	private MessageTemplate isAllowAccess(String userCode, String templateId) {
+		MessageTemplate template = getById(templateId);
 		if (template == null) {
 			throw new IllegalArgumentException("模板 [" + templateId + "]信息为空");
 		}
@@ -194,9 +199,8 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		return template;
 	}
 
-	@Override
 	public boolean deleteById(String id) {
-		SmsMessageTemplate template = get(id);
+		MessageTemplate template = getById(id);
 		if (template == null) {
 			logger.error("用户短信模板为空，删除失败， ID：{}", id);
 			return false;
@@ -208,7 +212,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 			logger.error("移除REDIS用户模板失败， ID：{}", id, e);
 		}
 
-		return super.deleteById(id);
+		return super.removeById(id);
 	}
 
 	/**
@@ -218,20 +222,20 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	 * @param content 短信内容
 	 * @return 匹配后的模板数据
 	 */
-	private SmsMessageTemplate matchAccessTemplate(List<SmsMessageTemplate> list, String content) {
-		if (ListUtils.isEmpty(list)) {
+	private MessageTemplate matchAccessTemplate(List<MessageTemplate> list, String content) {
+		if (CollUtil.isEmpty(list)) {
 			logger.warn("There is no message template result matched");
 			return null;
 		}
 
-		SmsMessageTemplate superTemplate = null;
-		for (SmsMessageTemplate template : list) {
+		MessageTemplate superTemplate = null;
+		for (MessageTemplate template : list) {
 			if (template == null) {
 				logger.warn("LOOP当前值为空");
 				continue;
 			}
 
-			if (StringUtils.isEmpty(template.getRegexValue())) {
+			if (StrUtil.isEmpty(template.getRegexValue())) {
 				continue;
 			}
 
@@ -241,7 +245,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 			}
 
 			// 如果普通短信模板存在，则以普通模板为主
-			if (PatternUtils.isRight(template.getRegexValue(), content)) {
+			if (PatternUtil.isRight(template.getRegexValue(), content)) {
 				return template;
 			}
 		}
@@ -254,10 +258,9 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		return null;
 	}
 
-	@Override
-	public SmsMessageTemplate getByContent(String userCode, String content) {
-		List<SmsMessageTemplate> list = getTemplatesByUserCode(userCode);
-		if (ListUtils.isEmpty(list)) {
+	public MessageTemplate getByContent(String userCode, String content) {
+		List<MessageTemplate> list = getTemplatesByUserCode(userCode);
+		if (CollUtil.isEmpty(list)) {
 			return null;
 		}
 
@@ -270,22 +273,21 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	 * @param userCode 用户ID
 	 * @return 模板集合
 	 */
-	private List<SmsMessageTemplate> getTemplatesByUserCode(String userCode) {
-		if (ListUtils.isNotEmpty(GLOBAL_MESSAGE_TEMPLATE.get(userCode))) {
+	private List<MessageTemplate> getTemplatesByUserCode(String userCode) {
+		if (CollUtil.isNotEmpty(GLOBAL_MESSAGE_TEMPLATE.get(userCode))) {
 			return GLOBAL_MESSAGE_TEMPLATE.get(userCode);
 		}
 
-		List<SmsMessageTemplate> list = null;
+		List<MessageTemplate> list = null;
 		try {
 			list = getFromRedis(userCode);
-			if (ListUtils.isNotEmpty(list)) {
+			if (CollUtil.isNotEmpty(list)) {
 				return list;
 			}
-			list = super.select(
-					Wrappers.<SmsMessageTemplate>lambdaQuery().eq(SmsMessageTemplate::getUserCode, userCode));
-			if (ListUtils.isNotEmpty(list)) {
+			list = super.list(Wrappers.<MessageTemplate>lambdaQuery().eq(MessageTemplate::getUserCode, userCode));
+			if (CollUtil.isNotEmpty(list)) {
 				// 如果DB中存在，REDIS中不存在，则需要加载至REDIS
-				pushToRedis(userCode, list.toArray(new SmsMessageTemplate[] {}));
+				pushToRedis(userCode, list.toArray(new MessageTemplate[] {}));
 			}
 
 			return list;
@@ -293,7 +295,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 			logger.warn("No templates found by userCode [" + userCode + "]", e);
 			return null;
 		} finally {
-			if (ListUtils.isNotEmpty(list)) {
+			if (CollUtil.isNotEmpty(list)) {
 				GLOBAL_MESSAGE_TEMPLATE.put(userCode, list);
 			}
 		}
@@ -304,29 +306,28 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	 * 
 	 * @param template 模板信息
 	 */
-	private void setProperties(SmsMessageTemplate template) {
-		template.setCreateTime(new Date());
+	private void setProperties(MessageTemplate template) {
+		template.setCreateDate(new Date());
 		// 平台判断 后台添加 状态默认
 //		if (AppType.WEB.getCode() == template.getAppType()) {
 //			template.setStatus(ApproveStatus.WAITING.getValue() + "");
 //		}
 		template.setRegexValue(parseContent2Regex(template.getContent()));
 
-		if (ObjectUtils.toInteger(template.getStatus()).intValue() == ApproveStatus.SUCCESS.getValue()) {
+		if (Convert.toInt(template.getStatus()) == ApproveStatus.SUCCESS.getValue()) {
 			pushToRedis(template.getUserCode(), template);
 		} else {
 			removeRedis(template);
 		}
 	}
 
-	@Override
-	public boolean saveOrUpdate(SmsMessageTemplate template) {
-		if (StringUtils.isEmpty(template.getContent())) {
+	public boolean saveOrUpdate(MessageTemplate template) {
+		if (StrUtil.isEmpty(template.getContent())) {
 			throw new IllegalArgumentException("模板内容不能为空");
 		}
 
 		Set<String> words = forbiddenWordsService.filterForbiddenWords(template.getContent());
-		if (ListUtils.isNotEmpty(words)) {
+		if (CollUtil.isNotEmpty(words)) {
 			throw new IllegalArgumentException("模板内容包含敏感词[" + words + "]");
 		}
 		setProperties(template);
@@ -334,11 +335,10 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		return super.saveOrUpdate(template);
 	}
 
-	@Override
 	@Transactional
-	public boolean saveToBatchContent(SmsMessageTemplate template, String[] contents) {
+	public boolean saveToBatchContent(MessageTemplate template, String[] contents) {
 		Set<String> words = forbiddenWordsService.filterForbiddenWords(template.getContent());
-		if (ListUtils.isNotEmpty(words)) {
+		if (CollUtil.isNotEmpty(words)) {
 			throw new IllegalArgumentException("模板内容包含敏感词[" + words + "]");
 		}
 
@@ -347,13 +347,13 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		}
 
 		try {
-			List<SmsMessageTemplate> list = new ArrayList<>();
+			List<MessageTemplate> list = new ArrayList<>();
 			for (String content : contents) {
-				SmsMessageTemplate newTemplate = new SmsMessageTemplate();
+				MessageTemplate newTemplate = new MessageTemplate();
 				BeanUtils.copyProperties(template, newTemplate);
 
 				newTemplate.setContent(content);
-				newTemplate.setCreateTime(new Date());
+				newTemplate.setCreateDate(new Date());
 				newTemplate.setRegexValue(parseContent2Regex(content));
 
 				boolean result = super.save(newTemplate);
@@ -364,13 +364,13 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 				list.add(newTemplate);
 			}
 
-			if (ListUtils.isEmpty(list)) {
-				logger.warn("No template data need to process by contents [" + StringUtils.join(contents) + "]");
+			if (CollUtil.isEmpty(list)) {
+				logger.warn("No template data need to process by contents [" + contents + "]");
 				return false;
 			}
 
-			if (ObjectUtils.toInteger(template.getStatus()).intValue() == ApproveStatus.SUCCESS.getValue()) {
-				pushToRedis(template.getUserCode(), list.toArray(new SmsMessageTemplate[] {}));
+			if (Convert.toInt(template.getStatus()) == ApproveStatus.SUCCESS.getValue()) {
+				pushToRedis(template.getUserCode(), list.toArray(new MessageTemplate[] {}));
 			}
 
 			return true;
@@ -399,10 +399,9 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 
 	}
 
-	@Override
 	public boolean approve(String id, int status, String remarks) {
-		SmsMessageTemplate template = get(id);
-		template.setStatus(ObjectUtils.toString2(status));
+		MessageTemplate template = getById(id);
+		template.setStatus(status + "");
 		template.setRemarks(remarks);
 		template.setApproveTime(new Date());
 
@@ -414,10 +413,9 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		return super.updateById(template);
 	}
 
-	@Override
 	public boolean isContentMatched(String id, String content) {
-		SmsMessageTemplate template = get(id);
-		return template != null && PatternUtils.isRight(template.getRegexValue(), content);
+		MessageTemplate template = getById(id);
+		return template != null && PatternUtil.isRight(template.getRegexValue(), content);
 	}
 
 	/**
@@ -425,8 +423,8 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	 * 
 	 * @param template 模板数据
 	 */
-	private void updateTemplateInRedis(SmsMessageTemplate template) {
-		final SmsMessageTemplate originTemplate = super.get(template.getId());
+	private void updateTemplateInRedis(MessageTemplate template) {
+		final MessageTemplate originTemplate = super.getById(template);
 		try {
 			stringRedisTemplate.execute((connection) -> {
 				RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
@@ -452,10 +450,9 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		}
 	}
 
-	@Override
 	public boolean reloadToRedis() {
-		List<SmsMessageTemplate> list = super.select();
-		if (ListUtils.isEmpty(list)) {
+		List<MessageTemplate> list = super.list();
+		if (CollUtil.isEmpty(list)) {
 			logger.warn("短信模板数据为空");
 			return false;
 		}
@@ -470,11 +467,11 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 			// connection.keys(serializer.serialize(SmsRedisConstant.RED_USER_MESSAGE_TEMPLATE
 			// +
 			// "*"));
-			// if (ListUtils.isNotEmpty(keys)) {
+			// if (CollUtil.isNotEmpty(keys)) {
 			// connection.del(keys.toArray(new byte[][] {}));
 			// }
 
-			for (SmsMessageTemplate template : list) {
+			for (MessageTemplate template : list) {
 				byte[] key = serializer.serialize(getKey(template.getUserCode()));
 
 				connection.zAdd(key, template.getPriority().doubleValue(), JSON.toJSONBytes(template));
@@ -484,12 +481,11 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 
 		}, false, true);
 
-		return ListUtils.isNotEmpty(con);
+		return CollUtil.isNotEmpty(con);
 	}
 
-	@Override
 	public boolean delete(String id, String userCode) {
-		SmsMessageTemplate originTemplate;
+		MessageTemplate originTemplate;
 		try {
 			originTemplate = isAllowAccess(userCode, id);
 		} catch (IllegalArgumentException e) {
@@ -502,7 +498,6 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		} catch (Exception e) {
 			logger.error("移除REDIS用户模板失败， ID：{}", id, e);
 		}
-
-		return super.deleteById(id);
+		return super.removeById(id);
 	}
 }

@@ -35,6 +35,12 @@ public class SmsMobileTablesService{
 	private static final String MOBILE_LAST_SEND_MILLIS = "last_send_millis";
 	// 手机号码发送总数
 	private static final String MOBILE_SEND_TOTAL_COUNT = "send_total_count";
+	
+	public static final int NICE_PASSED = 0;
+	
+	public static final int MOBILE_BEYOND_SPEED = 1;
+	
+	public static final int MOBILE_BEYOND_TIMES = 2;
 
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;

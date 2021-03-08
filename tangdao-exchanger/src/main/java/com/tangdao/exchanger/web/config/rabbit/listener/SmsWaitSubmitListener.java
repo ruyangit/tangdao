@@ -19,7 +19,10 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
+import com.tangdao.exchanger.service.SmsPassageMessageTemplateService;
+import com.tangdao.exchanger.service.SmsPassageService;
 import com.tangdao.exchanger.service.SmsProviderService;
+import com.tangdao.exchanger.service.SmsSignatureExtnoService;
 import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
 
 /**
@@ -41,21 +44,21 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	@Autowired
 	private SmsProviderService smsProviderService;
 	@Autowired
-	private IPushConfigService pushConfigService;
+	private PushConfigService pushConfigService;
 	@Autowired
-	private IMobileLocalService mobileLocalService;
+	private MobileLocalService mobileLocalService;
 	@Autowired
-	private IUserSmsConfigService userSmsConfigService;
+	private UserSmsConfigService userSmsConfigService;
 	@Autowired
-	private ISmsMtSubmitService smsSubmitService;
+	private SmsMtSubmitService smsSubmitService;
 	@Autowired
-	private ISmsPassageService smsPassageService;
+	private SmsPassageService smsPassageService;
 	@Autowired
-	private ISmsSignatureExtnoService smsSignatureExtnoService;
+	private SmsSignatureExtnoService smsSignatureExtnoService;
 	@Autowired
 	private Jackson2JsonMessageConverter messageConverter;
 	@Autowired
-	private ISmsPassageMessageTemplateService smsPassageMessageTemplateService;
+	private SmsPassageMessageTemplateService smsPassageMessageTemplateService;
 	@Autowired
     private ThreadPoolTaskExecutor            threadPoolTaskExecutor;
 
