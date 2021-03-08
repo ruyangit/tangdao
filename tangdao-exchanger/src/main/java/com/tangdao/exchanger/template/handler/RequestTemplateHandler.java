@@ -3,7 +3,7 @@ package com.tangdao.exchanger.template.handler;
 import com.alibaba.fastjson.JSON;
 import com.tangdao.core.exception.DataEmptyException;
 import com.tangdao.core.exception.DataParseException;
-import com.tangdao.exchanger.template.vo.TParameter;
+import com.tangdao.exchanger.template.TParameter;
 
 import cn.hutool.core.util.StrUtil;
 

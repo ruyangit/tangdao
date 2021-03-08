@@ -25,6 +25,8 @@ public class MobileBlacklist extends DataEntity<MobileBlacklist> {
 
 	private String mobile; // 手机号码
 	private int type; // 类型
+	
+	private String remarks;
 
 	public MobileBlacklist() {
 		super();

@@ -1,10 +1,10 @@
 package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.mapper.SmsMessageDeliverMapper;
-import org.tangdao.modules.sms.model.domain.SmsMessageDeliver;
-import org.tangdao.modules.sms.service.ISmsDeliverService;
+
+import com.tangdao.core.model.domain.sms.MessageDeliver;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMessageDeliverMapper;
 
 /**
  * 回执推送信息ServiceImpl
@@ -13,7 +13,6 @@ import org.tangdao.modules.sms.service.ISmsDeliverService;
  * @version 2019-09-06
  */
 @Service
-public class SmsMessageDeliverService extends CrudService<SmsMessageDeliverMapper, SmsMessageDeliver>
-		implements ISmsDeliverService {
+public class SmsMessageDeliverService extends BaseService<SmsMessageDeliverMapper, MessageDeliver>{
 
 }

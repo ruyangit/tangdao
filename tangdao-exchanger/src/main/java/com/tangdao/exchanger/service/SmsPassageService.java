@@ -40,6 +40,7 @@ import org.tangdao.modules.sys.utils.DictUtils;
 import com.alibaba.fastjson.JSON;
 //import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.service.BaseService;
 
 /**
  * 通道管理ServiceImpl
@@ -48,9 +49,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageService extends CrudService<SmsPassageMapper, SmsPassage> implements ISmsPassageService {
-
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 
 	/**
 	 * 非中文表达式

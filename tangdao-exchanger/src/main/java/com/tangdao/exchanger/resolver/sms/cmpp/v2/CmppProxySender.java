@@ -25,9 +25,9 @@ import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.exchanger.resolver.sms.AbstractSmsProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.constant.CmppConstant;
+import com.tangdao.exchanger.response.ProviderSendResponse;
+import com.tangdao.exchanger.template.TParameter;
 import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
-import com.tangdao.exchanger.template.response.ProviderSendResponse;
-import com.tangdao.exchanger.template.vo.TParameter;
 import com.tangdao.exchanger.utils.MobileNumberCatagoryUtil;
 
 import cn.hutool.core.collection.CollUtil;

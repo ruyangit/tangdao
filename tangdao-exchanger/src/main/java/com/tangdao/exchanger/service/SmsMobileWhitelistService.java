@@ -15,16 +15,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.mapper.SmsMobileWhitelistMapper;
-import org.tangdao.modules.sms.model.domain.SmsMobileWhitelist;
-import org.tangdao.modules.sms.service.ISmsMobileWhiteListService;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.model.domain.sms.MobileWhitelist;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMobileWhitelistMapper;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 手机白名单信息表ServiceImpl
@@ -33,10 +33,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
  * @version 2019-09-06
  */
 @Service
-public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMapper, SmsMobileWhitelist>
-		implements ISmsMobileWhiteListService {
-//	@Reference
-//    private IUserService             userService;
+public class SmsMobileWhitelistService extends BaseService<SmsMobileWhitelistMapper, MobileWhitelist>{
 	@Autowired
 	private SmsMobileWhitelistMapper smsMobileWhitelistMapper;
 	@Resource
@@ -51,19 +48,18 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 		return resultMap;
 	}
 
-	@Override
-	public Map<String, Object> batchInsert(SmsMobileWhitelist white) {
-		if (StringUtils.isEmpty(white.getMobile())) {
+	public Map<String, Object> batchInsert(MobileWhitelist white) {
+		if (StrUtil.isEmpty(white.getMobile())) {
 			return response("-2", "参数不能为空！");
 		}
 
-		List<SmsMobileWhitelist> list = new ArrayList<>();
+		List<MobileWhitelist> list = new ArrayList<>();
 		try {
 			// 前台默认是多个手机号码换行添加
 			String[] mobiles = white.getMobile().split("\n");
-			SmsMobileWhitelist mwl;
+			MobileWhitelist mwl;
 			for (String mobile : mobiles) {
-				if (StringUtils.isBlank(mobile)) {
+				if (StrUtil.isBlank(mobile)) {
 					continue;
 				}
 
@@ -73,18 +69,18 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 					continue;
 				}
 
-				mwl = new SmsMobileWhitelist();
+				mwl = new MobileWhitelist();
 				mwl.setMobile(mobile.trim());
 				mwl.setUserCode(white.getUserCode());
 
 				list.add(mwl);
 			}
 
-			if (ListUtils.isNotEmpty(list)) {
+			if (CollUtil.isNotEmpty(list)) {
 				this.saveBatch(list);
 
 				// 批量操作无误后添加至缓存REDIS
-				for (SmsMobileWhitelist ml : list) {
+				for (MobileWhitelist ml : list) {
 					pushToRedis(ml);
 				}
 			}
@@ -96,9 +92,8 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 		}
 	}
 
-	@Override
-	public List<SmsMobileWhitelist> selectByUserCode(String userCode) {
-		return this.select(Wrappers.<SmsMobileWhitelist>lambdaQuery().eq(SmsMobileWhitelist::getUserCode, userCode));
+	public List<MobileWhitelist> selectByUserCode(String userCode) {
+		return this.list(Wrappers.<MobileWhitelist>lambdaQuery().eq(MobileWhitelist::getUserCode, userCode));
 	}
 
 	/**
@@ -111,10 +106,9 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 		return String.format("%s:%s", SmsRedisConstant.RED_MOBILE_WHITELIST, UserCode);
 	}
 
-	@Override
 	public boolean reloadToRedis() {
-		List<SmsMobileWhitelist> list = this.select();
-		if (ListUtils.isEmpty(list)) {
+		List<MobileWhitelist> list = this.list();
+		if (CollUtil.isEmpty(list)) {
 			logger.info("数据库未检索到手机白名单，放弃填充REDIS");
 			return true;
 		}
@@ -125,7 +119,7 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 
 				RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 				connection.openPipeline();
-				for (SmsMobileWhitelist mwl : list) {
+				for (MobileWhitelist mwl : list) {
 					byte[] key = serializer.serialize(getKey(mwl.getUserCode()));
 
 					connection.sAdd(key, serializer.serialize(mwl.getMobile()));
@@ -135,7 +129,7 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 
 			}, false, true);
 
-			return ListUtils.isNotEmpty(con);
+			return CollUtil.isNotEmpty(con);
 		} catch (Exception e) {
 			logger.warn("REDIS重载手机白名单数据失败", e);
 			return false;
@@ -147,7 +141,7 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 	 * 
 	 * @param mwl 手机白名单数据
 	 */
-	private void pushToRedis(SmsMobileWhitelist mwl) {
+	private void pushToRedis(MobileWhitelist mwl) {
 		try {
 			stringRedisTemplate.opsForSet().add(getKey(mwl.getUserCode()), mwl.getMobile());
 		} catch (Exception e) {
@@ -155,9 +149,8 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 		}
 	}
 
-	@Override
 	public boolean isMobileWhitelist(String userCode, String mobile) {
-		if (StringUtils.isEmpty(userCode) || StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(userCode) || StrUtil.isEmpty(mobile)) {
 			return false;
 		}
 
@@ -169,14 +162,13 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 		}
 	}
 
-	@Override
 	public Set<String> getByUserCode(String userCode) {
 		try {
 			return stringRedisTemplate.opsForSet().members(getKey(userCode));
 		} catch (Exception e) {
 			logger.warn("redis 获取手机号码白名单集合失败，将从DB加载", e);
 			List<String> list = smsMobileWhitelistMapper.selectDistinctMobilesByUserCode(userCode);
-			if (ListUtils.isEmpty(list)) {
+			if (CollUtil.isEmpty(list)) {
 				return null;
 			}
 
@@ -185,7 +177,7 @@ public class SmsMobileWhitelistService extends CrudService<SmsMobileWhitelistMap
 	}
 
 	public int selectByUserCodeAndMobile(String userCode, String mobile) {
-		QueryWrapper<SmsMobileWhitelist> queryWrapper = new QueryWrapper<SmsMobileWhitelist>();
+		QueryWrapper<MobileWhitelist> queryWrapper = new QueryWrapper<MobileWhitelist>();
 		queryWrapper.eq("user_code", userCode);
 		queryWrapper.eq("mobile", mobile);
 		return count(queryWrapper);

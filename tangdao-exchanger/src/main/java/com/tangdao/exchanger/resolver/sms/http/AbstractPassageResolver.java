@@ -14,7 +14,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.tangdao.core.model.domain.sms.MoMessageReceive;
 import com.tangdao.core.model.domain.sms.MtMessageDeliver;
-import com.tangdao.exchanger.template.vo.TParameter;
+import com.tangdao.exchanger.template.TParameter;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;

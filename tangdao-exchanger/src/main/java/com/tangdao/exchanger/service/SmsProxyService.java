@@ -28,8 +28,8 @@ import com.tangdao.exchanger.resolver.sms.sgip.SgipProxySender;
 import com.tangdao.exchanger.resolver.sms.sgip.constant.SgipConstant;
 import com.tangdao.exchanger.resolver.sms.smgp.SmgpManageProxy;
 import com.tangdao.exchanger.resolver.sms.smgp.SmgpProxySender;
+import com.tangdao.exchanger.template.TParameter;
 import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
-import com.tangdao.exchanger.template.vo.TParameter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

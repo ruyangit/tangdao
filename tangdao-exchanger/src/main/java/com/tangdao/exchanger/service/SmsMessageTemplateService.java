@@ -17,20 +17,10 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.constant.CommonContext.AppType;
-import org.tangdao.common.lang.ObjectUtils;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.common.utils.PatternUtils;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.constant.SmsTemplateContext.ApproveStatus;
-import org.tangdao.modules.sms.mapper.SmsMessageTemplateMapper;
-import org.tangdao.modules.sms.model.domain.SmsMessageTemplate;
 
 import com.alibaba.fastjson.JSON;
-//import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.model.domain.sms.MessageTemplate;
 
 import javax.annotation.Resource;
 
@@ -41,22 +31,21 @@ import javax.annotation.Resource;
  * @version 2019-09-06
  */
 @Service
-public class SmsMessageTemplateService extends CrudService<SmsMessageTemplateMapper, SmsMessageTemplate>
-		implements ISmsTemplateService {
+public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMapper, MessageTemplate> {
 
 	@Resource
-	private ISmsForbiddenWordsService forbiddenWordsService;
+	private SmsForbiddenWordsService forbiddenWordsService;
+
 	@Resource
 	private RedisTemplate<String, Object> redisTemplate;
+
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
-
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * 全局短信模板（与REDIS 同步采用广播模式）
 	 */
-	public static volatile Map<String, List<SmsMessageTemplate>> GLOBAL_MESSAGE_TEMPLATE = new ConcurrentHashMap<>();
+	public static volatile Map<String, List<MessageTemplate>> GLOBAL_MESSAGE_TEMPLATE = new ConcurrentHashMap<>();
 
 	/**
 	 * 超级模板正则表达式（一般指无限制）
@@ -70,7 +59,7 @@ public class SmsMessageTemplateService extends CrudService<SmsMessageTemplateMap
 	/**
 	 * 添加到REDIS
 	 *
-	 * @param userCode    用户编号
+	 * @param userCode  用户编号
 	 * @param templates 短信模板数据
 	 */
 	private void pushToRedis(String userCode, SmsMessageTemplate... templates) {
@@ -82,8 +71,7 @@ public class SmsMessageTemplateService extends CrudService<SmsMessageTemplateMap
 				byte[] key = serializer.serialize(getKey(userCode));
 
 				for (SmsMessageTemplate template : templates) {
-					connection.zAdd(key, template.getPriority().doubleValue(),
-							JSON.toJSONBytes(template));
+					connection.zAdd(key, template.getPriority().doubleValue(), JSON.toJSONBytes(template));
 
 					// publish message for flush jvm map data
 					connection.publish(serializer.serialize(SmsRedisConstant.BROADCAST_MESSAGE_TEMPLATE_TOPIC),
@@ -106,25 +94,25 @@ public class SmsMessageTemplateService extends CrudService<SmsMessageTemplateMap
 	 */
 	private List<SmsMessageTemplate> getFromRedis(String userCode) {
 		try {
-            Set<String> set = stringRedisTemplate.opsForZSet().reverseRangeByScore(getKey(userCode), 0, 1000);
-            if (ListUtils.isEmpty(set)) {
-                return null;
-            }
+			Set<String> set = stringRedisTemplate.opsForZSet().reverseRangeByScore(getKey(userCode), 0, 1000);
+			if (ListUtils.isEmpty(set)) {
+				return null;
+			}
 
-            List<SmsMessageTemplate> list = new ArrayList<>(set.size());
-            for (String s : set) {
-                if (StringUtils.isEmpty(s)) {
-                    continue;
-                }
+			List<SmsMessageTemplate> list = new ArrayList<>(set.size());
+			for (String s : set) {
+				if (StringUtils.isEmpty(s)) {
+					continue;
+				}
 
-                list.add(JSON.parseObject(s, SmsMessageTemplate.class));
-            }
+				list.add(JSON.parseObject(s, SmsMessageTemplate.class));
+			}
 
-            return list;
-        } catch (Exception e) {
-            logger.warn("REDIS 短信模板获取失败", e);
-            return null;
-        }
+			return list;
+		} catch (Exception e) {
+			logger.warn("REDIS 短信模板获取失败", e);
+			return null;
+		}
 	}
 
 	/**
@@ -181,7 +169,7 @@ public class SmsMessageTemplateService extends CrudService<SmsMessageTemplateMap
 	/**
 	 * 是否允许被访问（针对用户ID进行鉴权,防止恶意使用userID来篡改其他userId数据）
 	 * 
-	 * @param userCode     用户ID
+	 * @param userCode   用户ID
 	 * @param templateId 模板ID
 	 * @return 模板信息
 	 */
@@ -325,7 +313,7 @@ public class SmsMessageTemplateService extends CrudService<SmsMessageTemplateMap
 
 		if (ObjectUtils.toInteger(template.getStatus()).intValue() == ApproveStatus.SUCCESS.getValue()) {
 			pushToRedis(template.getUserCode(), template);
-		}else {
+		} else {
 			removeRedis(template);
 		}
 	}
@@ -449,8 +437,7 @@ public class SmsMessageTemplateService extends CrudService<SmsMessageTemplateMap
 					connection.zRem(key, JSON.toJSONBytes(originTemplate));
 				}
 
-				connection.zAdd(key, template.getPriority().doubleValue(),
-						JSON.toJSONBytes(template));
+				connection.zAdd(key, template.getPriority().doubleValue(), JSON.toJSONBytes(template));
 
 				// publish message for flush jvm map data
 				connection.publish(serializer.serialize(SmsRedisConstant.BROADCAST_MESSAGE_TEMPLATE_TOPIC),
@@ -489,8 +476,7 @@ public class SmsMessageTemplateService extends CrudService<SmsMessageTemplateMap
 			for (SmsMessageTemplate template : list) {
 				byte[] key = serializer.serialize(getKey(template.getUserCode()));
 
-				connection.zAdd(key, template.getPriority().doubleValue(),
-						JSON.toJSONBytes(template));
+				connection.zAdd(key, template.getPriority().doubleValue(), JSON.toJSONBytes(template));
 			}
 
 			return connection.closePipeline();

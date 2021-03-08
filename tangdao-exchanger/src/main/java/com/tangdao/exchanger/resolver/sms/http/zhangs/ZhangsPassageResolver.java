@@ -19,9 +19,9 @@ import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.core.model.domain.sms.PassageParameter;
 import com.tangdao.exchanger.resolver.HttpClientManager;
 import com.tangdao.exchanger.resolver.sms.http.AbstractPassageResolver;
+import com.tangdao.exchanger.response.ProviderSendResponse;
+import com.tangdao.exchanger.template.TParameter;
 import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
-import com.tangdao.exchanger.template.response.ProviderSendResponse;
-import com.tangdao.exchanger.template.vo.TParameter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;

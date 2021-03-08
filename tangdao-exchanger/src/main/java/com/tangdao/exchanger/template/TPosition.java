@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.exchanger.template.vo;
+package com.tangdao.exchanger.template;
 
 import java.util.HashMap;
 import java.util.Map;

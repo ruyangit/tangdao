@@ -8,27 +8,28 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.lang.DateUtils;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.service.ISmsMobileTablesService;
+
+import com.tangdao.core.constant.SmsRedisConstant;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 
  * <p>
- * TODO 描述 手机号码防火墙设置服务实现
+ * TODO  手机号码防火墙设置服务实现
  * </p>
  *
- * @author ruyangit@gmail.com
- * @since 2020年3月12日
+ * @author ruyang
+ * @since 2021年3月8日
  */
 @Service
-public class SmsMobileTablesService implements ISmsMobileTablesService {
+public class SmsMobileTablesService{
 
 	// 手机号码最后发送毫秒时间
 	private static final String MOBILE_LAST_SEND_MILLIS = "last_send_millis";
@@ -63,7 +64,8 @@ public class SmsMobileTablesService implements ISmsMobileTablesService {
 	private static long getH24TimeMillis() {
 		SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 		try {
-			Date endDate = dfs.parse(DateUtils.formatDate(DateUtils.getLastDay(1)) + " 00:00:00.000");
+			
+			Date endDate = dfs.parse(DateUtil.formatDate(DateUtil.offsetDay(new Date(), -1)) + " 00:00:00.000");
 
 			return endDate.getTime() - System.currentTimeMillis();
 		} catch (Exception e) {
@@ -72,9 +74,8 @@ public class SmsMobileTablesService implements ISmsMobileTablesService {
 		}
 	}
 
-	@Override
 	public void setMobileSendRecord(String userCode, String templateId, String mobile, int sendCount) {
-		if (StringUtils.isEmpty(userCode) || templateId == null || StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(userCode) || templateId == null || StrUtil.isEmpty(mobile)) {
 			logger.error("参数数据为空，无法匹配该用户：{}, 模板：{}，手机号码：{} ", userCode, templateId, mobile);
 			return;
 		}
@@ -94,7 +95,6 @@ public class SmsMobileTablesService implements ISmsMobileTablesService {
 		}
 	}
 
-	@Override
 	public int checkMobileIsBeyondExpected(String userCode, String templateId, String mobile, int maxSpeed,
 			int maxLimit) {
 
@@ -109,7 +109,7 @@ public class SmsMobileTablesService implements ISmsMobileTablesService {
 			Map<Object, Object> map = stringRedisTemplate.opsForHash()
 					.entries(getAssistKey(SmsRedisConstant.RED_MOBILE_GREEN_TABLES, userCode, templateId, mobile));
 
-			if (MapUtils.isEmpty(map)) {
+			if (CollUtil.isEmpty(map)) {
 				setMobileSendRecord(userCode, templateId, mobile,
 						_sendTotalCount == null ? 0 : _sendTotalCount.intValue());
 				return NICE_PASSED;

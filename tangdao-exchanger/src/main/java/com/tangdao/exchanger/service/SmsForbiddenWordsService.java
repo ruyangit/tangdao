@@ -6,10 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -18,8 +14,11 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Lists;
+import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.context.SettingsContext;
 import com.tangdao.core.model.domain.sms.ForbiddenWords;
 import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsForbiddenWordsMapper;
 import com.tangdao.exchanger.web.filter.SensitiveWordFilter;
 
 import cn.hutool.core.collection.CollUtil;
@@ -130,8 +129,8 @@ public class SmsForbiddenWordsService extends BaseService<SmsForbiddenWordsMappe
 		return list;
 	}
 
-	public boolean saveForbiddenWords(SmsForbiddenWords words) {
-		if (words == null || StrUtil.isBlank(words.getWord()) || StringUtils.isBlank(words.getLabel())) {
+	public boolean saveForbiddenWords(ForbiddenWords words) {
+		if (words == null || StrUtil.isBlank(words.getWord()) || StrUtil.isBlank(words.getLabel())) {
 			return false;
 		}
 
@@ -197,7 +196,7 @@ public class SmsForbiddenWordsService extends BaseService<SmsForbiddenWordsMappe
 
 	public boolean deleteWord(int id) {
 		try {
-			ForbiddenWords words = this.get(id);
+			ForbiddenWords words = super.getById(id);
 			stringRedisTemplate.opsForSet().remove(SmsRedisConstant.RED_FORBIDDEN_WORDS, words.getWord());
 
 			// 是否为通配敏感词
@@ -212,13 +211,12 @@ public class SmsForbiddenWordsService extends BaseService<SmsForbiddenWordsMappe
 			logger.warn("Redis 删除敏感词信息失败, id : {}", id, e);
 			return false;
 		}
-		return this.deleteById(id);
+		return super.removeById(id);
 	}
 
-	@Override
 	public String[] findWordsLabelLibrary() {
 //		SystemConfig systemConfig = systemConfigService.findByTypeAndKey(SystemConfigType.WORDS_LIBRARY.name(), WordsLibrary.FORBIDDEN_LABEL.name());
-//		if (systemConfig == null || StringUtils.isEmpty(systemConfig.getAttrValue())) {
+//		if (systemConfig == null || StrUtil.isEmpty(systemConfig.getAttrValue())) {
 //			logger.warn("敏感词标签库未配置，请及时配置");
 //			return null;
 //		}
@@ -227,23 +225,22 @@ public class SmsForbiddenWordsService extends BaseService<SmsForbiddenWordsMappe
 		return "".split(SettingsContext.MULTI_VALUE_SEPERATOR);
 	}
 
-	@Override
-	public List<SmsForbiddenWords> getLabelByWords(String words) {
-		if (StringUtils.isEmpty(words)) {
+	public List<ForbiddenWords> getLabelByWords(String words) {
+		if (StrUtil.isEmpty(words)) {
 			return null;
 		}
 
 		String[] wordsArray = words.split(",");
-		SmsForbiddenWords forbiddenWords = null;
+		ForbiddenWords forbiddenWords = null;
 
-		List<SmsForbiddenWords> list = new ArrayList<>();
+		List<ForbiddenWords> list = new ArrayList<>();
 		if (wordsArray.length == 1) {
 			// 如果只有一个词汇，并且为空则直接返回空
-			if (StringUtils.isBlank(wordsArray[0])) {
+			if (StrUtil.isBlank(wordsArray[0])) {
 				return null;
 			}
 			forbiddenWords = this
-					.getOne(Wrappers.<SmsForbiddenWords>lambdaQuery().eq(SmsForbiddenWords::getWord, wordsArray[0]));
+					.getOne(Wrappers.<ForbiddenWords>lambdaQuery().eq(ForbiddenWords::getWord, wordsArray[0]));
 			if (forbiddenWords == null) {
 				return null;
 			}
@@ -251,21 +248,21 @@ public class SmsForbiddenWordsService extends BaseService<SmsForbiddenWordsMappe
 			list.add(forbiddenWords);
 			return list;
 		}
-		List<SmsForbiddenWords> wordLib = this.select(Wrappers.<SmsForbiddenWords>lambdaQuery()
-				.in(SmsForbiddenWords::getWord, Lists.newArrayList(wordsArray)));
-		if (ListUtils.isEmpty(wordLib)) {
+		List<ForbiddenWords> wordLib = this.list(
+				Wrappers.<ForbiddenWords>lambdaQuery().in(ForbiddenWords::getWord, Lists.newArrayList(wordsArray)));
+		if (CollUtil.isEmpty(wordLib)) {
 			return null;
 		}
 
-		Map<String, SmsForbiddenWords> map = new HashMap<>();
+		Map<String, ForbiddenWords> map = new HashMap<>();
 		// 如果存在多个标签，需要判断是否是同一个，如果为同一个标签则只返回一个即可
-		for (SmsForbiddenWords word : wordLib) {
+		for (ForbiddenWords word : wordLib) {
 			if (!map.containsKey(word.getLabel())) {
 				map.put(word.getLabel(), word);
 				continue;
 			}
 
-			SmsForbiddenWords originWord = map.get(word.getLabel());
+			ForbiddenWords originWord = map.get(word.getLabel());
 			originWord.setWord(originWord.getWord() + "," + word.getWord());
 
 			map.put(word.getLabel(), originWord);
@@ -278,7 +275,6 @@ public class SmsForbiddenWordsService extends BaseService<SmsForbiddenWordsMappe
 		return list;
 	}
 
-	@Override
 	public boolean freshLocalForbiddenWords(boolean isWildcards, boolean isSaveMode) {
 		try {
 			// 重新初始化明确敏感词词库(JVM)

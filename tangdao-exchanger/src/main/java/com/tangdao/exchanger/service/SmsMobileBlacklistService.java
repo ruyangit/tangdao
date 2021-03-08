@@ -6,24 +6,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.constant.SmsRedisConstant.MessageAction;
-import org.tangdao.modules.sms.constant.SmsSettingsContext.MobileBlacklistType;
-import org.tangdao.modules.sms.mapper.SmsMobileBlacklistMapper;
-import org.tangdao.modules.sms.model.domain.SmsMobileBlacklist;
-import org.tangdao.modules.sms.service.ISmsMobileBlackListService;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.context.SettingsContext.MessageAction;
+import com.tangdao.core.context.SmsSettingsContext.MobileBlacklistType;
+import com.tangdao.core.model.domain.sms.MobileBlacklist;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMobileBlacklistMapper;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 手机黑名单信息表ServiceImpl
@@ -32,10 +30,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
  * @version 2019-09-06
  */
 @Service
-public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMapper, SmsMobileBlacklist>
-		implements ISmsMobileBlackListService {
-
-	private Logger logger = LoggerFactory.getLogger(getClass());
+public class SmsMobileBlacklistService extends BaseService<SmsMobileBlacklistMapper, MobileBlacklist> {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
@@ -59,18 +54,16 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 		return resultMap;
 	}
 
-	@Override
 	public boolean isMobileBelongtoBlacklist(String mobile) {
-		if (StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(mobile)) {
 			return false;
 		}
-
 		try {
 			return GLOBAL_MOBILE_BLACKLIST.keySet().contains(mobile);
 		} catch (Exception e) {
 			logger.warn("Redis 手机号黑名单查询失败", e);
 		}
-		return this.count(Wrappers.<SmsMobileBlacklist>lambdaQuery().eq(SmsMobileBlacklist::getMobile, mobile)) > 0;
+		return this.count(Wrappers.<MobileBlacklist>lambdaQuery().eq(MobileBlacklist::getMobile, mobile)) > 0;
 	}
 
 	/**
@@ -84,7 +77,6 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 				|| MobileBlacklistType.UNSUBSCRIBE.getCode() == type;
 	}
 
-	@Override
 	public List<String> filterBlacklistMobile(List<String> mobiles, boolean isIgnored) {
 		try {
 			List<String> blackList = new ArrayList<>(mobiles);
@@ -114,20 +106,19 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 		}
 	}
 
-	@Override
 	@Transactional
-	public Map<String, Object> batchInsert(SmsMobileBlacklist black) {
-		if (StringUtils.isEmpty(black.getMobile())) {
+	public Map<String, Object> batchInsert(MobileBlacklist black) {
+		if (StrUtil.isEmpty(black.getMobile())) {
 			return response("-2", "参数不能为空！");
 		}
 
-		List<SmsMobileBlacklist> list = new ArrayList<>();
+		List<MobileBlacklist> list = new ArrayList<>();
 		try {
 			// 前台默认是多个手机号码换行添加
 			String[] mobiles = black.getMobile().split("\n");
-			SmsMobileBlacklist mbl;
+			MobileBlacklist mbl;
 			for (String mobile : mobiles) {
-				if (StringUtils.isBlank(mobile)) {
+				if (StrUtil.isBlank(mobile)) {
 					continue;
 				}
 
@@ -136,7 +127,7 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 					continue;
 				}
 
-				mbl = new SmsMobileBlacklist();
+				mbl = new MobileBlacklist();
 				mbl.setMobile(mobile.trim());
 				mbl.setType(black.getType());
 				mbl.setRemarks(black.getRemarks());
@@ -144,10 +135,10 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 			}
 
 			// 批量添加黑名单
-			if (ListUtils.isNotEmpty(list)) {
+			if (CollUtil.isNotEmpty(list)) {
 				super.saveBatch(list);
 				// 批量操作无误后添加至缓存REDIS
-				for (SmsMobileBlacklist ml : list) {
+				for (MobileBlacklist ml : list) {
 					publishToRedis(MessageAction.ADD, ml.getMobile(), ml.getType());
 				}
 			}
@@ -159,17 +150,16 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 		}
 	}
 
-	@Override
 	public boolean deleteByPrimaryKey(String id) {
 		try {
-			SmsMobileBlacklist smsMobileBlackList = super.get(id);
+			MobileBlacklist smsMobileBlackList = super.getById(id);
 			publishToRedis(MessageAction.REMOVE, smsMobileBlackList.getMobile(), smsMobileBlackList.getType());
 
 		} catch (Exception e) {
 			logger.warn("Redis 删除黑名单数据信息失败, id : {}", id, e);
 		}
 
-		return super.deleteById(id);
+		return super.removeById(id);
 	}
 
 	/**
@@ -189,12 +179,12 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 		}
 	}
 
-	private boolean pushToRedis(final List<SmsMobileBlacklist> list) {
+	private boolean pushToRedis(final List<MobileBlacklist> list) {
 		try {
 			long size = stringRedisTemplate.opsForHash().size(SmsRedisConstant.RED_MOBILE_BLACKLIST);
 			if (size == list.size()) {
 				// 初始化JVM 全局数据
-				for (SmsMobileBlacklist mbl : list) {
+				for (MobileBlacklist mbl : list) {
 					GLOBAL_MOBILE_BLACKLIST.put(mbl.getMobile(), mbl.getType());
 				}
 				return true;
@@ -207,7 +197,7 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 				connection.openPipeline();
 
 				// Map<byte[], byte[]> map = new HashMap<>();
-				for (SmsMobileBlacklist mbl : list) {
+				for (MobileBlacklist mbl : list) {
 					// map.put(serializer.serialize(mbl.getMobile()),
 					// serializer.serialize(mbl.getType()+ ""));
 					GLOBAL_MOBILE_BLACKLIST.put(mbl.getMobile(), mbl.getType());
@@ -217,17 +207,16 @@ public class SmsMobileBlacklistService extends CrudService<SmsMobileBlacklistMap
 				// connection.hMSet(key, map);
 				return connection.closePipeline();
 			}, false, true);
-			return ListUtils.isNotEmpty(result);
+			return CollUtil.isNotEmpty(result);
 		} catch (Exception e) {
 			logger.error("REDIS数据LOAD手机号码黑名单失败", e);
 			return false;
 		}
 	}
 
-	@Override
 	public boolean reloadToRedis() {
-		List<SmsMobileBlacklist> list = this.select();
-		if (ListUtils.isEmpty(list)) {
+		List<MobileBlacklist> list = this.list();
+		if (CollUtil.isEmpty(list)) {
 			logger.warn("未找到手机号码黑名单数据");
 			return false;
 		}

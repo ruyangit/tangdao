@@ -3,29 +3,20 @@ package com.tangdao.exchanger.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.collect.MapUtils;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.common.utils.PatternUtils;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.mapper.SmsSignatureExtnoMapper;
-import org.tangdao.modules.sms.model.domain.SmsSignatureExtno;
-import org.tangdao.modules.sms.service.ISmsSignatureExtnoService;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.model.domain.sms.SignatureExtno;
 import com.tangdao.core.service.BaseService;
+import com.tangdao.core.utils.PatternUtil;
+import com.tangdao.exchanger.dao.SmsSignatureExtnoMapper;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -57,7 +48,7 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 	}
 
 	public boolean update(SignatureExtno signatureExtNo) {
-		SignatureExtno td = get(signatureExtNo.getId());
+		SignatureExtno td = super.getById(signatureExtNo.getId());
 		if (td == null) {
 			logger.error("签名数据为空, id:{}", signatureExtNo.getId());
 			return false;
@@ -71,27 +62,25 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 		return result;
 	}
 
-	@Override
 	public boolean delete(String id) {
-		SmsSignatureExtno signatureExtNo = get(id);
+		SignatureExtno signatureExtNo = super.getById(id);
 		if (signatureExtNo == null) {
 			logger.error("用户签名数据为空，删除失败， ID：{}", id);
 			return false;
 		}
 
 		try {
-			removeRedis(signatureExtNo.getUserCode(), id);
+			removeRedis(signatureExtNo.getAppId(), id);
 		} catch (Exception e) {
 			logger.error("移除REDIS用户签名失败， ID：{}", id, e);
 		}
 
-		return super.deleteById(id);
+		return super.removeById(id);
 	}
 
-	@Override
 	public boolean reloadToRedis() {
-		List<SmsSignatureExtno> list = super.select();
-		if (ListUtils.isEmpty(list)) {
+		List<SignatureExtno> list = super.list();
+		if (CollUtil.isEmpty(list)) {
 			logger.warn("用户签名数据为空");
 			return false;
 		}
@@ -102,26 +91,26 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 			logger.error("移除REDIS 签名扩展号码失败", e);
 		}
 
-		for (SmsSignatureExtno signatureExtNo : list) {
+		for (SignatureExtno signatureExtNo : list) {
 			pushToRedis(signatureExtNo);
 		}
 
 		return true;
 	}
 
-	private String getKey(String userCode) {
-		return String.format("%s:%s", SmsRedisConstant.RED_USER_SIGNATURE_EXT_NO, userCode);
+	private String getKey(String appId) {
+		return String.format("%s:%s", SmsRedisConstant.RED_USER_SIGNATURE_EXT_NO, appId);
 	}
 
-	private void pushToRedis(SmsSignatureExtno signatureExtNo) {
+	private void pushToRedis(SignatureExtno signatureExtNo) {
 		if (signatureExtNo == null) {
 			return;
 		}
 
 		try {
-			stringRedisTemplate.opsForHash().put(getKey(signatureExtNo.getUserCode()),
-					signatureExtNo.getId().toString(), JSON.toJSONString(signatureExtNo,
-							new SimplePropertyPreFilter("id", "userCode", "signature", "extNumber")));
+			stringRedisTemplate.opsForHash().put(getKey(signatureExtNo.getAppId()), signatureExtNo.getId().toString(),
+					JSON.toJSONString(signatureExtNo,
+							new SimplePropertyPreFilter("id", "appId", "signature", "extNumber")));
 		} catch (Exception e) {
 			logger.error("签名扩展号加载到REDIS失败", e);
 		}
@@ -135,14 +124,14 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 	 * @param content
 	 * @return
 	 */
-	private String getFromDb(String userCode, String content) {
-		List<SmsSignatureExtno> list = super.select(
-				Wrappers.<SmsSignatureExtno>lambdaQuery().eq(SmsSignatureExtno::getUserCode, userCode));
-		if (ListUtils.isEmpty(list)) {
+	private String getFromDb(String appId, String content) {
+		List<SignatureExtno> list = super.list(
+				Wrappers.<SignatureExtno>lambdaQuery().eq(SignatureExtno::getAppId, appId));
+		if (CollUtil.isEmpty(list)) {
 			return null;
 		}
 
-		for (SmsSignatureExtno signatureExtNo : list) {
+		for (SignatureExtno signatureExtNo : list) {
 			// 根据内容匹配用户的扩展号码
 			String extNumber = getExtNumber(signatureExtNo, content);
 			if (extNumber == null) {
@@ -159,23 +148,23 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 	 * 
 	 * TODO 查询REDIS
 	 * 
-	 * @param userId
+	 * @param appId
 	 */
-	private String getFromRedis(String userCode, String content) {
+	private String getFromRedis(String appId, String content) {
 		try {
-			Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(getKey(userCode));
-			if (MapUtils.isEmpty(map)) {
+			Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(getKey(appId));
+			if (CollUtil.isEmpty(map)) {
 				return null;
 			}
 
-			SmsSignatureExtno signatureExtNo = null;
+			SignatureExtno signatureExtNo = null;
 			for (Object key : map.keySet()) {
 				Object obj = map.get(key);
 				if (obj == null) {
 					continue;
 				}
 
-				signatureExtNo = JSON.parseObject(obj.toString(), SmsSignatureExtno.class);
+				signatureExtNo = JSON.parseObject(obj.toString(), SignatureExtno.class);
 
 				// 根据内容匹配用户的扩展号码
 				String extNumber = getExtNumber(signatureExtNo, content);
@@ -201,13 +190,13 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 	 * @param content
 	 * @return
 	 */
-	private static String getExtNumber(SmsSignatureExtno signatureExtNo, String content) {
+	private static String getExtNumber(SignatureExtno signatureExtNo, String content) {
 		if (signatureExtNo == null) {
 			return null;
 		}
 
 		String signature = buildSignaturePattern(signatureExtNo.getSignature());
-		if (StringUtils.isEmpty(signature)) {
+		if (StrUtil.isEmpty(signature)) {
 			return null;
 		}
 
@@ -226,33 +215,31 @@ public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMappe
 	 * @return
 	 */
 	private static String buildSignaturePattern(String signature) {
-		if (StringUtils.isEmpty(signature)) {
+		if (StrUtil.isEmpty(signature)) {
 			return null;
 		}
 
 		return String.format("【%s】", signature);
 	}
 
-	private void removeRedis(String userCode, String id) {
+	private void removeRedis(String appId, String id) {
 		try {
-			stringRedisTemplate.opsForHash().delete(getKey(userCode), id);
+			stringRedisTemplate.opsForHash().delete(getKey(appId), id);
 		} catch (Exception e) {
 			logger.warn("REDIS 用户签名移除失败", e);
 		}
 	}
 
-	@Override
-	public String getExtNumber(String userCode, String content) {
-		if (StringUtils.isEmpty(content) || (!PatternUtils.isContainsSignature(content))
-				|| StringUtils.isEmpty(userCode)) {
+	public String getExtNumber(String appId, String content) {
+		if (StrUtil.isEmpty(content) || (!PatternUtil.isContainsSignature(content)) || StrUtil.isEmpty(appId)) {
 			return null;
 		}
 
 		try {
-			return getFromRedis(userCode, content);
+			return getFromRedis(appId, content);
 		} catch (Exception e) {
 			// 如果出错则由数据库补偿
-			return getFromDb(userCode, content);
+			return getFromDb(appId, content);
 		}
 	}
 }
