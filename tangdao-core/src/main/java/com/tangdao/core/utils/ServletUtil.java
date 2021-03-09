@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.core.web;
+package com.tangdao.core.utils;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @author ruyang
  * @since 2020年12月24日
  */
-public class ServletUtils {
+public class ServletUtil {
 
 	/**
 	 * 获取当前请求对象

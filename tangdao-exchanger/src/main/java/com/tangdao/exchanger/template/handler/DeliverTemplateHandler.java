@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.tangdao.core.context.CommonContext.CMCP;
-import com.tangdao.core.context.ParameterFilterContext;
+import com.tangdao.core.context.ParameterContext;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
 import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.core.model.domain.sms.PassageAccess;
@@ -46,7 +46,7 @@ public class DeliverTemplateHandler {
 //				throw new RuntimeException("数据节点配置异常");
 //			}
 
-			String rport = report.getString(ParameterFilterContext.PARAMETER_NAME_IN_STREAM);
+			String rport = report.getString(ParameterContext.PARAMETER_NAME_IN_STREAM);
 			if (StrUtil.isEmpty(rport)) {
 				return null;
 			}

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.model.domain.paas.UserDeveloper;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.UserDeveloperMapper;
@@ -25,7 +25,7 @@ public class UserDeveloperService extends BaseService<UserDeveloperMapper, UserD
 	private StringRedisTemplate stringRedisTemplate;
 
 	private String getKey(String appkey) {
-		return String.format("%s:%s", CommonRedisConstant.RED_DEVELOPER_LIST, appkey);
+		return String.format("%s:%s", RedisConstant.RED_DEVELOPER_LIST, appkey);
 	}
 
 	public UserDeveloper getByAppkey(String appkey) {

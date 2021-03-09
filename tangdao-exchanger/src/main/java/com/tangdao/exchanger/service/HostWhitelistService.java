@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.model.domain.paas.HostWhitelist;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.HostWhitelistMapper;
@@ -23,7 +23,7 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 	private StringRedisTemplate stringRedisTemplate;
 
 	private String getKey(String userId) {
-		return String.format("%s:%d", CommonRedisConstant.RED_USER_WHITE_HOST, userId);
+		return String.format("%s:%d", RedisConstant.RED_USER_WHITE_HOST, userId);
 	}
 
 	public int updateByPrimaryKey(HostWhitelist record) {

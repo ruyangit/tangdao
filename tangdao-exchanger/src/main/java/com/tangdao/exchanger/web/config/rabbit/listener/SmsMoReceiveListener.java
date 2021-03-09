@@ -97,7 +97,7 @@ public class SmsMoReceiveListener extends AbstartRabbitListener {
 	 */
 	private List<MoMessageReceive> doReceiveMessage(JSONObject jsonObject) {
 		// 提供商代码（通道）
-		String providerCode = jsonObject.getString(ParameterFilterContext.PASSAGE_PROVIDER_CODE_NODE);
+		String providerCode = jsonObject.getString(ParameterContext.PASSAGE_PROVIDER_CODE_NODE);
 		if (StringUtils.isEmpty(providerCode)) {
 			logger.warn("上行报告解析失败：回执码为空");
 			jsonObject.put("reason", "上行报告解析失败：回执码为空");

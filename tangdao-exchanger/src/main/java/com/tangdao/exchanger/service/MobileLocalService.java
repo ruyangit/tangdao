@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.model.domain.Area;
 import com.tangdao.core.model.domain.paas.AreaLocal;
@@ -188,7 +188,7 @@ public class MobileLocalService {
 			// 手机号码前7位确定归属地
 			String area = mobile.trim().substring(0, 7);
 
-			AreaLocal pl = CommonRedisConstant.GLOBAL_MOBILES_LOCAL.get(area);
+			AreaLocal pl = RedisConstant.GLOBAL_MOBILES_LOCAL.get(area);
 
 			return pl == null ? getAreaLocalIfNotFound(mobile) : pl;
 
@@ -248,19 +248,19 @@ public class MobileLocalService {
 	 */
 	private void load2Cache(List<AreaLocal> list) {
 		for (AreaLocal pl : list) {
-			CommonRedisConstant.GLOBAL_MOBILES_LOCAL.put(pl.getNumberArea(), pl);
+			RedisConstant.GLOBAL_MOBILES_LOCAL.put(pl.getNumberArea(), pl);
 		}
 	}
 
 	private String getKey() {
-		return CommonRedisConstant.RED_AREA_MOBILES_LOCAL;
+		return RedisConstant.RED_AREA_MOBILES_LOCAL;
 	}
 
 	public boolean reload() {
 		try {
 			String value = stringRedisTemplate.opsForValue().get(getKey());
 			if (StrUtil.isNotEmpty(value)) {
-				CommonRedisConstant.GLOBAL_MOBILES_LOCAL = JSON.parseObject(value,
+				RedisConstant.GLOBAL_MOBILES_LOCAL = JSON.parseObject(value,
 						new TypeReference<Map<String, AreaLocal>>() {
 						});
 				return true;
@@ -282,7 +282,7 @@ public class MobileLocalService {
 			return false;
 		} finally {
 			logger.info(
-					"Global mobiles local data[" + CommonRedisConstant.GLOBAL_MOBILES_LOCAL.size() + "] has loaded");
+					"Global mobiles local data[" + RedisConstant.GLOBAL_MOBILES_LOCAL.size() + "] has loaded");
 		}
 
 	}

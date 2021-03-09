@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.tangdao.core.BaseModel;
 import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.constant.PassportConstant;
+import com.tangdao.core.context.UserContext.UserStatus;
 import com.tangdao.core.model.domain.paas.UserDeveloper;
 import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.dto.AuthorizationDTO;
@@ -62,7 +63,7 @@ public class AuthorizationValidator {
 		}
 
 		// 账号冻结
-		if (!BaseModel.STATUS_NORMAL.equals(developer.getStatus())) {
+		if (!UserStatus.YES.equals(developer.getStatus())) {
 			throw new ValidateException(CommonApiCode.DEV7100107);
 		}
 

@@ -19,28 +19,11 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.collect.MapUtils;
-import org.tangdao.common.constant.CommonContext.CMCP;
-import org.tangdao.common.constant.CommonContext.PassageCallType;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.mapper.SmsPassageAccessMapper;
-import org.tangdao.modules.sms.model.domain.SmsPassage;
-import org.tangdao.modules.sms.model.domain.SmsPassageAccess;
-import org.tangdao.modules.sms.model.domain.SmsPassageGroupDetail;
-import org.tangdao.modules.sms.model.domain.SmsPassageParameter;
-import org.tangdao.modules.sys.constant.PassageContext.PassageStatus;
-import org.tangdao.modules.sys.constant.PassageContext.RouteType;
-import org.tangdao.modules.sys.constant.TemplateContext.PassageTemplateType;
-import org.tangdao.modules.sys.model.domain.UserPassage;
-import org.tangdao.modules.sys.service.IUserPassageService;
 
 import com.alibaba.fastjson.JSON;
-//import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.service.BaseService;
 
 /**
  * 通道资产ServiceImpl
@@ -48,7 +31,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageAccessService extends CrudService<SmsPassageAccessMapper, SmsPassageAccess> implements ISmsPassageAccessService{
+public class SmsPassageAccessService extends BaseService<SmsPassageAccessMapper, PassageAccess>{
 	/**
      * 全局可用通道缓存
      */

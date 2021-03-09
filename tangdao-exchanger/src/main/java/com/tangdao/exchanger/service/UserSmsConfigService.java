@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.model.domain.paas.UserSmsConfig;
 import com.tangdao.core.service.BaseService;
@@ -27,7 +27,7 @@ public class UserSmsConfigService extends BaseService<UserSmsConfigMapper, UserS
 	private StringRedisTemplate stringRedisTemplate;
 
 	private static String getKey(String userId) {
-		return CommonRedisConstant.RED_USER_SMS_CONFIG + ":" + userId;
+		return RedisConstant.RED_USER_SMS_CONFIG + ":" + userId;
 	}
 
 	public UserSmsConfig getByUserId(String userId) {

@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.constant.RedisConstant;
 
 @Service
 @EnableAsync
@@ -29,9 +29,9 @@ public class AsyncService {
 		stringRedisTemplate.execute((connection) -> {
 			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 			connection.openPipeline();
-			byte[] key = serializer.serialize(CommonRedisConstant.RED_AREA_MOBILES_LOCAL);
+			byte[] key = serializer.serialize(RedisConstant.RED_AREA_MOBILES_LOCAL);
 
-			byte[] value = JSON.toJSONBytes(CommonRedisConstant.GLOBAL_MOBILES_LOCAL);
+			byte[] value = JSON.toJSONBytes(RedisConstant.GLOBAL_MOBILES_LOCAL);
 
 			connection.set(key, value);
 

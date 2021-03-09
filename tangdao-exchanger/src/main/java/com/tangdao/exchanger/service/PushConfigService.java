@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.context.SettingsContext.PushConfigStatus;
 import com.tangdao.core.model.domain.paas.PushConfig;
 import com.tangdao.core.service.BaseService;
@@ -30,7 +30,7 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String getAssistKey(String userId, int type) {
-		return String.format("%s:%s:%d", CommonRedisConstant.RED_USER_PUSH_CONFIG, userId, type);
+		return String.format("%s:%s:%d", RedisConstant.RED_USER_PUSH_CONFIG, userId, type);
 	}
 
 	public boolean update(PushConfig record) {

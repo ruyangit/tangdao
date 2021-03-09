@@ -68,7 +68,6 @@ public class RoleController extends BaseController {
 		if (StrUtil.isNotBlank(role.getRoleName())) {
 			queryWrapper.like("role_name", role.getRoleName());
 		}
-		queryWrapper.eq("status", Role.STATUS_NORMAL);
 		return success(roleService.list(queryWrapper));
 	}
 

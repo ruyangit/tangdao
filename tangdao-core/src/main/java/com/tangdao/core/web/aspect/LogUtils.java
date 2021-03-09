@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import com.tangdao.core.context.SessionContext;
 import com.tangdao.core.model.domain.Log;
 import com.tangdao.core.model.vo.SessionUser;
-import com.tangdao.core.web.ServletUtils;
+import com.tangdao.core.utils.ServletUtil;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -101,7 +101,7 @@ public class LogUtils {
 		}
 
 		// 从获取RequestAttributes中获取HttpServletRequest的信息
-		HttpServletRequest request = ServletUtils.getRequest();
+		HttpServletRequest request = ServletUtil.getRequest();
 
 		Log audit = new Log();
 

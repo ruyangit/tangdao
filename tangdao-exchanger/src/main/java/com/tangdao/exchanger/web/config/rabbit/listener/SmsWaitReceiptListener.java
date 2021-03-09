@@ -15,7 +15,7 @@ import com.rabbitmq.client.Channel;
 import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.CommonContext.PassageCallType;
-import com.tangdao.core.context.ParameterFilterContext;
+import com.tangdao.core.context.ParameterContext;
 import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.core.model.domain.sms.MtMessageSubmit;
 import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
@@ -117,7 +117,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 	 */
 	private List<MtMessageDeliver> doDeliverMessage(JSONObject jsonObject) {
 		// 提供商代码（通道）
-		String providerCode = jsonObject.getString(ParameterFilterContext.PASSAGE_PROVIDER_CODE_NODE);
+		String providerCode = jsonObject.getString(ParameterContext.PASSAGE_PROVIDER_CODE_NODE);
 		if (StringUtils.isEmpty(providerCode)) {
 			logger.warn("上家推送状态回执报告解析失败：回执码为空");
 			jsonObject.put("reason", "上家推送状态回执报告解析失败：回执码为空");

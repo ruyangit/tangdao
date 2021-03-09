@@ -16,7 +16,7 @@ import com.tangdao.core.model.domain.paas.AreaLocal;
  * @author ruyang
  * @since 2021年3月8日
  */
-public class CommonRedisConstant {
+public class RedisConstant {
 
 	/**
 	 * 用户推送配置信息

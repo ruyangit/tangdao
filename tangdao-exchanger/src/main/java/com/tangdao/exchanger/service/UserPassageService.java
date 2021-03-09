@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.core.constant.CommonRedisConstant;
+import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.context.SettingsContext.SystemConfigType;
 import com.tangdao.core.context.SettingsContext.UserDefaultPassageGroupKey;
@@ -37,7 +37,7 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 	}
 
 	private String getKey(String userId, int type) {
-		return String.format("%s:%d:%d", CommonRedisConstant.RED_USER_SMS_PASSAGE, userId, type);
+		return String.format("%s:%d:%d", RedisConstant.RED_USER_SMS_PASSAGE, userId, type);
 	}
 
 	

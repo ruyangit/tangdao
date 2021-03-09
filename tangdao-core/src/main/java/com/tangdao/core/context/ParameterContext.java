@@ -12,7 +12,7 @@ package com.tangdao.core.context;
  * @author ruyang
  * @since 2021年3月3日
  */
-public class ParameterFilterContext {
+public class ParameterContext {
 
 	/**
 	 * 过滤码定义
@@ -29,15 +29,6 @@ public class ParameterFilterContext {
 	 */
 	public static final String PARAMETER_NAME_IN_STREAM = "parameterReport";
 
-	/**
-	 * 
-	 * <p>
-	 * TODO 描述 参数解析方式
-	 * </p>
-	 *
-	 * @author ruyangit@gmail.com
-	 * @since 2020年3月12日
-	 */
 	public enum ParameterFilter {
 
 		PARAMETER_MAP(1, "参数集合解析"), PARAMETER_STRAEM(2, "数据流解析"), HEADER(3, "数据报文头信息");

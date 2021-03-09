@@ -39,19 +39,19 @@ public class UserContext {
 
 		private int value;
 
-		private String memo;
+		private String title;
 
-		private UserBalanceType(int value, String memo) {
+		private UserBalanceType(int value, String title) {
 			this.value = value;
-			this.memo = memo;
+			this.title = title;
 		}
 
 		public int getValue() {
 			return value;
 		}
 
-		public String getMemo() {
-			return memo;
+		public String getTitle() {
+			return title;
 		}
 	}
 
@@ -60,19 +60,19 @@ public class UserContext {
 
 		private int value;
 
-		private String memo;
+		private String title;
 
-		private UserStatus(int value, String memo) {
+		private UserStatus(int value, String title) {
 			this.value = value;
-			this.memo = memo;
+			this.title = title;
 		}
 
 		public int getValue() {
 			return value;
 		}
 
-		public String getMemo() {
-			return memo;
+		public String getTitle() {
+			return title;
 		}
 	}
 

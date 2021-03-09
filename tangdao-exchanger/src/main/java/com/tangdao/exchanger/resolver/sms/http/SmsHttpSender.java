@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
-import com.tangdao.core.context.ParameterFilterContext;
+import com.tangdao.core.context.ParameterContext;
 import com.tangdao.core.model.domain.sms.MoMessageReceive;
 import com.tangdao.core.model.domain.sms.MtMessageDeliver;
 import com.tangdao.core.model.domain.sms.PassageAccess;
@@ -170,7 +170,7 @@ public class SmsHttpSender {
 	private List<MtMessageDeliver> customStatusTranslate(JSONObject report, TParameter tparameter,
 			String successCode) {
 		return AbstractPassageResolver.getInstance(tparameter.customPassage())
-				.mtDeliver(report.getString(ParameterFilterContext.PARAMETER_NAME_IN_STREAM), successCode);
+				.mtDeliver(report.getString(ParameterContext.PARAMETER_NAME_IN_STREAM), successCode);
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class SmsHttpSender {
 	 */
 	private List<MoMessageReceive> customMoTranslate(JSONObject report, TParameter tparameter, String passageId) {
 		return AbstractPassageResolver.getInstance(tparameter.customPassage())
-				.moReceive(report.getString(ParameterFilterContext.PARAMETER_NAME_IN_STREAM), passageId);
+				.moReceive(report.getString(ParameterContext.PARAMETER_NAME_IN_STREAM), passageId);
 	}
 
 	/**
