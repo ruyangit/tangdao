@@ -130,9 +130,9 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	private void removeRedis(MessageTemplate template) {
 		try {
 
-			Set<Object> set = redisTemplate.opsForZSet().reverseRangeByScore(getKey(template.getUserCode()), 0, 1000);
+			Set<Object> set = redisTemplate.opsForZSet().reverseRangeByScore(getKey(template.getUserId()), 0, 1000);
 			if (CollUtil.isEmpty(set)) {
-				logger.warn("redis中未找到短信模板 userId[" + template.getUserCode() + "]信息");
+				logger.warn("redis中未找到短信模板 userId[" + template.getUserId() + "]信息");
 				return;
 			}
 
@@ -143,7 +143,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 				}
 
 				if (template.getContent().equals(messageTemplate.getContent())) {
-					stringRedisTemplate.opsForZSet().remove(getKey(template.getUserCode()), templateJson);
+					stringRedisTemplate.opsForZSet().remove(getKey(template.getUserId()), templateJson);
 					stringRedisTemplate.convertAndSend(SmsRedisConstant.BROADCAST_MESSAGE_TEMPLATE_TOPIC, templateJson);
 					break;
 				}
@@ -157,7 +157,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 	public boolean update(MessageTemplate template) {
 		MessageTemplate originTemplate;
 		try {
-			originTemplate = isAllowAccess(template.getUserCode(), template.getId());
+			originTemplate = isAllowAccess(template.getUserId(), template.getId());
 		} catch (IllegalArgumentException e) {
 			logger.error("模板数据鉴权失败 : {}", e.getMessage());
 			return false;
@@ -186,9 +186,9 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		}
 
 		// 仅针对WEB用户自己添加的模板进行过滤
-		if (AppType.WEB.getCode() == template.getAppType() && !template.getUserCode().equals(userCode)) {
+		if (AppType.WEB.getCode() == template.getAppType() && !template.getUserId().equals(userCode)) {
 			throw new IllegalArgumentException(
-					"用户模板[" + templateId + "]数据不匹配，原模板用户:[" + template.getUserCode() + "] , 本次用户:[" + userCode + "]");
+					"用户模板[" + templateId + "]数据不匹配，原模板用户:[" + template.getUserId() + "] , 本次用户:[" + userCode + "]");
 		}
 
 		if (AppType.WEB.getCode() == template.getAppType()
@@ -284,7 +284,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 			if (CollUtil.isNotEmpty(list)) {
 				return list;
 			}
-			list = super.list(Wrappers.<MessageTemplate>lambdaQuery().eq(MessageTemplate::getUserCode, userCode));
+			list = super.list(Wrappers.<MessageTemplate>lambdaQuery().eq(MessageTemplate::getUserId, userCode));
 			if (CollUtil.isNotEmpty(list)) {
 				// 如果DB中存在，REDIS中不存在，则需要加载至REDIS
 				pushToRedis(userCode, list.toArray(new MessageTemplate[] {}));
@@ -315,7 +315,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		template.setRegexValue(parseContent2Regex(template.getContent()));
 
 		if (Convert.toInt(template.getStatus()) == ApproveStatus.SUCCESS.getValue()) {
-			pushToRedis(template.getUserCode(), template);
+			pushToRedis(template.getUserId(), template);
 		} else {
 			removeRedis(template);
 		}
@@ -370,7 +370,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 			}
 
 			if (Convert.toInt(template.getStatus()) == ApproveStatus.SUCCESS.getValue()) {
-				pushToRedis(template.getUserCode(), list.toArray(new MessageTemplate[] {}));
+				pushToRedis(template.getUserId(), list.toArray(new MessageTemplate[] {}));
 			}
 
 			return true;
@@ -406,7 +406,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 		template.setApproveTime(new Date());
 
 		if (ApproveStatus.SUCCESS.getValue() == status) {
-			pushToRedis(template.getUserCode(), template);
+			pushToRedis(template.getUserId(), template);
 		} else {
 			removeRedis(template);
 		}
@@ -429,7 +429,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 			stringRedisTemplate.execute((connection) -> {
 				RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
 				connection.openPipeline();
-				byte[] key = serializer.serialize(getKey(template.getUserCode()));
+				byte[] key = serializer.serialize(getKey(template.getUserId()));
 
 				if (originTemplate != null) {
 					// 删除原有的模板数据
@@ -472,7 +472,7 @@ public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMap
 			// }
 
 			for (MessageTemplate template : list) {
-				byte[] key = serializer.serialize(getKey(template.getUserCode()));
+				byte[] key = serializer.serialize(getKey(template.getUserId()));
 
 				connection.zAdd(key, template.getPriority().doubleValue(), JSON.toJSONBytes(template));
 			}

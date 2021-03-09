@@ -29,23 +29,6 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import org.tangdao.common.collect.ListUtils;
-import org.tangdao.common.collect.MapUtils;
-import org.tangdao.common.lang.StringUtils;
-import org.tangdao.common.service.CrudService;
-import org.tangdao.common.web.http.HttpClientUtils;
-import org.tangdao.common.web.http.HttpClientUtils.RetryResponse;
-import org.tangdao.modules.sms.config.worker.fork.MtReportFailoverPushWorker;
-import org.tangdao.modules.sms.config.worker.fork.MtReportPushToDeveloperWorker;
-import org.tangdao.modules.sms.constant.SmsRedisConstant;
-import org.tangdao.modules.sms.mapper.SmsMtMessageDeliverMapper;
-import org.tangdao.modules.sms.mapper.SmsMtMessagePushMapper;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageDeliver;
-import org.tangdao.modules.sms.model.domain.SmsMtMessagePush;
-import org.tangdao.modules.sms.model.domain.SmsMtMessageSubmit;
-import org.tangdao.modules.sms.model.vo.SmsPushReport;
-import org.tangdao.modules.sys.constant.PassageContext.DeliverStatus;
-import org.tangdao.modules.sys.constant.PassageContext.PushStatus;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -53,6 +36,16 @@ import com.alibaba.fastjson.serializer.PropertyPreFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.context.PassageContext.DeliverStatus;
+import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.model.domain.sms.MtMessagePush;
+import com.tangdao.core.service.BaseService;
+import com.tangdao.exchanger.dao.SmsMtMessageDeliverMapper;
+import com.tangdao.exchanger.dao.SmsMtMessagePushMapper;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 下行短信推送ServiceImpl
@@ -61,8 +54,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper, SmsMtMessagePush>
-		implements ISmsMtPushService {
+public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper, MtMessagePush>{
 
 	@Autowired
 	private SmsMtMessageDeliverMapper smsMtMessageDeliverMapper;
@@ -71,7 +63,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
-	private ISmsMtSubmitService smsMtSubmitService;
+	private SmsMtMessageSubmitService smsMtSubmitService;
 
 	@Value("${thread.poolsize.push:2}")
 	private int pushThreadPoolSize;
@@ -118,7 +110,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 	 */
 	private static final String PUSH_BODY_SUBPACKAGE_KEY = "pushUrl";
 
-	@Override
+	
 	public boolean doListenerAllUser() {
 		// never invoke, add thread when userId has pushed data
 		// Set<Integer> userIds = userService.findAvaiableUserIds();
@@ -146,9 +138,9 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 	 * @param userId 用户ID，每个用户ID不同的队列（用户独享队列，非共享一个推送队列）
 	 * @return 推送队列名称
 	 */
-	@Override
-	public String getUserPushQueueName(String userCode) {
-		return String.format("%s:%s", SmsRedisConstant.RED_QUEUE_SMS_MT_WAIT_PUSH, userCode);
+	
+	public String getUserPushQueueName(String userId) {
+		return String.format("%s:%s", SmsRedisConstant.RED_QUEUE_SMS_MT_WAIT_PUSH, userId);
 	}
 
 	/**
@@ -160,10 +152,10 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 	 * @param failoverDeliversQueue 本次处理失败（一般是查询REDIS或者DB都没有推送配置信息）重入待处理回执状态（后续线程重试）
 	 * @return true/false
 	 */
-	private boolean assembleBody(JSONObject body, SmsMtMessageDeliver deliver, Map<String, JSONObject> cachedPushArgs,
-			List<SmsMtMessageDeliver> failoverDeliversQueue) {
+	private boolean assembleBody(JSONObject body, MtMessageDeliver deliver, Map<String, JSONObject> cachedPushArgs,
+			List<MtMessageDeliver> failoverDeliversQueue) {
 		// 如果本地缓存中存在相关值，则直接获取，无需请求REDIS或DB
-		if (MapUtils.isNotEmpty(cachedPushArgs) && cachedPushArgs.containsKey(deliver.getMsgId())) {
+		if (CollUtil.isNotEmpty(cachedPushArgs) && cachedPushArgs.containsKey(deliver.getMsgId())) {
 			body.putAll(cachedPushArgs.get(deliver.getMsgId()));
 			return true;
 		}
@@ -175,7 +167,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 				// if(System.currentTimeMillis() - deliver.getCreateTime().getTime() >= 5 * 60 *
 				// 1000 )
 
-				if (System.currentTimeMillis() - deliver.getCreateTime().getTime() >= 20 * 1000) {
+				if (System.currentTimeMillis() - deliver.getCreateDate().getTime() >= 20 * 1000) {
 					return false;
 				}
 
@@ -201,7 +193,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 	 * @param userBodies 本次需要处理的过程累计的报文集合信息
 	 * @return
 	 */
-	private boolean subQueue(JSONObject body, SmsMtMessageDeliver deliver, Map<String, List<JSONObject>> userBodies) {
+	private boolean subQueue(JSONObject body, MtMessageDeliver deliver, Map<String, List<JSONObject>> userBodies) {
 		// edit by ruyang 将SID转型为string（部分客户提到推送到客户侧均按照字符类型去解析，顾做了转义）
 		body.put("sid", body.getLong("sid").toString());
 		body.put("mobile", deliver.getMobile());
@@ -252,9 +244,9 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 	 * @param delivers
 	 * @return
 	 */
-	@Override
+	
 	@Async
-	public Future<Boolean> compareAndPushBody(List<SmsMtMessageDeliver> delivers) {
+	public Future<Boolean> compareAndPushBody(List<MtMessageDeliver> delivers) {
 		if (CollectionUtils.isEmpty(delivers)) {
 			return new AsyncResult<Boolean>(false);
 		}
@@ -263,10 +255,10 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 		// 用户ID对应的 推送报告集合数据
 		Map<String, List<JSONObject>> userBodies = new HashMap<>();
 		// 针对上家回执数据已回，但我方回执数据未入库以及REDIS没有推送配置信息，后续线程重试补完成
-		List<SmsMtMessageDeliver> failoverDeliversQueue = new ArrayList<>();
+		List<MtMessageDeliver> failoverDeliversQueue = new ArrayList<>();
 
 		try {
-			for (SmsMtMessageDeliver deliver : delivers) {
+			for (MtMessageDeliver deliver : delivers) {
 				if (deliver == null) {
 					continue;
 				}
@@ -279,7 +271,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 				removeReadyMtPushConfig(deliver.getMsgId(), deliver.getMobile());
 
 				// 如果用户推送地址为空则表明不需要推送
-				if (StringUtils.isEmpty(body.getString(PUSH_BODY_SUBPACKAGE_KEY))) {
+				if (StrUtil.isEmpty(body.getString(PUSH_BODY_SUBPACKAGE_KEY))) {
 					continue;
 				}
 
@@ -289,7 +281,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 			}
 
 			// 如果针对上家已回执我方未入库数据存在则保存至REDIS
-			if (ListUtils.isNotEmpty(failoverDeliversQueue)) {
+			if (CollUtil.isNotEmpty(failoverDeliversQueue)) {
 				sendToDeliverdFailoverQueue(failoverDeliversQueue);
 			}
 
@@ -340,7 +332,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 	 * @param mobile
 	 * @return
 	 */
-	@Override
+	
 	public JSONObject getWaitPushBodyArgs(String msgId, String mobile) {
 		// 首先在REDIS查询是否存在数据
 		try {
@@ -401,7 +393,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 	 * @param msgId
 	 * @return
 	 */
-	@Override
+	
 	public String getMtPushConfigKey(String msgId) {
 		return String.format("%s:%s", SmsRedisConstant.RED_READY_MT_PUSH_CONFIG, msgId);
 	}
@@ -420,7 +412,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 		}
 	}
 
-	@Override
+	
 	@Async
 	public void setMessageReadyPushConfigurations(List<SmsMtMessageSubmit> submits) {
 		try {
@@ -447,7 +439,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 		return String.format("push-%s:%d", userCode, sequence == null ? 1 : sequence++);
 	}
 
-	@Override
+	
 	public boolean addUserMtPushListener(String userCode) {
 		final Lock lock = ADD_PUSH_THREAD_MONITOR;
 		lock.lock();
@@ -469,7 +461,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 		return false;
 	}
 
-	@Override
+	
 	public void pushMessageBodyToDeveloper(List<JSONObject> bodies) {
 		// 资源URL对应的推送地址(资源地址对应的总量超过500应该分包发送)
 		Map<String, List<JSONObject>> urlBodies = new HashMap<>();
@@ -587,7 +579,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 		super.saveBatch(persistPushesList);
 	}
 
-	@Override
+	
 	public boolean startFailoverListener() {
 		for (int i = 0; i < failoverThreadPoolSize; i++) {
 
@@ -604,7 +596,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 		return REPUSH_DELIVER_IDS_KEY + serialNo;
 	}
 
-	@Override
+	
 	public SmsPushReport getPushReport(Map<String, Object> queryParams) {
 		SmsPushReport report = new SmsPushReport();
 		logger.info(JSON.toJSONString(queryParams));
@@ -677,7 +669,7 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 		return MapUtils.isNotEmpty(queryParams) && queryParams.containsKey("ignorePushData");
 	}
 
-	@Override
+	
 	public boolean repush(Long serialNo) {
 		if (serialNo == null || serialNo == 0L) {
 			logger.error("Repush args[serialNo] is illegal");
@@ -692,8 +684,8 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 				logger.error("No data in redis [" + getRepushKey(serialNo) + "] found");
 				return false;
 			}
-			List<SmsMtMessageDeliver> delivers = smsMtMessageDeliverMapper.selectBatchIds(deliverIds);
-			if (CollectionUtils.isEmpty(delivers)) {
+			List<MtMessageDeliver> delivers = smsMtMessageDeliverMapper.selectBatchIds(deliverIds);
+			if (CollUtil.isEmpty(delivers)) {
 				logger.error("Can't find any data in deliverIds [" + deliverIds + "]");
 				return false;
 			}
@@ -711,10 +703,9 @@ public class SmsMtMessagePushService extends CrudService<SmsMtMessagePushMapper,
 		return false;
 	}
 
-	@Override
-	public SmsMtMessagePush findByMobileAndMsgid(String mobile, String msgId) {
+	public MtMessagePush findByMobileAndMsgid(String mobile, String msgId) {
 		// TODO Auto-generated method stub
-		QueryWrapper<SmsMtMessagePush> queryWrapper = new QueryWrapper<SmsMtMessagePush>();
+		QueryWrapper<MtMessagePush> queryWrapper = new QueryWrapper<MtMessagePush>();
 		queryWrapper.eq("mobile", mobile);
 		queryWrapper.eq("msg_id", msgId);
 		return super.getOne(queryWrapper);

@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.CommonRedisConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
+import com.tangdao.core.context.SettingsContext.SystemConfigType;
 import com.tangdao.core.context.SettingsContext.UserDefaultPassageGroupKey;
 import com.tangdao.core.model.domain.paas.UserPassage;
 import com.tangdao.core.service.BaseService;
@@ -40,7 +41,7 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 	}
 
 	
-	public String getByUserCodeAndType(String userId, int type) {
+	public String getByUserIdAndType(String userId, int type) {
 		if (StrUtil.isEmpty(userId) || type == 0) {
 			return null;
 		}
@@ -112,7 +113,7 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 	}
 
 	
-	public boolean initUserPassage(String userCode, List<UserPassage> passageList) {
+	public boolean initUserPassage(String userId, List<UserPassage> passageList) {
 		try {
 			if (CollUtil.isEmpty(passageList)) {
 				// 如果传递的用户通道集合为空，则根据系统参数配置查询平台所有业务的默认可用通道信息，插入值用户通道关系表中
@@ -167,7 +168,7 @@ public class UserPassageService extends BaseService<UserPassageMapper, UserPassa
 					continue;
 				}
 
-				save(passageGroupId, userCode, code);
+				save(passageGroupId, userId, code);
 			}
 
 			return true;

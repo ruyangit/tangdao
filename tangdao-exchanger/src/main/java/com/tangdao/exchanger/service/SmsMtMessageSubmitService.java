@@ -19,9 +19,20 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.tangdao.core.constant.RabbitConstant;
+import com.tangdao.core.context.PassageContext;
+import com.tangdao.core.model.domain.paas.User;
+import com.tangdao.core.model.domain.sms.MtMessagePush;
 import com.tangdao.core.model.domain.sms.MtMessageSubmit;
+import com.tangdao.core.model.domain.sms.MtTaskPackets;
+import com.tangdao.core.model.domain.sms.Passage;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsMtMessageSubmitMapper;
+import com.tangdao.exchanger.web.config.rabbit.RabbitMessageQueueManager;
+import com.tangdao.exchanger.web.config.rabbit.listener.SmsWaitSubmitListener;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 下行短信提交ServiceImpl
@@ -33,16 +44,16 @@ import com.tangdao.exchanger.dao.SmsMtMessageSubmitMapper;
 public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMapper, MtMessageSubmit>{
 
 	@Autowired
-	private IUserService userService;
+	private UserService userService;
 
 	@Autowired
-	private ISmsMtPushService smsMtPushService;
+	private SmsMtMessagePushService smsMtPushService;
 	
 	@Autowired
-	private ISmsMtDeliverService smsMtDeliverService;
+	private SmsMtMessageDeliverService smsMtDeliverService;
 	
 	@Autowired
-	private ISmsPassageService smsPassageService;
+	private SmsPassageService smsPassageService;
 
 	@Resource
 	private RabbitTemplate rabbitTemplate;
@@ -53,29 +64,27 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 	@Autowired(required = false)
 	private RabbitMessageQueueManager rabbitMessageQueueManager;
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	public IPage<MtMessageSubmit> page(IPage<MtMessageSubmit> page, Wrapper<MtMessageSubmit> queryWrapper) {
+		IPage<MtMessageSubmit> pageData = baseMapper.selectPage(page, queryWrapper);
 
-	@Override
-	public IPage<SmsMtMessageSubmit> page(IPage<SmsMtMessageSubmit> page, Wrapper<SmsMtMessageSubmit> queryWrapper) {
-		IPage<SmsMtMessageSubmit> pageData = baseMapper.selectPage(page, queryWrapper);
-
-		Map<String, SmsMtMessagePush> pushMap = new HashMap<>();
+		Map<String, MtMessagePush> pushMap = new HashMap<>();
 
 		// 加入内存对象，减少DB的查询次数
 		Map<String, User> userMap = new HashMap<>();
 		Map<String, String> passageMap = new HashMap<>();
 
 		String key;
-		for (SmsMtMessageSubmit record : pageData.getRecords()) {
+		for (MtMessageSubmit record : pageData.getRecords()) {
 			record.setMessageDeliver(smsMtDeliverService.findByMobileAndMsgid(record.getMobile(), record.getMsgId()));
 
 			key = String.format("%s_%s", record.getMsgId(), record.getMobile());
-			if (record.getUserCode() != null) {
-				if (userMap.containsKey(record.getUserCode())) {
-					record.setUser(userMap.get(record.getUserCode()));
+			if (record.getUserId() != null) {
+				if (userMap.containsKey(record.getUserId())) {
+					record.setUser(userMap.get(record.getUserId()));
 				} else {
-					record.setUser(userService.getByUserCode(record.getUserCode()));
-					userMap.put(record.getUserCode(), record.getUser());
+					record.setUser(userService.getByUserCode(record.getUserId()));
+					userMap.put(record.getUserId(), record.getUser());
 				}
 			}
 
@@ -99,10 +108,10 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 				if (record.getPassageId() == PassageContext.EXCEPTION_PASSAGE_ID) {
 					record.setPassageName(PassageContext.EXCEPTION_PASSAGE_NAME);
 				} else {
-					if (passageMap.containsKey(record.getUserCode())) {
+					if (passageMap.containsKey(record.getUserId())) {
 						record.setPassageName(passageMap.get(record.getPassageId()));
 					} else {
-						SmsPassage passage = smsPassageService.findById(record.getPassageId());
+						Passage passage = smsPassageService.findById(record.getPassageId());
 						if (passage != null) {
 							record.setPassageName(passage.getName());
 							passageMap.put(record.getPassageId(), passage.getName());
@@ -114,36 +123,36 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		return pageData;
 	}
 
-	@Override
-	public SmsMtMessageSubmit findByMobileAndMsgid(String mobile, String msgId) {
+	
+	public MtMessageSubmit findByMobileAndMsgid(String mobile, String msgId) {
 		// TODO Auto-generated method stub
-		QueryWrapper<SmsMtMessageSubmit> queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
+		QueryWrapper<MtMessageSubmit> queryWrapper = new QueryWrapper<MtMessageSubmit>();
 		queryWrapper.eq("mobile", mobile);
 		queryWrapper.eq("msg_id", msgId);
 		return this.getOne(queryWrapper);
 	}
 
-//    @Override
-//    public List<SmsMtMessageSubmit> findBySid(long sid) {
-//    	QueryWrapper<SmsMtMessageSubmit> queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
+//    
+//    public List<MtMessageSubmit> findBySid(long sid) {
+//    	QueryWrapper<MtMessageSubmit> queryWrapper = new QueryWrapper<MtMessageSubmit>();
 //    	queryWrapper.eq("msg_id", sid);
 //    	queryWrapper.eq("mobile", mobile);
 //    	queryWrapper.orderByDesc("id").last(" limit 1");
 //    	return super.select(queryWrapper);
 //    }
 //
-////    @Override
-////    public boolean save(SmsMtMessageSubmit submit) {
+////    
+////    public boolean save(MtMessageSubmit submit) {
 ////        submit.setCreateTime(new Date());
-////        return smsMtMessageSubmitMapper.insertSelective(submit) > 0;
+////        return MtMessageSubmitMapper.insertSelective(submit) > 0;
 ////    }
 //
-////    @Override
-////    public List<SmsMtMessageSubmit> findList(Map<String, Object> queryParams) {
+////    
+////    public List<MtMessageSubmit> findList(Map<String, Object> queryParams) {
 ////
 ////        changeTimestampeParamsIfExists(queryParams);
 ////
-////        return smsMtMessageSubmitMapper.findList(queryParams);
+////        return MtMessageSubmitMapper.findList(queryParams);
 ////    }
 ////
 ////    /**
@@ -155,11 +164,11 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 ////        String startDate = queryParams.get("startDate") == null ? "" : queryParams.get("startDate").toString();
 ////        String endDate = queryParams.get("endDate") == null ? "" : queryParams.get("endDate").toString();
 ////
-////        if (StringUtils.isNotBlank(startDate)) {
+////        if (StrUtil.isNotBlank(startDate)) {
 ////            queryParams.put("startDate", DateUtil.getSecondDate(startDate).getTime());
 ////        }
 ////
-////        if (StringUtils.isNotBlank(endDate)) {
+////        if (StrUtil.isNotBlank(endDate)) {
 ////            queryParams.put("endDate", DateUtil.getSecondDate(endDate).getTime());
 ////        }
 ////
@@ -170,7 +179,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //     *
 //     * @param submits
 //     */
-//    private void joinRecordFascade(List<SmsMtMessageSubmit> submits) {
+//    private void joinRecordFascade(List<MtMessageSubmit> submits) {
 //        Map<String, SmsMtMessagePush> pushMap = new HashMap<>();
 //
 //        // 加入内存对象，减少DB的查询次数
@@ -178,14 +187,14 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        Map<String, String> passageMap = new HashMap<>();
 //
 //        String key;
-//        for (SmsMtMessageSubmit record : submits) {
+//        for (MtMessageSubmit record : submits) {
 //            key = String.format("%s_%s", record.getMsgId(), record.getMobile());
-////            if (record.getUserCode() != null) {
-////                if (userModelMap.containsKey(record.getUserCode())) {
-////                    record.setUserModel(userModelMap.get(record.getUserCode()));
+////            if (record.getUserId() != null) {
+////                if (userModelMap.containsKey(record.getUserId())) {
+////                    record.setUserModel(userModelMap.get(record.getUserId()));
 ////                } else {
-////                    record.setUserModel(userService.getByUserId(record.getUserCode()));
-////                    userModelMap.put(record.getUserCode(), record.getUserModel());
+////                    record.setUserModel(userService.getByUserId(record.getUserId()));
+////                    userModelMap.put(record.getUserId(), record.getUserModel());
 ////                }
 ////            }
 //
@@ -209,7 +218,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //                if (record.getPassageId() == PassageContext.EXCEPTION_PASSAGE_ID) {
 //                    record.setPassageName(PassageContext.EXCEPTION_PASSAGE_NAME);
 //                } else {
-//                    if (passageMap.containsKey(record.getUserCode())) {
+//                    if (passageMap.containsKey(record.getUserId())) {
 //                        record.setPassageName(passageMap.get(record.getPassageId()));
 //                    } else {
 //                        SmsPassage passage = smsPassageService.findById(record.getPassageId());
@@ -224,7 +233,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //
 //    }
 //
-//    @Override
+//    
 //    public List<ConsumptionReport> getConsumeMessageInYestday() {
 //        Set<Integer> userList = userService.findAvaiableUserIds();
 //        if (ListUtils.isEmpty(userList)) {
@@ -235,19 +244,19 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //
 //        // 昨日日期
 //        String yestday = DateUtil.getDayGoXday(-1);
-//        List<SmsMtMessageSubmit> submits = smsMtMessageSubmitMapper.findByDate(yestday);
+//        List<MtMessageSubmit> submits = MtMessageSubmitMapper.findByDate(yestday);
 //
 //        // 已存在的用户ID
 //        Set<Integer> existsUsers = new HashSet<>();
 //        ConsumptionReport report;
-//        for (SmsMtMessageSubmit submit : submits) {
+//        for (MtMessageSubmit submit : submits) {
 //            report = new ConsumptionReport();
 //            report.setAmount(submit.getFee());
 //            report.setType(PlatformType.SEND_MESSAGE_SERVICE.getCode());
 //            report.setRecordDate(DateUtil.getDayDate(yestday));
-//            report.setUserId(submit.getUserCode());
+//            report.setUserId(submit.getUserId());
 //
-//            existsUsers.add(submit.getUserCode());
+//            existsUsers.add(submit.getUserId());
 //            list.add(report);
 //        }
 //
@@ -268,13 +277,13 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        return list;
 //    }
 //
-//    @Override
+//    
 //    public SmsLastestRecordVo findLastestRecord(String userCode, String mobile) {
 //        SmsLastestRecordVo vo = new SmsLastestRecordVo();
 //        vo.setMobile(mobile);
 //        vo.setUserId(userId);
 //
-//        Map<String, Object> map = smsMtMessageSubmitMapper.selectByUserIdAndMobile(userId, mobile);
+//        Map<String, Object> map = MtMessageSubmitMapper.selectByUserIdAndMobile(userId, mobile);
 //        if (MapUtils.isEmpty(map)) {
 //            vo.setDescrption("未找到相关记录");
 //            return vo;
@@ -309,8 +318,8 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        return vo;
 //    }
 
-	@Override
-	public void batchInsertSubmit(List<SmsMtMessageSubmit> list) {
+	
+	public void batchInsertSubmit(List<MtMessageSubmit> list) {
 		if (ListUtils.isEmpty(list)) {
 			return;
 		}
@@ -319,11 +328,11 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		// SqlSession session =
 		// sqlSessionTemplate.getSqlSessionFactory().openSession(ExecutorType.BATCH,
 		// false);
-		// SmsMtMessagesmsMtMessageSubmitMapper smsMtMessageSubmitMapper =
-		// session.getMapper(SmsMtMessagesmsMtMessageSubmitMapper.class);
+		// SmsMtMessageMtMessageSubmitMapper MtMessageSubmitMapper =
+		// session.getMapper(SmsMtMessageMtMessageSubmitMapper.class);
 		// int size = 0;
 		// try {
-		// size = smsMtMessageSubmitMapper.batchInsert(list);
+		// size = MtMessageSubmitMapper.batchInsert(list);
 		// session.commit();
 		// // 清理缓存，防止溢出
 		// session.clearCache();
@@ -337,63 +346,63 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		// return size;
 	}
 //
-//    @Override
-//    public SmsMtMessageSubmit getSubmitWaitReceipt(String msgId, String mobile) {
-//        return smsMtMessageSubmitMapper.selectByMsgIdAndMobile(msgId, mobile);
+//    
+//    public MtMessageSubmit getSubmitWaitReceipt(String msgId, String mobile) {
+//        return MtMessageSubmitMapper.selectByMsgIdAndMobile(msgId, mobile);
 //    }
 
-	@Override
-	public SmsMtMessageSubmit getByMoMapping(String passageId, String msgId, String mobile, String spcode) {
-		QueryWrapper<SmsMtMessageSubmit> queryWrapper = null;
+	
+	public MtMessageSubmit getByMoMapping(String passageId, String msgId, String mobile, String spcode) {
+		QueryWrapper<MtMessageSubmit> queryWrapper = null;
 
-		SmsMtMessageSubmit smsMtMessageSubmit = null;
-		if (passageId != null && StringUtils.isNotEmpty(msgId)) {
-			queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
+		MtMessageSubmit MtMessageSubmit = null;
+		if (passageId != null && StrUtil.isNotEmpty(msgId)) {
+			queryWrapper = new QueryWrapper<MtMessageSubmit>();
 			queryWrapper.eq("passage_id", passageId);
 			queryWrapper.eq("msg_id", msgId);
 			queryWrapper.eq("mobile", mobile);
 			queryWrapper.orderByDesc("id").last(" limit 1");
 			return super.getOne(queryWrapper);
 		}
-		if (smsMtMessageSubmit == null && StringUtils.isNotEmpty(msgId)) {
-			smsMtMessageSubmit = getByMsgidAndMobile(msgId, mobile);
+		if (MtMessageSubmit == null && StrUtil.isNotEmpty(msgId)) {
+			MtMessageSubmit = getByMsgidAndMobile(msgId, mobile);
 		}
-		if (smsMtMessageSubmit == null) {
-			queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
+		if (MtMessageSubmit == null) {
+			queryWrapper = new QueryWrapper<MtMessageSubmit>();
 			queryWrapper.eq("mobile", mobile);
 			queryWrapper.orderByDesc("id").last(" limit 1");
 			return super.getOne(queryWrapper);
 		}
-		return smsMtMessageSubmit;
+		return MtMessageSubmit;
 	}
 
-	@Override
-	public SmsMtMessageSubmit getByMsgidAndMobile(String msgId, String mobile) {
-		QueryWrapper<SmsMtMessageSubmit> queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
+	
+	public MtMessageSubmit getByMsgidAndMobile(String msgId, String mobile) {
+		QueryWrapper<MtMessageSubmit> queryWrapper = new QueryWrapper<MtMessageSubmit>();
 		queryWrapper.eq("msg_id", msgId);
 		queryWrapper.eq("mobile", mobile);
 		queryWrapper.orderByDesc("id").last(" limit 1");
 		return super.getOne(queryWrapper);
 	}
 
-	@Override
-	public SmsMtMessageSubmit getByMsgid(String msgId) {
-		QueryWrapper<SmsMtMessageSubmit> queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
+	
+	public MtMessageSubmit getByMsgid(String msgId) {
+		QueryWrapper<MtMessageSubmit> queryWrapper = new QueryWrapper<MtMessageSubmit>();
 		queryWrapper.eq("msg_id", msgId);
 		queryWrapper.orderByDesc("id").last(" limit 1");
 		return super.getOne(queryWrapper);
 	}
 
-	@Override
-	public boolean doSmsException(List<SmsMtMessageSubmit> submits) {
+	
+	public boolean doSmsException(List<MtMessageSubmit> submits) {
 		List<SmsMtMessageDeliver> delivers = new ArrayList<>();
 		SmsMtMessageDeliver deliver;
-		for (SmsMtMessageSubmit submit : submits) {
+		for (MtMessageSubmit submit : submits) {
 			deliver = new SmsMtMessageDeliver();
 			deliver.setCmcp(submit.getCmcp());
 			deliver.setMobile(submit.getMobile());
 			deliver.setMsgId(submit.getMsgId());
-			deliver.setStatusCode(StringUtils.isNotEmpty(submit.getPushErrorCode()) ? submit.getPushErrorCode()
+			deliver.setStatusCode(StrUtil.isNotEmpty(submit.getPushErrorCode()) ? submit.getPushErrorCode()
 					: submit.getRemarks());
 			deliver.setStatus(DeliverStatus.FAILED.getValue());
 			deliver.setDeliverTime(DateUtils.getDate());
@@ -416,11 +425,11 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		}
 	}
 
-	@Override
-	public void setPushConfigurationIfNecessary(List<SmsMtMessageSubmit> submits) {
+	
+	public void setPushConfigurationIfNecessary(List<MtMessageSubmit> submits) {
 		// add by 2018-03-24 取出第一个值的信息（推送设置一批任务为一致信息）
-		SmsMtMessageSubmit submit = submits.iterator().next();
-		if (submit.getNeedPush() == null || !submit.getNeedPush() || StringUtils.isEmpty(submit.getPushUrl())) {
+		MtMessageSubmit submit = submits.iterator().next();
+		if (submit.getNeedPush() == null || !submit.getNeedPush() || StrUtil.isEmpty(submit.getPushUrl())) {
 			return;
 		}
 
@@ -431,7 +440,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		smsMtPushService.setMessageReadyPushConfigurations(submits);
 	}
 
-	@Override
+	
 	public boolean declareWaitSubmitMessageQueues() {
 		List<String> passageCodes = smsPassageService.findPassageCodes();
 		if (ListUtils.isEmpty(passageCodes)) {
@@ -452,17 +461,17 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		}
 	}
 
-	@Override
+	
 	public String getSubmitMessageQueueName(String passageCode) {
 		return String.format("%s.%s", RabbitConstant.MQ_SMS_MT_WAIT_SUBMIT, passageCode);
 	}
 
-//    @Override
-//    public List<SmsMtMessageSubmit> getRecordListToMonitor(Long passageId, Long startTime, Long endTime) {
-//        return smsMtMessageSubmitMapper.getRecordListToMonitor(passageId, startTime, endTime);
+//    
+//    public List<MtMessageSubmit> getRecordListToMonitor(Long passageId, Long startTime, Long endTime) {
+//        return MtMessageSubmitMapper.getRecordListToMonitor(passageId, startTime, endTime);
 //    }
 
-	@Override
+	
 	public boolean declareNewSubmitMessageQueue(String protocol, String passageCode) {
 		String mqName = getSubmitMessageQueueName(passageCode);
 		try {
@@ -476,7 +485,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		}
 	}
 
-	@Override
+	
 	public boolean removeSubmitMessageQueue(String passageCode) {
 		String mqName = getSubmitMessageQueueName(passageCode);
 		boolean isSuccess = rabbitMessageQueueManager.removeQueue(mqName);
@@ -489,19 +498,19 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		return isSuccess;
 	}
 
-	@Override
-	public boolean sendToSubmitQueue(List<SmsMtTaskPackets> packets) {
-		if (ListUtils.isEmpty(packets)) {
+	
+	public boolean sendToSubmitQueue(List<MtTaskPackets> packets) {
+		if (CollUtil.isEmpty(packets)) {
 			logger.warn("子任务数据为空，无需发送队列");
 			return false;
 		}
 
 		// 发送至待提交信息队列处理
 		Map<String, String> passageCodesMap = new HashMap<>();
-		for (SmsMtTaskPackets packet : packets) {
+		for (MtTaskPackets packet : packets) {
 			try {
 				String passageCode = getPassageCode(passageCodesMap, packet);
-				if (StringUtils.isEmpty(passageCode)) {
+				if (StrUtil.isEmpty(passageCode)) {
 					logger.error("子任务通道数据为空，无法进行通道代码分队列处理，通道ID：{}", packet.getFinalPassageId());
 					continue;
 				}
@@ -526,13 +535,13 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 	 * @param packet
 	 * @return
 	 */
-	private String getPassageCode(Map<String, String> passageCodesMap, SmsMtTaskPackets packet) {
-		if (StringUtils.isEmpty(packet.getPassageCode())) {
+	private String getPassageCode(Map<String, String> passageCodesMap, MtTaskPackets packet) {
+		if (StrUtil.isEmpty(packet.getPassageCode())) {
 			if (passageCodesMap.containsKey(packet.getPassageId())) {
 				return passageCodesMap.get(packet.getPassageId());
 			}
 
-			SmsPassage passage = smsPassageService.findById(packet.getFinalPassageId());
+			Passage passage = smsPassageService.findById(packet.getFinalPassageId());
 			if (passage == null) {
 				return null;
 			}
@@ -544,14 +553,14 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		return packet.getPassageCode();
 	}
 //
-//    @Override
+//    
 //    public List<Map<String, Object>> getSubmitStatReport(Long startTime, Long endTime) {
 //
 //        if (startTime == null || endTime == null) {
 //            return null;
 //        }
 //
-//        List<Map<String, Object>> list = smsMtMessageSubmitMapper.selectSubmitReport(startTime, endTime);
+//        List<Map<String, Object>> list = MtMessageSubmitMapper.selectSubmitReport(startTime, endTime);
 //        if (ListUtils.isEmpty(list)) {
 //            return null;
 //        }
@@ -559,7 +568,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        return list;
 //    }
 //
-//    @Override
+//    
 //    public List<Map<String, Object>> getLastHourSubmitReport() {
 //        // 截止时间为前一个小时0分0秒
 //        Long endTime = DateUtil.getXHourWithMzSzMillis(-1);
@@ -569,12 +578,12 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        return getSubmitStatReport(startTime, endTime);
 //    }
 //
-//    @Override
+//    
 //    public List<Map<String, Object>> getSubmitCmcpReport(Long startTime, Long endTime) {
 //        if (startTime == null || endTime == null) {
 //            return null;
 //        }
 //
-//        return smsMtMessageSubmitMapper.selectCmcpReport(startTime, endTime);
+//        return MtMessageSubmitMapper.selectCmcpReport(startTime, endTime);
 //    }
 }

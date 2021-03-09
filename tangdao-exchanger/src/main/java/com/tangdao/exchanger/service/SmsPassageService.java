@@ -41,7 +41,7 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
+public class SmsPassageService extends BaseService<SmsPassageMapper, Passage> {
 
 	/**
 	 * 非中文表达式
@@ -58,7 +58,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 	private SmsPassageParameterService smsPassageParameterService;
 
 	@Autowired
-	private SmsMtSubmitService smsMtSubmitService;
+	private SmsMtMessageSubmitService smsMtSubmitService;
 
 	@Autowired(required = false)
 	private SmsProxyManager smsProxyManager;
@@ -71,7 +71,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 //    private ISmsMessageSendService       messageSendService;
 	@Autowired
 	private UserDeveloperService userDeveloperService;
-	
+
 	@Autowired
 	private SmsPassageAccessService PassageAccessService;
 
@@ -101,8 +101,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		if (passage.getId() != null) {
 			return;
 		}
-		Passage originPassage = this
-				.getOne(Wrappers.<Passage>lambdaQuery().eq(Passage::getCode, passage.getCode()));
+		Passage originPassage = this.getOne(Wrappers.<Passage>lambdaQuery().eq(Passage::getCode, passage.getCode()));
 		if (originPassage != null) {
 			throw new IllegalArgumentException("通道编码 [" + passage.getCode().trim() + "] 已存在，无法添加");
 		}
@@ -129,7 +128,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 
 		if (CollUtil.isNotEmpty(passage.getAreaList())) {
-			PassageAreaService.saveBatch(passage.getAreaList());
+			smsPassageAreaService.saveBatch(passage.getAreaList());
 		}
 	}
 
@@ -194,7 +193,6 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	
 	@Transactional
 	public Map<String, Object> create(Passage passage, String provinceCodes) {
 		boolean isQueueCreateFinished = false;
@@ -270,14 +268,13 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 
 		passage.setStatus(originPassage.getStatus());
-		passage.setCreateTime(originPassage.getCreateTime());
-//        passage.setModifyTime(new Date());
+		passage.setCreateDate(originPassage.getCreateDate());
+		passage.setUpdateDate(new Date());
 
 		// 更新通道信息
 		return this.updateById(passage);
 	}
 
-	
 	@Transactional
 	public Map<String, Object> update(Passage passage, String provinceCodes) {
 		try {
@@ -326,11 +323,10 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return report;
 	}
 
-	
 	@Transactional
 	public boolean deleteById(String id) {
 		try {
-			Passage passage = this.get(id);
+			Passage passage = this.findById(id);
 			if (passage == null) {
 				throw new RuntimeException("查询通道ID：" + id + "数据为空");
 			}
@@ -340,12 +336,12 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 				throw new RuntimeException("删除通道失败");
 			}
 
-			result = this.PassageParameterService.deleteByPassageId(id);
+			result = this.smsPassageParameterService.deleteByPassageId(id);
 			if (!result) {
 				throw new RuntimeException("删除通道参数失败");
 			}
 
-			result = PassageAreaService.deleteByPassageId(id);
+			result = smsPassageAreaService.deleteByPassageId(id);
 			if (!result) {
 				throw new RuntimeException("删除通道省份关系数据失败");
 			}
@@ -365,7 +361,6 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return false;
 	}
 
-	
 	@Transactional
 	public boolean disabledOrActive(String passageId, String status) {
 		try {
@@ -397,11 +392,10 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	
 	public List<Passage> findAll() {
 		try {
 			Map<Object, Object> map = stringRedisTemplate.opsForHash().entries(SmsRedisConstant.RED_SMS_PASSAGE);
-			if (MapUtils.isNotEmpty(map)) {
+			if (CollUtil.isNotEmpty(map)) {
 				List<Passage> passages = new ArrayList<>();
 
 				map.forEach((k, v) -> {
@@ -420,7 +414,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 			logger.warn("通道REDIS加载出错 {}", e.getMessage());
 		}
 
-		return this.select();
+		return this.list();
 	}
 
 	public Passage findById(String id) {
@@ -457,7 +451,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 			return;
 		}
 
-		Passage.getParameterList().addAll(this.PassageParameterService.findByPassageId(Passage.getId()));
+		Passage.getParameterList().addAll(this.smsPassageParameterService.findByPassageId(Passage.getId()));
 
 	}
 
@@ -509,9 +503,8 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		return CollUtil.isNotEmpty(con);
 	}
 
-	
 	public List<PassageArea> getPassageAreaById(String passageId) {
-		return this.PassageAreaService.selectPassageAreaByPassageId(passageId);
+		return this.smsPassageAreaService.selectSmsPassageAreaByPassageId(passageId);
 	}
 
 	private boolean pushToRedis(Passage Passage) {
@@ -553,27 +546,26 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	
 	@Transactional
-	public boolean doMonitorSmsSend(String mobile, String content) {
-		String userCode = DictUtils.getDictValue(SystemConfigType.SMS_ALARM_USER.name(),
-				SettingsContext.USER_CODE_KEY_NAME, null);
-		if (StrUtil.isEmpty(userCode)) {
+	public boolean doMonitorSmsSend(String userId, String mobile, String content) {
+//		String userCode = DictUtils.getDictValue(SystemConfigType.SMS_ALARM_USER.name(),
+//				SettingsContext.USER_CODE_KEY_NAME, null);
+		if (StrUtil.isEmpty(userId)) {
 			logger.error("告警用户数据为空，请配置");
 			return false;
 		}
 
 		try {
 			// 根据用户ID获取开发者相关信息
-			UserDeveloper developer = userDeveloperService.getByUserCode(userCode);
+			UserDeveloper developer = userDeveloperService.getById(userId);
 			if (developer == null) {
-				logger.error("用户：{}，开发者信息为空", userCode);
+				logger.error("用户：{}，开发者信息为空", userId);
 				return false;
 			}
 
 			// 如果用户无效则报错
-			if (!UserStatus.YES.getValue().equals(developer.getStatus())) {
-				logger.error("用户：{}，开发者信息状态[" + developer.getStatus() + "]无效", userCode);
+			if (UserStatus.YES.getValue() != Integer.parseInt(developer.getStatus())) {
+				logger.error("用户：{}，开发者信息状态[" + developer.getStatus() + "]无效", userId);
 				return false;
 			}
 
@@ -588,21 +580,20 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	
 	@Transactional
-	public boolean doTestPassage(String passageId, String mobile, String content) {
+	public boolean doTestPassage(String passageId, String userId, String mobile, String content) {
 //        String  systemConfig = systemConfigService.findByTypeAndKey(SystemConfigType.PASSAGE_TEST_USER.name(),
 //                                                                         SettingsContext.USER_ID_KEY_NAME);
-		String userCode = DictUtils.getDictValue(SystemConfigType.PASSAGE_TEST_USER.name(),
-				SettingsContext.USER_CODE_KEY_NAME, null);
+//		String userCode = DictUtils.getDictValue(SystemConfigType.PASSAGE_TEST_USER.name(),
+//				SettingsContext.USER_CODE_KEY_NAME, null);
 
-		if (StrUtil.isEmpty(userCode)) {
+		if (StrUtil.isEmpty(userId)) {
 			logger.error("通道测试用户数据为空，请配置");
 			return false;
 		}
 
 		try {
-			String passageGroupId = userPassageService.getByUserCodeAndType(userCode,
+			String passageGroupId = userPassageService.getByUserIdAndType(userId,
 					PlatformType.SEND_MESSAGE_SERVICE.getCode());
 			if (StrUtil.isEmpty(passageGroupId)) {
 				logger.error("通道测试用户未配置短信通道组信息");
@@ -640,12 +631,10 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, Passage>{
 		}
 	}
 
-	
 	public List<String> findPassageCodes() {
 		return this.getBaseMapper().selectAvaiableCodes();
 	}
 
-	
 	public boolean isPassageBelongtoDirect(String protocol, String passageCode) {
 		if (StrUtil.isNotEmpty(protocol)) {
 			return ProtocolType.isBelongtoDirect(protocol);
