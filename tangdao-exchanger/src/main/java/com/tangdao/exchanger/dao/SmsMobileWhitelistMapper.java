@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.sms.MobileWhitelist;
+import com.tangdao.core.model.domain.MobileWhitelist;
 
 /**
  * 手机白名单信息表Mapper接口

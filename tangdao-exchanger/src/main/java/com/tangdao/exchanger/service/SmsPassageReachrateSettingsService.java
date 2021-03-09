@@ -2,7 +2,7 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.model.domain.sms.PassageReachrateSettings;
+import com.tangdao.core.model.domain.PassageReachrateSettings;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsPassageReachrateSettingsMapper;
 

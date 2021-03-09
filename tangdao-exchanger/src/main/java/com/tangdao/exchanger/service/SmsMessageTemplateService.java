@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.CommonContext.AppType;
 import com.tangdao.core.context.SmsTemplateContext.ApproveStatus;
-import com.tangdao.core.model.domain.sms.MessageTemplate;
+import com.tangdao.core.model.domain.MessageTemplate;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.utils.PatternUtil;
 import com.tangdao.exchanger.dao.SmsMessageTemplateMapper;

@@ -13,8 +13,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.ParameterContext;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
-import com.tangdao.core.model.domain.sms.MtMessageDeliver;
-import com.tangdao.core.model.domain.sms.PassageAccess;
+import com.tangdao.core.model.domain.MtMessageDeliver;
+import com.tangdao.core.model.domain.PassageAccess;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;

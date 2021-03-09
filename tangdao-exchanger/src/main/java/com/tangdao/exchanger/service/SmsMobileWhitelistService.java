@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
-import com.tangdao.core.model.domain.sms.MobileWhitelist;
+import com.tangdao.core.model.domain.MobileWhitelist;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsMobileWhitelistMapper;
 

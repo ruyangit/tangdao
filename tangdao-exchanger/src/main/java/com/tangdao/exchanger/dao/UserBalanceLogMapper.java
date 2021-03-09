@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.tangdao.core.model.domain.paas.UserBalanceLog;
+import com.tangdao.core.model.domain.UserBalanceLog;
 
 @Mapper
 public interface UserBalanceLogMapper extends BaseMapper<UserBalanceLog> {

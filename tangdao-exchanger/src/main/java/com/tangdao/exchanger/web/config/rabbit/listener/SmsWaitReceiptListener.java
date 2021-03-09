@@ -15,9 +15,9 @@ import com.rabbitmq.client.Channel;
 import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.CommonContext.PassageCallType;
+import com.tangdao.core.model.domain.MtMessageDeliver;
+import com.tangdao.core.model.domain.MtMessageSubmit;
 import com.tangdao.core.context.ParameterContext;
-import com.tangdao.core.model.domain.sms.MtMessageDeliver;
-import com.tangdao.core.model.domain.sms.MtMessageSubmit;
 import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
 
 import cn.hutool.core.collection.CollUtil;

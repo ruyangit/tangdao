@@ -6,7 +6,7 @@ package com.tangdao.core.constant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.tangdao.core.model.domain.paas.AreaLocal;
+import com.tangdao.core.model.domain.AreaLocal;
 
 /**
  * <p>

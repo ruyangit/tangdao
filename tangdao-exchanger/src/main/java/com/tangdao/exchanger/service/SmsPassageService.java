@@ -24,10 +24,10 @@ import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.context.SettingsContext;
 import com.tangdao.core.context.SettingsContext.SystemConfigType;
 import com.tangdao.core.context.UserContext.UserStatus;
-import com.tangdao.core.model.domain.paas.UserDeveloper;
-import com.tangdao.core.model.domain.sms.Passage;
-import com.tangdao.core.model.domain.sms.PassageArea;
-import com.tangdao.core.model.domain.sms.PassageParameter;
+import com.tangdao.core.model.domain.Passage;
+import com.tangdao.core.model.domain.PassageArea;
+import com.tangdao.core.model.domain.PassageParameter;
+import com.tangdao.core.model.domain.UserDeveloper;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsPassageMapper;
 

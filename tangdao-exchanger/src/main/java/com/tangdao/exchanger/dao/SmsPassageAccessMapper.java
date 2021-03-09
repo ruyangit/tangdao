@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.sms.PassageAccess;
+import com.tangdao.core.model.domain.PassageAccess;
 
 /**
  * 通道资产Mapper接口

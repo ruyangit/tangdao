@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.RedisConstant;
-import com.tangdao.core.model.domain.paas.UserDeveloper;
+import com.tangdao.core.model.domain.UserDeveloper;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.UserDeveloperMapper;
 

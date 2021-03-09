@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.sms.PassageGroupDetail;
+import com.tangdao.core.model.domain.PassageGroupDetail;
 
 /**
  * 通道组内容Mapper接口

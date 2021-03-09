@@ -5,7 +5,7 @@ package com.tangdao.portal.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.model.domain.Log;
+import com.tangdao.core.model.Log;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.web.aspect.AuditLogService;
 import com.tangdao.portal.dao.LogMapper;

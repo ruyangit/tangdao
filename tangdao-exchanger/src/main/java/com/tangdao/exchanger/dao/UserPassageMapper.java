@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.paas.UserPassage;
+import com.tangdao.core.model.domain.UserPassage;
 
 @Mapper
 public interface UserPassageMapper extends BaseMapper<UserPassage> {

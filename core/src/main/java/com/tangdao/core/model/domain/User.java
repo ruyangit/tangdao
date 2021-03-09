@@ -3,25 +3,26 @@
  */
 package com.tangdao.core.model.domain;
 
+import java.io.Serializable;
+
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.DataEntity;
 
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * <p>
- * TODO 用户
+ * TODO 描述
  * </p>
  *
  * @author ruyang
- * @since 2020年12月29日
+ * @since 2021年3月8日
  */
 @Getter
 @Setter
-@TableName("sys_user")
-public class User extends DataEntity<User> {
+@TableName("paas_user")
+public class User implements Serializable {
 
 	/**
 	 * 
@@ -29,5 +30,7 @@ public class User extends DataEntity<User> {
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private String userCode;
+	public String id;
+	
+	
 }

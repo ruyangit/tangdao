@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.model.domain.sms.PassageGroupDetail;
+import com.tangdao.core.model.domain.PassageGroupDetail;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsPassageGroupDetailMapper;
 

@@ -2,7 +2,7 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.model.domain.sms.SubmitHourReport;
+import com.tangdao.core.model.domain.SubmitHourReport;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsSubmitHourReportMapper;
 

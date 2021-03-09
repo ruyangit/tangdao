@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tangdao.core.model.domain.sms.PassageParameter;
+import com.tangdao.core.model.domain.PassageParameter;
 import com.tangdao.exchanger.service.SmsProxyManager;
 
 /**

@@ -3,7 +3,7 @@ package com.tangdao.exchanger.dao;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.sms.PriorityWords;
+import com.tangdao.core.model.domain.PriorityWords;
 
 /**
  * 优先级词库配置Mapper接口

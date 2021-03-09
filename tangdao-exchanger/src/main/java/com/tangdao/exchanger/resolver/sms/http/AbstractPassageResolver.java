@@ -12,8 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
-import com.tangdao.core.model.domain.sms.MoMessageReceive;
-import com.tangdao.core.model.domain.sms.MtMessageDeliver;
+import com.tangdao.core.model.domain.MoMessageReceive;
+import com.tangdao.core.model.domain.MtMessageDeliver;
 import com.tangdao.exchanger.template.TParameter;
 
 import cn.hutool.core.date.DateUtil;

@@ -2,7 +2,7 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.model.domain.sms.MtManualHandling;
+import com.tangdao.core.model.domain.MtManualHandling;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsMtManualHandlingMapper;
 

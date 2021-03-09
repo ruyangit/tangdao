@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.tangdao.core.model.domain.sms.PassageArea;
+import com.tangdao.core.model.domain.PassageArea;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsPassageAreaMapper;
 

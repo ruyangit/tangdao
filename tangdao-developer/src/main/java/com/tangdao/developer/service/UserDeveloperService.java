@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.context.UserContext.UserStatus;
-import com.tangdao.core.model.domain.paas.UserDeveloper;
+import com.tangdao.core.model.domain.UserDeveloper;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.developer.dao.UserDeveloperMapper;
 

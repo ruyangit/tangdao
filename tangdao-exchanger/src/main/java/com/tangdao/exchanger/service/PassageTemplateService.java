@@ -1,8 +1,8 @@
 package com.tangdao.exchanger.service;
 
 import com.alibaba.fastjson.JSON;
-import com.tangdao.core.model.domain.paas.PassageTemplate;
-import com.tangdao.core.model.domain.paas.PassageTemplateDetail;
+import com.tangdao.core.model.domain.PassageTemplate;
+import com.tangdao.core.model.domain.PassageTemplateDetail;
 import com.tangdao.core.model.vo.TemplateDetail;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.PassageTemplateMapper;

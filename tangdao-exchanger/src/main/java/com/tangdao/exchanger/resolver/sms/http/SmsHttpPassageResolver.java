@@ -2,9 +2,9 @@ package com.tangdao.exchanger.resolver.sms.http;
 
 import java.util.List;
 
-import com.tangdao.core.model.domain.sms.MoMessageReceive;
-import com.tangdao.core.model.domain.sms.MtMessageDeliver;
-import com.tangdao.core.model.domain.sms.PassageParameter;
+import com.tangdao.core.model.domain.MoMessageReceive;
+import com.tangdao.core.model.domain.MtMessageDeliver;
+import com.tangdao.core.model.domain.PassageParameter;
 import com.tangdao.exchanger.response.ProviderSendResponse;
 import com.tangdao.exchanger.template.TParameter;
 

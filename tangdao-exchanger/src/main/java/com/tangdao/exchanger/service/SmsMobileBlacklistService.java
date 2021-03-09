@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.SettingsContext.MessageAction;
 import com.tangdao.core.context.SmsSettingsContext.MobileBlacklistType;
-import com.tangdao.core.model.domain.sms.MobileBlacklist;
+import com.tangdao.core.model.domain.MobileBlacklist;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsMobileBlacklistMapper;
 

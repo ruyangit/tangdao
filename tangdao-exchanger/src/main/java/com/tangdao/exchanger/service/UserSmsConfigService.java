@@ -13,7 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.constant.UserBalanceConstant;
-import com.tangdao.core.model.domain.paas.UserSmsConfig;
+import com.tangdao.core.model.domain.UserSmsConfig;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.UserSmsConfigMapper;
 

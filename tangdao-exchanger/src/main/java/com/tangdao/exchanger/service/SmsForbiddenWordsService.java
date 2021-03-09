@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Lists;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.SettingsContext;
-import com.tangdao.core.model.domain.sms.ForbiddenWords;
+import com.tangdao.core.model.domain.ForbiddenWords;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsForbiddenWordsMapper;
 import com.tangdao.exchanger.web.filter.SensitiveWordFilter;

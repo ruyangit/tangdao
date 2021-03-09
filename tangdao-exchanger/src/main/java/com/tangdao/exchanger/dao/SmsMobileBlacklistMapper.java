@@ -3,7 +3,7 @@ package com.tangdao.exchanger.dao;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.sms.MobileBlacklist;
+import com.tangdao.core.model.domain.MobileBlacklist;
 
 /**
  * 手机黑名单信息表Mapper接口

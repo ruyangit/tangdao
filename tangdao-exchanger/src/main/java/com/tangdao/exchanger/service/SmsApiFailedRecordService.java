@@ -2,7 +2,7 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.model.domain.sms.ApiFailedRecord;
+import com.tangdao.core.model.domain.ApiFailedRecord;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsApiFailedRecordMapper;
 

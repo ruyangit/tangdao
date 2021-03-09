@@ -3,7 +3,7 @@ package com.tangdao.exchanger.dao;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.sms.PassageReachrateSettings;
+import com.tangdao.core.model.domain.PassageReachrateSettings;
 
 /**
  * 通道重连配置Mapper接口

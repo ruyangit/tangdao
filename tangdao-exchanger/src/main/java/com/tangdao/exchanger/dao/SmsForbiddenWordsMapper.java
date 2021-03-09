@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.sms.ForbiddenWords;
+import com.tangdao.core.model.domain.ForbiddenWords;
 
 /**
  * 告警敏感词Mapper接口

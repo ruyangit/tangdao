@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.core.model.domain.sms.MtTask;
+import com.tangdao.core.model.domain.MtTask;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.exchanger.dao.SmsMtTaskMapper;
 

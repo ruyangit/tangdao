@@ -22,7 +22,7 @@ import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.context.RabbitContext.WordsPriority;
 import com.tangdao.core.context.TaskContext.TaskSubmitType;
 import com.tangdao.core.exception.QueueProcessException;
-import com.tangdao.core.model.domain.sms.MtTask;
+import com.tangdao.core.model.domain.MtTask;
 import com.tangdao.developer.model.dto.SmsSendDTO;
 import com.tangdao.developer.model.vo.SmsSendVo;
 

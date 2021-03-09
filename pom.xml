@@ -17,11 +17,9 @@
 
 	<modules>
 		<module>core</module>
-		<!-- 
 		<module>tangdao-developer</module>
 		<module>tangdao-exchanger</module>
-		
-		<module>tangdao-portal</module> -->
+		<module>tangdao-portal</module>
 	</modules>
 
 	<properties>

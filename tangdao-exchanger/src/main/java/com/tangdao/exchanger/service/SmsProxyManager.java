@@ -18,7 +18,7 @@ import com.google.common.util.concurrent.RateLimiter;
 import com.huawei.insa2.util.Args;
 import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.exception.DataEmptyException;
-import com.tangdao.core.model.domain.sms.PassageParameter;
+import com.tangdao.core.model.domain.PassageParameter;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppManageProxy;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ManageProxy;
