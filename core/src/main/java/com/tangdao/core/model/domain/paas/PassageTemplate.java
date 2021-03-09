@@ -11,6 +11,15 @@ import com.tangdao.core.model.vo.TemplateDetail;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月9日
+ */
 @Getter
 @Setter
 @TableName("paas_passage_template")

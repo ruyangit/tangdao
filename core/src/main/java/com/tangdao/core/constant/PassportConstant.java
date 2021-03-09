@@ -72,14 +72,14 @@ public class PassportConstant {
 	 */
 	public static final String[] SMS_NODE_NAMES = { DEVELOPER_APP_KEY_NODE_NAME, DEVELOPER_APP_SECRET_NODE_NAME,
 			SIGNATURE_TIMESTAMP_NODE_NAME, SmsNode.SMS_MOBILE_NODE_NAME, SmsNode.SMS_CONTENT_NODE_NAME };
-	
-	/**
-     * 异常通道ID
-     */
-    public static final int EXCEPTION_PASSAGE_ID = 0;
 
-    /**
-     * 异常（根据ID找不到通道等情况）显示的通道名称
-     */
-    public static final String EXCEPTION_PASSAGE_NAME = "N/A";
+	/**
+	 * 异常通道ID
+	 */
+	public static final String EXCEPTION_PASSAGE_ID = "0";
+
+	/**
+	 * 异常（根据ID找不到通道等情况）显示的通道名称
+	 */
+	public static final String EXCEPTION_PASSAGE_NAME = "N/A";
 }

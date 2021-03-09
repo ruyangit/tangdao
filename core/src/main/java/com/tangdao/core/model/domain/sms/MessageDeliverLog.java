@@ -6,6 +6,15 @@ import com.tangdao.core.DataEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月9日
+ */
 @Getter
 @Setter
 @TableName("sms_message_deliver_log")

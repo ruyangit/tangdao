@@ -15,7 +15,7 @@ import cn.hutool.core.util.StrUtil;
  */
 public class RabbitConstant {
 
-	public static final String EXCHANGE_SMS = "tangdao.sms";
+	public static final String EXCHANGE_SMS = "exchange.sms";
 
 	/**
 	 * 短信下行 已完成前置校验（包括用户授权、余额校验等），待处理归正逻辑队列
