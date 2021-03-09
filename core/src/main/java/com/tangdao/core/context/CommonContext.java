@@ -20,6 +20,40 @@ import cn.hutool.core.util.StrUtil;
  */
 public class CommonContext {
 
+	public enum Status {
+
+		NORMAL(0, "正常"),
+
+		DELETE(1, "已删除"),
+
+		DISABLE(2, "停用"),
+
+		FREEZE(3, "冻结"),
+
+		AUDIT(4, "审核"),
+
+		AUDIT_BACK(5, "回退"),
+
+		DRAFT(9, "草稿");
+
+		private int value;
+
+		private String title;
+
+		private Status(int value, String title) {
+			this.value = value;
+			this.title = title;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
+		public String getTitle() {
+			return title;
+		}
+	}
+
 	public enum PlatformType {
 
 		UNDEFINED(0, "未定义"),
@@ -62,36 +96,36 @@ public class CommonContext {
 			return all;
 		}
 	}
-	
+
 	public enum CallbackUrlType {
-        SMS_STATUS(1, "短信状态报告"), SMS_MO(2, "短信上行报告"), FLUX_CHARGE_RESULT(3, "流量充值结果"),
-        VOICE_SEND_STATUS(4, "语音验证码发送报告"), MMS_STATUS(5, "彩信状态报告"), MMS_MO(6, "彩信上行报告");
+		SMS_STATUS(1, "短信状态报告"), SMS_MO(2, "短信上行报告"), FLUX_CHARGE_RESULT(3, "流量充值结果"),
+		VOICE_SEND_STATUS(4, "语音验证码发送报告"), MMS_STATUS(5, "彩信状态报告"), MMS_MO(6, "彩信上行报告");
 
-        private int    code;
-        private String name;
+		private int code;
+		private String name;
 
-        CallbackUrlType(int code, String name) {
-            this.code = code;
-            this.name = name;
-        }
+		CallbackUrlType(int code, String name) {
+			this.code = code;
+			this.name = name;
+		}
 
-        public int getCode() {
-            return code;
-        }
+		public int getCode() {
+			return code;
+		}
 
-        public String getName() {
-            return name;
-        }
+		public String getName() {
+			return name;
+		}
 
-        public static PlatformType parse(int code) {
-            for (PlatformType pt : PlatformType.values()) {
-                if (pt.getCode() == code) {
-                    return pt;
-                }
-            }
-            return null;
-        }
-    }
+		public static PlatformType parse(int code) {
+			for (PlatformType pt : PlatformType.values()) {
+				if (pt.getCode() == code) {
+					return pt;
+				}
+			}
+			return null;
+		}
+	}
 
 	public enum PassageCallType {
 
