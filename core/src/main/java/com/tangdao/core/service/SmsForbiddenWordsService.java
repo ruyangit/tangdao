@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +25,14 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 告警敏感词ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
 public class SmsForbiddenWordsService extends BaseService<ForbiddenWordsMapper, ForbiddenWords> {
 
 	@Autowired

@@ -1,11 +1,10 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
@@ -13,20 +12,21 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.dao.SignatureExtnoMapper;
 import com.tangdao.core.model.domain.SignatureExtno;
-import com.tangdao.core.service.BaseService;
 import com.tangdao.core.utils.PatternUtil;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 签名扩展ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsSignatureExtnoService extends BaseService<SignatureExtnoMapper, SignatureExtno> {
+public class SignatureExtnoService extends BaseService<SignatureExtnoMapper, SignatureExtno> {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;

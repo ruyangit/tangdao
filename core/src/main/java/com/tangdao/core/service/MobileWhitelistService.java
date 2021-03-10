@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,26 +12,26 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.dao.MobileWhitelistMapper;
 import com.tangdao.core.model.domain.MobileWhitelist;
-import com.tangdao.core.service.BaseService;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 手机白名单信息表ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsMobileWhitelistService extends BaseService<MobileWhitelistMapper, MobileWhitelist> {
+public class MobileWhitelistService extends BaseService<MobileWhitelistMapper, MobileWhitelist> {
 
 	@Autowired
 	private MobileWhitelistMapper smsMobileWhitelistMapper;
@@ -62,7 +62,7 @@ public class SmsMobileWhitelistService extends BaseService<MobileWhitelistMapper
 				}
 
 				// 判断是否重复 重复则不保存
-				int statCount = selectByUserCodeAndMobile(white.getUserId(), mobile.trim());
+				int statCount = selectByUserIdAndMobile(white.getUserId(), mobile.trim());
 				if (statCount > 0) {
 					continue;
 				}
@@ -147,25 +147,25 @@ public class SmsMobileWhitelistService extends BaseService<MobileWhitelistMapper
 		}
 	}
 
-	public boolean isMobileWhitelist(String userCode, String mobile) {
-		if (StrUtil.isEmpty(userCode) || StrUtil.isEmpty(mobile)) {
+	public boolean isMobileWhitelist(String userId, String mobile) {
+		if (StrUtil.isEmpty(userId) || StrUtil.isEmpty(mobile)) {
 			return false;
 		}
 
 		try {
-			return stringRedisTemplate.opsForSet().isMember(getKey(userCode), mobile);
+			return stringRedisTemplate.opsForSet().isMember(getKey(userId), mobile);
 		} catch (Exception e) {
-			logger.warn("redis 获取手机号码白名单失败，将从DB加载", e);
-			return selectByUserCodeAndMobile(userCode, mobile) > 0;
+			logger.warn("REDIS 获取手机号码白名单失败，将从DB加载", e);
+			return selectByUserIdAndMobile(userId, mobile) > 0;
 		}
 	}
 
-	public Set<String> getByUserCode(String userCode) {
+	public Set<String> getByUserId(String userId) {
 		try {
-			return stringRedisTemplate.opsForSet().members(getKey(userCode));
+			return stringRedisTemplate.opsForSet().members(getKey(userId));
 		} catch (Exception e) {
-			logger.warn("redis 获取手机号码白名单集合失败，将从DB加载", e);
-			List<String> list = smsMobileWhitelistMapper.selectDistinctMobilesByUserCode(userCode);
+			logger.warn("REDIS 获取手机号码白名单集合失败，将从DB加载", e);
+			List<String> list = smsMobileWhitelistMapper.selectDistinctMobilesByUserId(userId);
 			if (CollUtil.isEmpty(list)) {
 				return null;
 			}
@@ -174,9 +174,9 @@ public class SmsMobileWhitelistService extends BaseService<MobileWhitelistMapper
 		}
 	}
 
-	public int selectByUserCodeAndMobile(String userCode, String mobile) {
+	public int selectByUserIdAndMobile(String userId, String mobile) {
 		QueryWrapper<MobileWhitelist> queryWrapper = new QueryWrapper<MobileWhitelist>();
-		queryWrapper.eq("user_code", userCode);
+		queryWrapper.eq("user_id", userId);
 		queryWrapper.eq("mobile", mobile);
 		return count(queryWrapper);
 	}

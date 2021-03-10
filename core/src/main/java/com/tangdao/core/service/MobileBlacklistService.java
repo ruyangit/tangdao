@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -18,19 +17,20 @@ import com.tangdao.core.context.SettingsContext.MessageAction;
 import com.tangdao.core.context.SmsSettingsContext.MobileBlacklistType;
 import com.tangdao.core.dao.MobileBlacklistMapper;
 import com.tangdao.core.model.domain.MobileBlacklist;
-import com.tangdao.core.service.BaseService;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 手机黑名单信息表ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsMobileBlacklistService extends BaseService<MobileBlacklistMapper, MobileBlacklist> {
+public class MobileBlacklistService extends BaseService<MobileBlacklistMapper, MobileBlacklist> {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;

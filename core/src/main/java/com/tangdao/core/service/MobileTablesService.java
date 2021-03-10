@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
 
 import com.tangdao.core.constant.SmsRedisConstant;
 
@@ -28,8 +27,7 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang
  * @since 2021年3月8日
  */
-@Service
-public class SmsMobileTablesService{
+public class MobileTablesService{
 
 	// 手机号码最后发送毫秒时间
 	private static final String MOBILE_LAST_SEND_MILLIS = "last_send_millis";
@@ -57,8 +55,8 @@ public class SmsMobileTablesService{
 	 * @param mobile
 	 * @return
 	 */
-	private String getAssistKey(String keyname, String userCode, String templateId, String mobile) {
-		return String.format("%s:%s:%s:%s", keyname, userCode, templateId, mobile);
+	private String getAssistKey(String keyname, String userId, String templateId, String mobile) {
+		return String.format("%s:%s:%s:%s", keyname, userId, templateId, mobile);
 	}
 
 	/**
@@ -80,14 +78,14 @@ public class SmsMobileTablesService{
 		}
 	}
 
-	public void setMobileSendRecord(String userCode, String templateId, String mobile, int sendCount) {
-		if (StrUtil.isEmpty(userCode) || templateId == null || StrUtil.isEmpty(mobile)) {
-			logger.error("参数数据为空，无法匹配该用户：{}, 模板：{}，手机号码：{} ", userCode, templateId, mobile);
+	public void setMobileSendRecord(String userId, String templateId, String mobile, int sendCount) {
+		if (StrUtil.isEmpty(userId) || templateId == null || StrUtil.isEmpty(mobile)) {
+			logger.error("参数数据为空，无法匹配该用户：{}, 模板：{}，手机号码：{} ", userId, templateId, mobile);
 			return;
 		}
 
 		try {
-			String key = getAssistKey(SmsRedisConstant.RED_MOBILE_GREEN_TABLES, userCode, templateId, mobile);
+			String key = getAssistKey(SmsRedisConstant.RED_MOBILE_GREEN_TABLES, userId, templateId, mobile);
 
 			Map<Object, Object> map = new HashMap<>();
 			map.put(MOBILE_LAST_SEND_MILLIS, System.currentTimeMillis() + "");
@@ -101,7 +99,7 @@ public class SmsMobileTablesService{
 		}
 	}
 
-	public int checkMobileIsBeyondExpected(String userCode, String templateId, String mobile, int maxSpeed,
+	public int checkMobileIsBeyondExpected(String userId, String templateId, String mobile, int maxSpeed,
 			int maxLimit) {
 
 		Integer _sendTotalCount = null;
@@ -113,10 +111,10 @@ public class SmsMobileTablesService{
 
 			// 根据手机号码和用户信息获取手机防火墙计数信息
 			Map<Object, Object> map = stringRedisTemplate.opsForHash()
-					.entries(getAssistKey(SmsRedisConstant.RED_MOBILE_GREEN_TABLES, userCode, templateId, mobile));
+					.entries(getAssistKey(SmsRedisConstant.RED_MOBILE_GREEN_TABLES, userId, templateId, mobile));
 
 			if (CollUtil.isEmpty(map)) {
-				setMobileSendRecord(userCode, templateId, mobile,
+				setMobileSendRecord(userId, templateId, mobile,
 						_sendTotalCount == null ? 0 : _sendTotalCount.intValue());
 				return NICE_PASSED;
 			}
@@ -132,7 +130,7 @@ public class SmsMobileTablesService{
 
 			// 如果提交频率为0，则不限制提交任何
 			if (maxSpeed == 0) {
-				setMobileSendRecord(userCode, templateId, mobile,
+				setMobileSendRecord(userId, templateId, mobile,
 						_sendTotalCount == null ? 0 : _sendTotalCount.intValue());
 				return NICE_PASSED;
 			}
@@ -143,7 +141,7 @@ public class SmsMobileTablesService{
 				return MOBILE_BEYOND_SPEED;
 			}
 
-			setMobileSendRecord(userCode, templateId, mobile, _sendTotalCount == null ? 0 : _sendTotalCount.intValue());
+			setMobileSendRecord(userId, templateId, mobile, _sendTotalCount == null ? 0 : _sendTotalCount.intValue());
 		} catch (Exception e) {
 			logger.warn("REDIS查询手机号码白名单失败，数据默认通过", e);
 		}
