@@ -17,7 +17,7 @@ import com.tangdao.core.model.domain.Passage;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsPassageMapper extends BaseMapper<Passage> {
+public interface PassageMapper extends BaseMapper<Passage> {
 
 	@Select("select distinct(code) from sms_passage")
 	public List<String> selectAvaiableCodes();

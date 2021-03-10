@@ -2,7 +2,7 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.dao.SmsMtProcessFailedMapper;
+import com.tangdao.core.dao.MtProcessFailedMapper;
 import com.tangdao.core.model.domain.MtProcessFailed;
 import com.tangdao.core.service.BaseService;
 
@@ -12,6 +12,6 @@ import com.tangdao.core.service.BaseService;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtProcessFailedService extends BaseService<SmsMtProcessFailedMapper, MtProcessFailed> {
+public class SmsMtProcessFailedService extends BaseService<MtProcessFailedMapper, MtProcessFailed> {
 		
 }

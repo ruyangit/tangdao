@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.SubmitHourReport;
+import com.tangdao.core.model.domain.MtProcessFailed;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.SubmitHourReport;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsSubmitHourReportMapper extends BaseMapper<SubmitHourReport> {
-
+public interface MtProcessFailedMapper extends BaseMapper<MtProcessFailed> {
+	
 }

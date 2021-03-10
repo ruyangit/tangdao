@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.context.CommonContext.PassageCallType;
-import com.tangdao.core.dao.SmsPassageParameterMapper;
+import com.tangdao.core.dao.PassageParameterMapper;
 import com.tangdao.core.model.domain.PassageParameter;
 import com.tangdao.core.service.BaseService;
 
@@ -18,7 +18,7 @@ import com.tangdao.core.service.BaseService;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageParameterService extends BaseService<SmsPassageParameterMapper, PassageParameter> {
+public class SmsPassageParameterService extends BaseService<PassageParameterMapper, PassageParameter> {
 
 	public List<PassageParameter> findByPassageId(String passageId) {
 		// TODO Auto-generated method stub

@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.MtMessageSubmit;
+import com.tangdao.core.model.domain.MoMessagePush;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.MtMessageSubmit;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsMtMessageSubmitMapper extends BaseMapper<MtMessageSubmit> {
-
+public interface MoMessagePushMapper extends BaseMapper<MoMessagePush> {
+	
 }

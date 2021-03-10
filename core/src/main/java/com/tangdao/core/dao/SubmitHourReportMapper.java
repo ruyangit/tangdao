@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.SignatureExtno;
+import com.tangdao.core.model.domain.SubmitHourReport;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.SignatureExtno;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsSignatureExtnoMapper extends BaseMapper<SignatureExtno> {
+public interface SubmitHourReportMapper extends BaseMapper<SubmitHourReport> {
 
 }

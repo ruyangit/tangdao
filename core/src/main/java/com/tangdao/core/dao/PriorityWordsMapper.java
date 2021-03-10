@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.MessageDeliver;
+import com.tangdao.core.model.domain.PriorityWords;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.MessageDeliver;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsMessageDeliverMapper extends BaseMapper<MessageDeliver> {
-	
+public interface PriorityWordsMapper extends BaseMapper<PriorityWords> {
+
 }

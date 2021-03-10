@@ -15,7 +15,7 @@ import com.tangdao.core.model.domain.PassageAccess;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsPassageAccessMapper extends BaseMapper<PassageAccess> {
+public interface PassageAccessMapper extends BaseMapper<PassageAccess> {
 	
 	@Delete("delete from sms_passage_access where passage_id = ${passageId}")
 	public int deleteByPasageId(String passageId);

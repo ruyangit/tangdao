@@ -2,7 +2,7 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.dao.SmsMtMessageDeliverLogMapper;
+import com.tangdao.core.dao.MtMessageDeliverLogMapper;
 import com.tangdao.core.model.domain.MtMessageDeliverLog;
 import com.tangdao.core.service.BaseService;
 
@@ -13,6 +13,6 @@ import com.tangdao.core.service.BaseService;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtMessageDeliverLogService extends BaseService<SmsMtMessageDeliverLogMapper, MtMessageDeliverLog> {
+public class SmsMtMessageDeliverLogService extends BaseService<MtMessageDeliverLogMapper, MtMessageDeliverLog> {
 
 }

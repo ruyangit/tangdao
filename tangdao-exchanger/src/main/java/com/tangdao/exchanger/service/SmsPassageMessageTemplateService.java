@@ -16,7 +16,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.PassageContext.PassageMessageTemplateStatus;
-import com.tangdao.core.dao.SmsPassageMessageTemplateMapper;
+import com.tangdao.core.dao.PassageMessageTemplateMapper;
 import com.tangdao.core.model.domain.PassageMessageTemplate;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.utils.PatternUtil;
@@ -32,13 +32,13 @@ import cn.hutool.core.util.StrUtil;
  */
 @Service
 public class SmsPassageMessageTemplateService
-		extends BaseService<SmsPassageMessageTemplateMapper, PassageMessageTemplate> {
+		extends BaseService<PassageMessageTemplateMapper, PassageMessageTemplate> {
 
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
-	private SmsPassageMessageTemplateMapper smsPassageMessageTemplateMapper;
+	private PassageMessageTemplateMapper smsPassageMessageTemplateMapper;
 
 	public boolean save(PassageMessageTemplate passageMessageTemplate) {
 		try {

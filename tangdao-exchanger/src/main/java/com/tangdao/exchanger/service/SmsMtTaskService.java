@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.tangdao.core.dao.SmsMtTaskMapper;
+import com.tangdao.core.dao.MtTaskMapper;
 import com.tangdao.core.model.domain.MtTask;
 import com.tangdao.core.service.BaseService;
 
@@ -21,7 +21,7 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtTaskService extends BaseService<SmsMtTaskMapper, MtTask> {
+public class SmsMtTaskService extends BaseService<MtTaskMapper, MtTask> {
 
 	@Autowired
 	private SmsMtTaskPacketsService smsMtTaskPacketsService;

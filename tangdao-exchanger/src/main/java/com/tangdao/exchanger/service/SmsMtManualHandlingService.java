@@ -2,7 +2,7 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.dao.SmsMtManualHandlingMapper;
+import com.tangdao.core.dao.MtManualHandlingMapper;
 import com.tangdao.core.model.domain.MtManualHandling;
 import com.tangdao.core.service.BaseService;
 
@@ -13,6 +13,6 @@ import com.tangdao.core.service.BaseService;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtManualHandlingService extends BaseService<SmsMtManualHandlingMapper, MtManualHandling> {
+public class SmsMtManualHandlingService extends BaseService<MtManualHandlingMapper, MtManualHandling> {
 
 }

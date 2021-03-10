@@ -14,7 +14,7 @@ import com.tangdao.core.model.domain.PassageArea;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsPassageAreaMapper extends BaseMapper<PassageArea> {
+public interface PassageAreaMapper extends BaseMapper<PassageArea> {
 
 	public int deleteByPassageId(@Param("passageId") String passageId);
 }

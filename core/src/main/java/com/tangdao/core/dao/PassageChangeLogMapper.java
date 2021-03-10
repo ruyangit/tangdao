@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.PriorityWords;
+import com.tangdao.core.model.domain.PassageChangeLog;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.PriorityWords;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsPriorityWordsMapper extends BaseMapper<PriorityWords> {
+public interface PassageChangeLogMapper extends BaseMapper<PassageChangeLog> {
 
 }

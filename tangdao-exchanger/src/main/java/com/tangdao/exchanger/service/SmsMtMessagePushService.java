@@ -38,8 +38,8 @@ import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
-import com.tangdao.core.dao.SmsMtMessageDeliverMapper;
-import com.tangdao.core.dao.SmsMtMessagePushMapper;
+import com.tangdao.core.dao.MtMessageDeliverMapper;
+import com.tangdao.core.dao.MtMessagePushMapper;
 import com.tangdao.core.model.domain.MtMessageDeliver;
 import com.tangdao.core.model.domain.MtMessagePush;
 import com.tangdao.core.service.BaseService;
@@ -54,10 +54,10 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper, MtMessagePush>{
+public class SmsMtMessagePushService extends BaseService<MtMessagePushMapper, MtMessagePush>{
 
 	@Autowired
-	private SmsMtMessageDeliverMapper smsMtMessageDeliverMapper;
+	private MtMessageDeliverMapper smsMtMessageDeliverMapper;
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;

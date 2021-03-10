@@ -2,7 +2,7 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.dao.SmsPriorityWordsMapper;
+import com.tangdao.core.dao.PriorityWordsMapper;
 import com.tangdao.core.model.domain.PriorityWords;
 import com.tangdao.core.service.BaseService;
 
@@ -13,6 +13,6 @@ import com.tangdao.core.service.BaseService;
  * @version 2019-09-06
  */
 @Service
-public class SmsPriorityWordsService extends BaseService<SmsPriorityWordsMapper, PriorityWords> {
+public class SmsPriorityWordsService extends BaseService<PriorityWordsMapper, PriorityWords> {
 
 }

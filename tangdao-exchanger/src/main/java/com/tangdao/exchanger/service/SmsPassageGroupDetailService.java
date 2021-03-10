@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.dao.SmsPassageGroupDetailMapper;
+import com.tangdao.core.dao.PassageGroupDetailMapper;
 import com.tangdao.core.model.domain.PassageGroupDetail;
 import com.tangdao.core.service.BaseService;
 
@@ -15,7 +15,7 @@ import com.tangdao.core.service.BaseService;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageGroupDetailService extends BaseService<SmsPassageGroupDetailMapper, PassageGroupDetail> {
+public class SmsPassageGroupDetailService extends BaseService<PassageGroupDetailMapper, PassageGroupDetail> {
 
 	public List<String> findGroupIdByPassageId(String passageId) {
 		// TODO Auto-generated method stub

@@ -11,7 +11,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
-import com.tangdao.core.dao.SmsSignatureExtnoMapper;
+import com.tangdao.core.dao.SignatureExtnoMapper;
 import com.tangdao.core.model.domain.SignatureExtno;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.utils.PatternUtil;
@@ -26,7 +26,7 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsSignatureExtnoService extends BaseService<SmsSignatureExtnoMapper, SignatureExtno> {
+public class SmsSignatureExtnoService extends BaseService<SignatureExtnoMapper, SignatureExtno> {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;

@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.PassageChangeLog;
+import com.tangdao.core.model.domain.MessageTemplate;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.PassageChangeLog;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsPassageChangeLogMapper extends BaseMapper<PassageChangeLog> {
-
+public interface MessageTemplateMapper extends BaseMapper<MessageTemplate> {
+	
 }

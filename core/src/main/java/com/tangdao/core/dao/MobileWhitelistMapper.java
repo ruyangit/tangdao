@@ -14,7 +14,7 @@ import com.tangdao.core.model.domain.MobileWhitelist;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsMobileWhitelistMapper extends BaseMapper<MobileWhitelist> {
+public interface MobileWhitelistMapper extends BaseMapper<MobileWhitelist> {
 
 	/**
 	 * 

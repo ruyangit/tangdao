@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.CommonContext.AppType;
 import com.tangdao.core.context.SmsTemplateContext.ApproveStatus;
-import com.tangdao.core.dao.SmsMessageTemplateMapper;
+import com.tangdao.core.dao.MessageTemplateMapper;
 import com.tangdao.core.model.domain.MessageTemplate;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.utils.PatternUtil;
@@ -38,7 +38,7 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMessageTemplateService extends BaseService<SmsMessageTemplateMapper, MessageTemplate> {
+public class SmsMessageTemplateService extends BaseService<MessageTemplateMapper, MessageTemplate> {
 
 	@Resource
 	private SmsForbiddenWordsService forbiddenWordsService;

@@ -16,7 +16,7 @@ import com.tangdao.core.model.domain.PassageGroupDetail;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsPassageGroupDetailMapper extends BaseMapper<PassageGroupDetail> {
+public interface PassageGroupDetailMapper extends BaseMapper<PassageGroupDetail> {
 
 	@Select("select distinct group_id from sms_passage_group_detail where passage_id =#{passageId}")
 	public List<String> findGroupIdByPassageId(String passageId);

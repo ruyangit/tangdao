@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import com.tangdao.core.dao.SmsPassageAreaMapper;
+import com.tangdao.core.dao.PassageAreaMapper;
 import com.tangdao.core.model.domain.PassageArea;
 import com.tangdao.core.service.BaseService;
 
@@ -17,7 +17,7 @@ import com.tangdao.core.service.BaseService;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageAreaService extends BaseService<SmsPassageAreaMapper, PassageArea> {
+public class SmsPassageAreaService extends BaseService<PassageAreaMapper, PassageArea> {
 
 	public List<PassageArea> selectSmsPassageAreaByPassageId(String passageId) {
 		return this.list(Wrappers.<PassageArea>lambdaQuery().eq(PassageArea::getPassageId, passageId));

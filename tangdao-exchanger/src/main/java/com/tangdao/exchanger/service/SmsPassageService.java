@@ -24,7 +24,7 @@ import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.context.SettingsContext;
 import com.tangdao.core.context.SettingsContext.SystemConfigType;
 import com.tangdao.core.context.UserContext.UserStatus;
-import com.tangdao.core.dao.SmsPassageMapper;
+import com.tangdao.core.dao.PassageMapper;
 import com.tangdao.core.model.domain.Passage;
 import com.tangdao.core.model.domain.PassageArea;
 import com.tangdao.core.model.domain.PassageParameter;
@@ -41,7 +41,7 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsPassageService extends BaseService<SmsPassageMapper, Passage> {
+public class SmsPassageService extends BaseService<PassageMapper, Passage> {
 
 	/**
 	 * 非中文表达式

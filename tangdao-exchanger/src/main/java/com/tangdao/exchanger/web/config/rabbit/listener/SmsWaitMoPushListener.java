@@ -34,7 +34,7 @@ public class SmsWaitMoPushListener extends AbstartRabbitListener {
     @Autowired
     private Jackson2JsonMessageConverter messageConverter;
     @Autowired
-    private SmsMoMessagePushMapper       smsMoMessagePushMapper;
+    private MoMessagePushMapper       smsMoMessagePushMapper;
 
     /**
      * TODO 上行推送数据

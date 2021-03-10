@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.MtManualHandling;
+import com.tangdao.core.model.domain.MtTaskPackets;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.MtManualHandling;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsMtManualHandlingMapper extends BaseMapper<MtManualHandling> {
+public interface MtTaskPacketsMapper extends BaseMapper<MtTaskPackets> {
 	
 }

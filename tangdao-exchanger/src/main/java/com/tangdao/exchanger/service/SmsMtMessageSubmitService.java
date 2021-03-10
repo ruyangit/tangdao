@@ -21,7 +21,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.context.PassageContext;
-import com.tangdao.core.dao.SmsMtMessageSubmitMapper;
+import com.tangdao.core.dao.MtMessageSubmitMapper;
 import com.tangdao.core.model.domain.MtMessagePush;
 import com.tangdao.core.model.domain.MtMessageSubmit;
 import com.tangdao.core.model.domain.MtTaskPackets;
@@ -41,7 +41,7 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMapper, MtMessageSubmit>{
+public class SmsMtMessageSubmitService extends BaseService<MtMessageSubmitMapper, MtMessageSubmit>{
 
 	@Autowired
 	private UserService userService;

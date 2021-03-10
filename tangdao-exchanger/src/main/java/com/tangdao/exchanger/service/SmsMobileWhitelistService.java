@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
-import com.tangdao.core.dao.SmsMobileWhitelistMapper;
+import com.tangdao.core.dao.MobileWhitelistMapper;
 import com.tangdao.core.model.domain.MobileWhitelist;
 import com.tangdao.core.service.BaseService;
 
@@ -31,10 +31,10 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMobileWhitelistService extends BaseService<SmsMobileWhitelistMapper, MobileWhitelist> {
+public class SmsMobileWhitelistService extends BaseService<MobileWhitelistMapper, MobileWhitelist> {
 
 	@Autowired
-	private SmsMobileWhitelistMapper smsMobileWhitelistMapper;
+	private MobileWhitelistMapper smsMobileWhitelistMapper;
 
 	@Resource
 	private StringRedisTemplate stringRedisTemplate;

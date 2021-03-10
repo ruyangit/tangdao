@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.MtTask;
+import com.tangdao.core.model.domain.PassageControl;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.MtTask;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsMtTaskMapper extends BaseMapper<MtTask> {
+public interface PassageControlMapper extends BaseMapper<PassageControl> {
 	
 }

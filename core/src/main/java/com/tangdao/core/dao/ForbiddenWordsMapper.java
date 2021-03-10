@@ -14,7 +14,7 @@ import com.tangdao.core.model.domain.ForbiddenWords;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsForbiddenWordsMapper extends BaseMapper<ForbiddenWords> {
+public interface ForbiddenWordsMapper extends BaseMapper<ForbiddenWords> {
 
 	public List<String> selectAllWords();
 }

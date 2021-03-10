@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.constant.SmsRedisConstant;
-import com.tangdao.core.dao.SmsMtMessageDeliverMapper;
+import com.tangdao.core.dao.MtMessageDeliverMapper;
 import com.tangdao.core.model.domain.MtMessageDeliver;
 import com.tangdao.core.service.BaseService;
 
@@ -28,7 +28,7 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtMessageDeliverService extends BaseService<SmsMtMessageDeliverMapper, MtMessageDeliver>{
+public class SmsMtMessageDeliverService extends BaseService<MtMessageDeliverMapper, MtMessageDeliver>{
 
 	@Autowired
 	private SmsMtPushService smsMtPushService;

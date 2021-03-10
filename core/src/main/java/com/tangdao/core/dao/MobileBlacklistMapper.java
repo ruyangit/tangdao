@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.MobileBlacklist;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsMobileBlacklistMapper extends BaseMapper<MobileBlacklist> {
+public interface MobileBlacklistMapper extends BaseMapper<MobileBlacklist> {
 	
 }

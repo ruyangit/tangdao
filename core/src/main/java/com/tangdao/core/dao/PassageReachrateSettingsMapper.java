@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.PassageParameter;
+import com.tangdao.core.model.domain.PassageReachrateSettings;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.PassageParameter;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsPassageParameterMapper extends BaseMapper<PassageParameter> {
+public interface PassageReachrateSettingsMapper extends BaseMapper<PassageReachrateSettings> {
 
 }

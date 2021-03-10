@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.MtProcessFailed;
+import com.tangdao.core.model.domain.MtTask;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.MtProcessFailed;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsMtProcessFailedMapper extends BaseMapper<MtProcessFailed> {
+public interface MtTaskMapper extends BaseMapper<MtTask> {
 	
 }

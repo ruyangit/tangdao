@@ -1,7 +1,7 @@
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.PassageGroup;
+import com.tangdao.core.model.domain.MoMessageReceive;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.core.model.domain.PassageGroup;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface SmsPassageGroupMapper extends BaseMapper<PassageGroup> {
+public interface MoMessageReceiveMapper extends BaseMapper<MoMessageReceive> {
 	
 }
