@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
@@ -23,7 +22,15 @@ import com.tangdao.core.model.vo.MobileCatagory;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
-@Service
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月10日
+ */
 public class MobileLocalService {
 
 	@Autowired
@@ -281,8 +288,7 @@ public class MobileLocalService {
 			logger.error("省份手机号码归属地加载异常", e);
 			return false;
 		} finally {
-			logger.info(
-					"Global mobiles local data[" + RedisConstant.GLOBAL_MOBILES_LOCAL.size() + "] has loaded");
+			logger.info("Global mobiles local data[" + RedisConstant.GLOBAL_MOBILES_LOCAL.size() + "] has loaded");
 		}
 
 	}

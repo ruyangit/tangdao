@@ -1,25 +1,36 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.data.redis.serializer.RedisSerializer;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.RedisConstant;
+import com.tangdao.core.context.CommonContext.Status;
 import com.tangdao.core.dao.HostWhitelistMapper;
 import com.tangdao.core.model.domain.HostWhitelist;
-import com.tangdao.core.service.BaseService;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
-@Service
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月10日
+ */
 public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostWhitelist> {
 
-	@Resource
+	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
 	private String getKey(String userId) {
@@ -27,9 +38,8 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 	}
 
 	public int updateByPrimaryKey(HostWhitelist record) {
-		int result = this
-				.count(Wrappers.<HostWhitelist>lambdaQuery().eq(HostWhitelist::getStatus, HostWhitelist.STATUS_NORMAL)
-						.eq(HostWhitelist::getUserId, record).eq(HostWhitelist::getIp, record.getIp()));
+		int result = this.count(Wrappers.<HostWhitelist>lambdaQuery().eq(HostWhitelist::getStatus, Status.NORMAL)
+				.eq(HostWhitelist::getUserId, record).eq(HostWhitelist::getIp, record.getIp()));
 		if (result == 0) {
 			pushToRedis(record.getUserId(), record.getIp());
 			return this.getBaseMapper().updateById(record);
@@ -39,21 +49,20 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 	}
 
 	public boolean ipAllowedPass(String userId, String ip) {
-//      try {
-//      Set<String> set = stringRedisTemplate.opsForSet().members(getKey(userId));
-//      if(CollectionUtils.isNotEmpty(set) && set.contains(ip)) {
-//          return true;
-//      }
-//
-//  } catch (Exception e) {
-//      logger.warn("REDIS 操作用户服务器IP配置失败", e);
-//  }
-//
-//   int result = hostWhiteListMapper.selectByUserIdAndIp(userId, ip);
-//   if(result == 0) {
-//       logger.warn("用户IP 未报备，及时备案");
-//   }
+		try {
+			Set<String> set = stringRedisTemplate.opsForSet().members(getKey(userId));
+			if (CollUtil.isNotEmpty(set) && set.contains(ip)) {
+				return true;
+			}
 
+		} catch (Exception e) {
+			logger.warn("REDIS 操作用户服务器IP配置失败", e);
+		}
+
+		int result = this.baseMapper.selectByUserIdAndIp(userId, ip);
+		if (result == 0) {
+			logger.warn("用户IP 未报备，及时备案");
+		}
 		return true;
 	}
 
@@ -71,28 +80,26 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 		}
 	}
 
-//	@Override
-//	public boolean reloadToRedis() {
-//		List<HostWhiteList> list = this.select();
-//		if (CollectionUtils.isEmpty(list)) {
-//			log.warn("服务器IP报备为空");
-//			return true;
-//		}
-//
-//		List<Object> con = stringRedisTemplate.execute((connection) -> {
-//			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
-//			connection.openPipeline();
-//			for (HostWhiteList hwl : list) {
-//				byte[] key = serializer.serialize(getKey(hwl.getUserCode()));
-//				connection.sAdd(key, serializer.serialize(JSON.toJSONString(hwl)));
-//			}
-//
-//			return connection.closePipeline();
-//
-//		}, false, true);
-//
-//		return CollectionUtils.isNotEmpty(con);
-//	}
+	public boolean reloadToRedis() {
+		List<HostWhitelist> list = this.list();
+		if (CollUtil.isEmpty(list)) {
+			log.warn("服务器IP报备为空");
+			return true;
+		}
+
+		List<Object> con = stringRedisTemplate.execute((connection) -> {
+			RedisSerializer<String> serializer = stringRedisTemplate.getStringSerializer();
+			connection.openPipeline();
+			for (HostWhitelist hwl : list) {
+				byte[] key = serializer.serialize(getKey(hwl.getUserId()));
+				connection.sAdd(key, serializer.serialize(JSON.toJSONString(hwl)));
+			}
+			return connection.closePipeline();
+
+		}, false, true);
+
+		return CollUtil.isNotEmpty(con);
+	}
 
 	public Map<String, Object> batchInsert(HostWhitelist record) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -111,15 +118,15 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 			for (int i = 0; i < str.length; i++) {
 				count++;
 				record.setIp(str[i]);
-				record.setStatus(HostWhitelist.STATUS_NORMAL);
+				record.setStatus(Status.NORMAL + "");
 				// 标记重复提示
 				boolean codeFlag = false;
 				// 去空格验证是否为空
 				if (!StrUtil.isEmpty(str[i].trim())) {
 					// 判断是否重复 重复则不保存
-					int exisCount = this.count(Wrappers.<HostWhitelist>lambdaQuery()
-							.eq(HostWhitelist::getStatus, HostWhitelist.STATUS_NORMAL)
-							.eq(HostWhitelist::getUserId, record).eq(HostWhitelist::getIp, record.getIp()));
+					int exisCount = this
+							.count(Wrappers.<HostWhitelist>lambdaQuery().eq(HostWhitelist::getStatus, Status.NORMAL)
+									.eq(HostWhitelist::getUserId, record).eq(HostWhitelist::getIp, record.getIp()));
 					if (exisCount == 0) {
 						// flag = hostWhiteListMapper.batchInsert(record) > 0;
 					} else {
@@ -137,7 +144,7 @@ public class HostWhitelistService extends BaseService<HostWhitelistMapper, HostW
 				for (int i = 0; i < str.length; i++) {
 					count++;
 					record.setIp(str[i]);
-					record.setStatus(HostWhitelist.STATUS_NORMAL);
+					record.setStatus(Status.NORMAL + "");
 					// 标记重复提示
 					// 去空格验证是否为空
 					if (!StrUtil.isEmpty(str[i].trim())) {

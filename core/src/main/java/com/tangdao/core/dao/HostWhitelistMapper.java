@@ -14,4 +14,5 @@ import com.tangdao.core.model.domain.HostWhitelist;
  */
 public interface HostWhitelistMapper extends BaseMapper<HostWhitelist> {
 
+	public int selectByUserIdAndIp(String userId, String ip);
 }

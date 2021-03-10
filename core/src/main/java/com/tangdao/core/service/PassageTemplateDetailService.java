@@ -1,20 +1,20 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.dao.PassageTemplateDetailMapper;
 import com.tangdao.core.model.domain.PassageTemplateDetail;
-import com.tangdao.core.service.BaseService;
 
 /**
- * 通道模板内容ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
 public class PassageTemplateDetailService extends BaseService<PassageTemplateDetailMapper, PassageTemplateDetail> {
 
 	@Transactional(rollbackFor = Exception.class)

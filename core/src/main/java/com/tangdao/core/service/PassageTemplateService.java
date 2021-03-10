@@ -1,31 +1,31 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
 import com.tangdao.core.dao.PassageTemplateMapper;
 import com.tangdao.core.model.domain.PassageTemplate;
 import com.tangdao.core.model.domain.PassageTemplateDetail;
 import com.tangdao.core.model.vo.TemplateDetail;
-import com.tangdao.core.service.BaseService;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import java.util.List;
-
 /**
- * 通道模板ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
 public class PassageTemplateService extends BaseService<PassageTemplateMapper, PassageTemplate> {
 
-	@Resource
+	@Autowired
 	private PassageTemplateDetailService passageTemplateDetailService;
 
 	@Transactional(rollbackFor = Exception.class)
