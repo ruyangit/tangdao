@@ -9,6 +9,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
 
 import com.rabbitmq.client.Channel;
+import com.tangdao.core.config.runner.AbstractInitializeRunner;
 
 public abstract class AbstartRabbitListener implements ChannelAwareMessageListener {
 
@@ -60,14 +61,14 @@ public abstract class AbstartRabbitListener implements ChannelAwareMessageListen
 	 * TODO 检验是否可以消费，主要是判断资源数据是否都已经初始化完毕
 	 */
 	protected void checkIsStartingConsumeMessage() {
-		if (!SmsInitializeRunner.isResourceInitFinished) {
-			SmsInitializeRunner.LOCK.lock();
+		if (!AbstractInitializeRunner.isResourceInitFinished) {
+			AbstractInitializeRunner.LOCK.lock();
 			try {
-				SmsInitializeRunner.CONDITION.await();
+				AbstractInitializeRunner.CONDITION.await();
 			} catch (InterruptedException e) {
-
+				logger.error(e.getMessage(), e);
 			} finally {
-				SmsInitializeRunner.LOCK.unlock();
+				AbstractInitializeRunner.LOCK.unlock();
 			}
 		}
 	}

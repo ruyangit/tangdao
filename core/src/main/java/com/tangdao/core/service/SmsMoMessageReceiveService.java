@@ -31,23 +31,20 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveMapper, SmsMoMessageReceive>{
+public class SmsMoMessageReceiveService extends BaseService<SmsMoMessageReceiveMapper, SmsMoMessageReceive> {
 
 	@Autowired
 	private RabbitTemplate smsRabbitTemplate;
-	
+
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
 	private PushConfigService pushConfigService;
-	
-    @Autowired
-    private SmsPassageService         smsPassageService;
 
 	@Autowired
 	private SmsMtMessageSubmitService smsMtSubmitService;
-	
+
 	@Autowired
 	private SmsMobileBlacklistService smsMobileBlacklistService;
 

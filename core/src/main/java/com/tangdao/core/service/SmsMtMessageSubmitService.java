@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,15 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.tangdao.core.config.rabbit.RabbitMessageQueueManager;
+import com.tangdao.core.config.rabbit.listener.SmsWaitSubmitListener;
 import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.context.PassageContext;
+import com.tangdao.core.context.PassageContext.DeliverStatus;
+import com.tangdao.core.context.RabbitContext.WordsPriority;
 import com.tangdao.core.dao.SmsMtMessageSubmitMapper;
+import com.tangdao.core.model.domain.SmsMtMessageDeliver;
 import com.tangdao.core.model.domain.SmsMtMessagePush;
 import com.tangdao.core.model.domain.SmsMtMessageSubmit;
 import com.tangdao.core.model.domain.SmsMtTaskPackets;
@@ -29,6 +33,7 @@ import com.tangdao.core.model.domain.SmsPassage;
 import com.tangdao.core.model.domain.User;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
@@ -38,17 +43,17 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMapper, SmsMtMessageSubmit>{
+public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMapper, SmsMtMessageSubmit> {
 
 	@Autowired
 	private UserService userService;
 
 	@Autowired
 	private SmsMtMessagePushService smsMtPushService;
-	
+
 	@Autowired
 	private SmsMtMessageDeliverService smsMtDeliverService;
-	
+
 	@Autowired
 	private SmsPassageService smsPassageService;
 
@@ -61,8 +66,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 	@Autowired(required = false)
 	private RabbitMessageQueueManager rabbitMessageQueueManager;
 
-	
-	public IPage<SmsMtMessageSubmit> page(IPage<SmsMtMessageSubmit> page, Wrapper<SmsMtMessageSubmit> queryWrapper) {
+	public IPage<SmsMtMessageSubmit> page(Page<SmsMtMessageSubmit> page, Wrapper<SmsMtMessageSubmit> queryWrapper) {
 		IPage<SmsMtMessageSubmit> pageData = baseMapper.selectPage(page, queryWrapper);
 
 		Map<String, SmsMtMessagePush> pushMap = new HashMap<>();
@@ -80,7 +84,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 				if (userMap.containsKey(record.getUserId())) {
 					record.setUser(userMap.get(record.getUserId()));
 				} else {
-					record.setUser(userService.getByUserCode(record.getUserId()));
+					record.setUser(userService.getById(record.getUserId()));
 					userMap.put(record.getUserId(), record.getUser());
 				}
 			}
@@ -120,7 +124,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		return pageData;
 	}
 
-	
 	public SmsMtMessageSubmit findByMobileAndMsgid(String mobile, String msgId) {
 		// TODO Auto-generated method stub
 		QueryWrapper<SmsMtMessageSubmit> queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
@@ -145,31 +148,31 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 ////    }
 //
 ////    
-////    public List<MtMessageSubmit> findList(Map<String, Object> queryParams) {
-////
-////        changeTimestampeParamsIfExists(queryParams);
-////
-////        return MtMessageSubmitMapper.findList(queryParams);
-////    }
-////
-////    /**
-////     * 转换时间戳信息
-////     *
-////     * @param queryParams
-////     */
-////    private void changeTimestampeParamsIfExists(Map<String, Object> queryParams) {
-////        String startDate = queryParams.get("startDate") == null ? "" : queryParams.get("startDate").toString();
-////        String endDate = queryParams.get("endDate") == null ? "" : queryParams.get("endDate").toString();
-////
-////        if (StrUtil.isNotBlank(startDate)) {
-////            queryParams.put("startDate", DateUtil.getSecondDate(startDate).getTime());
-////        }
-////
-////        if (StrUtil.isNotBlank(endDate)) {
-////            queryParams.put("endDate", DateUtil.getSecondDate(endDate).getTime());
-////        }
-////
-////    }
+	public List<SmsMtMessageSubmit> findList(Map<String, Object> queryParams) {
+
+		changeTimestampeParamsIfExists(queryParams);
+
+		return this.baseMapper.findList(queryParams);
+	}
+
+	/**
+	 * 转换时间戳信息
+	 *
+	 * @param queryParams
+	 */
+	private void changeTimestampeParamsIfExists(Map<String, Object> queryParams) {
+		String startDate = queryParams.get("startDate") == null ? "" : queryParams.get("startDate").toString();
+		String endDate = queryParams.get("endDate") == null ? "" : queryParams.get("endDate").toString();
+
+		if (StrUtil.isNotBlank(startDate)) {
+			queryParams.put("startDate", DateUtil.parse(startDate).getTime());
+		}
+
+		if (StrUtil.isNotBlank(endDate)) {
+			queryParams.put("endDate", DateUtil.parse(endDate).getTime());
+		}
+
+	}
 //
 //    /**
 //     * 加入记录关联列数据（主要针对回执数据和推送数据）
@@ -233,7 +236,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //    
 //    public List<ConsumptionReport> getConsumeMessageInYestday() {
 //        Set<Integer> userList = userService.findAvaiableUserIds();
-//        if (ListUtils.isEmpty(userList)) {
+//        if (CollUtil.isEmpty(userList)) {
 //            throw new RuntimeException("用户数据异常，请检修");
 //        }
 //
@@ -259,7 +262,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //
 //        userList.removeAll(existsUsers);
 //
-//        if (ListUtils.isNotEmpty(userList)) {
+//        if (CollUtil.isNotEmpty(userList)) {
 //            for (Integer userId : userList) {
 //                report = new ConsumptionReport();
 //                report.setAmount(0);
@@ -315,9 +318,8 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        return vo;
 //    }
 
-	
 	public void batchInsertSubmit(List<SmsMtMessageSubmit> list) {
-		if (ListUtils.isEmpty(list)) {
+		if (CollUtil.isEmpty(list)) {
 			return;
 		}
 		super.saveBatch(list);
@@ -348,7 +350,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        return MtMessageSubmitMapper.selectByMsgIdAndMobile(msgId, mobile);
 //    }
 
-	
 	public SmsMtMessageSubmit getByMoMapping(String passageId, String msgId, String mobile, String spcode) {
 		QueryWrapper<SmsMtMessageSubmit> queryWrapper = null;
 
@@ -373,7 +374,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		return MtMessageSubmit;
 	}
 
-	
 	public SmsMtMessageSubmit getByMsgidAndMobile(String msgId, String mobile) {
 		QueryWrapper<SmsMtMessageSubmit> queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
 		queryWrapper.eq("msg_id", msgId);
@@ -382,7 +382,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		return super.getOne(queryWrapper);
 	}
 
-	
 	public SmsMtMessageSubmit getByMsgid(String msgId) {
 		QueryWrapper<SmsMtMessageSubmit> queryWrapper = new QueryWrapper<SmsMtMessageSubmit>();
 		queryWrapper.eq("msg_id", msgId);
@@ -390,7 +389,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		return super.getOne(queryWrapper);
 	}
 
-	
 	public boolean doSmsException(List<SmsMtMessageSubmit> submits) {
 		List<SmsMtMessageDeliver> delivers = new ArrayList<>();
 		SmsMtMessageDeliver deliver;
@@ -399,11 +397,11 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 			deliver.setCmcp(submit.getCmcp());
 			deliver.setMobile(submit.getMobile());
 			deliver.setMsgId(submit.getMsgId());
-			deliver.setStatusCode(StrUtil.isNotEmpty(submit.getPushErrorCode()) ? submit.getPushErrorCode()
-					: submit.getRemarks());
-			deliver.setStatus(DeliverStatus.FAILED.getValue());
-			deliver.setDeliverTime(DateUtils.getDate());
-			deliver.setCreateTime(new Date());
+			deliver.setStatusCode(
+					StrUtil.isNotEmpty(submit.getPushErrorCode()) ? submit.getPushErrorCode() : submit.getRemarks());
+			deliver.setStatus(DeliverStatus.FAILED.getValue() + "");
+			deliver.setDeliverTime(DateUtil.now());
+			deliver.setCreateDate(new Date());
 			deliver.setRemarks(submit.getRemarks());
 			delivers.add(deliver);
 		}
@@ -422,7 +420,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		}
 	}
 
-	
 	public void setPushConfigurationIfNecessary(List<SmsMtMessageSubmit> submits) {
 		// add by 2018-03-24 取出第一个值的信息（推送设置一批任务为一致信息）
 		SmsMtMessageSubmit submit = submits.iterator().next();
@@ -437,10 +434,9 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		smsMtPushService.setMessageReadyPushConfigurations(submits);
 	}
 
-	
 	public boolean declareWaitSubmitMessageQueues() {
 		List<String> passageCodes = smsPassageService.findPassageCodes();
-		if (ListUtils.isEmpty(passageCodes)) {
+		if (CollUtil.isEmpty(passageCodes)) {
 			logger.error("无可用通道需要声明队列");
 			return false;
 		}
@@ -458,7 +454,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		}
 	}
 
-	
 	public String getSubmitMessageQueueName(String passageCode) {
 		return String.format("%s.%s", RabbitConstant.MQ_SMS_MT_WAIT_SUBMIT, passageCode);
 	}
@@ -468,7 +463,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        return MtMessageSubmitMapper.getRecordListToMonitor(passageId, startTime, endTime);
 //    }
 
-	
 	public boolean declareNewSubmitMessageQueue(String protocol, String passageCode) {
 		String mqName = getSubmitMessageQueueName(passageCode);
 		try {
@@ -482,7 +476,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		}
 	}
 
-	
 	public boolean removeSubmitMessageQueue(String passageCode) {
 		String mqName = getSubmitMessageQueueName(passageCode);
 		boolean isSuccess = rabbitMessageQueueManager.removeQueue(mqName);
@@ -495,7 +488,6 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 		return isSuccess;
 	}
 
-	
 	public boolean sendToSubmitQueue(List<SmsMtTaskPackets> packets) {
 		if (CollUtil.isEmpty(packets)) {
 			logger.warn("子任务数据为空，无需发送队列");
@@ -558,7 +550,7 @@ public class SmsMtMessageSubmitService extends BaseService<SmsMtMessageSubmitMap
 //        }
 //
 //        List<Map<String, Object>> list = MtMessageSubmitMapper.selectSubmitReport(startTime, endTime);
-//        if (ListUtils.isEmpty(list)) {
+//        if (CollUtil.isEmpty(list)) {
 //            return null;
 //        }
 //

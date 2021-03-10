@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -78,9 +77,6 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 
 	@Resource
 	private ThreadPoolTaskExecutor threadPoolTaskExecutor;
-
-	@Autowired
-	private ApplicationContext applicationContext;
 
 	/**
 	 * 重推回执ID集合间

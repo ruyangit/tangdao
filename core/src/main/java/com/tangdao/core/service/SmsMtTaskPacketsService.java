@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.dao.SmsMtTaskPacketsMapper;
+import com.tangdao.core.model.domain.Area;
 import com.tangdao.core.model.domain.SmsMtTaskPackets;
 import com.tangdao.core.model.domain.SmsPassage;
 
@@ -24,7 +26,7 @@ import cn.hutool.core.util.StrUtil;
 public class SmsMtTaskPacketsService extends BaseService<SmsMtTaskPacketsMapper, SmsMtTaskPackets> {
 
 	@Autowired
-	private IAreaService areaService;
+	private AreaService areaService;
 
 	@Autowired
 	private SmsPassageService smsPassageService;
@@ -37,10 +39,9 @@ public class SmsMtTaskPacketsService extends BaseService<SmsMtTaskPacketsMapper,
 			// 组装省份信息
 			if (StrUtil.isNotBlank(smsMtTaskPackets.getAreaCode())) {
 				// 根据省份代码查询省份名称
-				Area area = areaService.get(smsMtTaskPackets.getAreaCode());
+				Area area = areaService.getById(smsMtTaskPackets.getAreaCode());
 				smsMtTaskPackets.setAreaName(area == null ? "未知" : area.getAreaName());
 			}
-
 			// 组装通道信息
 			if (StrUtil.isNotBlank(smsMtTaskPackets.getFinalPassageId())) {
 				SmsPassage passage = smsPassageService.findById(smsMtTaskPackets.getFinalPassageId());
@@ -50,7 +51,7 @@ public class SmsMtTaskPacketsService extends BaseService<SmsMtTaskPacketsMapper,
 		return smsMtTaskPackets;
 	}
 
-	public IPage<SmsMtTaskPackets> page(IPage<SmsMtTaskPackets> page, Wrapper<SmsMtTaskPackets> queryWrapper) {
+	public IPage<SmsMtTaskPackets> page(Page<SmsMtTaskPackets> page, Wrapper<SmsMtTaskPackets> queryWrapper) {
 		IPage<SmsMtTaskPackets> pageData = baseMapper.selectPage(page, queryWrapper);
 		Map<String, String> areaMap = new HashMap<>();
 		Map<String, String> passageMap = new HashMap<>();
@@ -61,7 +62,7 @@ public class SmsMtTaskPacketsService extends BaseService<SmsMtTaskPacketsMapper,
 					r.setAreaName(areaMap.get(r.getAreaCode()));
 				} else {
 					// 根据省份代码查询省份名称
-					Area area = areaService.get(r.getAreaCode());
+					Area area = areaService.getById(r.getAreaCode());
 					r.setAreaName(area == null ? "未知" : area.getAreaName());
 					areaMap.put(r.getAreaCode(), r.getAreaName());
 				}

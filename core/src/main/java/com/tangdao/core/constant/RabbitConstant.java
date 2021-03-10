@@ -18,6 +18,11 @@ public class RabbitConstant {
 	public static final String EXCHANGE_SMS = "exchange.sms";
 
 	/**
+	 * 短信下行 已完整归正数据逻辑，待提交网关队列（待调用上家通道）
+	 */
+	public static final String MQ_SMS_MT_WAIT_SUBMIT = "mq_sms_mt_wait_submit";
+
+	/**
 	 * 短信下行 已完成前置校验（包括用户授权、余额校验等），待处理归正逻辑队列
 	 */
 	public static final String MQ_SMS_MT_WAIT_PROCESS = "mq_sms_mt_wait_process";

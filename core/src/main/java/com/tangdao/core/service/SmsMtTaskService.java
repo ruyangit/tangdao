@@ -1,12 +1,10 @@
 package com.tangdao.core.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.dao.SmsMtTaskMapper;
 import com.tangdao.core.model.domain.SmsMtTask;
 
@@ -45,7 +43,7 @@ public class SmsMtTaskService extends BaseService<SmsMtTaskMapper, SmsMtTask> {
 		return effect;
 	}
 
-	public IPage<SmsMtTask> page(IPage<SmsMtTask> page, Wrapper<SmsMtTask> queryWrapper) {
+	public IPage<SmsMtTask> page(Page<SmsMtTask> page, Wrapper<SmsMtTask> queryWrapper) {
 		IPage<SmsMtTask> pageData = this.getBaseMapper().selectPage(page, queryWrapper);
 		pageData.getRecords().stream().forEach(r -> {
 			// 设置当前用户信息

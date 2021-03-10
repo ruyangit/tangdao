@@ -2,11 +2,8 @@ package com.tangdao.core.service;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -27,15 +24,13 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang
  * @since 2021年3月10日
  */
-public class SmsMtMessageDeliverService extends BaseService<SmsMtMessageDeliverMapper, SmsMtMessageDeliver>{
+public class SmsMtMessageDeliverService extends BaseService<SmsMtMessageDeliverMapper, SmsMtMessageDeliver> {
 
 	@Autowired
 	private SmsMtMessagePushService smsMtPushService;
-	
+
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
-
-	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	public SmsMtMessageDeliver findByMobileAndMsgid(String mobile, String msgId) {
 		if (StrUtil.isEmpty(mobile) || StrUtil.isEmpty(msgId)) {
