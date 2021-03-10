@@ -5,7 +5,7 @@ package com.tangdao.developer.service;
 
 import org.springframework.stereotype.Service;
 
-import com.tangdao.core.model.domain.ApiFailedRecord;
+import com.tangdao.core.model.domain.SmsApiFailedRecord;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.developer.dao.SmsApiFailedRecordMapper;
 
@@ -18,6 +18,6 @@ import com.tangdao.developer.dao.SmsApiFailedRecordMapper;
  * @since 2021年2月23日
  */
 @Service
-public class SmsApiFaildRecordService extends BaseService<SmsApiFailedRecordMapper, ApiFailedRecord> {
+public class SmsApiFaildRecordService extends BaseService<SmsApiFailedRecordMapper, SmsApiFailedRecord> {
 
 }

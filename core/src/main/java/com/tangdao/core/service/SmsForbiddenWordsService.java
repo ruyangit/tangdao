@@ -17,9 +17,9 @@ import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.SettingsContext;
 import com.tangdao.core.context.SettingsContext.DictType;
 import com.tangdao.core.context.SettingsContext.WordsLibrary;
-import com.tangdao.core.dao.ForbiddenWordsMapper;
+import com.tangdao.core.dao.SmsForbiddenWordsMapper;
 import com.tangdao.core.model.domain.DictData;
-import com.tangdao.core.model.domain.ForbiddenWords;
+import com.tangdao.core.model.domain.SmsForbiddenWords;
 import com.tangdao.core.service.filter.SensitiveWordFilter;
 
 import cn.hutool.core.collection.CollUtil;
@@ -34,7 +34,7 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang
  * @since 2021年3月10日
  */
-public class SmsForbiddenWordsService extends BaseService<ForbiddenWordsMapper, ForbiddenWords> {
+public class SmsForbiddenWordsService extends BaseService<SmsForbiddenWordsMapper, SmsForbiddenWords> {
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
@@ -135,7 +135,7 @@ public class SmsForbiddenWordsService extends BaseService<ForbiddenWordsMapper, 
 		return list;
 	}
 
-	public boolean saveForbiddenWords(ForbiddenWords words) {
+	public boolean saveForbiddenWords(SmsForbiddenWords words) {
 		if (words == null || StrUtil.isBlank(words.getWord()) || StrUtil.isBlank(words.getLabel())) {
 			return false;
 		}
@@ -202,7 +202,7 @@ public class SmsForbiddenWordsService extends BaseService<ForbiddenWordsMapper, 
 
 	public boolean deleteWord(int id) {
 		try {
-			ForbiddenWords words = super.getById(id);
+			SmsForbiddenWords words = super.getById(id);
 			stringRedisTemplate.opsForSet().remove(SmsRedisConstant.RED_FORBIDDEN_WORDS, words.getWord());
 
 			// 是否为通配敏感词
@@ -229,22 +229,22 @@ public class SmsForbiddenWordsService extends BaseService<ForbiddenWordsMapper, 
 		return dictData.getDictValue().split(SettingsContext.MULTI_VALUE_SEPERATOR);
 	}
 
-	public List<ForbiddenWords> getLabelByWords(String words) {
+	public List<SmsForbiddenWords> getLabelByWords(String words) {
 		if (StrUtil.isEmpty(words)) {
 			return null;
 		}
 
 		String[] wordsArray = words.split(",");
-		ForbiddenWords forbiddenWords = null;
+		SmsForbiddenWords forbiddenWords = null;
 
-		List<ForbiddenWords> list = new ArrayList<>();
+		List<SmsForbiddenWords> list = new ArrayList<>();
 		if (wordsArray.length == 1) {
 			// 如果只有一个词汇，并且为空则直接返回空
 			if (StrUtil.isBlank(wordsArray[0])) {
 				return null;
 			}
 			forbiddenWords = this
-					.getOne(Wrappers.<ForbiddenWords>lambdaQuery().eq(ForbiddenWords::getWord, wordsArray[0]));
+					.getOne(Wrappers.<SmsForbiddenWords>lambdaQuery().eq(SmsForbiddenWords::getWord, wordsArray[0]));
 			if (forbiddenWords == null) {
 				return null;
 			}
@@ -252,21 +252,21 @@ public class SmsForbiddenWordsService extends BaseService<ForbiddenWordsMapper, 
 			list.add(forbiddenWords);
 			return list;
 		}
-		List<ForbiddenWords> wordLib = this.list(
-				Wrappers.<ForbiddenWords>lambdaQuery().in(ForbiddenWords::getWord, Lists.newArrayList(wordsArray)));
+		List<SmsForbiddenWords> wordLib = this.list(
+				Wrappers.<SmsForbiddenWords>lambdaQuery().in(SmsForbiddenWords::getWord, Lists.newArrayList(wordsArray)));
 		if (CollUtil.isEmpty(wordLib)) {
 			return null;
 		}
 
-		Map<String, ForbiddenWords> map = new HashMap<>();
+		Map<String, SmsForbiddenWords> map = new HashMap<>();
 		// 如果存在多个标签，需要判断是否是同一个，如果为同一个标签则只返回一个即可
-		for (ForbiddenWords word : wordLib) {
+		for (SmsForbiddenWords word : wordLib) {
 			if (!map.containsKey(word.getLabel())) {
 				map.put(word.getLabel(), word);
 				continue;
 			}
 
-			ForbiddenWords originWord = map.get(word.getLabel());
+			SmsForbiddenWords originWord = map.get(word.getLabel());
 			originWord.setWord(originWord.getWord() + "," + word.getWord());
 
 			map.put(word.getLabel(), originWord);
