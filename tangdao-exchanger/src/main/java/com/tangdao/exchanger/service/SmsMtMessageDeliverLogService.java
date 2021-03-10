@@ -2,9 +2,9 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
+import com.tangdao.core.dao.SmsMtMessageDeliverLogMapper;
 import com.tangdao.core.model.domain.MtMessageDeliverLog;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.SmsMtMessageDeliverLogMapper;
 
 /**
  * 下行短信回执状态日志ServiceImpl

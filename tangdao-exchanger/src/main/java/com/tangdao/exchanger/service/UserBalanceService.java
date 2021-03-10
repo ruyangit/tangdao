@@ -17,12 +17,12 @@ import com.tangdao.core.context.PayContext.PaySource;
 import com.tangdao.core.context.PayContext.PayType;
 import com.tangdao.core.context.UserContext.BalancePayType;
 import com.tangdao.core.context.UserContext.BalanceStatus;
+import com.tangdao.core.dao.UserBalanceMapper;
 import com.tangdao.core.exception.DataEmptyException;
 import com.tangdao.core.model.domain.UserBalance;
 import com.tangdao.core.model.domain.UserBalanceLog;
 import com.tangdao.core.model.vo.P2pBalance;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.UserBalanceMapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

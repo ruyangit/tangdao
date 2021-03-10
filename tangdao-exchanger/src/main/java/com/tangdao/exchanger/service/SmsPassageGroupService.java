@@ -2,9 +2,9 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
+import com.tangdao.core.dao.SmsPassageGroupMapper;
 import com.tangdao.core.model.domain.PassageGroup;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.SmsPassageGroupMapper;
 
 /**
  * 通道组ServiceImpl

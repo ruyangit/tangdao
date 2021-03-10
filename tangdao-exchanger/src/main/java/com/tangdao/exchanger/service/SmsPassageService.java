@@ -24,12 +24,12 @@ import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.context.SettingsContext;
 import com.tangdao.core.context.SettingsContext.SystemConfigType;
 import com.tangdao.core.context.UserContext.UserStatus;
+import com.tangdao.core.dao.SmsPassageMapper;
 import com.tangdao.core.model.domain.Passage;
 import com.tangdao.core.model.domain.PassageArea;
 import com.tangdao.core.model.domain.PassageParameter;
 import com.tangdao.core.model.domain.UserDeveloper;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.SmsPassageMapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

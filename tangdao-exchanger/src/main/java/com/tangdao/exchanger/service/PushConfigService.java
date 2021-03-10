@@ -15,9 +15,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.context.SettingsContext.PushConfigStatus;
+import com.tangdao.core.dao.PushConfigMapper;
 import com.tangdao.core.model.domain.PushConfig;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.PushConfigMapper;
 
 import cn.hutool.core.collection.CollUtil;
 

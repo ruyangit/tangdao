@@ -2,9 +2,9 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
+import com.tangdao.core.dao.SmsPriorityWordsMapper;
 import com.tangdao.core.model.domain.PriorityWords;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.SmsPriorityWordsMapper;
 
 /**
  * 优先级词库配置ServiceImpl

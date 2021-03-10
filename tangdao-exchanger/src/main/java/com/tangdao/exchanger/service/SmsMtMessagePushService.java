@@ -38,11 +38,11 @@ import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
+import com.tangdao.core.dao.SmsMtMessageDeliverMapper;
+import com.tangdao.core.dao.SmsMtMessagePushMapper;
 import com.tangdao.core.model.domain.MtMessageDeliver;
 import com.tangdao.core.model.domain.MtMessagePush;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.SmsMtMessageDeliverMapper;
-import com.tangdao.exchanger.dao.SmsMtMessagePushMapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

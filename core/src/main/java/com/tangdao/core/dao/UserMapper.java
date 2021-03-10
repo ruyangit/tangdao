@@ -15,6 +15,6 @@ import com.tangdao.core.model.domain.User;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface UserMapper extends BaseMapper<User> {
-	
+public interface UserMapper extends BaseMapper<User>{
+
 }

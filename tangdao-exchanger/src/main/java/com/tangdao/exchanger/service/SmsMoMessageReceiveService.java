@@ -16,12 +16,12 @@ import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.CommonContext.CallbackUrlType;
 import com.tangdao.core.context.SettingsContext.SystemConfigType;
 import com.tangdao.core.context.SmsSettingsContext.MobileBlacklistType;
+import com.tangdao.core.dao.SmsMoMessageReceiveMapper;
 import com.tangdao.core.model.domain.MoMessageReceive;
 import com.tangdao.core.model.domain.MobileBlacklist;
 import com.tangdao.core.model.domain.MtMessageSubmit;
 import com.tangdao.core.model.domain.PushConfig;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.SmsMoMessageReceiveMapper;
 
 import cn.hutool.core.util.StrUtil;
 

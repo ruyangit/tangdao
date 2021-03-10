@@ -16,10 +16,10 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.PassageContext.PassageMessageTemplateStatus;
+import com.tangdao.core.dao.SmsPassageMessageTemplateMapper;
 import com.tangdao.core.model.domain.PassageMessageTemplate;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.utils.PatternUtil;
-import com.tangdao.exchanger.dao.SmsPassageMessageTemplateMapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

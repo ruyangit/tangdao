@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.RedisConstant;
+import com.tangdao.core.dao.HostWhitelistMapper;
 import com.tangdao.core.model.domain.HostWhitelist;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.HostWhitelistMapper;
 
 import cn.hutool.core.util.StrUtil;
 

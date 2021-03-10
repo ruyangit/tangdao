@@ -11,10 +11,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.SmsRedisConstant;
+import com.tangdao.core.dao.SmsSignatureExtnoMapper;
 import com.tangdao.core.model.domain.SignatureExtno;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.utils.PatternUtil;
-import com.tangdao.exchanger.dao.SmsSignatureExtnoMapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

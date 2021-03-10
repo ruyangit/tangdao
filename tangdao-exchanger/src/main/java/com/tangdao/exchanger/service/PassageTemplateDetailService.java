@@ -4,9 +4,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.dao.PassageTemplateDetailMapper;
 import com.tangdao.core.model.domain.PassageTemplateDetail;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.PassageTemplateDetailMapper;
 
 /**
  * 通道模板内容ServiceImpl

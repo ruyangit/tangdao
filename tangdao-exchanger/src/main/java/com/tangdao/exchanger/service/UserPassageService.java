@@ -18,9 +18,9 @@ import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.context.SettingsContext.SystemConfigType;
 import com.tangdao.core.context.SettingsContext.UserDefaultPassageGroupKey;
+import com.tangdao.core.dao.UserPassageMapper;
 import com.tangdao.core.model.domain.UserPassage;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.UserPassageMapper;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

@@ -2,9 +2,9 @@ package com.tangdao.exchanger.service;
 
 import org.springframework.stereotype.Service;
 
+import com.tangdao.core.dao.SmsMoMessagePushMapper;
 import com.tangdao.core.model.domain.MoMessagePush;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.SmsMoMessagePushMapper;
 
 /**
  * 上行消息推送ServiceImpl

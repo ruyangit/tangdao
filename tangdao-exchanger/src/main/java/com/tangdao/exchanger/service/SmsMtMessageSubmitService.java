@@ -21,13 +21,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.context.PassageContext;
+import com.tangdao.core.dao.SmsMtMessageSubmitMapper;
 import com.tangdao.core.model.domain.MtMessagePush;
 import com.tangdao.core.model.domain.MtMessageSubmit;
 import com.tangdao.core.model.domain.MtTaskPackets;
 import com.tangdao.core.model.domain.Passage;
 import com.tangdao.core.model.domain.User;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.dao.SmsMtMessageSubmitMapper;
 import com.tangdao.exchanger.web.config.rabbit.RabbitMessageQueueManager;
 import com.tangdao.exchanger.web.config.rabbit.listener.SmsWaitSubmitListener;
 
