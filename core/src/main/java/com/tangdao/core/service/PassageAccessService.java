@@ -28,6 +28,7 @@ import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.CommonContext.PassageCallType;
 import com.tangdao.core.context.CommonContext.Status;
 import com.tangdao.core.context.PassageContext.PassageStatus;
+import com.tangdao.core.context.PassageContext.PassageTemplateType;
 import com.tangdao.core.context.PassageContext.RouteType;
 import com.tangdao.core.dao.PassageAccessMapper;
 import com.tangdao.core.model.domain.Passage;

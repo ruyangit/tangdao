@@ -11,12 +11,13 @@ import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.constant.ErrorCode;
 
 /**
+ * 
  * <p>
- * TODO 描述 返回对象
+ * TODO 描述
  * </p>
  *
- * @author ruyang@gmail.com
- * @since 2020年4月7日
+ * @author ruyang
+ * @since 2021年3月10日
  */
 public class CommonResponse extends LinkedHashMap<String, Object> {
 
