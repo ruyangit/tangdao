@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import org.springframework.stereotype.Service;
 
@@ -13,6 +13,6 @@ import com.tangdao.core.service.BaseService;
  * @version 2019-09-06
  */
 @Service
-public class SmsMessageDeliverService extends BaseService<MessageDeliverMapper, MessageDeliver>{
+public class MessageDeliverService extends BaseService<MessageDeliverMapper, MessageDeliver>{
 
 }

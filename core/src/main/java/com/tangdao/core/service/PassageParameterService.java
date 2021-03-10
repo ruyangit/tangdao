@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.List;
 
@@ -12,13 +12,15 @@ import com.tangdao.core.model.domain.PassageParameter;
 import com.tangdao.core.service.BaseService;
 
 /**
- * 通道消息模板参数ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsPassageParameterService extends BaseService<PassageParameterMapper, PassageParameter> {
+public class PassageParameterService extends BaseService<PassageParameterMapper, PassageParameter> {
 
 	public List<PassageParameter> findByPassageId(String passageId) {
 		// TODO Auto-generated method stub

@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import org.springframework.stereotype.Service;
 
@@ -7,12 +7,14 @@ import com.tangdao.core.model.domain.PassageControl;
 import com.tangdao.core.service.BaseService;
 
 /**
- * 通道控制ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsPassageControlService extends BaseService<PassageControlMapper, PassageControl> {
+public class PassageControlService extends BaseService<PassageControlMapper, PassageControl> {
 
 }

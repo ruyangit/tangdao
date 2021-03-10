@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.List;
 
@@ -11,13 +11,15 @@ import com.tangdao.core.model.domain.PassageArea;
 import com.tangdao.core.service.BaseService;
 
 /**
- * 通道支持省份ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsPassageAreaService extends BaseService<PassageAreaMapper, PassageArea> {
+public class PassageAreaService extends BaseService<PassageAreaMapper, PassageArea> {
 
 	public List<PassageArea> selectSmsPassageAreaByPassageId(String passageId) {
 		return this.list(Wrappers.<PassageArea>lambdaQuery().eq(PassageArea::getPassageId, passageId));

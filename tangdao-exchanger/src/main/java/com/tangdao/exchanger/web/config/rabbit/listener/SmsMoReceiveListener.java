@@ -17,7 +17,7 @@ import com.rabbitmq.client.Channel;
 import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.model.domain.MoMessageReceive;
 import com.tangdao.core.model.domain.PassageAccess;
-import com.tangdao.exchanger.service.SmsPassageAccessService;
+import com.tangdao.exchanger.service.PassageAccessService;
 import com.tangdao.exchanger.service.SmsProviderService;
 import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
 
@@ -45,7 +45,7 @@ public class SmsMoReceiveListener extends AbstartRabbitListener {
 	private SmsMoReceiveService smsMoReceiveService;
 	
 	@Autowired
-	private SmsPassageAccessService smsPassageAccessService;
+	private PassageAccessService smsPassageAccessService;
 
 	@Override
 	@RabbitListener(queues = RabbitConstant.MQ_SMS_MO_RECEIVE)

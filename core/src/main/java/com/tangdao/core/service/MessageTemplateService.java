@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,7 +38,7 @@ import cn.hutool.core.util.StrUtil;
  * @version 2019-09-06
  */
 @Service
-public class SmsMessageTemplateService extends BaseService<MessageTemplateMapper, MessageTemplate> {
+public class MessageTemplateService extends BaseService<MessageTemplateMapper, MessageTemplate> {
 
 	@Resource
 	private SmsForbiddenWordsService forbiddenWordsService;

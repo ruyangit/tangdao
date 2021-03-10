@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,13 +25,15 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 通道消息模板ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsPassageMessageTemplateService
+public class PassageMessageTemplateService
 		extends BaseService<PassageMessageTemplateMapper, PassageMessageTemplate> {
 
 	@Resource

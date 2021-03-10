@@ -47,7 +47,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 	private Jackson2JsonMessageConverter messageConverter;
 	
 	@Autowired
-	private SmsPassageAccessService smsPassageAccessService;
+	private PassageAccessService smsPassageAccessService;
 
 	@Override
 	@RabbitListener(queues = RabbitConstant.MQ_SMS_MT_WAIT_RECEIPT)

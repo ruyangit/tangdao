@@ -28,7 +28,7 @@ public class SmsMtTaskPacketsService extends BaseService<MtTaskPacketsMapper, Mt
 	private IAreaService areaService;
 
 	@Autowired
-	private SmsPassageService smsPassageService;
+	private PassageService smsPassageService;
 
 	public MtTaskPackets getSmsMtTaskPackets(MtTaskPackets smsMtTaskPackets) {
 		if (smsMtTaskPackets == null || StrUtil.isEmpty(smsMtTaskPackets.getId())) {

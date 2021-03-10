@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
-import com.tangdao.exchanger.service.SmsPassageMessageTemplateService;
-import com.tangdao.exchanger.service.SmsPassageService;
+import com.tangdao.exchanger.service.PassageMessageTemplateService;
+import com.tangdao.exchanger.service.PassageService;
 import com.tangdao.exchanger.service.SmsProviderService;
 import com.tangdao.exchanger.service.SmsSignatureExtnoService;
 import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
@@ -52,13 +52,13 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	@Autowired
 	private SmsMtSubmitService smsSubmitService;
 	@Autowired
-	private SmsPassageService smsPassageService;
+	private PassageService smsPassageService;
 	@Autowired
 	private SmsSignatureExtnoService smsSignatureExtnoService;
 	@Autowired
 	private Jackson2JsonMessageConverter messageConverter;
 	@Autowired
-	private SmsPassageMessageTemplateService smsPassageMessageTemplateService;
+	private PassageMessageTemplateService smsPassageMessageTemplateService;
 	@Autowired
     private ThreadPoolTaskExecutor            threadPoolTaskExecutor;
 
@@ -307,7 +307,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 		parameter.setVariableParamNames(smsPassageMessageTemplate.getParamNames().split(","));
 
 		// 根据表达式和参数数量获取本次具体的变量值
-		parameter.setVariableParamValues(SmsPassageMessageTemplateService.pickupValuesByRegex(packets.getContent(),
+		parameter.setVariableParamValues(PassageMessageTemplateService.pickupValuesByRegex(packets.getContent(),
 				smsPassageMessageTemplate.getRegexValue(),
 				smsPassageMessageTemplate.getParamNames().split(",").length));
 

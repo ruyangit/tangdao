@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +22,6 @@ import com.tangdao.core.context.CommonContext.PassageCallType;
 import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.context.SettingsContext;
-import com.tangdao.core.context.SettingsContext.SystemConfigType;
 import com.tangdao.core.context.UserContext.UserStatus;
 import com.tangdao.core.dao.PassageMapper;
 import com.tangdao.core.model.domain.Passage;
@@ -35,30 +34,32 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 通道管理ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsPassageService extends BaseService<PassageMapper, Passage> {
+public class PassageService extends BaseService<PassageMapper, Passage> {
 
 	/**
 	 * 非中文表达式
 	 */
 	private static final String NOT_CHINESS_REGEX = "[0-9A-Za-z_.]*";
 
-	@Resource
+	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
 	@Autowired
-	private SmsPassageAreaService smsPassageAreaService;
+	private PassageAreaService smsPassageAreaService;
 
 	@Autowired
-	private SmsPassageParameterService smsPassageParameterService;
+	private PassageParameterService smsPassageParameterService;
 
 	@Autowired
-	private SmsMtMessageSubmitService smsMtSubmitService;
+	private MtMessageSubmitService smsMtSubmitService;
 
 	@Autowired(required = false)
 	private SmsProxyManager smsProxyManager;
@@ -73,7 +74,7 @@ public class SmsPassageService extends BaseService<PassageMapper, Passage> {
 	private UserDeveloperService userDeveloperService;
 
 	@Autowired
-	private SmsPassageAccessService PassageAccessService;
+	private PassageAccessService PassageAccessService;
 
 	/**
 	 * 是否是中文字符

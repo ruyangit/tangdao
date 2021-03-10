@@ -47,6 +47,9 @@ public class PassageAccess extends DataEntity<PassageAccess> {
 	private int extNumber; // 拓展号长度,0表示不允许拓展
 	private int signMode; // 签名模式 0:不处理，1：自动前置，2：自动后置，3：自动去除签名
 	private int smsTemplateParam; // 是否需要短信模板参数信息
+	
+	private String status;
+	private String remarks;
 
 	@TableField(exist = false)
 	private String areaName;

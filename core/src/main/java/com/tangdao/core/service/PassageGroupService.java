@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import org.springframework.stereotype.Service;
 
@@ -7,12 +7,14 @@ import com.tangdao.core.model.domain.PassageGroup;
 import com.tangdao.core.service.BaseService;
 
 /**
- * 通道组ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsPassageGroupService extends BaseService<PassageGroupMapper, PassageGroup> {
+public class PassageGroupService extends BaseService<PassageGroupMapper, PassageGroup> {
 
 }

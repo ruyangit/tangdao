@@ -53,7 +53,7 @@ public class SmsMtMessageSubmitService extends BaseService<MtMessageSubmitMapper
 	private SmsMtMessageDeliverService smsMtDeliverService;
 	
 	@Autowired
-	private SmsPassageService smsPassageService;
+	private PassageService smsPassageService;
 
 	@Resource
 	private RabbitTemplate rabbitTemplate;

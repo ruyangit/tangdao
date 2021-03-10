@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.List;
 
@@ -9,13 +9,15 @@ import com.tangdao.core.model.domain.PassageGroupDetail;
 import com.tangdao.core.service.BaseService;
 
 /**
- * 通道组内容ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsPassageGroupDetailService extends BaseService<PassageGroupDetailMapper, PassageGroupDetail> {
+public class PassageGroupDetailService extends BaseService<PassageGroupDetailMapper, PassageGroupDetail> {
 
 	public List<String> findGroupIdByPassageId(String passageId) {
 		// TODO Auto-generated method stub

@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import org.springframework.stereotype.Service;
 
@@ -7,13 +7,15 @@ import com.tangdao.core.model.domain.PassageReachrateSettings;
 import com.tangdao.core.service.BaseService;
 
 /**
- * 通道重连配置ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsPassageReachrateSettingsService
+public class PassageReachrateSettingsService
 		extends BaseService<PassageReachrateSettingsMapper, PassageReachrateSettings> {
 
 }
