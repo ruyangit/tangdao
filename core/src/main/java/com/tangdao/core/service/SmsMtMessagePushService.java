@@ -38,22 +38,26 @@ import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
+import com.tangdao.core.context.PassageContext.PushStatus;
 import com.tangdao.core.dao.SmsMtMessageDeliverMapper;
 import com.tangdao.core.dao.SmsMtMessagePushMapper;
 import com.tangdao.core.model.domain.SmsMtMessageDeliver;
 import com.tangdao.core.model.domain.SmsMtMessagePush;
+import com.tangdao.core.model.domain.SmsMtMessageSubmit;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 下行短信推送ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
-public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper, SmsMtMessagePush>{
+public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper, SmsMtMessagePush> {
 
 	@Autowired
 	private SmsMtMessageDeliverMapper smsMtMessageDeliverMapper;
@@ -109,7 +113,6 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	 */
 	private static final String PUSH_BODY_SUBPACKAGE_KEY = "pushUrl";
 
-	
 	public boolean doListenerAllUser() {
 		// never invoke, add thread when userId has pushed data
 		// Set<Integer> userIds = userService.findAvaiableUserIds();
@@ -137,7 +140,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	 * @param userId 用户ID，每个用户ID不同的队列（用户独享队列，非共享一个推送队列）
 	 * @return 推送队列名称
 	 */
-	
+
 	public String getUserPushQueueName(String userId) {
 		return String.format("%s:%s", SmsRedisConstant.RED_QUEUE_SMS_MT_WAIT_PUSH, userId);
 	}
@@ -198,11 +201,12 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		body.put("mobile", deliver.getMobile());
 		body.put("status", deliver.getStatusCode());
 		body.put("receiveTime", deliver.getDeliverTime());
-		body.put("errorMsg", deliver.getStatus() == DeliverStatus.SUCCESS.getValue() ? "" : deliver.getStatusCode());
+		body.put("errorMsg", Integer.parseInt(deliver.getStatus()) == DeliverStatus.SUCCESS.getValue() ? ""
+				: deliver.getStatusCode());
 
 		try {
 			// 如果本次处理的用户ID已经包含在上下文处理集合中，则直接追加即可
-			if (MapUtils.isNotEmpty(userBodies) && userBodies.containsKey(body.getString("userCode"))) {
+			if (CollUtil.isNotEmpty(userBodies) && userBodies.containsKey(body.getString("userCode"))) {
 				userBodies.get(body.getString("userCode")).add(body);
 			} else {
 				// 如果未曾处理过，则重新初始化集合
@@ -243,7 +247,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	 * @param delivers
 	 * @return
 	 */
-	
+
 	@Async
 	public Future<Boolean> compareAndPushBody(List<SmsMtMessageDeliver> delivers) {
 		if (CollectionUtils.isEmpty(delivers)) {
@@ -331,7 +335,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	 * @param mobile
 	 * @return
 	 */
-	
+
 	public JSONObject getWaitPushBodyArgs(String msgId, String mobile) {
 		// 首先在REDIS查询是否存在数据
 		try {
@@ -359,7 +363,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	 * @return
 	 */
 	private JSONObject getUserPushConfigFromDatabase(String msgId, String mobile) {
-		if (StringUtils.isEmpty(msgId) || StringUtils.isEmpty(mobile)) {
+		if (StrUtil.isEmpty(msgId) || StrUtil.isEmpty(mobile)) {
 			return null;
 		}
 
@@ -377,7 +381,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 
 		JSONObject pushSettings = new JSONObject();
 		pushSettings.put("sid", submit.getSid());
-		pushSettings.put("userCode", submit.getUserCode());
+		pushSettings.put("userId", submit.getUserId());
 		pushSettings.put("msgId", msgId);
 		pushSettings.put("attach", submit.getAttach());
 		pushSettings.put("pushUrl", submit.getPushUrl());
@@ -392,7 +396,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	 * @param msgId
 	 * @return
 	 */
-	
+
 	public String getMtPushConfigKey(String msgId) {
 		return String.format("%s:%s", SmsRedisConstant.RED_READY_MT_PUSH_CONFIG, msgId);
 	}
@@ -411,7 +415,6 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		}
 	}
 
-	
 	@Async
 	public void setMessageReadyPushConfigurations(List<SmsMtMessageSubmit> submits) {
 		try {
@@ -438,7 +441,6 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		return String.format("push-%s:%d", userCode, sequence == null ? 1 : sequence++);
 	}
 
-	
 	public boolean addUserMtPushListener(String userCode) {
 		final Lock lock = ADD_PUSH_THREAD_MONITOR;
 		lock.lock();
@@ -460,18 +462,17 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		return false;
 	}
 
-	
 	public void pushMessageBodyToDeveloper(List<JSONObject> bodies) {
 		// 资源URL对应的推送地址(资源地址对应的总量超过500应该分包发送)
 		Map<String, List<JSONObject>> urlBodies = new HashMap<>();
 		String urlKey = null;
 
 		for (JSONObject body : bodies) {
-			if (MapUtils.isEmpty(body)) {
+			if (CollUtil.isEmpty(body)) {
 				continue;
 			}
 
-			if (StringUtils.isEmpty(body.getString(PUSH_BODY_SUBPACKAGE_KEY))) {
+			if (StrUtil.isEmpty(body.getString(PUSH_BODY_SUBPACKAGE_KEY))) {
 				continue;
 			}
 
@@ -479,7 +480,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 
 			// 根据用户的推送'URL'进行拆分组装状态报告
 			try {
-				if (MapUtils.isNotEmpty(urlBodies) && urlBodies.containsKey(urlKey)) {
+				if (CollUtil.isNotEmpty(urlBodies) && urlBodies.containsKey(urlKey)) {
 					urlBodies.get(urlKey).add(body);
 				} else {
 					urlBodies.put(urlKey, new ArrayList<>(Arrays.asList(body)));
@@ -578,7 +579,6 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		super.saveBatch(persistPushesList);
 	}
 
-	
 	public boolean startFailoverListener() {
 		for (int i = 0; i < failoverThreadPoolSize; i++) {
 
@@ -595,7 +595,6 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		return REPUSH_DELIVER_IDS_KEY + serialNo;
 	}
 
-	
 	public SmsPushReport getPushReport(Map<String, Object> queryParams) {
 		SmsPushReport report = new SmsPushReport();
 		logger.info(JSON.toJSONString(queryParams));
@@ -633,9 +632,9 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 				SmsMtMessagePush push = findByMobileAndMsgid(submit.getMobile(), submit.getMsgId());
 				if (push == null) {
 					report.setReadyPushCount(report.getReadyPushCount() + 1);
-				} else if (PushStatus.SUCCESS.getValue() == push.getStatus()) {
+				} else if (PushStatus.SUCCESS.getValue() == Integer.parseInt(push.getStatus())) {
 					report.setPushedSuccessCount(report.getPushedSuccessCount());
-				} else if (PushStatus.FAILED.getValue() == push.getStatus()) {
+				} else if (PushStatus.FAILED.getValue() == Integer.parseInt(push.getStatus())) {
 					report.setPushedFailedCount(report.getPushedFailedCount());
 				}
 			}
@@ -665,10 +664,9 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	}
 
 	private boolean isIgnoredPushData(Map<String, Object> queryParams) {
-		return MapUtils.isNotEmpty(queryParams) && queryParams.containsKey("ignorePushData");
+		return CollUtil.isNotEmpty(queryParams) && queryParams.containsKey("ignorePushData");
 	}
 
-	
 	public boolean repush(Long serialNo) {
 		if (serialNo == null || serialNo == 0L) {
 			logger.error("Repush args[serialNo] is illegal");

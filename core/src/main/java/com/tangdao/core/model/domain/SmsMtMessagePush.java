@@ -29,6 +29,8 @@ public class SmsMtMessagePush extends DataEntity<SmsMtMessagePush> {
 	private int retryTimes; // 重试次数
 	private Long responseMilliseconds; // 推送相应时间
 	private String responseContent; // 响应内容
+	
+	private String status;
 
 	public SmsMtMessagePush() {
 		super();

@@ -18,6 +18,7 @@ import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.CommonContext.PassageCallType;
 import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.context.CommonContext.ProtocolType;
+import com.tangdao.core.context.CommonContext.Status;
 import com.tangdao.core.context.UserContext.UserStatus;
 import com.tangdao.core.dao.SmsPassageMapper;
 import com.tangdao.core.model.domain.SmsPassage;
@@ -55,7 +56,7 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, SmsPassage>
 	private SmsPassageParameterService smsPassageParameterService;
 
 	@Autowired
-	private MtMessageSubmitService smsMtSubmitService;
+	private SmsMtMessageSubmitService smsMtSubmitService;
 
 	@Autowired(required = false)
 	private ISmsProxyManager smsProxyManager;
@@ -467,12 +468,12 @@ public class SmsPassageService extends BaseService<SmsPassageMapper, SmsPassage>
 	}
 
 	public List<SmsPassage> getByCmcp(String cmcp) {
-		return this.list(Wrappers.<SmsPassage>lambdaQuery().eq(SmsPassage::getStatus, SmsPassage.STATUS_NORMAL)
+		return this.list(Wrappers.<SmsPassage>lambdaQuery().eq(SmsPassage::getStatus, Status.NORMAL)
 				.eq(SmsPassage::getCmcp, cmcp).or().eq(SmsPassage::getCmcp, "4"));
 	}
 
 	public List<SmsPassage> findByCmcpOrAll(String cmcp) {
-		return this.list(Wrappers.<SmsPassage>lambdaQuery().eq(SmsPassage::getStatus, SmsPassage.STATUS_NORMAL)
+		return this.list(Wrappers.<SmsPassage>lambdaQuery().eq(SmsPassage::getStatus, Status.NORMAL)
 				.eq(SmsPassage::getType, "0").eq(SmsPassage::getCmcp, cmcp).or().eq(SmsPassage::getCmcp, "4"));
 	}
 
