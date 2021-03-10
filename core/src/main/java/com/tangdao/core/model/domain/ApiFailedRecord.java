@@ -7,7 +7,7 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.DataEntity;
+import com.tangdao.core.model.DataEntity;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;

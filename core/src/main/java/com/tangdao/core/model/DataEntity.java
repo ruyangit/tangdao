@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core;
+package com.tangdao.core.model;
 
 import java.util.Date;
 

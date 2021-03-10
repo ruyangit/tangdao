@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.tangdao.core.BaseModel;
 import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.constant.PassportConstant;
 import com.tangdao.core.context.UserContext.UserStatus;
+import com.tangdao.core.model.BaseModel;
 import com.tangdao.core.model.domain.UserDeveloper;
 import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.model.dto.AuthorizationDTO;

@@ -1,14 +1,15 @@
 /**
  *
  */
-package com.tangdao.core;
+package com.tangdao.core.model;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * <p>
@@ -18,7 +19,8 @@ import lombok.Data;
  * @author ruyang
  * @since 2021年2月5日
  */
-@Data
+@Getter
+@Setter
 public abstract class BaseModel implements Serializable {
 	/**
 	 * 

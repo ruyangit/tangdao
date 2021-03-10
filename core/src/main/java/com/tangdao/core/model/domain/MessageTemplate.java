@@ -5,9 +5,9 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tangdao.core.DataEntity;
 import com.tangdao.core.context.SmsTemplateContext.IgnoreBlacklist;
 import com.tangdao.core.context.SmsTemplateContext.IgnoreForbiddenWords;
+import com.tangdao.core.model.DataEntity;
 
 import lombok.Getter;
 import lombok.Setter;

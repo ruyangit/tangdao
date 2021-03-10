@@ -6,7 +6,7 @@ package com.tangdao.core.model.domain;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.DataEntity;
+import com.tangdao.core.model.DataEntity;
 
 import lombok.Getter;
 import lombok.Setter;

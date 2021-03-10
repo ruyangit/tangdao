@@ -8,9 +8,9 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.DataEntity;
-import com.tangdao.core.model.dto.ParseParamDto;
-import com.tangdao.core.model.dto.RequestParamDto;
+import com.tangdao.core.model.DataEntity;
+import com.tangdao.core.model.vo.ParseParamVo;
+import com.tangdao.core.model.vo.RequestParamVo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -48,18 +48,18 @@ public class PassageTemplateDetail extends DataEntity<PassageTemplateDetail> {
 		return null;
 	}
 
-	public List<RequestParamDto> getRequestParams() {
-		List<RequestParamDto> list = new ArrayList<RequestParamDto>();
+	public List<RequestParamVo> getRequestParams() {
+		List<RequestParamVo> list = new ArrayList<RequestParamVo>();
 		if (StringUtils.isNotBlank(params)) {
-			list = JSON.parseArray(params, RequestParamDto.class);
+			list = JSON.parseArray(params, RequestParamVo.class);
 		}
 		return list;
 	}
 
-	public List<ParseParamDto> getParseParams() {
-		List<ParseParamDto> list = new ArrayList<ParseParamDto>();
+	public List<ParseParamVo> getParseParams() {
+		List<ParseParamVo> list = new ArrayList<ParseParamVo>();
 		if (StringUtils.isNotBlank(position)) {
-			list = JSON.parseArray(position, ParseParamDto.class);
+			list = JSON.parseArray(position, ParseParamVo.class);
 		}
 		return list;
 	}

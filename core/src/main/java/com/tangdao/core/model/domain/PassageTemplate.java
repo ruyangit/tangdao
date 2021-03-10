@@ -5,7 +5,7 @@ import java.util.List;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.DataEntity;
+import com.tangdao.core.model.DataEntity;
 import com.tangdao.core.model.vo.TemplateDetail;
 
 import lombok.Getter;

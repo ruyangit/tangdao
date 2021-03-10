@@ -8,9 +8,9 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.DataEntity;
-import com.tangdao.core.model.dto.ParseParamDto;
-import com.tangdao.core.model.dto.RequestParamDto;
+import com.tangdao.core.model.DataEntity;
+import com.tangdao.core.model.vo.ParseParamVo;
+import com.tangdao.core.model.vo.RequestParamVo;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
@@ -99,21 +99,21 @@ public class PassageParameter extends DataEntity<PassageParameter> {
 		this.successCode = successCode == null ? null : successCode.trim();
 	}
 
-	public List<RequestParamDto> getRequestParams() {
-		List<RequestParamDto> list = new ArrayList<RequestParamDto>();
+	public List<RequestParamVo> getRequestParams() {
+		List<RequestParamVo> list = new ArrayList<RequestParamVo>();
 		if (StrUtil.isNotBlank(paramsDefinition)) {
-			list = JSON.parseArray(paramsDefinition, RequestParamDto.class);
+			list = JSON.parseArray(paramsDefinition, RequestParamVo.class);
 		}
 		return list;
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<ParseParamDto> getParseParams() {
-		List<ParseParamDto> list = new ArrayList<ParseParamDto>();
+	public List<ParseParamVo> getParseParams() {
+		List<ParseParamVo> list = new ArrayList<ParseParamVo>();
 		if (StrUtil.isNotBlank(position)) {
 			Map<String, String> map = JSON.parseObject(position, Map.class);
 			for (Map.Entry<String, String> m : map.entrySet()) {
-				ParseParamDto dto = new ParseParamDto();
+				ParseParamVo dto = new ParseParamVo();
 				dto.setPosition(m.getValue());
 				dto.setParseName(m.getKey());
 				dto.setShowName("");

@@ -11,10 +11,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tangdao.core.DataEntity;
 import com.tangdao.core.context.TaskContext.PacketsActionActor;
 import com.tangdao.core.context.TaskContext.PacketsActionPosition;
 import com.tangdao.core.context.TaskContext.TaskSubmitType;
+import com.tangdao.core.model.DataEntity;
 
 import cn.hutool.core.util.StrUtil;
 import lombok.Getter;

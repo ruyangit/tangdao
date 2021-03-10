@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.dto;
+package com.tangdao.core.model.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,11 +16,11 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class RequestParamDto {
+public class ParseParamVo {
 
 	private String showName;
 
-	private String requestName;
+	private String parseName;
 
-	private String defaultValue;
+	private String position;
 }
