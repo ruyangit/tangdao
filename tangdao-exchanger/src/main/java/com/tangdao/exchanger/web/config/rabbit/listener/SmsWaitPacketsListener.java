@@ -17,7 +17,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.rabbitmq.client.Channel;
-import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
+import com.tangdao.core.config.rabbit.AbstartRabbitListener;
 
 /**
  * 

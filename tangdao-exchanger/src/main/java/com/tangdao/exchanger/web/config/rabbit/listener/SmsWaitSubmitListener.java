@@ -19,11 +19,11 @@ import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
+import com.tangdao.core.config.rabbit.AbstartRabbitListener;
 import com.tangdao.exchanger.service.PassageMessageTemplateService;
 import com.tangdao.exchanger.service.PassageService;
 import com.tangdao.exchanger.service.SmsProviderService;
 import com.tangdao.exchanger.service.SmsSignatureExtnoService;
-import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
 
 /**
  * 

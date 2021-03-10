@@ -14,7 +14,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
-import com.tangdao.exchanger.web.config.worker.hook.ShutdownHookWorker;
+import com.tangdao.core.config.worker.hook.ShutdownHookWorker;
 
 /**
  * <p>

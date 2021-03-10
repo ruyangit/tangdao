@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.exchanger.utils;
+package com.tangdao.core.utils;
 
 import java.io.Serializable;
 import java.util.List;

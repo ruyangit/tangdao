@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.web.config.rabbit;
+package com.tangdao.core.config.rabbit;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.web.config.worker.hook;
+package com.tangdao.core.config.worker.hook;
 
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 

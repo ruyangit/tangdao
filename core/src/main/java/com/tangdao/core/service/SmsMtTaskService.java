@@ -14,12 +14,14 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
- * 下行短信任务ServiceImpl
  * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
  * @author ruyang
- * @version 2019-09-06
+ * @since 2021年3月10日
  */
-@Service
 public class SmsMtTaskService extends BaseService<SmsMtTaskMapper, SmsMtTask> {
 
 	@Autowired

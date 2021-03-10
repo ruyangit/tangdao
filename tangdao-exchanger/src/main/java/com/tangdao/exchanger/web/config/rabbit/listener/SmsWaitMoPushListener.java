@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
 import com.rabbitmq.client.Channel;
-import com.tangdao.exchanger.web.config.rabbit.AbstartRabbitListener;
+import com.tangdao.core.config.rabbit.AbstartRabbitListener;
 
 /**
  * 

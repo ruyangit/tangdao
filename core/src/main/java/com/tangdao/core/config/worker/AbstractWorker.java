@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.web.config.worker;
+package com.tangdao.core.config.worker;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -13,7 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import com.alibaba.fastjson.JSON;
-import com.tangdao.exchanger.web.config.worker.hook.ShutdownHookWorker;
+import com.tangdao.core.config.worker.hook.ShutdownHookWorker;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
