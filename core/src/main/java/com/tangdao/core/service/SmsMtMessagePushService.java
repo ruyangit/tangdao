@@ -27,7 +27,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -44,6 +43,9 @@ import com.tangdao.core.dao.SmsMtMessagePushMapper;
 import com.tangdao.core.model.domain.SmsMtMessageDeliver;
 import com.tangdao.core.model.domain.SmsMtMessagePush;
 import com.tangdao.core.model.domain.SmsMtMessageSubmit;
+import com.tangdao.core.model.vo.SmsPushReport;
+import com.tangdao.core.utils.HttpClientUtil;
+import com.tangdao.core.utils.HttpClientUtil.RetryResponse;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -206,13 +208,13 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 
 		try {
 			// 如果本次处理的用户ID已经包含在上下文处理集合中，则直接追加即可
-			if (CollUtil.isNotEmpty(userBodies) && userBodies.containsKey(body.getString("userCode"))) {
-				userBodies.get(body.getString("userCode")).add(body);
+			if (CollUtil.isNotEmpty(userBodies) && userBodies.containsKey(body.getString("userId"))) {
+				userBodies.get(body.getString("userId")).add(body);
 			} else {
 				// 如果未曾处理过，则重新初始化集合
 				// List<JSONObject> ds = new ArrayList<>();
 				// ds.add(body);
-				userBodies.put(body.getString("userCode"), new ArrayList<>(Arrays.asList(body)));
+				userBodies.put(body.getString("userId"), new ArrayList<>(Arrays.asList(body)));
 			}
 
 			return true;
@@ -225,16 +227,16 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	/**
 	 * 添加用户推送线程
 	 * 
-	 * @param userCode 用户ID
+	 * @param userId 用户ID
 	 */
-	private void addThreadIfNessary(String userCode) {
-		if (USER_PUTH_THREAD_FLAG.containsKey(userCode)) {
+	private void addThreadIfNessary(String userId) {
+		if (USER_PUTH_THREAD_FLAG.containsKey(userId)) {
 			return;
 		}
 
-		boolean isOk = addUserMtPushListener(userCode);
+		boolean isOk = addUserMtPushListener(userId);
 		if (isOk) {
-			USER_PUTH_THREAD_FLAG.putIfAbsent(userCode, System.currentTimeMillis());
+			USER_PUTH_THREAD_FLAG.putIfAbsent(userId, System.currentTimeMillis());
 			logger.info("There are " + (USER_PUTH_THREAD_FLAG.size() * 2) + " threads[" + USER_PUTH_THREAD_FLAG.keySet()
 					+ "] joined");
 		}
@@ -375,7 +377,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		// 此处需要查询数据库是否需要有推送设置，无则不推送
 		SmsMtMessageSubmit submit = smsMtSubmitService.findByMobileAndMsgid(mobile, msgId);
 		if (submit == null) {
-			// logger.warn("msg_id : {}, mobile: {} 未找到短信相关提交数据", msgId, mobile);
+			logger.warn("msg_id : {}, mobile: {} 未找到短信相关提交数据", msgId, mobile);
 			return null;
 		}
 
@@ -385,7 +387,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		pushSettings.put("msgId", msgId);
 		pushSettings.put("attach", submit.getAttach());
 		pushSettings.put("pushUrl", submit.getPushUrl());
-		pushSettings.put("retryTimes", HttpClientUtils.PUSH_RETRY_TIMES);
+		pushSettings.put("retryTimes", 3);
 
 		return pushSettings;
 	}
@@ -420,7 +422,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		try {
 			for (SmsMtMessageSubmit submit : submits) {
 				stringRedisTemplate.opsForHash().put(getMtPushConfigKey(submit.getMsgId()), submit.getMobile(),
-						JSON.toJSONString(submit, new SimplePropertyPreFilter("sid", "userCode", "msgId", "attach",
+						JSON.toJSONString(submit, new SimplePropertyPreFilter("sid", "userId", "msgId", "attach",
 								"pushUrl", "retryTimes")));
 				stringRedisTemplate.expire(getMtPushConfigKey(submit.getMsgId()), 3, TimeUnit.HOURS);
 			}
@@ -437,25 +439,26 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	 * @param sequence 序列号
 	 * @return
 	 */
-	private static String pushThreadName(String userCode, Integer sequence) {
-		return String.format("push-%s:%d", userCode, sequence == null ? 1 : sequence++);
+	private static String pushThreadName(String userId, Integer sequence) {
+		return String.format("push-%s:%d", userId, sequence == null ? 1 : sequence++);
 	}
 
-	public boolean addUserMtPushListener(String userCode) {
+	public boolean addUserMtPushListener(String userId) {
 		final Lock lock = ADD_PUSH_THREAD_MONITOR;
 		lock.lock();
 		try {
 			for (int i = 0; i < pushThreadPoolSize; i++) {
-				Thread thread = new Thread(
-						new MtReportPushToDeveloperWorker(applicationContext, getUserPushQueueName(userCode)),
-						pushThreadName(userCode, i));
-				thread.start();
+//				Thread thread = new Thread(
+//						new MtReportPushToDeveloperWorker(applicationContext, getUserPushQueueName(userId)),
+//						pushThreadName(userId, i));
+//				thread.start();
+				System.out.println(pushThreadName(userId, i));
 			}
 
-			logger.info("User[" + userCode + "] add push thread[" + pushThreadPoolSize + "] successfully");
+			logger.info("User[" + userId + "] add push thread[" + pushThreadPoolSize + "] successfully");
 			return true;
 		} catch (Exception e) {
-			logger.info("User[" + userCode + "] add push thread[" + pushThreadPoolSize + "] failed", e);
+			logger.info("User[" + userId + "] add push thread[" + pushThreadPoolSize + "] failed", e);
 		} finally {
 			lock.unlock();
 		}
@@ -526,7 +529,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 				String pushContent = translateBodies(urlBody.getValue());
 
 				// print result and cost time
-				RetryResponse response = HttpClientUtils.postBody(urlBody.getKey(), pushContent, 1);
+				RetryResponse response = HttpClientUtil.postBody(urlBody.getKey(), pushContent, 1);
 				logger.info("Url [" + urlBody.getKey() + "] push body [" + pushContent + "]'s result is "
 						+ response.isSuccess() + ", it costs {} ms ", (System.currentTimeMillis() - startTime));
 
@@ -554,11 +557,11 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 			push.setMsgId(body.getString("msgId"));
 			push.setMobile(body.getString("mobile"));
 			if (retryResponse == null) {
-				push.setStatus(PushStatus.FAILED.getValue());
+				push.setStatus(PushStatus.FAILED.getValue() + "");
 				push.setRetryTimes(0);
 			} else {
-				push.setStatus(
-						retryResponse.isSuccess() ? PushStatus.SUCCESS.getValue() : PushStatus.FAILED.getValue());
+				push.setStatus(retryResponse.isSuccess() ? PushStatus.SUCCESS.getValue() + ""
+						: PushStatus.FAILED.getValue() + "");
 				push.setRetryTimes(retryResponse.getAttemptTimes());
 				push.setResponseMilliseconds(retryResponse.getTimeCost());
 			}
@@ -567,7 +570,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 			push.setResponseContent(System.nanoTime() + "");
 			push.setContent(JSON.toJSONString(body, USER_PUSH_REPORT_FILTER, SerializerFeature.WriteMapNullValue,
 					SerializerFeature.WriteNullStringAsEmpty));
-			push.setCreateTime(new Date());
+			push.setCreateDate(new Date());
 
 			waitPushMsgIdRedisKeys.add(getMtPushConfigKey(body.getString("msgId")));
 			persistPushesList.add(push);
@@ -583,7 +586,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 		for (int i = 0; i < failoverThreadPoolSize; i++) {
 
 			// 用户下行状态延迟推送（针对上家下行状态报告回复过快而短信提交记录未入库情况，后续延迟推送）
-			threadPoolTaskExecutor.execute(new MtReportFailoverPushWorker(applicationContext));
+//			threadPoolTaskExecutor.execute(new MtReportFailoverPushWorker(applicationContext));
 		}
 
 		logger.info("Deliver failover threads[" + failoverThreadPoolSize + "] has joined");
@@ -598,8 +601,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 	public SmsPushReport getPushReport(Map<String, Object> queryParams) {
 		SmsPushReport report = new SmsPushReport();
 		logger.info(JSON.toJSONString(queryParams));
-//        List<SmsMtMessageSubmit> list = smsMtSubmitService.findList(queryParams);
-		List<SmsMtMessageSubmit> list = ListUtils.newArrayList();
+        List<SmsMtMessageSubmit> list = smsMtSubmitService.findList(queryParams);
 		if (CollectionUtils.isEmpty(list)) {
 			return report;
 		}

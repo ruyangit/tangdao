@@ -22,9 +22,9 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang
  * @since 2021年3月3日
  */
-public class MobileNumberCatagoryUtil {
+public class MobileCatagoryUtil {
 
-	private static Logger logger = LoggerFactory.getLogger(MobileNumberCatagoryUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(MobileCatagoryUtil.class);
 
 	// 数据分隔符
 	public static final String DATA_SPLIT_CHARCATOR = ",";

@@ -55,8 +55,11 @@ public class SmsMtTaskPackets extends DataEntity<SmsMtTaskPackets> {
 	private Integer retryTimes; // 调用上家重试次数
 	private String areaCode; // 省份代码
 
+	private String status;
+	private String remarks;
+
 	@TableField(exist = false)
-	private String appId;
+	private String userId;
 
 	@TableField(exist = false)
 	private String passageName;

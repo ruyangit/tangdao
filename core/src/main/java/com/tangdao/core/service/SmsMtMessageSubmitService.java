@@ -27,8 +27,6 @@ import com.tangdao.core.model.domain.SmsMtMessageSubmit;
 import com.tangdao.core.model.domain.SmsMtTaskPackets;
 import com.tangdao.core.model.domain.SmsPassage;
 import com.tangdao.core.model.domain.User;
-import com.tangdao.exchanger.web.config.rabbit.RabbitMessageQueueManager;
-import com.tangdao.exchanger.web.config.rabbit.listener.SmsWaitSubmitListener;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

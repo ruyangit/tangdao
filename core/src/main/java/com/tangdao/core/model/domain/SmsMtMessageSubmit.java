@@ -38,6 +38,9 @@ public class SmsMtMessageSubmit extends DataEntity<SmsMtMessageSubmit> {
 	private String destnationNo; // 扩展号码
 	private String msgId; // 调用接口回执ID，默认与SID一致
 
+	private String status;
+	private String remarks;
+
 	@TableField(exist = false)
 	private SmsMtMessageDeliver messageDeliver;
 

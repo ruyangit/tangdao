@@ -11,6 +11,6 @@ package com.tangdao.core.constant;
  * @author ruyang@gmail.com
  * @since 2020年6月2日
  */
-public interface ErrorCode extends Base<Integer, String> {
+public interface ErrorCode extends Base<String, String> {
 
 }

@@ -5,8 +5,6 @@ package com.tangdao.core.exception;
 
 import com.tangdao.core.constant.ErrorCode;
 
-import cn.hutool.core.exceptions.StatefulException;
-
 /**
  * <p>
  * TODO 列队处理异常
@@ -15,7 +13,7 @@ import cn.hutool.core.exceptions.StatefulException;
  * @author ruyang
  * @since 2021年2月24日
  */
-public class DataEmptyException extends StatefulException {
+public class DataEmptyException extends BusinessException {
 
 	private static final long serialVersionUID = 1L;
 

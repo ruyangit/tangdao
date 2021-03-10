@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.web.config.rabbit.listener;
+package com.tangdao.core.config.rabbit.listener;
 
 import java.util.List;
 
@@ -8,17 +8,23 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Reference;
-import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.tangdao.core.config.rabbit.AbstartRabbitListener;
 import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.CommonContext.PassageCallType;
-import com.tangdao.core.model.domain.MtMessageDeliver;
-import com.tangdao.core.model.domain.MtMessageSubmit;
 import com.tangdao.core.context.ParameterContext;
+import com.tangdao.core.model.domain.SmsMtMessageDeliver;
+import com.tangdao.core.model.domain.SmsMtMessageSubmit;
+import com.tangdao.core.model.domain.SmsPassageAccess;
+import com.tangdao.core.service.SmsMtMessageDeliverService;
+import com.tangdao.core.service.SmsMtMessageSubmitService;
+import com.tangdao.core.service.SmsPassageAccessService;
+import com.tangdao.core.service.proxy.ISmsProviderService;
 
 import cn.hutool.core.collection.CollUtil;
 
@@ -29,25 +35,20 @@ import cn.hutool.core.collection.CollUtil;
  * </p>
  *
  * @author ruyang
- * @since 2021年3月8日
+ * @since 2021年3月10日
  */
-@Component
 public class SmsWaitReceiptListener extends AbstartRabbitListener {
 
 	@Autowired
-	private SmsMtSubmitService smsMtSubmitService;
-	
+	private SmsMtMessageSubmitService smsMtSubmitService;
 	@Reference
-	private SmsProviderService smsProviderService;
-	
+	private ISmsProviderService smsProviderService;
 	@Autowired
-	private SmsMtDeliverService smsMtDeliverService;
-	
+	private SmsMtMessageDeliverService smsMtDeliverService;
 	@Autowired
 	private Jackson2JsonMessageConverter messageConverter;
-	
 	@Autowired
-	private PassageAccessService smsPassageAccessService;
+	private SmsPassageAccessService smsPassageAccessService;
 
 	@Override
 	@RabbitListener(queues = RabbitConstant.MQ_SMS_MT_WAIT_RECEIPT)
@@ -63,7 +64,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 				return;
 			}
 
-			List<MtMessageDeliver> delivers;
+			List<SmsMtMessageDeliver> delivers;
 			if (object instanceof JSONObject) {
 				delivers = doDeliverMessage((JSONObject) object);
 			} else if (object instanceof List) {
@@ -115,7 +116,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 	 * @param jsonObject
 	 * @return
 	 */
-	private List<MtMessageDeliver> doDeliverMessage(JSONObject jsonObject) {
+	private List<SmsMtMessageDeliver> doDeliverMessage(JSONObject jsonObject) {
 		// 提供商代码（通道）
 		String providerCode = jsonObject.getString(ParameterContext.PASSAGE_PROVIDER_CODE_NODE);
 		if (StringUtils.isEmpty(providerCode)) {
@@ -125,7 +126,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 			return null;
 		}
 
-		PassageAccess access = smsPassageAccessService.getByType(PassageCallType.MT_STATUS_RECEIPT_WITH_PUSH,
+		SmsPassageAccess access = smsPassageAccessService.getByType(PassageCallType.MT_STATUS_RECEIPT_WITH_PUSH,
 				providerCode);
 		if (access == null) {
 			logger.warn("上家推送状态回执报告通道参数无法匹配：{}", jsonObject.toJSONString());
@@ -135,7 +136,7 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 		}
 
 		// 回执数据解析后的报文
-		List<MtMessageDeliver> delivers = smsProviderService.receiveMtReport(access, jsonObject);
+		List<SmsMtMessageDeliver> delivers = smsProviderService.receiveMtReport(access, jsonObject);
 		if (CollUtil.isEmpty(delivers)) {
 			return null;
 		}
@@ -151,9 +152,9 @@ public class SmsWaitReceiptListener extends AbstartRabbitListener {
 	 *
 	 * @param delivers
 	 */
-	private void fillMobileWhenMobileMissed(List<MtMessageDeliver> delivers) {
-		MtMessageSubmit submit;
-		for (MtMessageDeliver deliver : delivers) {
+	private void fillMobileWhenMobileMissed(List<SmsMtMessageDeliver> delivers) {
+		SmsMtMessageSubmit submit;
+		for (SmsMtMessageDeliver deliver : delivers) {
 			if (StringUtils.isNotBlank(deliver.getMobile())) {
 				continue;
 			}

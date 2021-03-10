@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -18,7 +17,6 @@ import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.PassageContext.PassageMessageTemplateStatus;
 import com.tangdao.core.dao.SmsPassageMessageTemplateMapper;
 import com.tangdao.core.model.domain.SmsPassageMessageTemplate;
-import com.tangdao.core.service.BaseService;
 import com.tangdao.core.utils.PatternUtil;
 
 import cn.hutool.core.collection.CollUtil;

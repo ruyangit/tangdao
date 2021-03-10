@@ -68,6 +68,9 @@ public class SmsMtTask extends DataEntity<SmsMtTask> {
 	private String forceActions; // 异常分包情况下允许的操作，如000,010，第一位:未报备模板，第二位：敏感词，第三位：通道不可用
 	private String messageTemplateId; // 短信模板ID
 	private String forbiddenWords; // 敏感词
+	
+	private String status;
+	private String remarks;
 
 	public SmsMtTask() {
 		super();

@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.web.config.rabbit.listener;
+package com.tangdao.core.config.rabbit.listener;
 
 import java.util.List;
 
@@ -8,18 +8,21 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Reference;
-import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.tangdao.core.config.rabbit.AbstartRabbitListener;
 import com.tangdao.core.constant.RabbitConstant;
-import com.tangdao.core.model.domain.MoMessageReceive;
-import com.tangdao.core.model.domain.PassageAccess;
-import com.tangdao.exchanger.service.PassageAccessService;
-import com.tangdao.exchanger.service.SmsProviderService;
+import com.tangdao.core.context.CommonContext.PassageCallType;
+import com.tangdao.core.context.ParameterContext;
+import com.tangdao.core.model.domain.SmsMoMessageReceive;
+import com.tangdao.core.model.domain.SmsPassageAccess;
+import com.tangdao.core.service.SmsMoMessageReceiveService;
+import com.tangdao.core.service.SmsPassageAccessService;
+import com.tangdao.core.service.proxy.ISmsProviderService;
 
 import cn.hutool.core.collection.CollUtil;
 
@@ -30,22 +33,21 @@ import cn.hutool.core.collection.CollUtil;
  * </p>
  *
  * @author ruyang
- * @since 2021年3月8日
+ * @since 2021年3月10日
  */
-@Component
 public class SmsMoReceiveListener extends AbstartRabbitListener {
 
-	@Autowired
-	private SmsProviderService smsProviderService;
-	
+	@Reference
+	private ISmsProviderService smsProviderService;
+
 	@Autowired
 	private Jackson2JsonMessageConverter messageConverter;
-	
+
 	@Autowired
-	private SmsMoReceiveService smsMoReceiveService;
-	
+	private SmsMoMessageReceiveService smsMoReceiveService;
+
 	@Autowired
-	private PassageAccessService smsPassageAccessService;
+	private SmsPassageAccessService smsPassageAccessService;
 
 	@Override
 	@RabbitListener(queues = RabbitConstant.MQ_SMS_MO_RECEIVE)
@@ -60,12 +62,12 @@ public class SmsMoReceiveListener extends AbstartRabbitListener {
 				return;
 			}
 
-			List<MoMessageReceive> receives;
+			List<SmsMoMessageReceive> receives;
 			if (object instanceof JSONObject) {
 				receives = doReceiveMessage((JSONObject) object);
 			} else if (object instanceof List) {
 				ObjectMapper mapper = new ObjectMapper();
-				receives = mapper.convertValue(object, new TypeReference<List<MoMessageReceive>>() {
+				receives = mapper.convertValue(object, new TypeReference<List<SmsMoMessageReceive>>() {
 				});
 			} else {
 				logger.error("上行回执数据类型无法匹配");
@@ -95,7 +97,7 @@ public class SmsMoReceiveListener extends AbstartRabbitListener {
 	 * @param jsonObject
 	 * @return
 	 */
-	private List<MoMessageReceive> doReceiveMessage(JSONObject jsonObject) {
+	private List<SmsMoMessageReceive> doReceiveMessage(JSONObject jsonObject) {
 		// 提供商代码（通道）
 		String providerCode = jsonObject.getString(ParameterContext.PASSAGE_PROVIDER_CODE_NODE);
 		if (StringUtils.isEmpty(providerCode)) {
@@ -105,7 +107,7 @@ public class SmsMoReceiveListener extends AbstartRabbitListener {
 			return null;
 		}
 
-		PassageAccess access = smsPassageAccessService.getByType(PassageCallType.MO_REPORT_WITH_PUSH, providerCode);
+		SmsPassageAccess access = smsPassageAccessService.getByType(PassageCallType.MO_REPORT_WITH_PUSH, providerCode);
 		if (access == null) {
 			logger.warn("上行报告通道参数无法匹配：{}", jsonObject.toJSONString());
 			jsonObject.put("reason", "上行报告报告通道参数无法匹配");
@@ -114,7 +116,7 @@ public class SmsMoReceiveListener extends AbstartRabbitListener {
 		}
 
 		// 回执数据解析后的报文
-		List<MoMessageReceive> receives = smsProviderService.receiveMoReport(access, jsonObject);
+		List<SmsMoMessageReceive> receives = smsProviderService.receiveMoReport(access, jsonObject);
 		if (CollUtil.isEmpty(receives)) {
 			return null;
 		}

@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.web.config.rabbit.listener;
+package com.tangdao.core.config.rabbit.listener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.rabbitmq.client.Channel;
 import com.tangdao.core.config.rabbit.AbstartRabbitListener;
 import com.tangdao.core.constant.RabbitConstant;
+import com.tangdao.core.model.domain.SmsMtMessageSubmit;
+import com.tangdao.core.service.SmsMtMessageSubmitService;
 
 /**
  * 
@@ -19,13 +21,12 @@ import com.tangdao.core.constant.RabbitConstant;
  * </p>
  *
  * @author ruyang
- * @since 2021年3月8日
+ * @since 2021年3月10日
  */
-@Component
 public class SmsPacketsFailedListener extends AbstartRabbitListener {
 
 	@Autowired
-	private SmsMtSubmitService smsMtSubmitService;
+	private SmsMtMessageSubmitService smsMtSubmitService;
 
 	@Autowired
 	private Jackson2JsonMessageConverter messageConverter;
@@ -33,7 +34,6 @@ public class SmsPacketsFailedListener extends AbstartRabbitListener {
 	@Override
 	@RabbitListener(queues = RabbitConstant.MQ_SMS_MT_PACKETS_EXCEPTION)
 	public void onMessage(Message message, Channel channel) throws Exception {
-
 		checkIsStartingConsumeMessage();
 
 		try {

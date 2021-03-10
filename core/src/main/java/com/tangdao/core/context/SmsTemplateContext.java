@@ -14,7 +14,7 @@ package com.tangdao.core.context;
 public class SmsTemplateContext {
 
 	// 无需检验模板模板ID标识
-	public static final long SUPER_TEMPLATE_ID = 0L;
+	public static final String SUPER_TEMPLATE_ID = "0";
 
 	// 默认短信提交间隔数（同一手机号码）
 	public static final int DEFAULT_SUBMIT_INTERVAL = 30;

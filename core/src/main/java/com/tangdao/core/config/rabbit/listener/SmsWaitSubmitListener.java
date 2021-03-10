@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.web.config.rabbit.listener;
+package com.tangdao.core.config.rabbit.listener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,16 +14,43 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
 import com.tangdao.core.config.rabbit.AbstartRabbitListener;
-import com.tangdao.exchanger.service.PassageMessageTemplateService;
-import com.tangdao.exchanger.service.PassageService;
-import com.tangdao.exchanger.service.SmsProviderService;
-import com.tangdao.exchanger.service.SmsSignatureExtnoService;
+import com.tangdao.core.constant.OpenApiCode;
+import com.tangdao.core.constant.OpenApiCode.SmsPushCode;
+import com.tangdao.core.constant.RabbitConstant;
+import com.tangdao.core.constant.UserBalanceConstant;
+import com.tangdao.core.context.CommonContext.CMCP;
+import com.tangdao.core.context.CommonContext.CallbackUrlType;
+import com.tangdao.core.context.PassageContext.PassageSignMode;
+import com.tangdao.core.context.PassageContext.PassageSmsTemplateParam;
+import com.tangdao.core.context.SettingsContext.PushConfigStatus;
+import com.tangdao.core.context.TaskContext.MessageSubmitStatus;
+import com.tangdao.core.context.TaskContext.PacketsApproveStatus;
+import com.tangdao.core.model.domain.AreaLocal;
+import com.tangdao.core.model.domain.PushConfig;
+import com.tangdao.core.model.domain.SmsMtMessageSubmit;
+import com.tangdao.core.model.domain.SmsMtTask;
+import com.tangdao.core.model.domain.SmsMtTaskPackets;
+import com.tangdao.core.model.domain.SmsPassage;
+import com.tangdao.core.model.domain.SmsPassageMessageTemplate;
+import com.tangdao.core.model.domain.SmsPassageParameter;
+import com.tangdao.core.model.domain.UserSmsConfig;
+import com.tangdao.core.model.vo.MobileCatagory;
+import com.tangdao.core.model.vo.ProviderSendVo;
+import com.tangdao.core.service.MobileLocalService;
+import com.tangdao.core.service.PushConfigService;
+import com.tangdao.core.service.SmsMtMessageSubmitService;
+import com.tangdao.core.service.SmsPassageMessageTemplateService;
+import com.tangdao.core.service.SmsPassageService;
+import com.tangdao.core.service.SmsSignatureExtnoService;
+import com.tangdao.core.service.UserSmsConfigService;
+import com.tangdao.core.service.proxy.ISmsProviderService;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 
@@ -32,17 +59,16 @@ import com.tangdao.exchanger.service.SmsSignatureExtnoService;
  * </p>
  *
  * @author ruyang
- * @since 2021年3月8日
+ * @since 2021年3月10日
  */
-@Component
 public class SmsWaitSubmitListener extends AbstartRabbitListener {
 
-	@Autowired
+	@Resource
 	private RabbitTemplate rabbitTemplate;
-	@Autowired
+	@Resource
 	private StringRedisTemplate stringRedisTemplate;
 	@Autowired
-	private SmsProviderService smsProviderService;
+	private ISmsProviderService smsProviderService;
 	@Autowired
 	private PushConfigService pushConfigService;
 	@Autowired
@@ -50,17 +76,15 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	@Autowired
 	private UserSmsConfigService userSmsConfigService;
 	@Autowired
-	private SmsMtSubmitService smsSubmitService;
+	private SmsMtMessageSubmitService smsSubmitService;
 	@Autowired
-	private PassageService smsPassageService;
+	private SmsPassageService smsPassageService;
 	@Autowired
 	private SmsSignatureExtnoService smsSignatureExtnoService;
 	@Autowired
 	private Jackson2JsonMessageConverter messageConverter;
 	@Autowired
-	private PassageMessageTemplateService smsPassageMessageTemplateService;
-	@Autowired
-    private ThreadPoolTaskExecutor            threadPoolTaskExecutor;
+	private SmsPassageMessageTemplateService smsPassageMessageTemplateService;
 
 	/**
 	 * 处理分包产生的数据，并调用上家通道接口
@@ -68,7 +92,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	 * @param packets 子任务
 	 */
 	private void transport2Gateway(SmsMtTaskPackets packets) {
-		if (StringUtils.isBlank(packets.getMobile())) {
+		if (StrUtil.isBlank(packets.getMobile())) {
 			throw new RuntimeException("手机号码数据包为空，无法解析");
 		}
 
@@ -79,12 +103,12 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 		}
 
 		// 查询推送地址信息
-		PushConfig pushConfig = pushConfigService.getPushUrl(packets.getUserCode(),
+		PushConfig pushConfig = pushConfigService.getPushUrl(packets.getUserId(),
 				CallbackUrlType.SMS_STATUS.getCode(), packets.getCallback());
 
 		try {
 			// 组装最终发送短信的扩展号码
-			String extNumber = getUserExtNumber(packets.getUserCode(), packets.getTemplateExtNumber(),
+			String extNumber = getUserExtNumber(packets.getUserId(), packets.getTemplateExtNumber(),
 					packets.getExtNumber(), packets.getContent());
 
 			// 获取通道信息
@@ -100,19 +124,19 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 			packets.setContent(changeMessageContentBySignMode(packets.getContent(), packets.getPassageSignMode()));
 
 			for (String groupMobile : groupMobiles) {
-				if (StringUtils.isEmpty(groupMobile)) {
+				if (StrUtil.isEmpty(groupMobile)) {
 					continue;
 				}
 
 				// 调用网关通道处理器，提交短信信息，并接收回执
-				List<ProviderSendResponse> responses = smsProviderService.sendSms(
+				List<ProviderSendVo> responses = smsProviderService.sendSms(
 						getPassageParameter(packets, smsPassage), groupMobile, packets.getContent(),
 						packets.getSingleFee(), extNumber);
 
-				// ProviderSendResponse response = list.iterator().next();
+				// ProviderSendVo response = list.iterator().next();
 				List<SmsMtMessageSubmit> list = makeSubmitReport(packets, groupMobile, responses, extNumber,
 						pushConfig);
-				if (ListUtils.isEmpty(list)) {
+				if (CollUtil.isEmpty(list)) {
 					logger.error("解析上家回执数据逻辑数据为空，伪造包逻辑处理");
 					continue;
 				}
@@ -129,43 +153,43 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	/**
 	 * 获取用户的拓展号码
 	 *
-	 * @param userCode          用户
+	 * @param userId          用户
 	 * @param templateExtNumber 短信模板扩展号码
 	 * @param extNumber         用户自定义扩展号码
 	 * @return
 	 */
-	private String getUserExtNumber(String userCode, String templateExtNumber, String extNumber, String content) {
+	private String getUserExtNumber(String userId, String templateExtNumber, String extNumber, String content) {
 
 		// 签名扩展号码（1对1），优先级最高，add by 20170709
-		String signExtNumber = smsSignatureExtnoService.getExtNumber(userCode, content);
+		String signExtNumber = smsSignatureExtnoService.getExtNumber(userId, content);
 		if (signExtNumber == null) {
 			signExtNumber = "";
 		}
 
 		// 如果短信模板扩展名不为空，则按照此扩展号码为主（忽略用户短信配置的扩展号码）
-		if (StringUtils.isNotEmpty(templateExtNumber)) {
-			return signExtNumber + templateExtNumber + (StringUtils.isEmpty(extNumber) ? "" : extNumber);
+		if (StrUtil.isNotEmpty(templateExtNumber)) {
+			return signExtNumber + templateExtNumber + (StrUtil.isEmpty(extNumber) ? "" : extNumber);
 		}
 
 		// 如果签名扩展号码不为空，并且模板扩展号码为空，则以扩展号码为主（忽略用户短信配置的扩展号码）
-		if (StringUtils.isNotEmpty(signExtNumber)) {
-			return signExtNumber + (StringUtils.isEmpty(extNumber) ? "" : extNumber);
+		if (StrUtil.isNotEmpty(signExtNumber)) {
+			return signExtNumber + (StrUtil.isEmpty(extNumber) ? "" : extNumber);
 		}
 
-		if (userCode == null) {
+		if (userId == null) {
 			return extNumber;
 		}
 
-		UserSmsConfig userSmsConfig = userSmsConfigService.getByUserCode(userCode);
+		UserSmsConfig userSmsConfig = userSmsConfigService.getByUserId(userId);
 		if (userSmsConfig == null) {
 			return extNumber;
 		}
 
-		if (StringUtils.isEmpty(userSmsConfig.getExtNumber())) {
+		if (StrUtil.isEmpty(userSmsConfig.getExtNumber())) {
 			return extNumber;
 		}
 
-		return userSmsConfig.getExtNumber() + (StringUtils.isEmpty(extNumber) ? "" : extNumber);
+		return userSmsConfig.getExtNumber() + (StrUtil.isEmpty(extNumber) ? "" : extNumber);
 	}
 
 	/**
@@ -175,7 +199,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	 * @param smsPassage 通道信息
 	 */
 	private String resizeExtNumber(String extNumber, SmsPassage smsPassage) {
-		if (StringUtils.isEmpty(extNumber)) {
+		if (StrUtil.isEmpty(extNumber)) {
 			return extNumber;
 		}
 
@@ -220,7 +244,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	 * @return
 	 */
 	private static String changeMessageContentBySignMode(String content, Integer signMode) {
-		if (StringUtils.isEmpty(content)) {
+		if (StrUtil.isEmpty(content)) {
 			return null;
 		}
 
@@ -307,7 +331,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 		parameter.setVariableParamNames(smsPassageMessageTemplate.getParamNames().split(","));
 
 		// 根据表达式和参数数量获取本次具体的变量值
-		parameter.setVariableParamValues(PassageMessageTemplateService.pickupValuesByRegex(packets.getContent(),
+		parameter.setVariableParamValues(SmsPassageMessageTemplateService.pickupValuesByRegex(packets.getContent(),
 				smsPassageMessageTemplate.getRegexValue(),
 				smsPassageMessageTemplate.getParamNames().split(",").length));
 
@@ -342,7 +366,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	 * @return 提交集合信息
 	 */
 	private List<SmsMtMessageSubmit> makeSubmitReport(SmsMtTaskPackets packets, String mobileStr,
-			List<ProviderSendResponse> responses, String extNumber, PushConfig pushConfig) {
+			List<ProviderSendVo> responses, String extNumber, PushConfig pushConfig) {
 		String[] mobiles = mobileStr.split(",");
 		if (mobiles.length == 0) {
 			return null;
@@ -401,11 +425,10 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 			submitTemplate.setNeedPush(true);
 		}
 
-		submitTemplate.setCreateTime(new Date());
+		submitTemplate.setCreateDate(new Date());
 		submitTemplate.setDestnationNo(extNumber);
 		// 设置提交消息的id为null ruyang
-//        submitTemplate.setId(null);
-		submitTemplate.setKey(null);
+        submitTemplate.setId(null);
 		return submitTemplate;
 	}
 
@@ -416,9 +439,9 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	 * @param responses 网关回执
 	 * @param sid       消息ID
 	 */
-	private void fillSubmitFromResponse(SmsMtMessageSubmit submit, List<ProviderSendResponse> responses, Long sid) {
+	private void fillSubmitFromResponse(SmsMtMessageSubmit submit, List<ProviderSendVo> responses, Long sid) {
 		// 回执数据可能为空（直连协议常见）
-		if (ListUtils.isEmpty(responses)) {
+		if (CollUtil.isEmpty(responses)) {
 			submit.setStatus(MessageSubmitStatus.FAILED.getCode() + "");
 			submit.setPushErrorCode(SmsPushCode.SMS_SUBMIT_PASSAGE_FAILED.getCode());
 			submit.setRemarks(SmsPushCode.SMS_SUBMIT_PASSAGE_FAILED.getCode());
@@ -427,9 +450,9 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 		}
 
 		int effect = 0;
-		for (ProviderSendResponse response : responses) {
+		for (ProviderSendVo response : responses) {
 			// 回执手机号码如果为空，则表明网关回执不携带手机号码直接赋值状态相关
-			if (StringUtils.isNotEmpty(response.getMobile()) && !submit.getMobile().equals(response.getMobile())) {
+			if (StrUtil.isNotEmpty(response.getMobile()) && !submit.getMobile().equals(response.getMobile())) {
 				continue;
 			}
 
@@ -440,8 +463,8 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 				submit.setPushErrorCode(OpenApiCode.SmsPushCode.SMS_PASSAGE_AUTH_NOT_MATCHED.getCode());
 			}
 
-			submit.setRemarks(response.getRemark());
-			submit.setMsgId(StringUtils.isNotEmpty(response.getSid()) ? response.getSid() : sid + "");
+			submit.setRemarks(response.getRemarks());
+			submit.setMsgId(StrUtil.isNotEmpty(response.getSid()) ? response.getSid() : sid + "");
 
 			effect++;
 		}
@@ -531,7 +554,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 				continue;
 			}
 
-			if (StringUtils.isEmpty(packet.getMobile())) {
+			if (StrUtil.isEmpty(packet.getMobile())) {
 				logger.warn("待提交队列处理异常：手机号码为空， 跳出 {}", JSON.toJSONString(packet));
 				continue;
 			}
@@ -548,7 +571,7 @@ public class SmsWaitSubmitListener extends AbstartRabbitListener {
 	 * @return 重组后的手机号码
 	 */
 	private static List<String> regroupMobileByPacketsSize(String mobile, SmsPassage smsPassage) {
-		if (StringUtils.isBlank(mobile)) {
+		if (StrUtil.isBlank(mobile)) {
 			throw new RuntimeException("提交任务错误：手机号码为空");
 		}
 

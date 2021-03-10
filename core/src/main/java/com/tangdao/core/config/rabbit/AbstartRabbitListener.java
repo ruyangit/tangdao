@@ -9,7 +9,6 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
 
 import com.rabbitmq.client.Channel;
-import com.tangdao.exchanger.web.config.SmsInitializeRunner;
 
 public abstract class AbstartRabbitListener implements ChannelAwareMessageListener {
 
@@ -66,6 +65,7 @@ public abstract class AbstartRabbitListener implements ChannelAwareMessageListen
 			try {
 				SmsInitializeRunner.CONDITION.await();
 			} catch (InterruptedException e) {
+
 			} finally {
 				SmsInitializeRunner.LOCK.unlock();
 			}
