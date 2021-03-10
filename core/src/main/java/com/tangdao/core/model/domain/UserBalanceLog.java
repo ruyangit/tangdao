@@ -21,7 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_user_balance_log")
+@TableName("sys_user_balance_log")
 public class UserBalanceLog extends DataEntity<UserBalanceLog> {
 
 	private static final long serialVersionUID = 1L;

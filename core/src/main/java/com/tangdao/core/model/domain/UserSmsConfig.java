@@ -20,7 +20,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_user_sms_config")
+@TableName("sys_user_sms_config")
 public class UserSmsConfig extends DataEntity<UserSmsConfig> {
 
 	/**

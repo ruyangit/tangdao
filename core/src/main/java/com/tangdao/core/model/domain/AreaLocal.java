@@ -21,7 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_area_local")
+@TableName("sys_area_local")
 public class AreaLocal extends DataEntity<AreaLocal> {
 
 	private static final long serialVersionUID = 1L;

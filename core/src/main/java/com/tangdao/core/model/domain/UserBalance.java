@@ -22,7 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_user_balance")
+@TableName("sys_user_balance")
 public class UserBalance extends DataEntity<UserBalance> {
 
 	/**

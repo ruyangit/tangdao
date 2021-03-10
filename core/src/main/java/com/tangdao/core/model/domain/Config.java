@@ -11,18 +11,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 
  * <p>
  * TODO 描述
  * </p>
  *
  * @author ruyang
- * @since 2021年2月23日
+ * @since 2021年3月10日
  */
 @Getter
 @Setter
-@TableName("sys_host_whitelist")
-public class HostWhitelist extends DataEntity<HostWhitelist> {
+@TableName("sys_config")
+public class Config extends DataEntity<Config> {
 
 	/**
 	 * 
@@ -32,11 +31,11 @@ public class HostWhitelist extends DataEntity<HostWhitelist> {
 	@TableId
 	private String id;
 
-	private String ip;
+	private String configName;
 
-	private String userId;
+	private String configKey;
 
-	private String status;
-	
+	private String configValue;
+
 	private String remarks;
 }

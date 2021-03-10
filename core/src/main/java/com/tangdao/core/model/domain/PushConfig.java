@@ -7,9 +7,18 @@ import com.tangdao.core.DataEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月10日
+ */
 @Getter
 @Setter
-@TableName("paas_push_config")
+@TableName("sys_push_config")
 public class PushConfig extends DataEntity<PushConfig> {
 
 	private static final long serialVersionUID = 1L;

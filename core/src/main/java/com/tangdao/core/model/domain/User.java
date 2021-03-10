@@ -21,7 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_user")
+@TableName("sys_user")
 public class User implements Serializable {
 
 	/**

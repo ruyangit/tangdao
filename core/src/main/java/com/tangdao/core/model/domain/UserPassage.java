@@ -20,7 +20,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_user_passage")
+@TableName("sys_user_passage")
 public class UserPassage extends DataEntity<UserPassage> {
 
 	private static final long serialVersionUID = 1L;

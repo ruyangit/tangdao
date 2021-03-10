@@ -1,7 +1,10 @@
+/**
+ *
+ */
 package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.core.model.domain.AreaLocal;
+import com.tangdao.core.model.domain.DictType;
 
 /**
  * 
@@ -10,8 +13,8 @@ import com.tangdao.core.model.domain.AreaLocal;
  * </p>
  *
  * @author ruyang
- * @since 2021年3月9日
+ * @since 2021年3月10日
  */
-public interface AreaLocalMapper extends BaseMapper<AreaLocal> {
-	
+public interface DictTypeMapper extends BaseMapper<DictType> {
+
 }

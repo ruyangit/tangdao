@@ -15,7 +15,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("paas_area")
+@TableName("sys_area")
 public class Area extends TreeEntity<Area> {
 
 	private static final long serialVersionUID = 1L;
