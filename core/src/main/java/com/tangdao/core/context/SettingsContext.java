@@ -14,8 +14,8 @@ import com.tangdao.core.context.CommonContext.PlatformType;
  * @since 2021年3月8日
  */
 public class SettingsContext {
-
-	public enum SystemConfigType {
+	
+	public enum DictType {
 
 		// 用户注册/平台开户 余额初始化设置
 		USER_REGISTER_BALANCE("余额初始化设置"),
@@ -46,7 +46,36 @@ public class SettingsContext {
 
 		private String title;
 
-		SystemConfigType(String title) {
+		DictType(String title) {
+			this.title = title;
+		}
+
+		public String getTitle() {
+			return title;
+		}
+
+		public void setTitle(String title) {
+			this.title = title;
+		}
+	}
+
+	public enum ConfigType {
+
+		// 站内消息通知模板
+		NOTIFICATION_MESSAGE_TEMPLATE("站内消息通知模板"),
+
+		// 短信首条默认计费字数
+		SMS_WORDS_PER_NUM("短信收条默认计费字数"),
+
+		// 通道测试用户
+		PASSAGE_TEST_USER("通道测试用户"),
+
+		// 告警用户
+		SMS_ALARM_USER("短信告警用户"),;
+
+		private String title;
+
+		ConfigType(String title) {
 			this.title = title;
 		}
 

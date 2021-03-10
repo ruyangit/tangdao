@@ -1,13 +1,11 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -15,15 +13,13 @@ import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.dao.UserSmsConfigMapper;
 import com.tangdao.core.model.domain.UserSmsConfig;
-import com.tangdao.core.service.BaseService;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
-@Service
 public class UserSmsConfigService extends BaseService<UserSmsConfigMapper, UserSmsConfig> {
 
-	@Resource
+	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
 	private static String getKey(String userId) {

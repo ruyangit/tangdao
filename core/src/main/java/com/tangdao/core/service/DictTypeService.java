@@ -14,6 +14,6 @@ import com.tangdao.core.model.domain.DictType;
  * @author ruyang
  * @since 2020年12月29日
  */
-public class DictTypeService extends BaseService<DictTypeMapper, DictType>{
+public class DictTypeService extends BaseService<DictTypeMapper, DictType> {
 
 }

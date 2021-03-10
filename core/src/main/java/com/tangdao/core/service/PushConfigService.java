@@ -1,14 +1,10 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -17,17 +13,22 @@ import com.tangdao.core.constant.RedisConstant;
 import com.tangdao.core.context.SettingsContext.PushConfigStatus;
 import com.tangdao.core.dao.PushConfigMapper;
 import com.tangdao.core.model.domain.PushConfig;
-import com.tangdao.core.service.BaseService;
 
 import cn.hutool.core.collection.CollUtil;
 
-@Service
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月10日
+ */
 public class PushConfigService extends BaseService<PushConfigMapper, PushConfig> {
 
-	@Resource
+	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
-
-	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String getAssistKey(String userId, int type) {
 		return String.format("%s:%s:%d", RedisConstant.RED_USER_PUSH_CONFIG, userId, type);
@@ -127,7 +128,7 @@ public class PushConfigService extends BaseService<PushConfigMapper, PushConfig>
 			if (pushConfig == null) {
 				result = this.baseMapper.insert(pushConFig);
 			}
-			result = this.baseMapper.updateByUserCode(pushConFig);
+			result = this.baseMapper.updateByUserId(pushConFig);
 
 			// 查询修改后数据存储到缓存中
 			PushConfig cf = selectByUserIdAndType(pushConFig.getUserId(), pushConFig.getType());

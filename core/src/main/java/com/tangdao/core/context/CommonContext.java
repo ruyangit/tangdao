@@ -58,7 +58,8 @@ public class CommonContext {
 
 		UNDEFINED(0, "未定义"),
 
-		SEND_MESSAGE_SERVICE(1, "短信服务");
+		SEND_MESSAGE_SERVICE(1, "短信服务"), FLUX_SERVICE(2, "流量服务"), VOICE_SERVICE(3, "语音服务"),
+		MULTIMEDIA_MESSAGE_SERVICE(4, "彩信服务");
 
 		private int code;
 		private String name;

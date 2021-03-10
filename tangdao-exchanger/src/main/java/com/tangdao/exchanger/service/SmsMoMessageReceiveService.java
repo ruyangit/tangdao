@@ -22,6 +22,7 @@ import com.tangdao.core.model.domain.MobileBlacklist;
 import com.tangdao.core.model.domain.MtMessageSubmit;
 import com.tangdao.core.model.domain.PushConfig;
 import com.tangdao.core.service.BaseService;
+import com.tangdao.core.service.PushConfigService;
 
 import cn.hutool.core.util.StrUtil;
 

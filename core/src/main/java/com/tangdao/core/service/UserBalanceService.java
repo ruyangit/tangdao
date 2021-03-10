@@ -1,11 +1,10 @@
-package com.tangdao.exchanger.service;
+package com.tangdao.core.service;
 
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSONObject;
@@ -13,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
+import com.tangdao.core.context.CommonContext.Status;
 import com.tangdao.core.context.PayContext.PaySource;
 import com.tangdao.core.context.PayContext.PayType;
 import com.tangdao.core.context.UserContext.BalancePayType;
@@ -22,14 +22,19 @@ import com.tangdao.core.exception.DataEmptyException;
 import com.tangdao.core.model.domain.UserBalance;
 import com.tangdao.core.model.domain.UserBalanceLog;
 import com.tangdao.core.model.vo.P2pBalance;
-import com.tangdao.core.service.BaseService;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-@Service
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月10日
+ */
 public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalance> {
 
 	/**
@@ -114,7 +119,7 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 
 				if (isNotice) {
 					// LS
-//                    notificationMessageService.save(userCode,
+//                    notificationMessageService.save(userId,
 //                                                    NotificationMessageTemplateType.USER_BALACE_CHANGE,
 //                                                    String.format(NotificationMessageTemplateType.USER_BALACE_CHANGE.getContent(),
 //                                                                  PlatformType.parse(platformType).getName(),
@@ -150,18 +155,18 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 	}
 
 	@Transactional(readOnly = false, rollbackFor = Exception.class)
-	public boolean exchange(String userCode, String fromUserCode, int type, int amount) {
-		if (StrUtil.isEmpty(userCode)) {
+	public boolean exchange(String userId, String fromuserId, int type, int amount) {
+		if (StrUtil.isEmpty(userId)) {
 			throw new DataEmptyException("用户ID为空");
 		}
 
-		validate(fromUserCode, type, amount);
+		validate(fromuserId, type, amount);
 
 		try {
-			boolean isOk = updateBalance(userCode, amount, type, PaySource.USER_ACCOUNT_EXCHANGE,
+			boolean isOk = updateBalance(userId, amount, type, PaySource.USER_ACCOUNT_EXCHANGE,
 					PayType.HSUSER_EXCHANGE, null, null, "余额转赠", true);
 			if (isOk) {
-				return updateBalance(fromUserCode, -amount, type, PaySource.USER_ACCOUNT_EXCHANGE,
+				return updateBalance(fromuserId, -amount, type, PaySource.USER_ACCOUNT_EXCHANGE,
 						PayType.HSUSER_EXCHANGE, null, null, "余额转赠", true);
 			}
 			return false;
@@ -193,18 +198,18 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 	public boolean isBalanceEnough(String userId, PlatformType type, Double fee) {
 		UserBalance userBalance = getByUserId(userId, type);
 		if (userBalance == null) {
-			log.error("用户：{} ，平台类型：{} 余额数据异常，请检修", userId, type);
+			logger.error("用户：{} ，平台类型：{} 余额数据异常，请检修", userId, type);
 			return false;
 		}
 
 		// 如果用户付费类型为后付费则不判断 余额是否不足
 		if (BalancePayType.POSTPAY.getValue() == userBalance.getPayType()) {
-			log.info("用户：{} ，平台类型：{} 付费类型为后付费，不检验可用余额", userId, type);
+			logger.info("用户：{} ，平台类型：{} 付费类型为后付费，不检验可用余额", userId, type);
 			return true;
 		}
 
 		if (userBalance.getBalance() < fee) {
-			log.warn("用户额度不足：用户ID：{} 平台类型：{} 可用余额：{} 本次计费：{}，", userId, type, userBalance.getBalance(), fee);
+			logger.warn("用户额度不足：用户ID：{} 平台类型：{} 可用余额：{} 本次计费：{}，", userId, type, userBalance.getBalance(), fee);
 			return false;
 		}
 
@@ -220,30 +225,30 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 
 	public List<UserBalance> findAvaibleUserBalace() {
 		// TODO Auto-generated method stub
-		return this.list(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getStatus, UserBalance.STATUS_NORMAL));
+		return this.list(Wrappers.<UserBalance>lambdaQuery().eq(UserBalance::getStatus, Status.NORMAL));
 	}
 
-	public int calculateSmsAmount(String userCode, String content) {
+	public int calculateSmsAmount(String userId, String content) {
 		if (StrUtil.isEmpty(content)) {
-			log.error("userCode :{} 短信报文为空，无法计算计费条数", userCode);
+			logger.error("userId :{} 短信报文为空，无法计算计费条数", userId);
 			return UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE;
 		}
 
 		// 获取短信单条计费字数
-		int wordsPerNum = userSmsConfigService.getSingleChars(userCode);
+		int wordsPerNum = userSmsConfigService.getSingleChars(userId);
 
 		return calculateGroupSizeByContent(wordsPerNum, content);
 	}
 
-	public P2pBalance calculateP2pSmsAmount(String userCode, List<JSONObject> p2pBodies) {
+	public P2pBalance calculateP2pSmsAmount(String userId, List<JSONObject> p2pBodies) {
 		if (CollUtil.isEmpty(p2pBodies)) {
-			log.error("userCode :{} 点对点短信报文为空，无法计算计费条数", userCode);
+			logger.error("userId :{} 点对点短信报文为空，无法计算计费条数", userId);
 			return new P2pBalance(UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE, null);
 		}
 
 		// 总费用
 		int smsTotalNum = 0;
-		int wordsPerNum = userSmsConfigService.getSingleChars(userCode);
+		int wordsPerNum = userSmsConfigService.getSingleChars(userId);
 		for (JSONObject obj : p2pBodies) {
 			int num = calculateGroupSizeByContent(wordsPerNum, obj.getString("content"));
 			obj.put("fee", num);
@@ -253,16 +258,16 @@ public class UserBalanceService extends BaseService<UserBalanceMapper, UserBalan
 		return new P2pBalance(smsTotalNum, p2pBodies);
 	}
 
-	public P2pBalance calculateP2ptSmsAmount(String userCode, String content, List<JSONObject> p2pBody) {
+	public P2pBalance calculateP2ptSmsAmount(String userId, String content, List<JSONObject> p2pBody) {
 		if (CollUtil.isEmpty(p2pBody) || StrUtil.isEmpty(content)) {
-			log.error("userCode :{} 模板点对点短信内容或报文为空，无法计算计费条数", userCode);
+			logger.error("userId :{} 模板点对点短信内容或报文为空，无法计算计费条数", userId);
 			return new P2pBalance(UserBalanceConstant.CONTENT_WORDS_EXCEPTION_COUNT_FEE, null);
 		}
 
 		// 总费用
 		int smsTotalNum = 0;
 
-		int wordsPerNum = userSmsConfigService.getSingleChars(userCode);
+		int wordsPerNum = userSmsConfigService.getSingleChars(userId);
 		String finalContent;
 		for (JSONObject p2b : p2pBody) {
 			finalContent = translateP2pArgs(content, p2b.getObject("args", Object[].class));
