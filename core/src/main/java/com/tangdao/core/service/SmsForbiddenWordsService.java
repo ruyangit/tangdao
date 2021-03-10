@@ -9,17 +9,18 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Lists;
 import com.tangdao.core.constant.SmsRedisConstant;
 import com.tangdao.core.context.SettingsContext;
+import com.tangdao.core.context.SettingsContext.DictType;
+import com.tangdao.core.context.SettingsContext.WordsLibrary;
 import com.tangdao.core.dao.ForbiddenWordsMapper;
+import com.tangdao.core.model.domain.DictData;
 import com.tangdao.core.model.domain.ForbiddenWords;
-import com.tangdao.core.service.BaseService;
-import com.tangdao.exchanger.web.filter.SensitiveWordFilter;
+import com.tangdao.core.service.filter.SensitiveWordFilter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -37,6 +38,9 @@ public class SmsForbiddenWordsService extends BaseService<ForbiddenWordsMapper, 
 
 	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
+	
+	@Autowired
+	private DictDataService dictDataService;
 
 	public boolean isContainsForbiddenWords(String content) {
 		if (StrUtil.isEmpty(content)) {
@@ -217,14 +221,12 @@ public class SmsForbiddenWordsService extends BaseService<ForbiddenWordsMapper, 
 	}
 
 	public String[] findWordsLabelLibrary() {
-//		SystemConfig systemConfig = systemConfigService.findByTypeAndKey(SystemConfigType.WORDS_LIBRARY.name(), WordsLibrary.FORBIDDEN_LABEL.name());
-//		if (systemConfig == null || StrUtil.isEmpty(systemConfig.getAttrValue())) {
-//			logger.warn("敏感词标签库未配置，请及时配置");
-//			return null;
-//		}
-//		
-//		return systemConfig.getAttrValue().split(SettingsContext.MULTI_VALUE_SEPERATOR);
-		return "".split(SettingsContext.MULTI_VALUE_SEPERATOR);
+		DictData dictData =  dictDataService.getByDictTypeAndKey(DictType.WORDS_LIBRARY, WordsLibrary.FORBIDDEN_LABEL.name());
+		if (dictData == null || StrUtil.isEmpty(dictData.getDictValue())) {
+			logger.warn("敏感词标签库未配置，请及时配置");
+			return null;
+		}
+		return dictData.getDictValue().split(SettingsContext.MULTI_VALUE_SEPERATOR);
 	}
 
 	public List<ForbiddenWords> getLabelByWords(String words) {
