@@ -1,12 +1,17 @@
-package com.tangdao.exchanger.service;
-
-import org.springframework.stereotype.Service;
+package com.tangdao.core.service;
 
 import com.tangdao.core.dao.AreaLocalMapper;
 import com.tangdao.core.model.domain.AreaLocal;
-import com.tangdao.core.service.BaseService;
 
-@Service
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月10日
+ */
 public class AreaLocalService extends BaseService<AreaLocalMapper, AreaLocal> {
 
 }

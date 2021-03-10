@@ -1,9 +1,8 @@
-package com.tangdao.exchanger.service;
-
-import javax.annotation.Resource;
+package com.tangdao.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.scheduling.annotation.Async;
@@ -13,11 +12,20 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.tangdao.core.constant.RedisConstant;
 
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月10日
+ */
 @Service
 @EnableAsync
 public class AsyncService {
 
-	@Resource
+	@Autowired
 	private StringRedisTemplate stringRedisTemplate;
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
