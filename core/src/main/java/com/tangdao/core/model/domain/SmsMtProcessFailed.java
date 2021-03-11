@@ -1,5 +1,6 @@
 package com.tangdao.core.model.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.core.model.DataEntity;
 
@@ -18,6 +19,9 @@ import lombok.Setter;
 public class SmsMtProcessFailed extends DataEntity<SmsMtProcessFailed> {
 
 	private static final long serialVersionUID = 1L;
+	
+	@TableId
+	private String id;
 
 	private Long sid; // sid
 	private String appType; // 调用类型 1:融合WEB平台,2:开发者平台,3:运营支撑系统

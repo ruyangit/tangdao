@@ -1,5 +1,6 @@
 package com.tangdao.core.model.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.core.model.DataEntity;
 
@@ -18,7 +19,10 @@ public class SmsPassageReachrateSettings extends DataEntity<SmsPassageReachrateS
 	
 	private static final long serialVersionUID = 1L;
 	
-	private Long passageId;		// 短信通道ID
+	@TableId
+	private String id;
+	
+	private String passageId;		// 短信通道ID
 	private Long interval;		// 轮询间隔（单位秒）
 	private Long startTime;		// 数据源时间（开始执行时间点，单位秒）
 	private Long timeLength;		// 数据源时长

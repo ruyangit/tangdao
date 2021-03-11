@@ -1,5 +1,6 @@
 package com.tangdao.core.model.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.core.model.DataEntity;
 
@@ -21,6 +22,9 @@ import lombok.Setter;
 public class SmsMessageDeliverLog extends DataEntity<SmsMessageDeliverLog> {
 
 	private static final long serialVersionUID = 1L;
+	
+	@TableId
+	private String id;
 
 	private String passageCode; // 通道简码
 	private String msgId; // 消息ID

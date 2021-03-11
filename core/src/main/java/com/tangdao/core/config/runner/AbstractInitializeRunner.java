@@ -29,7 +29,7 @@ public abstract class AbstractInitializeRunner implements CommandLineRunner {
 	public static final Lock LOCK = new ReentrantLock();
 	public static final Condition CONDITION = LOCK.newCondition();
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * 自定义初始化资源是否完成（因有些服务强依赖某些资源初始化完成，如 rabbit listener 消费）
