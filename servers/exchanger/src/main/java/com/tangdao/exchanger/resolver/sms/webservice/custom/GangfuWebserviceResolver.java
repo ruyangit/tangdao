@@ -1,15 +1,14 @@
-package org.tangdao.modules.exchanger.resolver.sms.webservice.custom;
-
+package com.tangdao.exchanger.resolver.sms.webservice.custom;
 
 /**
  * 
-  * TODO 港辅状态报告/上行报告扫描服务
-  * 
-  * @version V1.0   
-  * @date 2016年7月19日 上午11:17:13
+ * TODO 港辅状态报告/上行报告扫描服务
+ * 
+ * @version V1.0
+ * @date 2016年7月19日 上午11:17:13
  */
 public class GangfuWebserviceResolver {
-	
+
 //	@Value("${gangfu.userid}")
 //	private String userid;
 //	@Value("${gangfu.password}")
@@ -72,7 +71,5 @@ public class GangfuWebserviceResolver {
 //			LogUtils.error("推送URL：{}，失败信息为：{}", url, e.getMessage());
 //		}
 //	}
-	
-	
 
 }

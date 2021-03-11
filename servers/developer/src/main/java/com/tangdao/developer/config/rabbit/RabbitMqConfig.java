@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.developer.config;
+package com.tangdao.developer.config.rabbit;
 
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory.ConfirmType;
@@ -24,7 +24,7 @@ import org.springframework.retry.support.RetryTemplate;
  * @since 2021年2月22日
  */
 @Configuration
-public class SmsRabbitMqConfig {
+public class RabbitMqConfig {
 
 	@Value("${mq.rabbit.host}")
 	private String mqHost;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.exchanger.config;
+package com.tangdao.exchanger.config.rabbit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +44,7 @@ import com.tangdao.core.constant.RabbitConstant;
 @Configuration
 @EnableRabbit
 @Order(4)
-public class SmsRabbitMqConfig {
+public class RabbitMqConfig {
 
 	@Value("${mq.rabbit.host}")
 	private String mqHost;

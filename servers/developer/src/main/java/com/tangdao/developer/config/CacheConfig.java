@@ -33,7 +33,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import com.tangdao.core.config.serializer.RedisObjectSerializer;
+import com.tangdao.core.config.redis.serializer.RedisObjectSerializer;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

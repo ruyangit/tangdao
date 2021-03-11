@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.core.config.serializer;
+package com.tangdao.core.config.redis.serializer;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.serializer.support.DeserializingConverter;
