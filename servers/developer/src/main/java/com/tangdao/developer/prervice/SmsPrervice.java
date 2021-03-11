@@ -1,4 +1,4 @@
-package org.tangdao.developer.prervice;
+package com.tangdao.developer.prervice;
 
 import java.util.Date;
 import java.util.Map;
@@ -10,35 +10,37 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tangdao.common.collect.MapUtils;
-import org.tangdao.common.constant.CommonContext.PlatformType;
-import org.tangdao.common.constant.OpenApiCode.CommonApiCode;
-import org.tangdao.common.exception.QueueProcessException;
-import org.tangdao.common.utils.IdGenerator;
-import org.tangdao.developer.constant.RabbitConstant;
-import org.tangdao.developer.constant.RabbitConstant.WordsPriority;
-import org.tangdao.developer.request.sms.SmsP2PSendRequest;
-import org.tangdao.developer.request.sms.SmsP2PTemplateSendRequest;
-import org.tangdao.developer.request.sms.SmsSendRequest;
-import org.tangdao.developer.response.sms.SmsBalanceResponse;
-import org.tangdao.developer.response.sms.SmsSendResponse;
-import org.tangdao.modules.sms.constant.SmsTaskContext.TaskSubmitType;
-import org.tangdao.modules.sms.model.domain.SmsApiFailedRecord;
-import org.tangdao.modules.sms.model.domain.SmsMtTask;
-import org.tangdao.modules.sms.service.ISmsApiFailedRecordService;
-import org.tangdao.modules.sys.model.domain.UserBalance;
-import org.tangdao.modules.sys.service.IUserBalanceService;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
+import com.tangdao.core.constant.RabbitConstant;
+import com.tangdao.core.context.CommonContext.PlatformType;
+import com.tangdao.core.context.RabbitContext.WordsPriority;
+import com.tangdao.core.context.TaskContext.TaskSubmitType;
+import com.tangdao.core.exception.QueueProcessException;
+import com.tangdao.core.model.domain.SmsApiFailedRecord;
+import com.tangdao.core.model.domain.SmsMtTask;
+import com.tangdao.core.model.domain.UserBalance;
+import com.tangdao.core.service.SmsApiFailedRecordService;
+import com.tangdao.core.service.UserBalanceService;
+import com.tangdao.developer.request.sms.SmsP2PSendRequest;
+import com.tangdao.developer.request.sms.SmsP2PTemplateSendRequest;
+import com.tangdao.developer.request.sms.SmsSendRequest;
+import com.tangdao.developer.response.sms.SmsBalanceResponse;
+import com.tangdao.developer.response.sms.SmsSendResponse;
+
+import cn.hutool.core.collection.CollUtil;
 
 /**
  * 
  * <p>
- * TODO 描述 短信前置服务
+ * TODO 短信前置服务
  * </p>
  *
- * @author ruyangit@gmail.com
- * @since 2020年3月11日
+ * @author ruyang
+ * @since 2021年3月11日
  */
 @Service
 public class SmsPrervice {
@@ -46,16 +48,13 @@ public class SmsPrervice {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private IdGenerator idGenerator;
-	
-	@Autowired
 	private RabbitTemplate smsRabbitTemplate;
-	
+
 	@Autowired
-	private IUserBalanceService userBalanceService;
-	
+	private UserBalanceService userBalanceService;
+
 	@Autowired
-	private ISmsApiFailedRecordService smsApiFailedRecordService;
+	private SmsApiFailedRecordService smsApiFailedRecordService;
 
 	/**
 	 * 发送短信信息
@@ -63,6 +62,7 @@ public class SmsPrervice {
 	 * @param smsSendRequest 发送请求
 	 * @return 处理回执
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public SmsSendResponse sendMessage(SmsSendRequest smsSendRequest) {
 		SmsMtTask task = new SmsMtTask();
 
@@ -89,6 +89,7 @@ public class SmsPrervice {
 	 * @param smsP2PSendRequest 点对点请求
 	 * @return 处理回执
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public SmsSendResponse sendP2PMessage(SmsP2PSendRequest smsP2PSendRequest) {
 		SmsMtTask task = new SmsMtTask();
 
@@ -118,6 +119,7 @@ public class SmsPrervice {
 	 * @param rqeuest 点对点模板请求
 	 * @return 处理结果
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public SmsSendResponse sendP2PTemplateMessage(SmsP2PTemplateSendRequest rqeuest) {
 		SmsMtTask task = new SmsMtTask();
 
@@ -154,7 +156,7 @@ public class SmsPrervice {
 		record.setRespCode(errorCode);
 		// 暂时默认开发者模式
 		record.setAppType(appType);
-		if (MapUtils.isEmpty(paramMap)) {
+		if (CollUtil.isEmpty(paramMap)) {
 			smsApiFailedRecordService.save(record);
 			return;
 		}
@@ -170,7 +172,7 @@ public class SmsPrervice {
 	}
 
 	private String getAttribute(Map<String, String[]> paramMap, String elementId) {
-		return MapUtils.isEmpty(paramMap) || !paramMap.containsKey(elementId) || paramMap.get(elementId).length == 0
+		return CollUtil.isEmpty(paramMap) || !paramMap.containsKey(elementId) || paramMap.get(elementId).length == 0
 				? null
 				: paramMap.get(elementId)[0];
 	}
@@ -180,10 +182,10 @@ public class SmsPrervice {
 	 *
 	 * @return 余额处理回执
 	 */
-	public SmsBalanceResponse getBalance(String userCode) {
-		UserBalance userBalance = userBalanceService.getByUserCode(userCode, PlatformType.SEND_MESSAGE_SERVICE);
+	public SmsBalanceResponse getBalance(String userId) {
+		UserBalance userBalance = userBalanceService.getByUserId(userId, PlatformType.SEND_MESSAGE_SERVICE);
 		if (userBalance == null) {
-			logger.error("用户 code：{} 查询短信余额失败，用户余额数据为空", userCode);
+			logger.error("用户：{} 查询短信余额失败，用户余额数据为空", userId);
 			return new SmsBalanceResponse(CommonApiCode.COMMON_SERVER_EXCEPTION.getCode());
 		}
 
@@ -197,18 +199,19 @@ public class SmsPrervice {
 	 * @param task 主任务
 	 * @return 消息ID
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	private long joinTask2Queue(SmsMtTask task) {
 		try {
 			// 更新用户余额
-			boolean isSuccess = userBalanceService.deductBalance(task.getUserCode(), -task.getTotalFee(),
+			boolean isSuccess = userBalanceService.deductBalance(task.getUserId(), -task.getTotalFee(),
 					PlatformType.SEND_MESSAGE_SERVICE.getCode(), "developer call");
 			if (!isSuccess) {
-				logger.error("用户ID: [" + task.getUserCode() + "] 扣除短信余额 " + task.getTotalFee() + " 失败");
+				logger.error("用户: [" + task.getUserId() + "] 扣除短信余额 " + task.getTotalFee() + " 失败");
 				throw new QueueProcessException("发送短信扣除短信余额失败");
 			}
 
-			task.setSid(idGenerator.generate());
-			task.setCreateTime(new Date());
+			task.setSid(IdWorker.getId());
+			task.setCreateDate(new Date());
 
 			// 插入TASK任务（异步）
 

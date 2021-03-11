@@ -1,4 +1,4 @@
-package org.tangdao.developer.controller;
+package com.tangdao.developer.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -7,63 +7,72 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tangdao.common.constant.CommonContext.AppType;
-import org.tangdao.common.network.IpUtils;
-import org.tangdao.developer.validator.AuthorizationValidator;
 
 import com.alibaba.fastjson.JSON;
+import com.tangdao.core.context.CommonContext.AppType;
+import com.tangdao.core.utils.IpUtil;
+import com.tangdao.developer.validator.AuthorizationValidator;
 
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月11日
+ */
 public class BasicApiSupport {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+	protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    protected HttpServletRequest request;
+	@Autowired
+	protected HttpServletRequest request;
 
-    @Autowired
-    protected HttpServletResponse response;	
-    
-    @Autowired
-    protected AuthorizationValidator passportValidator;
+	@Autowired
+	protected HttpServletResponse response;
 
-    @Override
-    public String toString() {
-        return JSON.toJSONString(request.getParameterMap());
-    }
+	@Autowired
+	protected AuthorizationValidator passportValidator;
 
-    /**
-     * TODO 根据Header中传递值判断调用方式
-     *
-     * @return
-     */
-    protected int getAppType() {
-        String appType = request.getHeader("apptype");
-        if (StringUtils.isEmpty(appType)) {
-            return AppType.DEVELOPER.getCode();
-        }
+	@Override
+	public String toString() {
+		return JSON.toJSONString(request.getParameterMap());
+	}
 
-        try {
-            if (String.valueOf(AppType.WEB.getCode()).equals(appType)) {
-                return AppType.WEB.getCode();
-            }
+	/**
+	 * TODO 根据Header中传递值判断调用方式
+	 *
+	 * @return
+	 */
+	protected int getAppType() {
+		String appType = request.getHeader("apptype");
+		if (StringUtils.isEmpty(appType)) {
+			return AppType.DEVELOPER.getCode();
+		}
 
-            if (String.valueOf(AppType.BOSS.getCode()).equals(appType)) {
-                return AppType.BOSS.getCode();
-            }
-        } catch (Exception e) {
-        }
+		try {
+			if (String.valueOf(AppType.WEB.getCode()).equals(appType)) {
+				return AppType.WEB.getCode();
+			}
 
-        return AppType.DEVELOPER.getCode();
-    }
-    
-    /**
-     * 
-     * TODO 获取客户端请求IP
-     * 
-     * @return
-     */
-    protected String getClientIp() {
-        return IpUtils.getRemoteAddr(request);
-    }
+			if (String.valueOf(AppType.BOSS.getCode()).equals(appType)) {
+				return AppType.BOSS.getCode();
+			}
+		} catch (Exception e) {
+		}
+
+		return AppType.DEVELOPER.getCode();
+	}
+
+	/**
+	 * 
+	 * TODO 获取客户端请求IP
+	 * 
+	 * @return
+	 */
+	protected String getClientIp() {
+		return IpUtil.getClientIp(request);
+	}
 
 }

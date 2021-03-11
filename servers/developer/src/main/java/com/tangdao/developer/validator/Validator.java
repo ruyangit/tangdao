@@ -2,7 +2,6 @@ package com.tangdao.developer.validator;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +15,7 @@ import com.tangdao.core.constant.PassportConstant;
 import com.tangdao.developer.annotation.ValidateField;
 import com.tangdao.developer.exception.ValidateException;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -47,8 +47,8 @@ public class Validator {
 		// 解析注解信息
 		Map<String, String> param = parseAnotation(obj.getClass(), paramMap);
 		try {
-			org.apache.commons.beanutils.BeanUtils.populate(obj, param);
-		} catch (IllegalAccessException | InvocationTargetException e) {
+			BeanUtil.fillBeanWithMap(param, obj, true);
+		} catch (RuntimeException e) {
 			logger.error("接收类型 : {}， 参数：{} 转换model异常", obj.getClass().getName(), JSON.toJSONString(paramMap), e);
 		}
 	}

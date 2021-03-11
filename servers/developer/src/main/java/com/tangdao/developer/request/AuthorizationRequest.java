@@ -38,7 +38,7 @@ public class AuthorizationRequest implements Serializable {
 	@ValidateField(value = "timestamp", required = true)
 	private String timestamp;
 
-	private transient String userCode;
+	private transient String userId;
 	private transient Integer fee;
 	private transient Integer totalFee;
 	private transient String ip;

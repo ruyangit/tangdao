@@ -68,7 +68,7 @@ public class OpenApiCode {
 		}
 	}
 
-	public enum SmsApiCode {
+	public enum SmsApiCode implements ErrorCode{
 		SMS_P2P_BODY_IS_WRONG("S0010", "点对点短信报文数据不符合"), SMS_P2P_TEMPLATE_BODY_IS_WRONG("S0011", "模板点对点短信报文数据不符合");
 
 		private String code;
@@ -100,7 +100,7 @@ public class OpenApiCode {
 	 * @version V1.0
 	 * @date 2019年3月15日 下午10:59:38
 	 */
-	public enum MmsApiCode {
+	public enum MmsApiCode implements ErrorCode{
 		MMS_MODEL_BODY_RULE_NOT_MATCHED("M0001", "彩信模板信息不匹配"), MMS_MODEL_APPLY_FAILED("M0002", "彩信模板信息报备失败"),
 		MMS_MODEL_ID_UNDEFAINED("M0003", "彩信模板ID不可用"), MMS_CUSTOM_BODY_RULE_NOT_MATCHED("M0004", "彩信发送内容格式不匹配"),
 		MMS_BEYOND_BODY_SIZE("M0005", "彩信内容大小超限");
@@ -127,7 +127,7 @@ public class OpenApiCode {
 		}
 	}
 
-	public enum FluxApiCode {
+	public enum FluxApiCode implements ErrorCode{
 		FLUX_MOBILE_NOT_AVAIABLE("F0001", "手机号码不合法"), FLUX_FLUX_DATA_PACKAGE_NOT_EXISTS("F0002", "流量包不存在或已失效"),
 		FLUX_FLUX_DATA_NOT_SUPPORT_LOCAL("F0003", "流量包不支持该归属地"), FLUX_CUSTOMER_DISCOUNT_INVALID("F0004", "用户折扣无效"),
 		FLUX_ORDER_IS_NOT_EXISTS("F0005", "充值记录不存在");
@@ -167,7 +167,7 @@ public class OpenApiCode {
 		}
 	}
 
-	public enum VoiceApiCode {
+	public enum VoiceApiCode implements ErrorCode{
 		VOICE_MOBILE_NOT_AVAIABLE("V0001", "手机号码不合法(为空或者不符合正则)"),
 		VOICE_SEND_CODE_ERROR("V0002", "语音验证码无效(为空或者非4-8位数字)"),
 		VOICE_SAME_MOBILE_NUM_BEYOND_LIMIT_IN_ONE_DAY("V0003", "同一个手机号码一天内超限"),
@@ -223,7 +223,7 @@ public class OpenApiCode {
 		return JSON.toJSONString(object);
 	}
 
-	public enum SmsPushCode {
+	public enum SmsPushCode implements ErrorCode{
 		SMS_SAME_MOBILE_NUM_SEND_BY_HIGN_FREQUENCY("BEYOND_SPEED", "同一个手机号码发送频率过快"),
 		SMS_SAME_MOBILE_NUM_BEYOND_LIMIT_IN_ONE_DAY("BEYOND_TIMES", "同一个手机号码一天内超限"),
 		SMS_MOBILE_BLACKLIST("BLACK", "短信黑名单"), SMS_TASK_REJECT("REJECT", "驳回任务"),

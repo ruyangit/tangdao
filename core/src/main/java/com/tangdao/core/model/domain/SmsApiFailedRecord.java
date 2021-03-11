@@ -47,7 +47,7 @@ public class SmsApiFailedRecord extends DataEntity<SmsApiFailedRecord> {
 	private String callback; // 回调URL
 	private String submitUrl; // 程序调用URL
 	private String ip; // 提交IP
-	private String code; // 错误码
+	private String respCode; // 错误码
 
 	private String remarks;
 	

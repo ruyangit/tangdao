@@ -1,29 +1,38 @@
-package org.tangdao.developer.controller;
+package com.tangdao.developer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.tangdao.common.constant.OpenApiCode.CommonApiCode;
-import org.tangdao.common.exception.ValidateException;
-import org.tangdao.developer.prervice.SmsPrervice;
-import org.tangdao.developer.request.AuthorizationRequest;
-import org.tangdao.developer.request.sms.SmsP2PSendRequest;
-import org.tangdao.developer.request.sms.SmsP2PTemplateSendRequest;
-import org.tangdao.developer.request.sms.SmsSendRequest;
-import org.tangdao.developer.response.sms.SmsBalanceResponse;
-import org.tangdao.developer.response.sms.SmsSendResponse;
-import org.tangdao.developer.validator.sms.SmsP2PTemplateValidator;
-import org.tangdao.developer.validator.sms.SmsP2PValidator;
-import org.tangdao.developer.validator.sms.SmsValidator;
 
 import com.alibaba.fastjson.JSON;
+import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
+import com.tangdao.developer.exception.ValidateException;
+import com.tangdao.developer.prervice.SmsPrervice;
+import com.tangdao.developer.request.AuthorizationRequest;
+import com.tangdao.developer.request.sms.SmsP2PSendRequest;
+import com.tangdao.developer.request.sms.SmsP2PTemplateSendRequest;
+import com.tangdao.developer.request.sms.SmsSendRequest;
+import com.tangdao.developer.response.sms.SmsBalanceResponse;
+import com.tangdao.developer.response.sms.SmsSendResponse;
+import com.tangdao.developer.validator.sms.SmsP2PTemplateValidator;
+import com.tangdao.developer.validator.sms.SmsP2PValidator;
+import com.tangdao.developer.validator.sms.SmsValidator;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
+/**
+ * 
+ * <p>
+ * TODO 短信服务
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月11日
+ */
 @Api
 @RestController
 @RequestMapping(value = "/sms")
@@ -146,9 +155,9 @@ public class SmsApiController extends BasicApiSupport {
 			AuthorizationRequest model = passportValidator.validate(request.getParameterMap(), getClientIp());
 			model.setAppType(getAppType());
 
-			return smsPrervice.getBalance(model.getUserCode());
+			return smsPrervice.getBalance(model.getUserId());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("查下用户余额失败", e);
 			// 如果失败则存储错误日志
 			String code = CommonApiCode.COMMON_SERVER_EXCEPTION.getCode();
 			if (e instanceof ValidateException) {

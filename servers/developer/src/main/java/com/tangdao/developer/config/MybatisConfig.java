@@ -22,7 +22,7 @@ import com.tangdao.core.DateMetaObjectHandler;
  */
 @Configuration
 @EnableTransactionManagement
-@MapperScan("com.tangdao.developer.dao")
+@MapperScan("com.tangdao.core.dao")
 public class MybatisConfig {
 
 	/**

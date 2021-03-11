@@ -5,13 +5,18 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.tangdao.developer.request.AuthorizationRequest;
 
 import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
+import com.tangdao.core.constant.PassportConstant;
+import com.tangdao.core.context.UserContext.UserStatus;
 import com.tangdao.core.model.domain.UserDeveloper;
 import com.tangdao.core.service.HostWhitelistService;
 import com.tangdao.core.service.UserDeveloperService;
 import com.tangdao.developer.exception.ValidateException;
+import com.tangdao.developer.request.AuthorizationRequest;
+
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 
 /**
  * 
@@ -24,10 +29,10 @@ import com.tangdao.developer.exception.ValidateException;
  */
 @Component
 public class AuthorizationValidator extends Validator {
-	
+
 	@Autowired
 	private UserDeveloperService userDeveloperService;
-	
+
 	@Autowired
 	private HostWhitelistService hostWhiteListService;
 
@@ -90,16 +95,16 @@ public class AuthorizationValidator extends Validator {
 		}
 
 		// 账号冻结
-		if ( !UserStatus.YES.getValue().equals(developer.getStatus())) {
+		if (UserStatus.YES.getValue() != Integer.parseInt(developer.getStatus())) {
 			throw new ValidateException(CommonApiCode.COMMON_APPKEY_NOT_AVAIABLE);
 		}
 
 		// a.服务器IP未报备
-		if (!hostWhiteListService.ipAllowedPass(developer.getUserCode(), ip)) {
+		if (!hostWhiteListService.ipAllowedPass(developer.getUserId(), ip)) {
 			throw new ValidateException(CommonApiCode.COMMON_REQUEST_IP_INVALID);
 		}
 
-		model.setUserCode(developer.getUserCode());
+		model.setUserId(developer.getUserId());
 
 		model.setIp(ip);
 	}
@@ -112,12 +117,13 @@ public class AuthorizationValidator extends Validator {
 	 * @param timestamp
 	 * @return
 	 */
-	private String signature(String appSecret, String mobile, String timestamp) {
-		if (StringUtils.isEmpty(mobile)) {
-			return SecurityUtils.md5Hex(appSecret + timestamp);
+	public String signature(String appSecret, String mobile, String timestamp) {
+		if (StrUtil.isEmpty(mobile)) {
+			return SecureUtil.md5(appSecret + timestamp);
 		}
-		return SecurityUtils.md5Hex(appSecret + mobile + timestamp);
+		return SecureUtil.md5(appSecret + mobile + timestamp);
 	}
+
 
 	/**
 	 * TODO 判断用户时间戳是否过期
