@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.exchanger.web.config.async;
+package com.tangdao.exchanger.config.async;
 
 import java.util.concurrent.ThreadPoolExecutor;
 

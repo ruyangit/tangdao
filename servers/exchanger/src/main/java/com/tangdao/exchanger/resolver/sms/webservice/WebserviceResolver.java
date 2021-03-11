@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.resolver.sms.webservice;
+package org.tangdao.modules.exchanger.resolver.sms.webservice;
 
 public class WebserviceResolver {
 }

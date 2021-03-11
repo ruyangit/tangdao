@@ -1,10 +1,9 @@
-package com.tangdao.exchanger.template.handler;
+package com.tangdao.exchanger.resolver.handler;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +18,7 @@ import com.tangdao.core.model.domain.SmsPassageAccess;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * 
@@ -29,9 +29,9 @@ import cn.hutool.core.date.DateUtil;
  * @author ruyang
  * @since 2021年3月11日
  */
-public class DeliverTemplateHandler {
+public class DeliverHandler {
 
-	private static Logger logger = LoggerFactory.getLogger(DeliverTemplateHandler.class);
+	private static Logger logger = LoggerFactory.getLogger(DeliverHandler.class);
 
 	public static List<SmsMtMessageDeliver> translate(SmsPassageAccess access, JSONObject report) {
 
@@ -47,7 +47,7 @@ public class DeliverTemplateHandler {
 //			}
 
 			String rport = report.getString(ParameterContext.PARAMETER_NAME_IN_STREAM);
-			if (StringUtils.isEmpty(rport)) {
+			if (StrUtil.isEmpty(rport)) {
 				return null;
 			}
 			List<JSONObject> array = JSON.parseObject(rport, new TypeReference<List<JSONObject>>() {
@@ -73,7 +73,7 @@ public class DeliverTemplateHandler {
 				response.setCmcp(CMCP.local(mobile).getCode());
 				response.setStatusCode(statusCode);
 				response.setStatus(
-						(StringUtils.isNotEmpty(statusCode) && statusCode.equalsIgnoreCase(access.getSuccessCode())
+						(StrUtil.isNotEmpty(statusCode) && statusCode.equalsIgnoreCase(access.getSuccessCode())
 								? DeliverStatus.SUCCESS.getValue() + ""
 								: DeliverStatus.FAILED.getValue() + ""));
 				response.setDeliverTime(DateUtil.now());

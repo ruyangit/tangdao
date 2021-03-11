@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.resolver.sms.sgip;
+package org.tangdao.modules.exchanger.resolver.sms.sgip;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -7,31 +7,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.tangdao.common.constant.CommonContext.CMCP;
+import org.tangdao.common.constant.RabbitConstant;
+import org.tangdao.common.lang.DateUtils;
+import org.tangdao.common.utils.MobileNumberCatagoryUtils;
+import org.tangdao.modules.exchanger.model.response.ProviderSendResponse;
+import org.tangdao.modules.exchanger.resolver.sms.AbstractSmsProxySender;
+import org.tangdao.modules.exchanger.resolver.sms.cmpp.constant.CmppConstant;
+import org.tangdao.modules.exchanger.resolver.sms.sgip.constant.SgipConstant;
+import org.tangdao.modules.exchanger.template.handler.RequestTemplateHandler;
+import org.tangdao.modules.exchanger.template.vo.TParameter;
+import org.tangdao.modules.sms.constant.SmsTaskContext.MessageSubmitStatus;
+import org.tangdao.modules.sms.model.domain.SmsMoMessageReceive;
+import org.tangdao.modules.sms.model.domain.SmsMtMessageDeliver;
+import org.tangdao.modules.sms.model.domain.SmsPassageParameter;
+import org.tangdao.modules.sys.constant.PassageContext.DeliverStatus;
 
 import com.alibaba.fastjson.JSON;
 import com.huawei.insa2.comm.sgip.message.SGIPDeliverMessage;
 import com.huawei.insa2.comm.sgip.message.SGIPReportMessage;
 import com.huawei.insa2.comm.sgip.message.SGIPSubmitMessage;
 import com.huawei.insa2.comm.sgip.message.SGIPSubmitRepMessage;
-import com.tangdao.core.constant.RabbitConstant;
-import com.tangdao.core.context.CommonContext.CMCP;
-import com.tangdao.core.context.PassageContext.DeliverStatus;
-import com.tangdao.core.context.TaskContext.MessageSubmitStatus;
-import com.tangdao.core.model.domain.MoMessageReceive;
-import com.tangdao.core.model.domain.MtMessageDeliver;
-import com.tangdao.core.model.domain.PassageParameter;
-import com.tangdao.exchanger.resolver.sms.AbstractSmsProxySender;
-import com.tangdao.exchanger.resolver.sms.cmpp.constant.CmppConstant;
-import com.tangdao.exchanger.resolver.sms.sgip.constant.SgipConstant;
-import com.tangdao.exchanger.response.ProviderSendResponse;
-import com.tangdao.exchanger.template.TParameter;
-import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
-import com.tangdao.exchanger.utils.MobileNumberCatagoryUtil;
-
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
 
 @Service
 public class SgipProxySender extends AbstractSmsProxySender {
@@ -117,11 +117,11 @@ public class SgipProxySender extends AbstractSmsProxySender {
      * @param content 短信内容
      * @return
      */
-    public List<ProviderSendResponse> send(PassageParameter parameter, String extNumber, String mobile,
+    public List<ProviderSendResponse> send(SmsPassageParameter parameter, String extNumber, String mobile,
                                            String content) {
         try {
             TParameter tparameter = RequestTemplateHandler.parse(parameter.getParams());
-            if (CollUtil.isEmpty(tparameter)) {
+            if (MapUtils.isEmpty(tparameter)) {
                 throw new RuntimeException("SGIP 参数信息为空");
             }
 
@@ -145,7 +145,7 @@ public class SgipProxySender extends AbstractSmsProxySender {
 
             if (submitRepMsg == null) {
                 logger.error("SGIPSubmitRepMessage 网关提交信息为空");
-                smsProxyService.plusSendErrorTimes(parameter.getPassageId());
+                smsProxyManageService.plusSendErrorTimes(parameter.getPassageId());
                 return null;
             }
 
@@ -156,13 +156,13 @@ public class SgipProxySender extends AbstractSmsProxySender {
             ProviderSendResponse response = new ProviderSendResponse();
             if (submitRepMsg.getResult() == MessageSubmitStatus.SUCCESS.getCode()) {
                 // 发送成功清空
-            	smsProxyService.clearSendErrorTimes(parameter.getPassageId());
+                smsProxyManageService.clearSendErrorTimes(parameter.getPassageId());
 
                 response.setMobile(mobile);
                 response.setStatusCode(submitRepMsg.getResult() + "");
                 response.setSid(submitRepMsg.getSubmitSequenceNumber());
                 response.setSuccess(true);
-                response.setRemarks(String.format("{msgId:%s, sequenceId:%d, commandId:%d}", response.getSid(),
+                response.setRemark(String.format("{msgId:%s, sequenceId:%d, commandId:%d}", response.getSid(),
                                                  submitRepMsg.getSequenceId(), submitRepMsg.getCommandId()));
 
                 list.add(response);
@@ -172,7 +172,7 @@ public class SgipProxySender extends AbstractSmsProxySender {
                 response.setStatusCode(submitRepMsg.getResult() + "");
                 response.setSid("" + submitRepMsg.getSubmitSequenceNumber());
                 response.setSuccess(false);
-                response.setRemarks(String.format("{result:%d, sequenceId:%d, commandId:%d}", submitRepMsg.getResult(),
+                response.setRemark(String.format("{result:%d, sequenceId:%d, commandId:%d}", submitRepMsg.getResult(),
                                                  submitRepMsg.getSequenceId(), submitRepMsg.getCommandId()));
 
                 list.add(response);
@@ -181,7 +181,7 @@ public class SgipProxySender extends AbstractSmsProxySender {
             return list;
         } catch (Exception e) {
             // 累加发送错误次数
-        	smsProxyService.plusSendErrorTimes(parameter.getPassageId());
+            smsProxyManageService.plusSendErrorTimes(parameter.getPassageId());
 
             logger.error("SGIP发送失败", e);
             throw new RuntimeException("SGIP发送失败");
@@ -224,7 +224,7 @@ public class SgipProxySender extends AbstractSmsProxySender {
             msgFmt = SgipConstant.MSG_FMT_UCS2;
         }
 
-        String[] mobiles = mobile.split(MobileNumberCatagoryUtil.DATA_SPLIT_CHARCATOR);
+        String[] mobiles = mobile.split(MobileNumberCatagoryUtils.DATA_SPLIT_CHARCATOR);
         for (int i = 0; i < mobiles.length; i++) {
             mobiles[i] = MOBILE_PREFIX_NUMBER + mobiles[i];
         }
@@ -327,22 +327,22 @@ public class SgipProxySender extends AbstractSmsProxySender {
                 mobile = mobile.substring(2);
             }
 
-            List<MtMessageDeliver> list = new ArrayList<>();
+            List<SmsMtMessageDeliver> list = new ArrayList<>();
 
-            MtMessageDeliver response = new MtMessageDeliver();
+            SmsMtMessageDeliver response = new SmsMtMessageDeliver();
             response.setMsgId(msgid);
             response.setMobile(mobile);
             response.setCmcp(CMCP.local(response.getMobile()).getCode());
             response.setStatusCode(state == 0 ? SgipConstant.COMMON_MT_STATUS_SUCCESS_CODE : report.getErrorCode() + "");
-            response.setStatus(state == 0 ? DeliverStatus.SUCCESS.getValue()+"" : DeliverStatus.FAILED.getValue()+"");
-            response.setDeliverTime(DateUtil.now());
-            response.setCreateDate(new Date());
+            response.setStatus(state == 0 ? DeliverStatus.SUCCESS.getValue() : DeliverStatus.FAILED.getValue());
+            response.setDeliverTime(DateUtils.getDate());
+            response.setCreateTime(new Date());
             response.setRemarks(String.format("msg_id:%s,code:%d", report.getSubmitSequenceNumber() + "",
                                              report.getErrorCode()));
 
             list.add(response);
 
-            if (CollUtil.isNotEmpty(list)) {
+            if (CollectionUtils.isNotEmpty(list)) {
                 // 发送异步消息
                 rabbitTemplate.convertAndSend(RabbitConstant.MQ_SMS_MT_WAIT_RECEIPT, list);
             }
@@ -369,7 +369,7 @@ public class SgipProxySender extends AbstractSmsProxySender {
 
             logger.info("SGIP上行报告数据: {}", report);
 
-            List<MoMessageReceive> list = new ArrayList<>();
+            List<SmsMoMessageReceive> list = new ArrayList<>();
 
             // 发送时手机号码拼接86，回执需去掉86前缀
             String mobile = report.getUserNumber();
@@ -377,13 +377,13 @@ public class SgipProxySender extends AbstractSmsProxySender {
                 mobile = mobile.substring(2);
             }
 
-            MoMessageReceive response = new MoMessageReceive();
+            SmsMoMessageReceive response = new SmsMoMessageReceive();
             response.setPassageId(null);
             response.setMsgId(deliverMsg.getSPNumber());
             response.setMobile(mobile);
             response.setDestnationNo(deliverMsg.getSPNumber());
-            response.setReceiveTime(DateUtil.now());
-            response.setCreateDate(new Date());
+            response.setReceiveTime(DateUtils.getDate());
+            response.setCreateTime(new Date());
             // 编号方式
             if (SgipConstant.MSG_FMT_UCS2 == report.getMsgFmt()) {
                 response.setContent(new String(report.getMsgContent(), "UTF-16"));
@@ -393,7 +393,7 @@ public class SgipProxySender extends AbstractSmsProxySender {
 
             list.add(response);
 
-            if (CollUtil.isNotEmpty(list)) {
+            if (CollectionUtils.isNotEmpty(list)) {
                 rabbitTemplate.convertAndSend(RabbitConstant.MQ_SMS_MO_RECEIVE, list);
             }
 

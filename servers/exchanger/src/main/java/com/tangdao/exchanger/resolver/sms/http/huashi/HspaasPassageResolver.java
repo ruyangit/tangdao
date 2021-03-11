@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.resolver.sms.http.huashi;
+package org.tangdao.modules.exchanger.resolver.sms.http.huashi;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,25 +7,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.tangdao.common.constant.CommonContext.CMCP;
+import org.tangdao.common.lang.DateUtils;
+import org.tangdao.modules.exchanger.model.response.ProviderSendResponse;
+import org.tangdao.modules.exchanger.resolver.HttpClientManager;
+import org.tangdao.modules.exchanger.resolver.handler.RequestHandler;
+import org.tangdao.modules.exchanger.resolver.sms.http.AbstractPassageResolver;
+import org.tangdao.modules.exchanger.template.vo.TParameter;
+import org.tangdao.modules.sms.model.domain.SmsMoMessageReceive;
+import org.tangdao.modules.sms.model.domain.SmsMtMessageDeliver;
+import org.tangdao.modules.sms.model.domain.SmsPassageParameter;
+import org.tangdao.modules.sys.constant.PassageContext.DeliverStatus;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.tangdao.core.context.CommonContext.CMCP;
-import com.tangdao.core.context.PassageContext.DeliverStatus;
-import com.tangdao.core.model.domain.MoMessageReceive;
-import com.tangdao.core.model.domain.MtMessageDeliver;
-import com.tangdao.core.model.domain.PassageParameter;
-import com.tangdao.exchanger.resolver.HttpClientManager;
-import com.tangdao.exchanger.resolver.sms.http.AbstractPassageResolver;
-import com.tangdao.exchanger.response.ProviderSendResponse;
-import com.tangdao.exchanger.template.TParameter;
-import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
-
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
 
 /**
  * 
@@ -38,11 +37,11 @@ import cn.hutool.core.util.StrUtil;
 public class HspaasPassageResolver extends AbstractPassageResolver {
 
 	@Override
-	public List<ProviderSendResponse> send(PassageParameter parameter, String mobile, String content,
+	public List<ProviderSendResponse> send(SmsPassageParameter parameter, String mobile, String content,
 			String extNumber) {
 
 		try {
-			TParameter tparameter = RequestTemplateHandler.parse(parameter.getParams());
+			TParameter tparameter = RequestHandler.parse(parameter.getParams());
 
 			// 转换参数，并调用网关接口，接收返回结果
 			String result = HttpClientManager.post(parameter.getUrl(),
@@ -94,11 +93,11 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 	 * @return
 	 */
 	private static List<ProviderSendResponse> sendResponse(String result, String successCode) {
-		if (StrUtil.isEmpty(result)) {
+		if (StringUtils.isEmpty(result)) {
 			return null;
 		}
 
-		successCode = StrUtil.isEmpty(successCode) ? COMMON_MT_STATUS_SUCCESS_CODE : successCode;
+		successCode = StringUtils.isEmpty(successCode) ? COMMON_MT_STATUS_SUCCESS_CODE : successCode;
 
 		JSONObject jsonObject = JSON.parseObject(result);
 		if (jsonObject == null) {
@@ -111,42 +110,41 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 		response.setStatusCode(jsonObject.getString("code"));
 		response.setSid(jsonObject.getString("sid"));
 		response.setSuccess(
-				StrUtil.isNotEmpty(response.getStatusCode()) && successCode.equals(response.getStatusCode()));
-		response.setRemarks(result);
+				StringUtils.isNotEmpty(response.getStatusCode()) && successCode.equals(response.getStatusCode()));
+		response.setRemark(result);
 
 		list.add(response);
 		return list;
 	}
 
 	@Override
-	public List<MtMessageDeliver> mtDeliver(String report, String successCode) {
+	public List<SmsMtMessageDeliver> mtDeliver(String report, String successCode) {
 		try {
 			logger.info("下行状态报告简码：{} =========={}", code(), report);
 
 			JSONArray array = JSON.parseArray(report);
-			if (CollUtil.isEmpty(array)) {
+			if (CollectionUtils.isEmpty(array)) {
 				return null;
 			}
 
-			List<MtMessageDeliver> list = new ArrayList<>();
-			MtMessageDeliver response;
+			List<SmsMtMessageDeliver> list = new ArrayList<>();
+			SmsMtMessageDeliver response;
 			for (Object object : array) {
 				if (object == null) {
 					continue;
 				}
 
 				JSONObject jsonobj = (JSONObject) object;
-				response = new MtMessageDeliver();
+				response = new SmsMtMessageDeliver();
 				response.setMsgId(jsonobj.getString("sid"));
 				response.setMobile(jsonobj.getString("mobile"));
 				response.setCmcp(CMCP.local(jsonobj.getString("mobile")).getCode());
 				response.setStatusCode(jsonobj.getString("status"));
-				response.setStatus((StrUtil.isNotEmpty(response.getStatusCode())
-						&& response.getStatusCode().equalsIgnoreCase(successCode)
-								? DeliverStatus.SUCCESS.getValue() + ""
-								: DeliverStatus.FAILED.getValue() + ""));
-				response.setDeliverTime(DateUtil.now());
-				response.setCreateDate(new Date());
+				response.setStatus((StringUtils.isNotEmpty(response.getStatusCode())
+						&& response.getStatusCode().equalsIgnoreCase(successCode) ? DeliverStatus.SUCCESS.getValue()
+								: DeliverStatus.FAILED.getValue()));
+				response.setDeliverTime(DateUtils.getDateTime());
+				response.setCreateTime(new Date());
 				response.setRemarks(jsonobj.toJSONString());
 
 				list.add(response);
@@ -161,7 +159,7 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 	}
 
 	@Override
-	public List<MoMessageReceive> moReceive(String report, String passageId) {
+	public List<SmsMoMessageReceive> moReceive(String report, String passageId) {
 		try {
 
 			logger.info("上行报告简码：{} =========={}", code(), report);
@@ -172,16 +170,16 @@ public class HspaasPassageResolver extends AbstractPassageResolver {
 			String mobile = jsonobj.getString("mobile");
 			String content = jsonobj.getString("content");
 
-			List<MoMessageReceive> list = new ArrayList<>();
+			List<SmsMoMessageReceive> list = new ArrayList<>();
 
-			MoMessageReceive response = new MoMessageReceive();
+			SmsMoMessageReceive response = new SmsMoMessageReceive();
 			response.setPassageId(passageId);
 			response.setMsgId(msgId);
 			response.setMobile(mobile);
 			response.setContent(content);
 			response.setDestnationNo(destId);
-			response.setReceiveTime(DateUtil.now());
-			response.setCreateDate(new Date());
+			response.setReceiveTime(DateUtils.getDateTime());
+			response.setCreateTime(new Date());
 			list.add(response);
 
 			// 解析返回结果并返回

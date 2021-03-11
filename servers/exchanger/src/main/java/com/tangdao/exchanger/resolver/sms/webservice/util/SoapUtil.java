@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.resolver.sms.webservice.util;
+package org.tangdao.modules.exchanger.resolver.sms.webservice.util;
 
 import java.io.StringReader;
 import java.util.Map;

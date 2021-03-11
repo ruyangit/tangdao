@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.developer.config;
+package com.tangdao.exchanger.config;
 
 import java.time.Duration;
 import java.util.HashMap;

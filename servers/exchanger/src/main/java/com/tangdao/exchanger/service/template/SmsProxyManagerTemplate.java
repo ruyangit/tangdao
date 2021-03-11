@@ -1,7 +1,4 @@
-/**
- *
- */
-package com.tangdao.exchanger.service;
+package com.tangdao.exchanger.service.template;
 
 import java.net.BindException;
 import java.util.HashMap;
@@ -18,7 +15,9 @@ import com.google.common.util.concurrent.RateLimiter;
 import com.huawei.insa2.util.Args;
 import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.exception.DataEmptyException;
-import com.tangdao.core.model.domain.PassageParameter;
+import com.tangdao.core.model.domain.SmsPassageParameter;
+import com.tangdao.core.service.proxy.ISmsProxyManager;
+import com.tangdao.exchanger.resolver.handler.RequestHandler;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppManageProxy;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ManageProxy;
@@ -28,22 +27,22 @@ import com.tangdao.exchanger.resolver.sms.sgip.SgipProxySender;
 import com.tangdao.exchanger.resolver.sms.sgip.constant.SgipConstant;
 import com.tangdao.exchanger.resolver.sms.smgp.SmgpManageProxy;
 import com.tangdao.exchanger.resolver.sms.smgp.SmgpProxySender;
-import com.tangdao.exchanger.template.TParameter;
-import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
+import com.tangdao.exchanger.template.vo.TParameter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
+ * 
  * <p>
  * TODO 描述
  * </p>
  *
  * @author ruyang
- * @since 2021年2月25日
+ * @since 2021年3月11日
  */
 @Service
-public class SmsProxyManager {
+public class SmsProxyManagerTemplate implements ISmsProxyManager {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -65,7 +64,7 @@ public class SmsProxyManager {
 	public static volatile Map<String, Object> GLOBAL_PROXIES = new ConcurrentHashMap<>();
 
 	/**
-	 * 通道PROXY 发送错误次数计数器
+	 * 通道PROXY 发送错误次数计数器 add by 20170903
 	 */
 	private static final Map<String, Integer> GLOBAL_PROXIES_ERROR_COUNTER = new HashMap<>();
 
@@ -84,13 +83,14 @@ public class SmsProxyManager {
 	 */
 	private static final int SGIP_RECONNECT_TIMEOUT = 60 * 1000;
 
-	public boolean startProxy(PassageParameter parameter) {
+	@Override
+	public boolean startProxy(SmsPassageParameter parameter) {
 		try {
 			if (parameter == null) {
 				throw new IllegalArgumentException("SmsPassageParameter is empty");
 			}
 
-			TParameter tparameter = RequestTemplateHandler.parse(parameter.getParams());
+			TParameter tparameter = RequestHandler.parse(parameter.getParams());
 			if (CollUtil.isEmpty(tparameter)) {
 				throw new IllegalArgumentException("SmsPassageParameter's params are empty");
 			}
@@ -109,7 +109,7 @@ public class SmsProxyManager {
 	 * @param parameter
 	 * @return
 	 */
-	private ProtocolType getPassageProtocolType(PassageParameter parameter) {
+	private ProtocolType getPassageProtocolType(SmsPassageParameter parameter) {
 		if (StrUtil.isEmpty(parameter.getProtocol())) {
 			throw new IllegalArgumentException("SmsPassageParameter's protocolType is empty");
 		}
@@ -306,6 +306,7 @@ public class SmsProxyManager {
 		}
 	}
 
+	@Override
 	public boolean isProxyAvaiable(String passageId) {
 		Object passage = getManageProxy(passageId);
 		if (passage == null) {
@@ -354,6 +355,7 @@ public class SmsProxyManager {
 		return GLOBAL_PROXIES.get(passageId);
 	}
 
+	@Override
 	public boolean stopProxy(String passageId) {
 		logger.info("stopProxy, passageId : {} ", passageId);
 		if (!isProxyAvaiable(passageId)) {
@@ -377,6 +379,7 @@ public class SmsProxyManager {
 		}
 	}
 
+	@Override
 	public void plusSendErrorTimes(String passageId) {
 		synchronized (GLOBAL_PROXIES_ERROR_COUNTER) {
 			Integer counter = GLOBAL_PROXIES_ERROR_COUNTER.get(passageId);
@@ -389,6 +392,7 @@ public class SmsProxyManager {
 		}
 	}
 
+	@Override
 	public void clearSendErrorTimes(String passageId) {
 		synchronized (GLOBAL_PROXIES_ERROR_COUNTER) {
 			Integer counter = GLOBAL_PROXIES_ERROR_COUNTER.get(passageId);
@@ -399,4 +403,5 @@ public class SmsProxyManager {
 			GLOBAL_PROXIES_ERROR_COUNTER.put(passageId, 0);
 		}
 	}
+
 }

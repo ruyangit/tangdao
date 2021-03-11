@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.resolver.sms.webservice.custom;
+package org.tangdao.modules.exchanger.resolver.sms.webservice.custom;
 
 
 /**

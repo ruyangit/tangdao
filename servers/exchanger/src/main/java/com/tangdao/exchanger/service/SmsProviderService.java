@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tangdao.exchanger.service;
 
 import java.util.ArrayList;
@@ -17,32 +14,34 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.util.concurrent.RateLimiter;
 import com.tangdao.core.context.CommonContext.ProtocolType;
 import com.tangdao.core.exception.ExchangeProcessException;
-import com.tangdao.core.model.domain.MoMessageReceive;
-import com.tangdao.core.model.domain.MtMessageDeliver;
-import com.tangdao.core.model.domain.PassageAccess;
-import com.tangdao.core.model.domain.PassageParameter;
+import com.tangdao.core.model.domain.SmsMoMessageReceive;
+import com.tangdao.core.model.domain.SmsMtMessageDeliver;
+import com.tangdao.core.model.domain.SmsPassageAccess;
+import com.tangdao.core.model.domain.SmsPassageParameter;
+import com.tangdao.core.model.vo.ProviderSendVo;
+import com.tangdao.core.service.proxy.ISmsProviderService;
+import com.tangdao.core.utils.MobileCatagoryUtil;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ProxySender;
 import com.tangdao.exchanger.resolver.sms.http.SmsHttpSender;
 import com.tangdao.exchanger.resolver.sms.sgip.SgipProxySender;
 import com.tangdao.exchanger.resolver.sms.smgp.SmgpProxySender;
-import com.tangdao.exchanger.response.ProviderSendResponse;
-import com.tangdao.exchanger.utils.MobileNumberCatagoryUtil;
+import com.tangdao.exchanger.service.template.SmsProxyManagerTemplate;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 
 /**
+ * 
  * <p>
- * TODO 描述
+ * TODO 短信接口提供商
  * </p>
  *
  * @author ruyang
- * @since 2021年2月25日
+ * @since 2021年3月11日
  */
 @Service
-public class SmsProviderService {
-	private final Logger log = LoggerFactory.getLogger(getClass());
+public class SmsProviderService implements ISmsProviderService {
 
 	@Autowired
 	private SmsHttpSender httpResolver;
@@ -59,6 +58,8 @@ public class SmsProviderService {
 	@Autowired
 	private SmgpProxySender smgpProxySender;
 
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	/**
 	 * 默认限流计流数
 	 */
@@ -70,7 +71,8 @@ public class SmsProviderService {
 	// @Value("${gateway.mobiles-per-sencond:10}")
 	// private int gatewayMobilesPerSecond;
 
-	public List<ProviderSendResponse> sendSms(PassageParameter parameter, String mobile, String content, Integer fee,
+	@Override
+	public List<ProviderSendVo> sendSms(SmsPassageParameter parameter, String mobile, String content, Integer fee,
 			String extNumber) throws ExchangeProcessException {
 
 		validate(parameter);
@@ -82,18 +84,18 @@ public class SmsProviderService {
 
 		// 获取通道对应的流速设置
 		RateLimiter rateLimiter = getRateLimiter(parameter.getPassageId(), parameter.getPacketsSize());
-		String[] mobiles = mobile.split(MobileNumberCatagoryUtil.DATA_SPLIT_CHARCATOR);
+		String[] mobiles = mobile.split(MobileCatagoryUtil.DATA_SPLIT_CHARCATOR);
 
 		// 目前HTTP用途并不是很大（因为取决于HTTP自身的瓶颈）
 		List<String[]> packets = recombineMobilesByLimitSpeedInSecond(mobiles,
 				getRateLimiterAmount(parameter.getProtocol(), fee), parameter.getPacketsSize());
 
 		// 如果手机号码同时传递多个，需要对流速进行控制，多余流速的需要分批提交
-		List<ProviderSendResponse> responsesInMultiGroup = new ArrayList<ProviderSendResponse>(packets.size());
+		List<ProviderSendVo> responsesInMultiGroup = new ArrayList<ProviderSendVo>(packets.size());
 		for (String[] m : packets) {
 			// 设置acquire 当前分包后的数量
 			rateLimiter.acquire(Integer.parseInt(m[0]));
-			List<ProviderSendResponse> reponsePerGroup = submitData2Gateway(parameter, m[1], content, extNumber);
+			List<ProviderSendVo> reponsePerGroup = submitData2Gateway(parameter, m[1], content, extNumber);
 			if (CollUtil.isEmpty(reponsePerGroup)) {
 				continue;
 			}
@@ -151,16 +153,16 @@ public class SmsProviderService {
 	 * @param extNumber
 	 * @return
 	 */
-	private List<ProviderSendResponse> submitData2Gateway(PassageParameter parameter, String mobile, String content,
+	private List<ProviderSendVo> submitData2Gateway(SmsPassageParameter parameter, String mobile, String content,
 			String extNumber) {
 
 		ProtocolType pt = ProtocolType.parse(parameter.getProtocol());
 		if (pt == null) {
-			log.warn("协议类型不匹配，跳过");
+			logger.warn("协议类型不匹配，跳过");
 			return null;
 		}
 
-		List<ProviderSendResponse> list = null;
+		List<ProviderSendVo> list = null;
 		switch (pt) {
 		case HTTP: {
 			list = httpResolver.post(parameter, mobile, content, extNumber);
@@ -186,7 +188,7 @@ public class SmsProviderService {
 			break;
 		}
 		default:
-			log.warn("Ignored by protocol is not matched");
+			logger.warn("Ignored by protocol is not matched");
 			break;
 		}
 
@@ -222,7 +224,7 @@ public class SmsProviderService {
 
 			index = i * groupMobileSize;
 			for (int j = 0; j < groupMobileSize && index < totalMobileSize; j++) {
-				builder.append(mobiles[index++]).append(MobileNumberCatagoryUtil.DATA_SPLIT_CHARCATOR);
+				builder.append(mobiles[index++]).append(MobileCatagoryUtil.DATA_SPLIT_CHARCATOR);
 				roundSize++;
 			}
 
@@ -241,7 +243,7 @@ public class SmsProviderService {
 	 * 
 	 * @param parameter
 	 */
-	private void validate(PassageParameter parameter) {
+	private void validate(SmsPassageParameter parameter) {
 		if (StrUtil.isEmpty(parameter.getUrl())) {
 			throw new IllegalArgumentException("SmsPassageParameter's url is empty");
 		}
@@ -252,40 +254,44 @@ public class SmsProviderService {
 
 	}
 
-	public List<MtMessageDeliver> receiveMtReport(PassageAccess access, JSONObject report) {
+	@Override
+	public List<SmsMtMessageDeliver> receiveMtReport(SmsPassageAccess access, JSONObject report) {
 		try {
 			return httpResolver.deliver(access, report);
 		} catch (Exception e) {
-			log.error("Failed by args - SmsPassageAccess[" + JSON.toJSONString(access) + "], JSONObject["
+			logger.error("Failed by args - SmsPassageAccess[" + JSON.toJSONString(access) + "], JSONObject["
 					+ report.toJSONString() + "] ", e);
 			throw new ExchangeProcessException(e);
 		}
 	}
 
-	public List<MtMessageDeliver> pullMtReport(PassageAccess access) {
+	@Override
+	public List<SmsMtMessageDeliver> pullMtReport(SmsPassageAccess access) {
 		try {
 			return httpResolver.deliver(access);
 		} catch (Exception e) {
-			log.error("Failed by args - SmsPassageAccess[" + JSON.toJSONString(access) + "]", e);
+			logger.error("Failed by args - SmsPassageAccess[" + JSON.toJSONString(access) + "]", e);
 			throw new ExchangeProcessException(e);
 		}
 	}
 
-	public List<MoMessageReceive> receiveMoReport(PassageAccess access, JSONObject report) {
+	@Override
+	public List<SmsMoMessageReceive> receiveMoReport(SmsPassageAccess access, JSONObject report) {
 		try {
 			return httpResolver.mo(access, report);
 		} catch (Exception e) {
-			log.error("Failed by args - SmsPassageAccess[" + JSON.toJSONString(access) + "], JSONObject["
+			logger.error("Failed by args - SmsPassageAccess[" + JSON.toJSONString(access) + "], JSONObject["
 					+ report.toJSONString() + "] ", e);
 			throw new ExchangeProcessException(e);
 		}
 	}
 
-	public List<MoMessageReceive> pullMoReport(PassageAccess access) {
+	@Override
+	public List<SmsMoMessageReceive> pullMoReport(SmsPassageAccess access) {
 		try {
 			return httpResolver.mo(access);
 		} catch (Exception e) {
-			log.error("Failed by args - SmsPassageAccess[" + JSON.toJSONString(access) + "]", e);
+			logger.error("Failed by args - SmsPassageAccess[" + JSON.toJSONString(access) + "]", e);
 			throw new ExchangeProcessException(e);
 		}
 	}
@@ -298,14 +304,14 @@ public class SmsProviderService {
 	 * @return
 	 */
 	private static RateLimiter getRateLimiter(String passageId, Integer speed) {
-		RateLimiter limiter = SmsProxyManager.GLOBAL_RATE_LIMITERS.get(passageId);
+		RateLimiter limiter = SmsProxyManagerTemplate.GLOBAL_RATE_LIMITERS.get(passageId);
 		if (limiter == null) {
 			ReentrantLock reentrantLock = new ReentrantLock();
 			reentrantLock.tryLock();
 			try {
 				limiter = RateLimiter
-						.create((speed == null || speed == 0) ? SmsProxyManager.DEFAULT_LIMIT_SPEED : speed);
-				SmsProxyManager.GLOBAL_RATE_LIMITERS.put(passageId, limiter);
+						.create((speed == null || speed == 0) ? SmsProxyManagerTemplate.DEFAULT_LIMIT_SPEED : speed);
+				SmsProxyManagerTemplate.GLOBAL_RATE_LIMITERS.put(passageId, limiter);
 			} finally {
 				reentrantLock.unlock();
 			}

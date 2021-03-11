@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.exchanger.web.config;
+package com.tangdao.exchanger.config;
 
 import java.util.HashMap;
 import java.util.Map;

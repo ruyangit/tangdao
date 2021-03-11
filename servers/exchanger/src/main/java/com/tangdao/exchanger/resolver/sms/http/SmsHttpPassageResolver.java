@@ -2,11 +2,11 @@ package com.tangdao.exchanger.resolver.sms.http;
 
 import java.util.List;
 
-import com.tangdao.core.model.domain.MoMessageReceive;
-import com.tangdao.core.model.domain.MtMessageDeliver;
-import com.tangdao.core.model.domain.PassageParameter;
-import com.tangdao.exchanger.response.ProviderSendResponse;
-import com.tangdao.exchanger.template.TParameter;
+import com.tangdao.core.model.domain.SmsMoMessageReceive;
+import com.tangdao.core.model.domain.SmsMtMessageDeliver;
+import com.tangdao.core.model.domain.SmsPassageParameter;
+import com.tangdao.core.model.vo.ProviderSendVo;
+import com.tangdao.exchanger.template.vo.TParameter;
 
 public interface SmsHttpPassageResolver {
 
@@ -19,7 +19,7 @@ public interface SmsHttpPassageResolver {
 	 * @param extNumber 用户扩展号码
 	 * @return
 	 */
-	List<ProviderSendResponse> send(PassageParameter parameter, String mobile, String content, String extNumber);
+	List<ProviderSendVo> send(SmsPassageParameter parameter, String mobile, String content, String extNumber);
 
 	/**
 	 * TODO 下行状态报告回执(推送)
@@ -27,7 +27,7 @@ public interface SmsHttpPassageResolver {
 	 * @param report
 	 * @return
 	 */
-	List<MtMessageDeliver> mtDeliver(String report, String successCode);
+	List<SmsMtMessageDeliver> mtDeliver(String report, String successCode);
 
 	/**
 	 * TODO 下行状态报告回执（自取）
@@ -37,7 +37,7 @@ public interface SmsHttpPassageResolver {
 	 * @param successCode
 	 * @return
 	 */
-	List<MtMessageDeliver> mtDeliver(TParameter tparameter, String url, String successCode);
+	List<SmsMtMessageDeliver> mtDeliver(TParameter tparameter, String url, String successCode);
 
 	/**
 	 * TODO 上行短信状态回执
@@ -45,7 +45,7 @@ public interface SmsHttpPassageResolver {
 	 * @param report
 	 * @return
 	 */
-	List<MoMessageReceive> moReceive(String report, String passageId);
+	List<SmsMoMessageReceive> moReceive(String report, String passageId);
 
 	/**
 	 * TODO 上行短信状态回执
@@ -55,7 +55,7 @@ public interface SmsHttpPassageResolver {
 	 * @param passageId
 	 * @return
 	 */
-	List<MoMessageReceive> moReceive(TParameter tparameter, String url, String passageId);
+	List<SmsMoMessageReceive> moReceive(TParameter tparameter, String url, String passageId);
 
 	/**
 	 * TODO 用户余额查询

@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.resolver.sms.cmpp.v3;
+package org.tangdao.modules.exchanger.resolver.sms.cmpp.v3;
 
 import com.huawei.insa2.comm.cmpp.message.CMPPMessage;
 import com.huawei.insa2.comm.cmpp30.message.CMPP30DeliverMessage;

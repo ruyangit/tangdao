@@ -18,6 +18,7 @@
 	<modules>
 		<module>core</module>
 		<module>servers/developer</module>
+		<module>servers/exchanger</module>
 	</modules>
 
 	<properties>

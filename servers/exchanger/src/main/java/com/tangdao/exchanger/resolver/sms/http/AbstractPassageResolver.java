@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.resolver.sms.http;
+package org.tangdao.modules.exchanger.resolver.sms.http;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -8,16 +8,14 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-
-import com.tangdao.core.model.domain.MoMessageReceive;
-import com.tangdao.core.model.domain.MtMessageDeliver;
-import com.tangdao.exchanger.template.TParameter;
-
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
+import org.tangdao.common.lang.DateUtils;
+import org.tangdao.modules.exchanger.template.vo.TParameter;
+import org.tangdao.modules.sms.model.domain.SmsMoMessageReceive;
+import org.tangdao.modules.sms.model.domain.SmsMtMessageDeliver;
 
 /**
  * TODO HTTP基础处理器
@@ -100,7 +98,7 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @param report
 	 * @return
 	 */
-	public List<MtMessageDeliver> mtDeliver(String report, String successCode) {
+	public List<SmsMtMessageDeliver> mtDeliver(String report, String successCode) {
 		throw new UnsupportedOperationException("It needs implement by child class");
 	}
 
@@ -112,7 +110,7 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @param successCode
 	 * @return
 	 */
-	public List<MtMessageDeliver> mtDeliver(TParameter tparameter, String url, String successCode) {
+	public List<SmsMtMessageDeliver> mtDeliver(TParameter tparameter, String url, String successCode) {
 		throw new UnsupportedOperationException("It needs implement by child class");
 	}
 
@@ -122,7 +120,7 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @param report
 	 * @return
 	 */
-	public List<MoMessageReceive> moReceive(String report, String passageId) {
+	public List<SmsMoMessageReceive> moReceive(String report, String passageId) {
 		throw new UnsupportedOperationException("It needs implement by child class");
 	}
 
@@ -134,7 +132,7 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @param passageId
 	 * @return
 	 */
-	public List<MoMessageReceive> moReceive(TParameter tparameter, String url, String passageId) {
+	public List<SmsMoMessageReceive> moReceive(TParameter tparameter, String url, String passageId) {
 		throw new UnsupportedOperationException("It needs implement by child class");
 	}
 
@@ -152,15 +150,15 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	 * @return
 	 */
 	protected static String unixtimeStamp2Date(Object timestampString) {
-		if (timestampString == null || StrUtil.isEmpty(timestampString.toString())) {
-			return DateUtil.now();
+		if (timestampString == null || StringUtils.isEmpty(timestampString.toString())) {
+			return DateUtils.getDateTime();
 		}
 
 		try {
 			Long timestamp = Long.parseLong(timestampString.toString()) * 1000;
 			return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(timestamp));
 		} catch (Exception e) {
-			return DateUtil.now();
+			return DateUtils.getDateTime();
 		}
 	}
 
@@ -175,16 +173,16 @@ public abstract class AbstractPassageResolver implements SmsHttpPassageResolver 
 	}
 
 	protected static String dateNumberFormat(Object dataNumber, String format) {
-		if (dataNumber == null || StrUtil.isEmpty(dataNumber.toString())) {
-			return DateUtil.now();
+		if (dataNumber == null || StringUtils.isEmpty(dataNumber.toString())) {
+			return DateUtils.getDateTime();
 		}
 
 		try {
 			SimpleDateFormat ff = new java.text.SimpleDateFormat(
-					StrUtil.isEmpty(format) ? "yyyyMMddHHmmss" : format);
+					StringUtils.isEmpty(format) ? "yyyyMMddHHmmss" : format);
 			return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(ff.parse(dataNumber.toString()));
 		} catch (Exception e) {
-			return DateUtil.now();
+			return DateUtils.getDateTime();
 		}
 	}
 

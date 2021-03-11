@@ -9,11 +9,11 @@
 		<groupId>com.tangdao</groupId>
 		<artifactId>tangdao</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../</relativePath>
+		<relativePath>../../</relativePath>
 	</parent>
 
 	<artifactId>tangdao-exchanger</artifactId>
-	
+
 	<properties>
 		<finalName>exchanger-web</finalName>
 	</properties>
@@ -48,10 +48,6 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-redis</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.baomidou</groupId>

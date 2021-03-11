@@ -17,17 +17,17 @@ import com.tangdao.core.constant.RabbitConstant;
 import com.tangdao.core.context.CommonContext.CMCP;
 import com.tangdao.core.context.PassageContext.DeliverStatus;
 import com.tangdao.core.context.TaskContext.MessageSubmitStatus;
-import com.tangdao.core.model.domain.MoMessageReceive;
-import com.tangdao.core.model.domain.MtMessageDeliver;
-import com.tangdao.core.model.domain.PassageParameter;
+import com.tangdao.core.model.domain.SmsMoMessageReceive;
+import com.tangdao.core.model.domain.SmsMtMessageDeliver;
+import com.tangdao.core.model.domain.SmsPassageParameter;
+import com.tangdao.core.model.vo.ProviderSendVo;
+import com.tangdao.core.utils.MobileCatagoryUtil;
 import com.tangdao.exchanger.resolver.sms.AbstractSmsProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.constant.CmppConstant;
 import com.tangdao.exchanger.resolver.sms.sgip.constant.SgipConstant;
 import com.tangdao.exchanger.resolver.sms.smgp.constant.SmgpConstant;
-import com.tangdao.exchanger.response.ProviderSendResponse;
-import com.tangdao.exchanger.template.TParameter;
 import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
-import com.tangdao.exchanger.utils.MobileNumberCatagoryUtil;
+import com.tangdao.exchanger.template.vo.TParameter;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateUtil;
@@ -136,8 +136,7 @@ public class SmgpProxySender extends AbstractSmsProxySender {
 	 * @param content   短信内容
 	 * @return
 	 */
-	public List<ProviderSendResponse> send(PassageParameter parameter, String extNumber, String mobile,
-			String content) {
+	public List<ProviderSendVo> send(SmsPassageParameter parameter, String extNumber, String mobile, String content) {
 		try {
 			TParameter tparameter = RequestTemplateHandler.parse(parameter.getParams());
 			if (CollUtil.isEmpty(tparameter)) {
@@ -159,20 +158,20 @@ public class SmgpProxySender extends AbstractSmsProxySender {
 			SMGPSubmitRespMessage submitRepMsg = getSMGPSubmitResponseMessage(tparameter.getString("spid"),
 					StrUtil.isEmpty(tparameter.getString("msg_fmt")) ? CmppConstant.MSG_FMT_GBK
 							: Integer.parseInt(tparameter.getString("msg_fmt")),
-							StrUtil.isEmpty(tparameter.getString("mobile")) ? "" : tparameter.getString("mobile"),
+					StrUtil.isEmpty(tparameter.getString("mobile")) ? "" : tparameter.getString("mobile"),
 					srcTerminalId, mobile, content, "", smgpManageProxy);
 
-			List<ProviderSendResponse> list = new ArrayList<>();
-			ProviderSendResponse response = new ProviderSendResponse();
+			List<ProviderSendVo> list = new ArrayList<>();
+			ProviderSendVo response = new ProviderSendVo();
 			if (submitRepMsg == null) {
 				logger.error("SMGPSubmitRespMessage 网关提交信息为空");
-				smsProxyService.plusSendErrorTimes(parameter.getPassageId());
+				smsProxyManageService.plusSendErrorTimes(parameter.getPassageId());
 				return null;
 			}
 
 			if (submitRepMsg.getStatus() == MessageSubmitStatus.SUCCESS.getCode()) {
 				// 发送成功清空
-				smsProxyService.clearSendErrorTimes(parameter.getPassageId());
+				smsProxyManageService.clearSendErrorTimes(parameter.getPassageId());
 
 				response.setMobile(mobile);
 				response.setStatusCode(submitRepMsg.getStatus() + "");
@@ -196,7 +195,7 @@ public class SmgpProxySender extends AbstractSmsProxySender {
 			return list;
 		} catch (Exception e) {
 			// 累加发送错误次数
-			smsProxyService.plusSendErrorTimes(parameter.getPassageId());
+			smsProxyManageService.plusSendErrorTimes(parameter.getPassageId());
 
 			logger.error("SMGP发送失败", e);
 			throw new RuntimeException("SMGP发送失败");
@@ -239,7 +238,7 @@ public class SmgpProxySender extends AbstractSmsProxySender {
 		SMGPSubmitRespMessage submitRepMsg = null;
 		for (int index = 1; index <= contentList.size(); index++) {
 			submitMsg = getSMGPSubmitMessage(tpUdhi, msgFmt, spid, validTime, atTime, chargeNumber, srcTerminalId,
-					mobile.split(MobileNumberCatagoryUtil.DATA_SPLIT_CHARCATOR), contentList.get(index - 1), reserve);
+					mobile.split(MobileCatagoryUtil.DATA_SPLIT_CHARCATOR), contentList.get(index - 1), reserve);
 
 			SMGPSubmitRespMessage repMsg = (SMGPSubmitRespMessage) smgpManageProxy.send(submitMsg);
 			if (index == 1) {
@@ -305,19 +304,19 @@ public class SmgpProxySender extends AbstractSmsProxySender {
 				mobile = mobile.substring(2);
 			}
 
-			List<MtMessageDeliver> list = new ArrayList<>();
+			List<SmsMtMessageDeliver> list = new ArrayList<>();
 
-			MtMessageDeliver response = new MtMessageDeliver();
+			SmsMtMessageDeliver response = new SmsMtMessageDeliver();
 			response.setMsgId(report.bytesToHexString(report.getReplyMsgId()));
 			response.setMobile(mobile);
 			response.setCmcp(CMCP.local(response.getMobile()).getCode());
 			response.setStatus((StrUtil.isNotEmpty(report.getErrorCode())
 					&& SmgpConstant.SMGP_MT_STATUS_SUCCESS_CODE.equalsIgnoreCase(report.getErrorCode())
-							? DeliverStatus.SUCCESS.getValue()+""
-							: DeliverStatus.FAILED.getValue()+""));
+							? DeliverStatus.SUCCESS.getValue() + ""
+							: DeliverStatus.FAILED.getValue() + ""));
 
-			// edit by zhengying 20171208 电信成功码转义
-			response.setStatusCode(DeliverStatus.SUCCESS.getValue()+"" == response.getStatus()
+			// edit 20171208 电信成功码转义
+			response.setStatusCode(DeliverStatus.SUCCESS.getValue() == Integer.parseInt(response.getStatus())
 					? SmgpConstant.COMMON_MT_STATUS_SUCCESS_CODE
 					: String.format("%s:%s", report.getStat(), report.getErrorCode()));
 
@@ -354,7 +353,7 @@ public class SmgpProxySender extends AbstractSmsProxySender {
 
 			logger.info("SMGP上行报告数据: {}", report);
 
-			List<MoMessageReceive> list = new ArrayList<>();
+			List<SmsMoMessageReceive> list = new ArrayList<>();
 
 			// 发送时手机号码拼接86，回执需去掉86前缀
 			String mobile = report.getSrcTermID();
@@ -362,7 +361,7 @@ public class SmgpProxySender extends AbstractSmsProxySender {
 				mobile = mobile.substring(2);
 			}
 
-			MoMessageReceive response = new MoMessageReceive();
+			SmsMoMessageReceive response = new SmsMoMessageReceive();
 			response.setPassageId(null);
 			response.setMsgId(report.bytesToHexString(report.getMsgId()));
 			response.setMobile(mobile);

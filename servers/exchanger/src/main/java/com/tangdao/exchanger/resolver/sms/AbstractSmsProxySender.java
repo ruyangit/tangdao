@@ -10,20 +10,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tangdao.core.model.domain.PassageParameter;
-import com.tangdao.exchanger.service.SmsProxyManager;
+import com.tangdao.core.model.domain.SmsPassageParameter;
+import com.tangdao.core.service.proxy.ISmsProxyManager;
+import com.tangdao.exchanger.service.template.SmsProxyManagerTemplate;
 
 /**
- * TODO 直连抽象类
  * 
+ * <p>
+ * TODO 直连抽象类
+ * </p>
+ *
  * @author ruyang
- * @version V1.0
- * @date 2018年8月5日 上午12:21:38
+ * @since 2021年3月11日
  */
 public abstract class AbstractSmsProxySender {
 
 	@Autowired
-	protected SmsProxyManager smsProxyService;
+	protected ISmsProxyManager smsProxyManageService;
 
 	@Resource
 	protected RabbitTemplate rabbitTemplate;
@@ -45,23 +48,23 @@ public abstract class AbstractSmsProxySender {
 	 * @param parameter
 	 * @return
 	 */
-	protected Object getSmManageProxy(PassageParameter parameter) {
+	protected Object getSmManageProxy(SmsPassageParameter parameter) {
 		addPassageLockMonitor(parameter.getPassageId());
 
 		synchronized (passageLockMonitor.get(parameter.getPassageId())) {
-			if (smsProxyService.isProxyAvaiable(parameter.getPassageId())) {
-				return SmsProxyManager.getManageProxy(parameter.getPassageId());
+			if (smsProxyManageService.isProxyAvaiable(parameter.getPassageId())) {
+				return SmsProxyManagerTemplate.getManageProxy(parameter.getPassageId());
 			}
 
-			boolean isOk = smsProxyService.startProxy(parameter);
+			boolean isOk = smsProxyManageService.startProxy(parameter);
 			if (!isOk) {
 				return null;
 			}
 
 			// 重新初始化后将错误计数器归零
-			smsProxyService.clearSendErrorTimes(parameter.getPassageId());
+			smsProxyManageService.clearSendErrorTimes(parameter.getPassageId());
 
-			return SmsProxyManager.GLOBAL_PROXIES.get(parameter.getPassageId());
+			return SmsProxyManagerTemplate.GLOBAL_PROXIES.get(parameter.getPassageId());
 		}
 	}
 
@@ -71,6 +74,6 @@ public abstract class AbstractSmsProxySender {
 	 * @param passageId
 	 */
 	public void onTerminate(String passageId) {
-		smsProxyService.stopProxy(passageId);
+		smsProxyManageService.stopProxy(passageId);
 	}
 }

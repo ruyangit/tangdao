@@ -1,4 +1,4 @@
-package com.tangdao.exchanger.template.handler;
+package com.tangdao.exchanger.resolver.handler;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,12 +16,12 @@ import com.tangdao.exchanger.template.vo.TParameter;
  * @author ruyang
  * @since 2021年3月11日
  */
-public class RequestTemplateHandler {
+public class RequestHandler {
 
 	public static TParameter parse(String parameter) {
-
+		
 		validate(parameter);
-
+		
 		try {
 			return JSON.parseObject(parameter, TParameter.class);
 		} catch (Exception e) {
@@ -31,8 +31,8 @@ public class RequestTemplateHandler {
 
 	private static void validate(String parameter) {
 		if (StringUtils.isEmpty(parameter)) {
-			throw new DataEmptyException("参数数据为空");
-		}
+            throw new DataEmptyException("参数数据为空");
+        }
 	}
-
+		
 }
