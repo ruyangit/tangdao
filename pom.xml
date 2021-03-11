@@ -17,9 +17,7 @@
 
 	<modules>
 		<module>core</module>
-		<module>tangdao-developer</module>
-		<module>tangdao-exchanger</module>
-		<module>tangdao-portal</module>
+		<module>servers/developer</module>
 	</modules>
 
 	<properties>
@@ -35,6 +33,7 @@
 		<!-- Spring versions -->
 		<spring-cloud-dependencies.version>Hoxton.SR1</spring-cloud-dependencies.version>
 		<spring-boot-dependencies.version>2.3.8.RELEASE</spring-boot-dependencies.version>
+		<springfox-swagger.version>2.6.1</springfox-swagger.version>
 
 		<jjwt.veersion>0.9.1</jjwt.veersion>
 		<guava.version>28.2-jre</guava.version>
