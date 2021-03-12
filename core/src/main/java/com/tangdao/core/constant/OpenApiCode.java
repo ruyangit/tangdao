@@ -25,7 +25,7 @@ public class OpenApiCode {
 	public static final String DELIVER_SUCCESS = "DELIVRD";
 
 	public enum CommonApiCode implements ErrorCode {
-		COMMON_SUCCESS("0", "调用成功"), COMMON_REQUEST_EXCEPTION("C0001", "用户请求参数不匹配"),
+		COMMON_SUCCESS("0", "调用成功"), COMMON_REQUEST_EXCEPTION("C0001", "请求参数不匹配"),
 		COMMON_REQUEST_ENCODING_ERROR("C0002", "参数内容编码不正确"), COMMON_REQUEST_TIMESTAMPS_EXPIRED("C0003", "时间戳已过期"),
 		COMMON_REQUEST_IP_INVALID("C0004", "IP未报备"), COMMON_APPKEY_INVALID("C0005", "账户无效"),
 		COMMON_APPKEY_NOT_AVAIABLE("C0006", "账户冻结或停用"), COMMON_AUTHENTICATION_FAILED("C0007", "账户鉴权失败"),

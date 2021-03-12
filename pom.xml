@@ -19,6 +19,7 @@
 		<module>core</module>
 		<module>servers/developer</module>
 		<module>servers/exchanger</module>
+		<module>servers/portal</module>
 	</modules>
 
 	<properties>

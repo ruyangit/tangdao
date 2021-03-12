@@ -3,16 +3,19 @@
  */
 package com.tangdao.portal.web.error;
 
+import java.util.Objects;
+
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.tangdao.core.CommonResponse;
-import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
+import com.tangdao.core.constant.CommonApiCode;
 import com.tangdao.core.exception.BusinessException;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
-import cn.hutool.core.util.ObjectUtil;
 
 /**
  * <p>
@@ -28,14 +31,28 @@ public class WebExceptionHandler {
 	@ExceptionHandler(BusinessException.class)
 	public @ResponseBody Object businessException(BusinessException e) {
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
-		commonResponse.fail(ObjectUtil.toString(e.getCode()), e.getMessage());
+		commonResponse.fail(e.getStatus(), e.getMessage());
+		return commonResponse;
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	private @ResponseBody Object handleIllegalArgumentException(IllegalArgumentException e) {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(CommonApiCode.BAD_REQUEST.getCode(), e.getMessage());
 		return commonResponse;
 	}
 
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
+		e.printStackTrace();
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
-		commonResponse.fail(CommonApiCode.COMMON_SERVER_EXCEPTION);
+		commonResponse.fail(CommonApiCode.INTERNAL_ERROR);
+		if (Objects.equals(MissingServletRequestParameterException.class, e.getClass())) {
+			commonResponse.fail(CommonApiCode.BAD_REQUEST);
+		}else if (Objects.equals(HttpRequestMethodNotSupportedException.class, e.getClass())) {
+			commonResponse.fail(CommonApiCode.BAD_METHOD);
+		}
+		// 异常描述
 		commonResponse.put("message_description", ExceptionUtil.getMessage(e));
 		return commonResponse;
 	}
