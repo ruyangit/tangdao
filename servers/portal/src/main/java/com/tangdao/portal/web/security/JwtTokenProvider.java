@@ -12,6 +12,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
+import com.tangdao.core.context.SessionContext;
+import com.tangdao.core.model.vo.SessionUser;
 import com.tangdao.portal.web.security.model.AuthUser;
 
 import io.jsonwebtoken.Claims;
@@ -81,5 +83,20 @@ public class JwtTokenProvider {
 	 */
 	public void validateToken(String token) {
 		Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+	}
+
+	/**
+	 * 
+	 * TODO
+	 * 
+	 * @param authentication
+	 */
+	public void putSessionContext(Authentication authentication) {
+		AuthUser authUser = (AuthUser) authentication.getPrincipal();
+		//
+		SessionUser session = new SessionUser();
+		session.setId(authUser.getId());
+		session.setUsername(authUser.getUsername());
+		SessionContext.setSession(session);
 	}
 }

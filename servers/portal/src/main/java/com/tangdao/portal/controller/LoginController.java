@@ -23,7 +23,7 @@ import com.tangdao.portal.web.security.model.AuthUser;
 /**
  * 
  * <p>
- * TODO 用户
+ * TODO 登录
  * </p>
  *
  * @author ruyang

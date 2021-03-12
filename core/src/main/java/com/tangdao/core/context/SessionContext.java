@@ -14,14 +14,7 @@ import com.tangdao.core.model.vo.SessionUser;
  * @since 2020年6月15日
  */
 public class SessionContext {
-
 	private static final ThreadLocal<SessionUser> LOCAL = ThreadLocal.withInitial(SessionUser::new);
-	static {
-		SessionUser session = new SessionUser();
-		session.setId("system");
-		session.setUsername("system");
-		SessionContext.setSession(session);
-	}
 
 	/**
 	 * TODO 获取session信息

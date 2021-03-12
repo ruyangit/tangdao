@@ -10,8 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
-import com.tangdao.core.exception.BusinessException;
 import com.tangdao.core.model.domain.User;
 import com.tangdao.core.service.UserService;
 import com.tangdao.portal.web.security.model.AuthUser;
