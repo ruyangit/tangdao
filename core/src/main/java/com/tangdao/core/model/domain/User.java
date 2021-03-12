@@ -5,7 +5,6 @@ package com.tangdao.core.model.domain;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -33,8 +32,9 @@ public class User implements Serializable {
 	@TableId
 	private String id;
 
-	@TableField("user_name")
 	private String username;
+	
+	private String password;
 
 	private String status;
 

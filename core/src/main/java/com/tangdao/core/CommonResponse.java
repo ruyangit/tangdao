@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import org.apache.commons.lang3.StringUtils;
 
 import com.tangdao.core.constant.ErrorCode;
-import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
+import com.tangdao.core.constant.OpenApiCode;
 
 /**
  * 
@@ -43,7 +43,7 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 	}
 
 	public CommonResponse success(String message) {
-		this.put(CODE, CommonApiCode.COMMON_SUCCESS.getCode());
+		this.put(CODE, OpenApiCode.SUCCESS);
 		this.put(MESSAGE, message);
 		return this;
 	}

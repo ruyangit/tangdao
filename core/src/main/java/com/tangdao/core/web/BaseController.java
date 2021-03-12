@@ -21,7 +21,7 @@ public abstract class BaseController {
 	/**
 	 * 成功消息
 	 * @param message
-	 * @return {success:true}
+	 * @return {"code":"0"}
 	 */
 	protected CommonResponse success(Boolean result) {
 		Map<String, Object> data = MapUtil.newHashMap();
@@ -32,7 +32,7 @@ public abstract class BaseController {
 	/**
 	 * 成功消息
 	 * @param message
-	 * @return {success:true}
+	 * @return {"code":"0", "data":""}
 	 */
 	protected CommonResponse success(Object data) {
 		return CommonResponse.createCommonResponse().success().setData(data);
@@ -42,7 +42,7 @@ public abstract class BaseController {
 	 * 成功消息
 	 * @param message
 	 * @param data
-	 * @return {success:true, message:'', data:{}}
+	 * @return {"code":"0", "message":"", "data":""}
 	 */
 	protected CommonResponse success(String message, Object data) {
 		return CommonResponse.createCommonResponse().success(message).setData(data);
@@ -51,7 +51,7 @@ public abstract class BaseController {
 	/**
 	 * 失败消息
 	 * @param message
-	 * @return {success:false,message:''}
+	 * @return{"code":"F", "message":""}
 	 */
     protected CommonResponse fail(ErrorCode errorCode) {
     	return CommonResponse.createCommonResponse().fail(errorCode);
