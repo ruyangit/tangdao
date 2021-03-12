@@ -1,4 +1,4 @@
-package com.tangdao.developer.prervice;
+package com.tangdao.developer.service;
 
 import java.util.Date;
 import java.util.Map;
@@ -43,7 +43,7 @@ import cn.hutool.core.collection.CollUtil;
  * @since 2021年3月11日
  */
 @Service
-public class SmsPrervice {
+public class SmsService {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 

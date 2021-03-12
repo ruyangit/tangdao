@@ -52,6 +52,7 @@ public class CommonContext {
 		public String getTitle() {
 			return title;
 		}
+		
 	}
 
 	public enum PlatformType {

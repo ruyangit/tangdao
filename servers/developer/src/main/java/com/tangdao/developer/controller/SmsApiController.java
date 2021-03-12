@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
 import com.tangdao.developer.exception.ValidateException;
-import com.tangdao.developer.prervice.SmsPrervice;
 import com.tangdao.developer.request.AuthorizationRequest;
 import com.tangdao.developer.request.sms.SmsP2PSendRequest;
 import com.tangdao.developer.request.sms.SmsP2PTemplateSendRequest;
 import com.tangdao.developer.request.sms.SmsSendRequest;
 import com.tangdao.developer.response.sms.SmsBalanceResponse;
 import com.tangdao.developer.response.sms.SmsSendResponse;
+import com.tangdao.developer.service.SmsService;
 import com.tangdao.developer.validator.sms.SmsP2PTemplateValidator;
 import com.tangdao.developer.validator.sms.SmsP2PValidator;
 import com.tangdao.developer.validator.sms.SmsValidator;
@@ -39,7 +39,7 @@ import io.swagger.annotations.ApiOperation;
 public class SmsApiController extends BasicApiSupport {
 
 	@Autowired
-	private SmsPrervice smsPrervice;
+	private SmsService smsPrervice;
 	@Autowired
 	private SmsValidator smsValidator;
 	@Autowired

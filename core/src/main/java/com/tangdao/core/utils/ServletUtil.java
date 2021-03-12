@@ -3,6 +3,8 @@
  */
 package com.tangdao.core.utils;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.alibaba.fastjson.JSON;
+import com.tangdao.core.CommonResponse;
+import com.tangdao.core.constant.ErrorCode;
 /**
  * <p>
  * TODO 描述
@@ -141,4 +147,50 @@ public class ServletUtil {
 		}
 		return queryStringBuilder.toString();
 	}
+	
+	/**
+	 * 
+	 * TODO
+	 * @param response
+	 * @param body
+	 * @param code
+	 * @throws IOException
+	 */
+	public static void response(HttpServletResponse response, String body, int code) throws IOException {
+		response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+		response.setContentType("application/json;charset=UTF-8");
+		response.getWriter().write(body);
+		response.setStatus(code);
+	}
+	
+	/**
+	 * 
+	 * TODO
+	 * @param response
+	 * @param errorCode
+	 * @throws IOException
+	 */
+	public static void responseJson(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(errorCode);
+		response(response, JSON.toJSONString(commonResponse), 200);
+	}
+
+	/**
+	 * 
+	 * TODO
+	 * @param response
+	 * @param errorCode
+	 * @param message_description
+	 * @throws IOException
+	 */
+	public static void responseJson(HttpServletResponse response, ErrorCode errorCode, String message_description)
+			throws IOException {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(errorCode);
+		// 异常描述
+		commonResponse.put("message_description", message_description);
+		response(response, JSON.toJSONString(commonResponse), 200);
+	}
+
 }
