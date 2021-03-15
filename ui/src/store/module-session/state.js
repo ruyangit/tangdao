@@ -1,86 +1,77 @@
 
-const gettingComponent = [
+const smsComponent = [
   {
     id: 'overview',
     name: '概览',
     icon: 'broken_image',
-    path: '/system/overview'
+    path: '/sms/overview'
   },
   {
-    id: 'user',
-    name: '权限',
-    icon: 'security',
-    path: '/system/user',
+    id: 'list',
+    name: '短信',
+    icon: 'layers',
+    // opened: true,
     children: [
       {
-        id: 'account-center',
-        name: '用户',
-        path: '/component/18'
+        id: 'smsrecord',
+        name: '短信记录',
+        path: '/sms/record'
       },
       {
-        id: 'role',
-        name: '角色',
-        path: '/system/role'
+        id: 'smsfailrecord',
+        name: '失败记录',
+        path: '/sms/fail/record'
       },
       {
-        id: 'admin',
-        name: '管理员',
-        path: '/system/dashboard/workplace'
+        id: 'smsrev',
+        name: '回复记录',
+        path: '/sms/rev/record'
+      },
+      {
+        id: 'receipt-analysis',
+        name: '回执分析',
+        path: '/sms/receipt/analysis'
       }
     ]
   },
   {
     id: 'setting',
-    name: '系统设置',
+    name: '设置',
     icon: 'settings',
-    path: '/system/setting',
-    opened: true,
     children: [
       {
-        id: 'account-center',
-        name: '菜单管理',
-        path: '/system/menu'
+        id: 'blacklist',
+        name: '黑名单管理',
+        path: '/sms/blacklist'
       },
       {
-        id: 'account-seting',
-        name: '系统配置',
-        path: '/component/19'
+        id: 'replyurl',
+        name: '回调配置',
+        path: '/sms/replyurl'
       },
       {
-        id: 'account-seting1',
-        name: '字典管理',
-        path: '/component/19'
-      },
-      {
-        id: 'area',
-        name: '行政区域',
-        path: '/component/19'
+        id: 'account',
+        name: '账户管理',
+        path: '/sms/account'
       }
     ]
-  },
-  {
-    id: 'log',
-    name: '日志',
-    icon: 'assignment',
-    path: '/system/dashboard/workplace'
   }
 ]
 export default function () {
   return {
+    reset: {
+      login: false,
+      code: null,
+      message: null
+    },
     menus: [
       {
-        id: 'dashboard',
-        name: '总览',
-        icon: 'eco',
-        path: '/dashboard'
-      },
-      {
-        id: 'system',
-        name: '系统管理',
+        id: 'sms',
+        name: '短信',
         icon: 'style',
-        path: '/system',
+        path: '/sms',
         opened: true,
-        children: gettingComponent
+        children: smsComponent
       }
     ]
   }

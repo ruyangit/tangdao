@@ -1,6 +1,6 @@
 import Axios from 'axios'
-import { Notify } from 'quasar'
-export default ({ router, Vue }) => {
+import { Notify, SessionStorage } from 'quasar'
+export default ({ app, router, Vue }) => {
   /**
    * axios 初始化
    */
@@ -12,16 +12,12 @@ export default ({ router, Vue }) => {
   // 请求拦截器
   axios.interceptors.request.use(
     config => {
-      const token = sessionStorage.getItem('access_token')
-      if (token && config.type) {
+      const token = SessionStorage.getItem('access_token')
+      if (token) {
         config.headers.Authorization = 'Bearer ' + token
-        switch (config.type) {
-          case 'FORM-DATA':
-            config.transformRequest = [data => { return 'args=' + JSON.stringify(data) }]
-            break
-          default:
-            break
-        }
+      }
+      if (config.type === 'FORM-DATA') {
+        config.transformRequest = [data => { return 'args=' + JSON.stringify(data) }]
       }
       return config
     },
@@ -33,6 +29,12 @@ export default ({ router, Vue }) => {
   // 响应拦截器
   axios.interceptors.response.use(
     response => {
+      const { code, message } = response.data
+      if (code === 'C0003' || code === 'C0007') { // 鉴权失败
+        app.store.commit('session/resetMutation', { code, message, login: true })
+      } else if (code === 'C0011') { // 无权限访问
+        router.push({ path: '/403' })
+      }
       return response
     },
     error => {
@@ -95,13 +97,12 @@ export default ({ router, Vue }) => {
  */
 
   const fetchData = query => {
-    console.warn(query)
     return axios({
       url: query.url, // 请求地址
       method: query.method || 'POST', // 请求方式，默认为 POST
       params: query.params, // 请求参数
       responseType: query.responseType || 'json', // 响应类型，默认为json
-      auth: query.auth || { username: localStorage.getItem('access_token') },
+      // auth: query.auth || { username: SessionStorage.getItem('username') },
       data: query.data || '' // 请求体数据 （仅仅post可用）
     })
   }

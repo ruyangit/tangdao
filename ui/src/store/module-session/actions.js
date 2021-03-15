@@ -1,17 +1,36 @@
 import Vue from 'vue'
 export function loginAction ({ commit, dispatch, getters }, data) {
-  return Vue.prototype.$fetchData({ url: '/api/user/login' })
+  if (getters.isAuthenticated) { return dispatch('validateAction') }
+  return Vue.prototype.$fetchData({ url: '/api/login', method: 'GET', params: data }).then(response => {
+    const { code, data } = response.data
+    if (code === '0' && data) {
+      commit('loginMutation', data.access_token)
+      dispatch('resetAction')
+      return data
+    }
+    return Promise.reject(response.data)
+  })
 }
 
-export function menusAction ({ commit, state }) {
-  // const menusOld = state.menus
-  // commit('menusMutation', [])
+export function validateAction ({ commit, state }) {
+  if (!state.access_token) return Promise.resolve(null)
+  return Vue.prototype.$fetchData({ url: '/api/check_token', method: 'GET' })
+    .then(response => {
+      const { code, data } = response.data
+      if (code === '0' && data) {
+        commit('loginMutation', data.access_token)
+        return data
+      }
+      return null
+    })
+}
 
-  // // commit('basic/globalLoadingMutAction', true)
-  // Vue.prototype.$fetchData({ url: '/login' }).then(e => {
-  //   console.log(e)
-  // }).finally(() => {
-  //   commit('menusMutation', menusOld)
-  //   // commit('basic/globalLoadingMutAction', false)
-  // })
+export function resetAction ({ commit, state }) {
+  if (state.reset.login) {
+    commit('resetMutation', { login: false })
+  } else {
+    console.log('已经弹出退出确认框了~~~')
+  }
+}
+export function menusAction ({ commit, state }) {
 }

@@ -31,13 +31,8 @@
       >
         <q-route-tab
           :ripple="false"
-          label="首页"
-          to="/dashboard"
-        />
-        <q-route-tab
-          :ripple="false"
-          label="系统管理"
-          to="/system"
+          label="短信"
+          to="/sms"
         />
       </q-tabs>
       <q-space />

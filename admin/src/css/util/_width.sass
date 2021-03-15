@@ -1,0 +1,49 @@
+//width mixin
+$num: 5
+@while $num <= 100
+  .wd-#{$num}
+    width: 0px+$num
+  .wd-#{$num}p
+    width: 0%+$num
+  .wd-#{$num}-f
+    width: 0px+$num !important
+  .wd-#{$num}p-f
+    width: 0%+$num !important
+  $num: $num + 5
+
+$num: 150
+@while $num <= 300
+  .wd-#{$num}
+    width: 0px+$num
+  .wd-#{$num}p
+    width: 0%+$num
+  .wd-#{$num}-f
+    width: 0px+$num !important
+  .wd-#{$num}p-f
+    width: 0%+$num !important
+  $num: $num + 50
+
+.wd-xl-auto
+  width: auto !important
+
+// Viewport width
+.wd-100v
+  width: 100vw
+
+// add your additional custom widths here
+.wd-1
+  width: 1px
+.wd-2
+  width: 2px
+.wd-3
+  width: 3px
+.wd-4
+  width: 4px
+.wd-6
+  width: 6px
+.wd-7
+  width: 7px
+.wd-8
+  width: 8px
+.wd-9
+  width: 9px

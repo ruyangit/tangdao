@@ -1,0 +1,150 @@
+// app global css in Sass form
+@import "./util/_width.sass"
+
+body.body--light
+  background: #EEF0F8
+  height: 100%
+  overflow: hidden
+
+a
+  text-decoration: none
+
+.q-scrollarea__bar--v,
+.q-scrollarea__thumb--v
+  width: 6px
+  opacity: 0.35
+  border-radius: 5px
+
+.container
+  width: 100%
+  padding-right: 10px
+  padding-left: 10px
+  margin-right: auto
+  margin-left: auto
+
+@media (min-width: 576px)
+  .container
+    max-width: 540px
+@media (min-width: 768px)
+  .container
+    max-width: 720px
+@media (min-width: 992px)
+  .container
+    max-width: 960px
+@media (min-width: 1200px)
+  .container
+    max-width: 1140px
+@media (min-width: 1400px)
+  .container
+    max-width: 1340px
+
+.my-page
+  &-header
+    width: 100%
+    background: $light
+    padding: 15px 10px 12px 10px
+    &-subtitle
+      font-size: 23px
+      margin-top: 10px
+    &-goback
+      position: relative
+      padding-left: 30px
+      & i
+        position: absolute
+        top: 2px
+        left: 0px
+
+  &-body
+    margin: 10px
+
+.my-table
+  & .q-table
+    &__container
+      border-radius: 4px
+    &__card
+      box-shadow: none
+      padding: 0 12px
+      & .q-table__top
+        padding: 12px 0
+      & thead
+        & tr
+          background: $grey-3
+      & tbody
+        & td
+          height: 38px
+          &.action
+            & > a
+              margin-right: 10px
+            & > a:last-child
+              margin-right: 0
+    &__card-f
+      padding: 0
+  &.text
+    &-line2-f
+      white-space: inherit !important
+      word-break: break-all !important
+
+.my-dialog
+  & .q-toolbar
+    &__title
+      font-size: 16px
+  & .q-form-item
+    & .q-field--with-bottom
+      padding-bottom: 10px
+  & .q-dialog-footer
+    & > button
+      min-width: 65px
+      max-height: 35px
+
+.my-form
+  & .q-label
+    display: inline-block
+    flex-grow: 0
+    overflow: hidden
+    white-space: nowrap
+    text-align: right
+    vertical-align: middle
+    &.text-left
+      text-align: left
+    & > label
+      position: relative
+      display: inline-flex
+      align-items: center
+      line-height: 40px
+    &::after
+      content: ":"
+      position: relative
+      top: -1px
+      margin: 0 15px 0 3px
+      font-weight: 400
+    &.required::before
+      content: "*"
+      position: relative
+      top: 1px
+      margin: 0 5px 0 10px
+      font-weight: 400
+      color: $negative
+  & .q-value
+    color: rgba(0,0,0,.65)
+    display: inline-block
+    line-height: 40px
+  & .q-field
+    &__bottom--animated
+      left: -5px
+      bottom: 16px !important
+      z-index: 10
+      & .q-field__messages
+        & div
+          width: max-content
+          border-radius: 5px
+          background: $negative
+          color: $light
+          padding: 5px
+  &.gutter
+    & .q-field
+      &--with-bottom
+        padding-bottom: 0
+.my-tabs
+  background: $light
+  margin-bottom: 10px
+  border-radius: 4px

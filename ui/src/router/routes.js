@@ -12,18 +12,17 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', redirect: { path: 'dashboard' } },
-      { path: 'dashboard', meta: { sidebar: false, title: '控制台' }, component: () => import('pages/Index.vue') },
+      { path: '', redirect: { path: 'sms/overview' } },
       {
-        path: 'system',
+        path: 'sms',
         component: () => import('layouts/BlankLayout.vue'),
         children: [
           { path: '', redirect: { path: 'overview' } },
           { path: 'overview', meta: {}, component: () => import('pages/Index.vue') },
-          { path: 'role', meta: { title: '角色' }, component: () => import('pages/system/RoleList.vue') },
-          { path: 'role/form', meta: {}, component: () => import('pages/system/RoleForm.vue') },
-          { path: 'role/form/:id', meta: {}, component: () => import('pages/system/RoleForm.vue') },
-          { path: 'menu', meta: {}, component: () => import('pages/system/Menu.vue') }
+          { path: 'record', meta: {}, component: () => import('pages/sms/MtMessageSubmitList.vue') },
+          { path: 'fail/record', meta: { title: '角色' }, component: () => import('pages/system/RoleList.vue') },
+          { path: 'rev/record', meta: {}, component: () => import('pages/system/RoleForm.vue') },
+          { path: 'receipt/analysis', meta: {}, component: () => import('pages/system/RoleForm.vue') }
 
         ]
       }

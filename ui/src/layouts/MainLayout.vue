@@ -49,6 +49,35 @@
       />
       <span class="text-primary text-overline">正在加载请稍后 ...</span>
     </q-inner-loading>
+    <q-dialog
+      v-model="resetLogin"
+      persistent
+    >
+      <q-card style="width:400px">
+        <q-card-section>
+          <div class="text-h6">操作提示</div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section class="row items-center">
+          <div class="q-ml-sm">{{reset.code}}</div>
+          <div class="q-ml-sm">{{reset.message ||'未知异常，请重新登陆后操作'}}</div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            label="关闭"
+            color="primary"
+            v-close-popup
+          />
+          <q-btn
+            flat
+            label="重新登录"
+            color="primary"
+            @click="resetLoginFn"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -72,8 +101,17 @@ export default {
   computed: {
     ...mapGetters({
       globalLoading: 'basic/globalLoading',
-      sidebarMenus: 'session/sidebarMenus'
-    })
+      sidebarMenus: 'session/sidebarMenus',
+      reset: 'session/reset'
+    }),
+    resetLogin: {
+      get () {
+        return this.reset.login
+      },
+      set (val) {
+        this.$store.dispatch('session/resetAction')
+      }
+    }
   },
   created () {
     this.onRequest()
@@ -118,6 +156,9 @@ export default {
     },
     async onRequest () {
       await this.$store.dispatch('session/menusAction')
+    },
+    resetLoginFn () {
+      this.$router.push({ path: '/user/login' })
     }
 
   }

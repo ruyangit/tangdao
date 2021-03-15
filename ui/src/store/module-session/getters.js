@@ -5,3 +5,7 @@ export const isAuthenticated = (state) => {
 export const sidebarMenus = (state) => {
   return state.menus
 }
+
+export const reset = (state) => {
+  return state.reset
+}

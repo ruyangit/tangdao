@@ -59,7 +59,7 @@ export default {
               expandSeparator: false,
               switchToggleSide: level > 0,
               denseToggle: level > 0,
-              duration: 200
+              duration: 0
             }
           },
           menu.children.map(item => this.getDrawerMenu(
@@ -146,7 +146,8 @@ export default {
     padding-right: 10px
     & > .q-icon
       font-size: 19px
-
+  .q-expansion-item__toggle-icon
+    transition: transform 0.1s
   .q-expansion-item--expanded > div > .q-item > .q-item__section--main
     color: $primary
     color: var(--q-color-primary)
