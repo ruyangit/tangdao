@@ -1,6 +1,5 @@
 import Vue from 'vue'
-export function loginAction ({ commit, dispatch, getters }, data) {
-  // if (getters.isAuthenticated) return dispatch('validateAction')
+export function loginAction ({ commit }, data) {
   commit('resetMutation', { login: false })
   return Vue.prototype.$fetchData({ url: '/api/login', method: 'GET', params: data }).then(response => {
     const { code, data } = response.data
