@@ -109,7 +109,7 @@ export default {
         return this.reset.login
       },
       set () {
-        this.$store.dispatch('session/resetAction')
+        this.$store.dispatch('session/resetMutation', { login: false })
       }
     }
   },
@@ -158,7 +158,6 @@ export default {
       await this.$store.dispatch('session/menusAction')
     },
     async resetLoginFn () {
-      await this.$store.dispatch('session/resetAction')
       this.$router.push({ path: '/user/login' })
     }
   }
