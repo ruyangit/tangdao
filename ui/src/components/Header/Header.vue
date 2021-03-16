@@ -253,7 +253,7 @@
               label="Logout"
               push
               size="sm"
-              v-close-popup
+              @click="$router.push({ path: '/user/login' })"
             />
           </div>
         </div>
