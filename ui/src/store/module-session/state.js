@@ -59,6 +59,7 @@ const smsComponent = [
 ]
 export default function () {
   return {
+    access_token: null,
     reset: {
       login: false,
       code: null,

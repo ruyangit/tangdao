@@ -108,7 +108,7 @@ export default {
       get () {
         return this.reset.login
       },
-      set (val) {
+      set () {
         this.$store.dispatch('session/resetAction')
       }
     }
@@ -157,10 +157,10 @@ export default {
     async onRequest () {
       await this.$store.dispatch('session/menusAction')
     },
-    resetLoginFn () {
+    async resetLoginFn () {
+      await this.$store.dispatch('session/resetAction')
       this.$router.push({ path: '/user/login' })
     }
-
   }
 }
 </script>
