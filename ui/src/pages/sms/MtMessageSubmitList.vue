@@ -18,8 +18,39 @@
 
     <div class="my-page-body">
       <div class="my-table">
-        <div class="my-search q-pa-sm">
-          11
+        <div class="my-search">
+          <div class="row q-col-gutter-md">
+            <div class="col-12 col-sm-6 col-lg-3">
+              <label>仓库名称</label>
+              <q-input
+                outlined
+                dense
+                v-model.trim="form.name"
+                placeholder="请输入仓库名称"
+              >
+              </q-input>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
+              <label for="name">仓库域名</label>
+              <q-input
+                outlined
+                dense
+                v-model.trim="form.name"
+                placeholder="请输入仓库域名"
+              >
+              </q-input>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
+              <label for="name">仓库管理员</label>
+              <q-input
+                outlined
+                dense
+                v-model.trim="form.name"
+                placeholder="请输入仓库域名"
+              >
+              </q-input>
+            </div>
+          </div>
         </div>
         <q-table
           :data="data"
@@ -113,7 +144,8 @@ export default {
         { name: 'remarks', label: '备注', align: 'center', field: 'remarks', style: 'width: 180px' }
       ],
       role: {},
-      data: []
+      data: [],
+      form: {}
     }
   },
   mounted () {
