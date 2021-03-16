@@ -21,32 +21,32 @@
         <div class="my-search">
           <div class="row q-col-gutter-md">
             <div class="col-12 col-sm-6 col-lg-3">
-              <label>仓库名称</label>
+              <label for="">消息ID</label>
               <q-input
                 outlined
                 dense
                 v-model.trim="form.name"
-                placeholder="请输入仓库名称"
+                placeholder="请输入消息ID"
               >
               </q-input>
             </div>
             <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
-              <label for="name">仓库域名</label>
+              <label for="">手机号码</label>
               <q-input
                 outlined
                 dense
                 v-model.trim="form.name"
-                placeholder="请输入仓库域名"
+                placeholder="请输入手机号码"
               >
               </q-input>
             </div>
-            <div class="col-12 col-sm-12 col-lg-4 offset-lg-1">
-              <label for="name">仓库管理员</label>
+            <div class="col-12 col-sm-12 col-lg-3 offset-lg-1">
+              <label for="">消息内容</label>
               <q-input
                 outlined
                 dense
                 v-model.trim="form.name"
-                placeholder="请输入仓库域名"
+                placeholder="请输入消息内容"
               >
               </q-input>
             </div>
