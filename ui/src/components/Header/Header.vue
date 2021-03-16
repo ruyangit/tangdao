@@ -37,11 +37,11 @@
       </q-tabs>
       <q-space />
 
-      <!-- <q-btn
+      <q-btn
         stretch
         flat
         icon="select_all"
-      /> -->
+      />
       <q-btn-dropdown
         stretch
         flat
