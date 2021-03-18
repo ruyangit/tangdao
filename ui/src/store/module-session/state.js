@@ -52,7 +52,7 @@ const smsComponent = [
       {
         id: 'account',
         name: '账户管理',
-        path: '/sms/account'
+        path: '/user/record'
       }
     ]
   }

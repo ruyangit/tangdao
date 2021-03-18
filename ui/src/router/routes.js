@@ -25,6 +25,14 @@ const routes = [
           { path: 'receipt/analysis', meta: {}, component: () => import('pages/system/RoleForm.vue') }
 
         ]
+      },
+      {
+        path: 'user',
+        component: () => import('layouts/BlankLayout.vue'),
+        children: [
+          { path: '', redirect: { path: 'record' } },
+          { path: 'record', meta: {}, component: () => import('pages/sms/MtMessageSubmitList.vue') }
+        ]
       }
     ]
   },
