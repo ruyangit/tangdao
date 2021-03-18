@@ -22,19 +22,12 @@
           style="letter-spacing: 0.1em;font-size:12px;font-weight:500;"
         >CLOUD PRO5</span>
       </q-toolbar-title>
-      <q-tabs
-        dense
-        narrow-indicator
-        shrink
-        align="left"
-        v-if="$q.screen.gt.xs"
-      >
-        <q-route-tab
-          :ripple="false"
-          label="短信"
-          to="/sms"
-        />
-      </q-tabs>
+      <q-btn
+        stretch
+        flat
+        icon="layers"
+      />
+
       <q-space />
 
       <q-btn

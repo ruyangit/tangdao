@@ -5,7 +5,10 @@
       bordered
     >
       <q-card-section horizontal>
-        <div class="col-6 q-pl-xs">
+        <div
+          class="col-6 q-pl-xs"
+          v-show="$q.screen.gt.xs"
+        >
           <q-lottie-web :path="'json/coding.json'"></q-lottie-web>
         </div>
         <q-card-section :class="`${$q.screen.gt.xs?'col-6':'col'} q-mt-xs q-pa-xl`">

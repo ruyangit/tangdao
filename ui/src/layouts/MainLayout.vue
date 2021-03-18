@@ -4,7 +4,7 @@
     <q-page-container class="main-page-container">
       <div
         class="main-page-sidebar full-height"
-        ref="pageSidebar"
+        ref="pageLeft"
         v-if="sidebarVisibility"
         :style="`width: ${!$q.screen.gt.xs ? 0 : !sidebarLeftOpen ? sidebarMinimize : sidebar }px`"
       >
@@ -73,7 +73,7 @@
             flat
             label="重新登录"
             color="primary"
-            @click="resetLoginFn"
+            @click="$router.push({ path: '/user/login' })"
           />
         </q-card-actions>
       </q-card>
@@ -115,7 +115,7 @@ export default {
   },
   created () {
     this.$store.dispatch('session/menusAction')
-    this.sidebarMenusFn(this.$route)
+    // this.sidebarMenusFn(this.$route)
     if (this.sidebarVisibility && this.$q.screen.gt.xs) {
       this.sidebarLeftOpen = false
     }
@@ -123,11 +123,14 @@ export default {
       this.sidebarLeftOpen = true
     }
   },
+  mounted () {
+    this.onLoadMenu(this.$route)
+  },
   watch: {
-    $route: 'sidebarMenusFn',
+    // $route: 'sidebarMenusFn',
     'sidebarLeftOpen' (val) {
       if (this.sidebarVisibility) {
-        this.$refs.pageSidebar.setAttribute('style', 'width: ' + (val ? this.sidebar : this.sidebarMinimize) + 'px')
+        this.$refs.pageLeft.setAttribute('style', 'width: ' + (val ? this.sidebar : this.sidebarMinimize) + 'px')
         this.$refs.pageBody.setAttribute('style', 'left: ' + (val ? this.sidebar : this.sidebarMinimize) + 'px')
       }
     },
@@ -144,18 +147,9 @@ export default {
   },
 
   methods: {
-    sidebarMenusFn (route) {
-      if (route.meta && route.meta.sidebar === undefined) {
-        this.sidebarVisibility = true
-        const { path } = route.matched[1]
-        this.sidebarMenus = this.menus.filter(item => item.children && item.path === path)
-      } else {
-        this.sidebarVisibility = false
-        this.sidebarMenus = []
-      }
-    },
-    async resetLoginFn () {
-      this.$router.push({ path: '/user/login' })
+    onLoadMenu (route) {
+      this.sidebarMenus = this.menus
+      this.sidebarVisibility = route.meta && route.meta.sidebar === undefined
     }
   }
 }

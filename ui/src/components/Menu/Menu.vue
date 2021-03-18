@@ -12,10 +12,6 @@ import {
 export default {
   name: 'Menu',
   props: {
-    minimize: {
-      type: Boolean,
-      default: false
-    },
     value: {
       type: Boolean
     },
@@ -23,10 +19,6 @@ export default {
       type: Array,
       default: () => []
     }
-  },
-
-  created () {
-    this.showMenu(this.$refs[this.$route.path])
   },
 
   watch: {
@@ -39,7 +31,7 @@ export default {
     showMenu (comp) {
       if (comp !== undefined && comp !== this) {
         this.showMenu(comp.$parent)
-        comp.show !== null && comp.show()
+        comp.show !== undefined && comp.show()
       }
     },
 
@@ -49,13 +41,13 @@ export default {
           QExpansionItem,
           {
             staticClass: 'non-selectable',
-            ref: menu.id,
-            key: menu.id,
+            ref: path,
+            key: `${menu.id}-${path}`,
             props: {
               label: menu.name,
               dense: level > 0,
               icon: level === 0 ? menu.icon : null,
-              defaultOpened: menu.opened,
+              defaultOpened: menu.opened || this.routePath.startsWith(path),
               expandSeparator: false,
               switchToggleSide: level > 0,
               denseToggle: level > 0,
@@ -65,7 +57,8 @@ export default {
           menu.children.map(item => this.getDrawerMenu(
             h,
             item,
-            item.path,
+            // item.path,
+            path + (item.path !== undefined ? '/' + item.path : ''),
             level + 0.45
           ))
         )
@@ -93,8 +86,8 @@ export default {
         props.insetLevel = 0
       }
       return h(QItem, {
-        ref: menu.id,
-        key: menu.id,
+        ref: path,
+        key: path,
         props,
         attrs,
         staticClass: 'app-menu-entry non-selectable'
@@ -120,17 +113,19 @@ export default {
   },
   render (h) {
     if (this.menus) {
-      if (this.minimize) {
-        return h(QList, { staticClass: this.value ? 'app-menu' : 'app-menu minimize' }, this.menus.map(
-          item => this.getDrawerMenu(h, item, item.path, 0)
-        ))
-      } else if (this.menus && this.menus.length === 1) {
-        return h(QList, { staticClass: this.value ? 'app-menu' : 'app-menu minimize' }, this.menus[0].children.map(
-          item => this.getDrawerMenu(h, item, item.path, 0)
-        ))
-      }
+      return h(QList, { staticClass: this.value ? 'app-menu' : 'app-menu minimize' }, this.menus.map(
+        item => this.getDrawerMenu(h, item, '/' + item.path, 0)
+      ))
     }
     return null
+  },
+
+  created () {
+    this.routePath = this.$route.path
+  },
+
+  mounted () {
+    this.showMenu(this.$refs[this.$route.path])
   }
 }
 </script>

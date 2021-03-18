@@ -12,28 +12,9 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', redirect: { path: 'sms/overview' } },
-      {
-        path: 'sms',
-        component: () => import('layouts/BlankLayout.vue'),
-        children: [
-          { path: '', redirect: { path: 'overview' } },
-          { path: 'overview', meta: {}, component: () => import('pages/Index.vue') },
-          { path: 'record', meta: {}, component: () => import('pages/sms/MtMessageSubmitList.vue') },
-          { path: 'fail/record', meta: {}, component: () => import('pages/system/RoleList.vue') },
-          { path: 'rev/record', meta: {}, component: () => import('pages/system/RoleForm.vue') },
-          { path: 'receipt/analysis', meta: {}, component: () => import('pages/system/RoleForm.vue') }
-
-        ]
-      },
-      {
-        path: 'user',
-        component: () => import('layouts/BlankLayout.vue'),
-        children: [
-          { path: '', redirect: { path: 'record' } },
-          { path: 'record', meta: {}, component: () => import('pages/sms/MtMessageSubmitList.vue') }
-        ]
-      }
+      { path: '', redirect: { name: 'overview' } },
+      { path: 'overview', name: 'overview', meta: {}, component: () => import('pages/Index.vue') },
+      { path: 'sms/record', name: 'sms-record', meta: {}, component: () => import('pages/sms/MtMessageSubmitList.vue') }
     ]
   },
 
