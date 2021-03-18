@@ -10,7 +10,7 @@ const smsComponent = [
     id: 'list',
     name: '短信',
     icon: 'layers',
-    // opened: true,
+    opened: true,
     children: [
       {
         id: 'smsrecord',
@@ -71,7 +71,6 @@ export default function () {
         name: '短信',
         icon: 'style',
         path: '/sms',
-        opened: true,
         children: smsComponent
       }
     ]

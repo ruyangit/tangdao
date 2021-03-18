@@ -1,4 +1,5 @@
 import Axios from 'axios'
+import qs from 'qs'
 import { Notify, SessionStorage } from 'quasar'
 export default ({ app, router, Vue }) => {
   /**
@@ -16,8 +17,16 @@ export default ({ app, router, Vue }) => {
       if (token) {
         config.headers.Authorization = 'Bearer ' + token
       }
-      if (config.type === 'FORM-DATA') {
-        config.transformRequest = [data => { return 'args=' + JSON.stringify(data) }]
+      switch (config.type) {
+        case 'FORM-DATA':
+          config.transformRequest = [data => { return 'args=' + JSON.stringify(data) }]
+          break
+        case 'FORM':
+          config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+          config.data = qs.stringify(config.data)
+          break
+        default:
+          break
       }
       return config
     },

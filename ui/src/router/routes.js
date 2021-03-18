@@ -20,7 +20,7 @@ const routes = [
           { path: '', redirect: { path: 'overview' } },
           { path: 'overview', meta: {}, component: () => import('pages/Index.vue') },
           { path: 'record', meta: {}, component: () => import('pages/sms/MtMessageSubmitList.vue') },
-          { path: 'fail/record', meta: { title: '角色' }, component: () => import('pages/system/RoleList.vue') },
+          { path: 'fail/record', meta: {}, component: () => import('pages/system/RoleList.vue') },
           { path: 'rev/record', meta: {}, component: () => import('pages/system/RoleForm.vue') },
           { path: 'receipt/analysis', meta: {}, component: () => import('pages/system/RoleForm.vue') }
 

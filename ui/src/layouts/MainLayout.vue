@@ -12,7 +12,7 @@
           <q-scroll-area class="fit">
             <q-menu
               v-model="sidebarLeftOpen"
-              :menus="menus"
+              :menus="sidebarMenus"
             />
           </q-scroll-area>
         </div>
@@ -95,13 +95,13 @@ export default {
       sidebarMinimize: 55,
       sidebarVisibility: false,
       sidebarLeftOpen: true,
-      menus: []
+      sidebarMenus: []
     }
   },
   computed: {
     ...mapGetters({
       globalLoading: 'basic/globalLoading',
-      sidebarMenus: 'session/sidebarMenus',
+      menus: 'session/menus',
       reset: 'session/reset'
     }),
     resetLogin: {
@@ -114,7 +114,7 @@ export default {
     }
   },
   created () {
-    this.onRequest()
+    this.$store.dispatch('session/menusAction')
     this.sidebarMenusFn(this.$route)
     if (this.sidebarVisibility && this.$q.screen.gt.xs) {
       this.sidebarLeftOpen = false
@@ -148,14 +148,11 @@ export default {
       if (route.meta && route.meta.sidebar === undefined) {
         this.sidebarVisibility = true
         const { path } = route.matched[1]
-        this.menus = this.sidebarMenus.filter(item => item.children && item.path === path)
+        this.sidebarMenus = this.menus.filter(item => item.children && item.path === path)
       } else {
         this.sidebarVisibility = false
-        this.menus = []
+        this.sidebarMenus = []
       }
-    },
-    async onRequest () {
-      await this.$store.dispatch('session/menusAction')
     },
     async resetLoginFn () {
       this.$router.push({ path: '/user/login' })

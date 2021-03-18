@@ -1,7 +1,7 @@
 import Vue from 'vue'
 export function loginAction ({ commit }, data) {
   commit('resetMutation', { login: false })
-  return Vue.prototype.$fetchData({ url: '/api/login', method: 'GET', params: data }).then(response => {
+  return Vue.prototype.$axios({ url: '/api/login', method: 'POST', type: 'FORM', data }).then(response => {
     const { code, data } = response.data
     if (code === '0' && data) {
       commit('loginMutation', data.access_token)
