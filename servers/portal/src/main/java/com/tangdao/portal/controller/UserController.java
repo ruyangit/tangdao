@@ -25,8 +25,8 @@ import com.tangdao.core.web.BaseController;
 @RequestMapping("/user")
 public class UserController extends BaseController {
 
-	@GetMapping("profile")
-	public CommonResponse userProfile(@LoginUser SessionUser user) {
+	@GetMapping("record")
+	public CommonResponse record(@LoginUser SessionUser user) {
 		System.out.println(JSON.toJSONString(user));
 		return success(null);
 	}
