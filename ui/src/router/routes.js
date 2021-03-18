@@ -13,6 +13,7 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', redirect: { name: 'overview' } },
+      { path: 'single', name: 'single-page', meta: { sidebar: true }, component: () => import('pages/SinglePage.vue') },
       { path: 'overview', name: 'overview', meta: {}, component: () => import('pages/Index.vue') },
       { path: 'sms/record', name: 'sms-record', meta: {}, component: () => import('pages/sms/MtMessageSubmitList.vue') }
     ]

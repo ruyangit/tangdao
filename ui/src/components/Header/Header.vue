@@ -16,30 +16,42 @@
       <q-toolbar-title
         shrink
         class="text-bold logo-text-primary"
+        v-if="$q.screen.gt.xs"
       >
         Short <span
           class="q-ml-xs"
           style="letter-spacing: 0.1em;font-size:12px;font-weight:500;"
         >CLOUD PRO5</span>
       </q-toolbar-title>
-      <q-btn
-        stretch
-        flat
-        icon="layers"
-      />
-
+      <div
+        class="q-gutter-sm"
+        v-if="$q.screen.gt.sm"
+      >
+        <q-btn
+          flat
+          label="控制台"
+          to="/overview"
+        />
+        <q-btn
+          flat
+          label="产品宣传页"
+          to="/single"
+        />
+      </div>
       <q-space />
 
       <q-btn
         stretch
         flat
         icon="select_all"
+        v-if="$q.screen.gt.xs"
       />
       <q-btn-dropdown
         stretch
         flat
         :dropdown-icon="`filter_tilt_shift`"
         :ripple="false"
+        v-if="$q.screen.gt.xs"
       >
         <q-list
           bordered

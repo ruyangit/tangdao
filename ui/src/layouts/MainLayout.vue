@@ -109,7 +109,7 @@ export default {
         return this.reset.login
       },
       set () {
-        this.$store.dispatch('session/resetMutation', { login: false })
+        this.$store.commit('session/resetMutation', { login: false })
       }
     }
   },
@@ -127,7 +127,7 @@ export default {
     this.onLoadMenu(this.$route)
   },
   watch: {
-    // $route: 'sidebarMenusFn',
+    $route: 'onLoadMenu',
     'sidebarLeftOpen' (val) {
       if (this.sidebarVisibility) {
         this.$refs.pageLeft.setAttribute('style', 'width: ' + (val ? this.sidebar : this.sidebarMinimize) + 'px')

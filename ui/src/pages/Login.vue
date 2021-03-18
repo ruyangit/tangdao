@@ -112,6 +112,10 @@ export default {
         this.loading = false
       )
     }
+  },
+
+  mounted () {
+    this.$store.commit('session/resetMutation', { login: false })
   }
 }
 </script>
