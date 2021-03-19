@@ -61,6 +61,18 @@
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td
+                auto-width
+                key="expand"
+              >
+                <q-btn
+                  size="xs"
+                  round
+                  dense
+                  @click="props.expand = !props.expand"
+                  :icon="props.expand ? 'remove' : 'add'"
+                />
+              </q-td>
+              <q-td
                 key="username"
                 :props="props"
               >
@@ -85,15 +97,15 @@
               <q-td
                 key="phone"
                 :props="props"
-              >{{ '--' }}</q-td>
+              >{{ props.row.phone }}</q-td>
               <q-td
                 key="lastLoginIp"
                 :props="props"
-              >{{ '--' }}</q-td>
+              >{{ props.row.lastLoginIp }}<br />{{ props.row.lastLoginDate }}</q-td>
               <q-td
                 key="remarks"
                 :props="props"
-              >{{ '--' }}</q-td>
+              >{{ props.row.remarks }}</q-td>
               <q-td
                 key="status"
                 :props="props"
@@ -120,6 +132,14 @@
                 >删除</a>
               </q-td>
             </q-tr>
+            <q-tr
+              v-show="props.expand"
+              :props="props"
+            >
+              <q-td colspan="100%">
+                <div class="text-left">This is expand slot for row above: {{ props.row.username }}.</div>
+              </q-td>
+            </q-tr>
           </template>
         </q-table>
       </div>
@@ -142,6 +162,7 @@ export default {
         rowsNumber: 10
       },
       columns: [
+        { name: 'expand', field: 'expand' },
         { name: 'username', label: '登录账号', align: 'left', field: 'username', style: 'width: 120px' },
         { name: 'nickname', label: '用户昵称', align: 'left', field: 'nickname', style: 'width: 100px' },
         { name: 'userType', label: '用户类型', align: 'center', field: 'userType', style: 'width: 100px' },
