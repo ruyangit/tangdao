@@ -8,10 +8,10 @@
             to="/"
           />
           <q-breadcrumbs-el
-            label="短信"
-            to="/sms"
+            label="系统管理"
+            to="/sys"
           />
-          <q-breadcrumbs-el label="短信记录" />
+          <q-breadcrumbs-el label="用户列表" />
         </q-breadcrumbs>
       </div>
     </div>

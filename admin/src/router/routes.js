@@ -19,7 +19,9 @@ const routes = [
         path: 'sys',
         component: () => import('layouts/BlankLayout.vue'),
         children: [
-          { path: 'user', name: 'user', meta: {}, component: () => import('pages/system/UserList.vue') }
+          { path: '', redirect: { name: 'overview' } },
+          { path: 'user', name: 'user', meta: { title: '用户列表' }, component: () => import('pages/system/UserList.vue') },
+          { path: 'role', name: 'role', meta: { title: '角色列表' }, component: () => import('pages/system/RoleList.vue') }
         ]
       }
 

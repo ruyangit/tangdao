@@ -8,70 +8,52 @@
             to="/"
           />
           <q-breadcrumbs-el
-            label="权限"
-            to="/system"
+            label="系统管理"
+            to="/sys"
           />
-          <q-breadcrumbs-el label="角色" />
+          <q-breadcrumbs-el label="角色列表" />
         </q-breadcrumbs>
       </div>
     </div>
 
     <div class="my-page-body">
-      <div class="my-tabs">
-        <q-tabs
-          narrow-indicator
-          align="left"
-          class="text-grey"
-          active-color="primary"
-          indicator-color="primary"
-        >
-          <q-route-tab to="/system/role">角色列表</q-route-tab>
-          <q-route-tab to="/system/role/form">新增角色</q-route-tab>
-        </q-tabs>
-      </div>
-      <q-banner
-        dense
-        inline-actions
-        class="q-mb-md bg-amber-1"
-      >
-        You have lost connection to the internet. This app is offline.
-        <template v-slot:action>
-          <q-btn
-            flat
-            label="Turn ON Wifi"
-          />
-          <q-btn
-            flat
-            label="Dismiss"
-          />
-        </template>
-      </q-banner>
       <div class="my-table">
+        <div class="my-search">
+          <div class="row q-col-gutter-md">
+            <div class="col-12 col-sm-3 col-lg-3">
+              <label for="">角色名称</label>
+              <q-input
+                outlined
+                dense
+                v-model.trim="form.roleName"
+                placeholder="请输入角色名称"
+              >
+              </q-input>
+            </div>
+            <div class="col-12 col-sm-2 col-lg-2 offset-lg-1">
+              <label for="">状态</label>
+              <q-input
+                outlined
+                dense
+                v-model.trim="form.status"
+              >
+              </q-input>
+            </div>
+            <div class="col-12 col-sm-2 col-lg-2">
+              <q-btn label="查询" />
+            </div>
+          </div>
+        </div>
         <q-table
-          title="Treats"
           :data="data"
           :columns="columns"
           row-key="id"
           :pagination.sync="pagination"
           :loading="loading"
-          :filter="roleName"
           @request="onRequest"
           binary-state-sort
           square
         >
-          <template v-slot:top-right>
-            <q-input
-              outlined
-              dense
-              v-model.trim="roleName"
-              placeholder="请输入角色名称搜索"
-              class="q-mt-sm"
-            >
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
           <template v-slot:no-data="{ message }">
             <div class="full-width row flex-center q-gutter-sm q-pa-lg">
               <span>
@@ -83,19 +65,23 @@
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td
-                key="roleName"
+                key="roleCode"
                 :props="props"
               >
                 <router-link
-                  :to="`role/form/${props.row.roleCode}`"
+                  :to="`user/form/${props.row.id}`"
                   class="text-primary"
-                >{{ props.row.roleName|| '-' }}</router-link>
+                >{{ props.row.roleCode|| '-' }}</router-link>
               </q-td>
               <q-td
-                key="remark"
+                key="roleName"
                 :props="props"
                 class="text--line2-f"
-              >{{ props.row.remarks }}</q-td>
+              >{{ props.row.roleName }}</q-td>
+              <q-td
+                key="remarks"
+                :props="props"
+              >{{ '--' }}</q-td>
               <q-td
                 key="status"
                 :props="props"
@@ -112,13 +98,13 @@
                 class="q-gutter-xs action"
               >
                 <router-link
-                  :to="`role/form/${props.row.roleCode}`"
+                  :to="`user/form/${props.row.id}`"
                   class="text-primary"
                 >编辑</router-link>
                 <a
                   class="text-primary"
                   href="javascript:;"
-                  v-biz-delete:refresh="{data:{ roleCode: props.row.roleCode }, url:'/v1/system/deleteRole'}"
+                  v-biz-delete:refresh="{data:{ id: props.row.id }, url:'/sys/user/delete'}"
                 >删除</a>
               </q-td>
             </q-tr>
@@ -131,11 +117,10 @@
 
 <script>
 export default {
-  name: 'RoleList',
+  name: 'UserList',
   data () {
     return {
       loading: false,
-      roleName: null,
       pagination: {
         sortBy: null,
         descending: false,
@@ -144,14 +129,18 @@ export default {
         rowsNumber: 10
       },
       columns: [
-        { name: 'roleName', label: '角色名称', align: 'left', field: 'roleName', style: 'width: 200px' },
-        { name: 'remark', label: '角色描述', align: 'left', field: 'remark' },
-        { name: 'status', label: '状态', align: 'left', field: 'status', sortable: true, style: 'width: 100px' },
-        { name: 'createDate', label: '创建时间', align: 'center', field: 'createDate', style: 'width: 180px' },
-        { name: 'action', label: '操作', field: 'action', align: 'center', style: 'width: 100px' }
+        { name: 'roleCode', label: '角色代码', align: 'left', field: 'roleCode', style: 'width: 120px' },
+        { name: 'roleName', label: '角色名称', align: 'left', field: 'roleName', style: 'width: 100px' },
+        { name: 'remarks', label: '备注', align: 'left', field: 'remarks' },
+        { name: 'status', label: '状态', field: 'status', align: 'left', sortable: true, style: 'width: 80px' },
+        { name: 'createDate', label: '创建时间', field: 'createDate', sortable: true, style: 'width: 120px' },
+        { name: 'action', label: '操作', align: 'center', field: 'action', style: 'width: 180px' }
       ],
       role: {},
-      data: []
+      data: [],
+      form: {
+        roleName: null
+      }
     }
   },
   mounted () {
@@ -170,12 +159,12 @@ export default {
       const filter = props.filter
       this.loading = true
       await this.$fetchData({
-        url: '/v1/system/queryRolePage',
+        url: '/user/record',
         method: 'GET',
         params: { current: page, size: rowsPerPage, roleName: filter }
       }).then(response => {
         const { code, data } = response.data
-        if (code === 0 && data) {
+        if (code === '0' && data) {
           this.pagination.page = data.current
           this.pagination.rowsNumber = data.total
           this.pagination.rowsPerPage = data.size
