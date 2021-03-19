@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.controller;
+package com.tangdao.admin.controller;
 
 import java.io.IOException;
 
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tangdao.admin.web.security.AuthProvider;
+import com.tangdao.admin.web.security.WebSecurityConfig;
+import com.tangdao.admin.web.security.model.AuthUser;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.web.BaseController;
-import com.tangdao.portal.web.security.AuthProvider;
-import com.tangdao.portal.web.security.WebSecurityConfig;
-import com.tangdao.portal.web.security.model.AuthUser;
 
 /**
  * 

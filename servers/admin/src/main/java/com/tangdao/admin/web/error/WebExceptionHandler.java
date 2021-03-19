@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.web.error;
+package com.tangdao.admin.web.error;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;

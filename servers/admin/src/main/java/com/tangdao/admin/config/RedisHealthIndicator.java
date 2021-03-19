@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.config;
+package com.tangdao.admin.config;
 
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  * @since 2020年11月19日
  */
 @Component
-public class RabbitHealthIndicator implements HealthIndicator {
+public class RedisHealthIndicator implements HealthIndicator {
 
 	@Override
 	public Health health() {

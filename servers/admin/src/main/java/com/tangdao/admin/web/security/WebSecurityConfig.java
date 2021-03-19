@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.web.security;
+package com.tangdao.admin.web.security;
 
 import java.io.IOException;
 
@@ -26,9 +26,9 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
 
+import com.tangdao.admin.web.security.service.IUserDetailsService;
 import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
 import com.tangdao.core.utils.ServletUtil;
-import com.tangdao.portal.web.security.service.IUserDetailsService;
 
 /**
  * <p>

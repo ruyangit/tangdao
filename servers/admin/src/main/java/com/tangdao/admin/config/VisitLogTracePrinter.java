@@ -1,4 +1,4 @@
-package com.tangdao.portal.config;
+package com.tangdao.admin.config;
 
 import java.util.concurrent.atomic.AtomicLong;
 

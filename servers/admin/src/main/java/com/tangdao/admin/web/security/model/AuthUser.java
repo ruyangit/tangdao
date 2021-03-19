@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.web.security.model;
+package com.tangdao.admin.web.security.model;
 
 import java.util.Collection;
 

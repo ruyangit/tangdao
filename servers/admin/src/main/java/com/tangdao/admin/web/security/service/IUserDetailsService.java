@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.web.security.service;
+package com.tangdao.admin.web.security.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 

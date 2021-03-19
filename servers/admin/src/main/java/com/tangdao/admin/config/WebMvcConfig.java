@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.config;
+package com.tangdao.admin.config;
 
 import java.util.List;
 
@@ -16,8 +16,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.tangdao.admin.web.security.resolver.LoginUserArgumentResolver;
 import com.tangdao.core.web.aspect.DemoAspect;
-import com.tangdao.portal.web.security.resolver.LoginUserArgumentResolver;
 
 /**
  * <p>

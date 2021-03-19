@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.web.security;
+package com.tangdao.admin.web.security;
 
 import java.io.IOException;
 

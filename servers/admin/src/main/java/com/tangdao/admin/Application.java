@@ -1,4 +1,4 @@
-package com.tangdao.portal;
+package com.tangdao.admin;
 
 import java.net.UnknownHostException;
 

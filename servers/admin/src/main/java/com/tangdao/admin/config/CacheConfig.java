@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.portal.config;
+package com.tangdao.admin.config;
 
 import java.time.Duration;
 import java.util.HashMap;

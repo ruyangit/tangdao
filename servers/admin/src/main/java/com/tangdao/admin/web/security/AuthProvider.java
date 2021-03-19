@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.web.security;
+package com.tangdao.admin.web.security;
 
 import java.io.IOException;
 
@@ -16,9 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import com.tangdao.admin.web.security.model.AuthUser;
 import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
 import com.tangdao.core.exception.BusinessException;
-import com.tangdao.portal.web.security.model.AuthUser;
 
 import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.ExpiredJwtException;

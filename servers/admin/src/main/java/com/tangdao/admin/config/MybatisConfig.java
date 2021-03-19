@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.config;
+package com.tangdao.admin.config;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.web.security.resolver;
+package com.tangdao.admin.web.security.resolver;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;

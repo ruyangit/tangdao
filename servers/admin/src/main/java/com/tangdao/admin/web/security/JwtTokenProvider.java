@@ -1,10 +1,12 @@
 /**
  *
  */
-package com.tangdao.portal.web.security;
+package com.tangdao.admin.web.security;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,9 +14,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
+import com.tangdao.admin.web.security.model.AuthUser;
 import com.tangdao.core.context.SessionContext;
 import com.tangdao.core.model.vo.SessionUser;
-import com.tangdao.portal.web.security.model.AuthUser;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -101,6 +103,12 @@ public class JwtTokenProvider {
 		SessionUser session = new SessionUser();
 		session.setId(authUser.getId());
 		session.setUsername(authUser.getUsername());
+		
+		Map<String, Object> claims = new HashMap<String, Object>();
+		claims.put("userType", authUser.getUserType());
+		claims.put("mgrType", authUser.getMgrType());
+		claims.put("token", authUser.getToken());
+		session.setClaims(claims);
 		SessionContext.setSession(session);
 	}
 }

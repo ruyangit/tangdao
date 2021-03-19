@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.portal.controller;
+package com.tangdao.admin.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
