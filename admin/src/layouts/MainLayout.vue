@@ -4,7 +4,7 @@
     <q-page-container class="main-page-container">
       <div
         class="main-page-sidebar full-height"
-        ref="pageSidebar"
+        ref="pageLeft"
         v-if="sidebarVisibility"
         :style="`width: ${!$q.screen.gt.xs ? 0 : !sidebarLeftOpen ? sidebarMinimize : sidebar }px`"
       >
@@ -12,7 +12,7 @@
           <q-scroll-area class="fit">
             <q-menu
               v-model="sidebarLeftOpen"
-              :menus="menus"
+              :menus="sidebarMenus"
             />
           </q-scroll-area>
         </div>
@@ -49,6 +49,35 @@
       />
       <span class="text-primary text-overline">正在加载请稍后 ...</span>
     </q-inner-loading>
+    <q-dialog
+      v-model="resetLogin"
+      persistent
+    >
+      <q-card style="width:400px">
+        <q-card-section>
+          <div class="text-h6">操作提示</div>
+        </q-card-section>
+        <q-separator />
+        <q-card-section class="row items-center">
+          <div class="q-ml-sm">{{reset.code}}</div>
+          <div class="q-ml-sm">{{reset.message ||'未知异常，请重新登陆后操作'}}</div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            label="关闭"
+            color="primary"
+            v-close-popup
+          />
+          <q-btn
+            flat
+            label="重新登录"
+            color="primary"
+            @click="$router.push({ path: '/user/login' })"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -66,18 +95,27 @@ export default {
       sidebarMinimize: 55,
       sidebarVisibility: false,
       sidebarLeftOpen: true,
-      menus: []
+      sidebarMenus: []
     }
   },
   computed: {
     ...mapGetters({
       globalLoading: 'basic/globalLoading',
-      sidebarMenus: 'session/sidebarMenus'
-    })
+      menus: 'session/menus',
+      reset: 'session/reset'
+    }),
+    resetLogin: {
+      get () {
+        return this.reset.login
+      },
+      set () {
+        this.$store.commit('session/resetMutation', { login: false })
+      }
+    }
   },
   created () {
-    this.onRequest()
-    this.sidebarMenusFn(this.$route)
+    this.$store.dispatch('session/menusAction')
+    // this.sidebarMenusFn(this.$route)
     if (this.sidebarVisibility && this.$q.screen.gt.xs) {
       this.sidebarLeftOpen = false
     }
@@ -85,11 +123,14 @@ export default {
       this.sidebarLeftOpen = true
     }
   },
+  mounted () {
+    this.onLoadMenu(this.$route)
+  },
   watch: {
-    $route: 'sidebarMenusFn',
+    $route: 'onLoadMenu',
     'sidebarLeftOpen' (val) {
       if (this.sidebarVisibility) {
-        this.$refs.pageSidebar.setAttribute('style', 'width: ' + (val ? this.sidebar : this.sidebarMinimize) + 'px')
+        this.$refs.pageLeft.setAttribute('style', 'width: ' + (val ? this.sidebar : this.sidebarMinimize) + 'px')
         this.$refs.pageBody.setAttribute('style', 'left: ' + (val ? this.sidebar : this.sidebarMinimize) + 'px')
       }
     },
@@ -106,20 +147,10 @@ export default {
   },
 
   methods: {
-    sidebarMenusFn (route) {
-      if (route.meta && route.meta.sidebar === undefined) {
-        this.sidebarVisibility = true
-        const { path } = route.matched[1]
-        this.menus = this.sidebarMenus.filter(item => item.children && item.path === path)
-      } else {
-        this.sidebarVisibility = false
-        this.menus = []
-      }
-    },
-    async onRequest () {
-      await this.$store.dispatch('session/menusAction')
+    onLoadMenu (route) {
+      this.sidebarMenus = this.menus
+      this.sidebarVisibility = route.meta && route.meta.sidebar === undefined
     }
-
   }
 }
 </script>

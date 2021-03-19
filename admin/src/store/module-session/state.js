@@ -1,86 +1,70 @@
 
-const gettingComponent = [
-  {
-    id: 'overview',
-    name: '概览',
-    icon: 'broken_image',
-    path: '/system/overview'
-  },
-  {
-    id: 'user',
-    name: '权限',
-    icon: 'security',
-    path: '/system/user',
-    children: [
-      {
-        id: 'account-center',
-        name: '用户',
-        path: '/component/18'
-      },
-      {
-        id: 'role',
-        name: '角色',
-        path: '/system/role'
-      },
-      {
-        id: 'admin',
-        name: '管理员',
-        path: '/system/dashboard/workplace'
-      }
-    ]
-  },
-  {
-    id: 'setting',
-    name: '系统设置',
-    icon: 'settings',
-    path: '/system/setting',
-    opened: true,
-    children: [
-      {
-        id: 'account-center',
-        name: '菜单管理',
-        path: '/system/menu'
-      },
-      {
-        id: 'account-seting',
-        name: '系统配置',
-        path: '/component/19'
-      },
-      {
-        id: 'account-seting1',
-        name: '字典管理',
-        path: '/component/19'
-      },
-      {
-        id: 'area',
-        name: '行政区域',
-        path: '/component/19'
-      }
-    ]
-  },
-  {
-    id: 'log',
-    name: '日志',
-    icon: 'assignment',
-    path: '/system/dashboard/workplace'
-  }
-]
 export default function () {
   return {
+    access_token: null,
+    reset: {
+      login: false,
+      code: null,
+      message: null
+    },
     menus: [
       {
-        id: 'dashboard',
-        name: '总览',
-        icon: 'eco',
-        path: '/dashboard'
+        id: 'overview',
+        name: '概览',
+        icon: 'broken_image',
+        path: 'overview'
       },
       {
-        id: 'system',
-        name: '系统管理',
-        icon: 'style',
-        path: '/system',
+        id: 'sms',
+        name: '短信',
+        icon: 'layers',
+        path: 'sms',
         opened: true,
-        children: gettingComponent
+        children: [
+          {
+            id: 'sms-record',
+            name: '短信记录',
+            path: 'record'
+          },
+          {
+            id: 'sms-fail-record',
+            name: '失败记录',
+            path: 'fail-record'
+          },
+          {
+            id: 'sms-reply-record',
+            name: '回复记录',
+            path: 'reply-record'
+          },
+          {
+            id: 'sms-receipt-analysis',
+            name: '回执分析',
+            path: 'receipt-analysis'
+          }
+        ]
+      },
+      {
+        id: 'setting',
+        name: '设置',
+        icon: 'settings',
+        path: 'setting',
+        children: [
+          {
+            id: 'setting-blacklist',
+            name: '黑名单管理',
+            path: 'blacklist'
+          },
+          {
+            id: 'setting-replyurl',
+            name: '回调配置',
+            path: 'replyurl'
+          },
+          {
+            id: 'setting-account',
+            name: '账户管理',
+            path: 'account'
+          }
+        ]
       }
     ]
   }

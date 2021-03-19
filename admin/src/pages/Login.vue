@@ -5,7 +5,10 @@
       bordered
     >
       <q-card-section horizontal>
-        <div class="col-6 q-pl-xs">
+        <div
+          class="col-6 q-pl-xs"
+          v-show="$q.screen.gt.xs"
+        >
           <q-lottie-web :path="'json/coding.json'"></q-lottie-web>
         </div>
         <q-card-section :class="`${$q.screen.gt.xs?'col-6':'col'} q-mt-xs q-pa-xl`">
@@ -100,13 +103,19 @@ export default {
   methods: {
     onSubmit () {
       this.loading = true
-      this.$store.dispatch('session/loginAction', this.form).then(e => {
+      this.$store.dispatch('session/loginAction', this.form).then(response => {
         const params = { redirect: this.$route.query.redirect || '/' }
         this.$router.push({ path: params.redirect })
-      }).finally(() => {
+      }).catch(err => {
+        this.$q.notify({ message: err.message || '登录失败' })
+      }).finally(
         this.loading = false
-      })
+      )
     }
+  },
+
+  mounted () {
+    this.$store.commit('session/resetMutation', { login: false })
   }
 }
 </script>

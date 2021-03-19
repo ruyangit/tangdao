@@ -2,7 +2,7 @@
   "name": "tangdao",
   "version": "0.0.1",
   "description": "TangDao Service",
-  "productName": "Short Cloud PRO5",
+  "productName": "ShortCloud",
   "author": "ruyang <ruyangit@163.com>",
   "private": true,
   "scripts": {

@@ -16,41 +16,42 @@
       <q-toolbar-title
         shrink
         class="text-bold logo-text-primary"
+        v-if="$q.screen.gt.xs"
       >
         Short <span
           class="q-ml-xs"
           style="letter-spacing: 0.1em;font-size:12px;font-weight:500;"
         >CLOUD PRO5</span>
       </q-toolbar-title>
-      <q-tabs
-        dense
-        narrow-indicator
-        shrink
-        align="left"
-        v-if="$q.screen.gt.xs"
+      <div
+        class="q-gutter-sm"
+        v-if="$q.screen.gt.sm"
       >
-        <q-route-tab
-          :ripple="false"
-          label="首页"
-          to="/dashboard"
+        <q-btn
+          flat
+          label="控制台"
+          to="/overview"
         />
-        <q-route-tab
-          :ripple="false"
-          label="系统管理"
-          to="/system"
+        <q-btn
+          flat
+          label="产品宣传页"
+          to="/single"
         />
-      </q-tabs>
+      </div>
       <q-space />
 
-      <!-- <q-btn
+      <q-btn
         stretch
         flat
         icon="select_all"
-      /> -->
+        v-if="$q.screen.gt.xs"
+      />
       <q-btn-dropdown
         stretch
         flat
-        dropdown-icon="filter_tilt_shift"
+        :dropdown-icon="`filter_tilt_shift`"
+        :ripple="false"
+        v-if="$q.screen.gt.xs"
       >
         <q-list
           bordered
@@ -220,11 +221,48 @@
           </q-item>
         </q-list>
       </q-btn-dropdown>
-      <q-btn
+      <q-btn-dropdown
         stretch
         flat
-        :label="`${ $q.lang.getLocale() }， v${ $q.version }`"
-      />
+        :icon="`img:https://cdn.quasar.dev/img/boy-avatar.png`"
+        :ripple="false"
+      >
+        <div class="row no-wrap q-pa-md">
+          <div class="column">
+            <div class="text-h6 q-mb-md">Settings</div>
+            <q-toggle
+              v-model="mobileData"
+              label="Use Mobile Data"
+            />
+            <q-toggle
+              v-model="bluetooth"
+              label="Bluetooth"
+            />
+          </div>
+
+          <q-separator
+            vertical
+            inset
+            class="q-mx-lg"
+          />
+
+          <div class="column items-center">
+            <q-avatar size="72px">
+              <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+            </q-avatar>
+
+            <div class="text-subtitle1 q-mt-md q-mb-xs">John Doe</div>
+
+            <q-btn
+              color="primary"
+              label="Logout"
+              push
+              size="sm"
+              @click="$router.push({ path: '/user/login' })"
+            />
+          </div>
+        </div>
+      </q-btn-dropdown>
     </q-toolbar>
   </q-header>
 </template>
@@ -233,6 +271,12 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'Header',
+  data () {
+    return {
+      mobileData: false,
+      bluetooth: true
+    }
+  },
   computed: {
     ...mapGetters({
       leftDrawerOpen: {

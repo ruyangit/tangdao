@@ -20,6 +20,7 @@
 		<module>servers/developer</module>
 		<module>servers/exchanger</module>
 		<module>servers/portal</module>
+		<module>servers/admin</module>
 	</modules>
 
 	<properties>
