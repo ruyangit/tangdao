@@ -32,7 +32,7 @@ import com.tangdao.portal.web.security.resolver.LoginUserArgumentResolver;
 public class WebMvcConfig implements WebMvcConfigurer {
 	
 	@Bean
-	@ConditionalOnProperty(prefix = "portal", name = "demo", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnProperty(prefix = "admin", name = "demo", havingValue = "true", matchIfMissing = true)
 	public DemoAspect demoAspect() {
 		return new DemoAspect();
 	}
