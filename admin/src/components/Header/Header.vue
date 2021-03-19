@@ -18,10 +18,10 @@
         class="text-bold logo-text-primary"
         v-if="$q.screen.gt.xs"
       >
-        Short <span
+        企业应用系统 <span
           class="q-ml-xs"
           style="letter-spacing: 0.1em;font-size:12px;font-weight:500;"
-        >CLOUD PRO5</span>
+        >{{$q.version}}</span>
       </q-toolbar-title>
       <div
         class="q-gutter-sm"

@@ -5,7 +5,10 @@
         404
       </div>
 
-      <div class="text-h2" style="opacity:.4">
+      <div
+        class="text-h2"
+        style="opacity:.4"
+      >
         Oops. Nothing here...
       </div>
 
@@ -14,7 +17,7 @@
         color="white"
         text-color="blue"
         unelevated
-        to="/"
+        v-go-back.single
         label="Go Home"
         no-caps
       />

@@ -30,7 +30,7 @@
               >
               </q-input>
             </div>
-            <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
+            <div class="col-12 col-sm-2 col-lg-2 offset-lg-1">
               <label for="">状态</label>
               <q-input
                 outlined
@@ -38,6 +38,9 @@
                 v-model.trim="form.status"
               >
               </q-input>
+            </div>
+            <div class="col-12 col-sm-2 col-lg-2">
+              <q-btn label="查询" />
             </div>
           </div>
         </div>
@@ -62,19 +65,39 @@
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td
-                key="roleName"
+                key="username"
                 :props="props"
               >
                 <router-link
-                  :to="`role/form/${props.row.roleCode}`"
+                  :to="`user/form/${props.row.id}`"
                   class="text-primary"
-                >{{ props.row.roleName|| '-' }}</router-link>
+                >{{ props.row.username|| '-' }}</router-link>
               </q-td>
               <q-td
-                key="remark"
+                key="nickname"
                 :props="props"
                 class="text--line2-f"
-              >{{ props.row.remarks }}</q-td>
+              >{{ props.row.nickname }}</q-td>
+              <q-td
+                key="userType"
+                :props="props"
+              >{{ props.row.userType }}</q-td>
+              <q-td
+                key="roles"
+                :props="props"
+              >{{ '--' }}</q-td>
+              <q-td
+                key="phone"
+                :props="props"
+              >{{ '--' }}</q-td>
+              <q-td
+                key="lastLoginIp"
+                :props="props"
+              >{{ '--' }}</q-td>
+              <q-td
+                key="remarks"
+                :props="props"
+              >{{ '--' }}</q-td>
               <q-td
                 key="status"
                 :props="props"
@@ -91,13 +114,13 @@
                 class="q-gutter-xs action"
               >
                 <router-link
-                  :to="`role/form/${props.row.roleCode}`"
+                  :to="`user/form/${props.row.id}`"
                   class="text-primary"
                 >编辑</router-link>
                 <a
                   class="text-primary"
                   href="javascript:;"
-                  v-biz-delete:refresh="{data:{ roleCode: props.row.roleCode }, url:'/v1/system/deleteRole'}"
+                  v-biz-delete:refresh="{data:{ id: props.row.id }, url:'/sys/user/delete'}"
                 >删除</a>
               </q-td>
             </q-tr>
@@ -122,16 +145,18 @@ export default {
         rowsNumber: 10
       },
       columns: [
-        { name: 'username', label: '登录账号', field: 'username', style: 'width: 100px' },
-        { name: 'nickname', label: '用户昵称', field: 'nickname', style: 'width: 100px' },
-        { name: 'userType', label: '用户类型', field: 'userType' },
-        { name: 'roles', label: '角色', field: 'roles', style: 'width: 100px' },
-        { name: 'lastLoginIp', label: '最后登录时间', field: 'lastLoginIp', style: 'width: 100px' },
-        { name: 'phone', label: '办公电话', field: 'phone', sortable: true, style: 'width: 100px' },
-        { name: 'status', label: '状态', field: 'status', sortable: true, style: 'width: 100px' },
+        { name: 'username', label: '登录账号', align: 'left', field: 'username', style: 'width: 120px' },
+        { name: 'nickname', label: '用户昵称', align: 'left', field: 'nickname', style: 'width: 100px' },
+        { name: 'userType', label: '用户类型', align: 'center', field: 'userType', style: 'width: 100px' },
+        { name: 'roles', label: '角色', field: 'roles', style: 'width: 150px' },
+        { name: 'phone', label: '办公电话', field: 'phone', style: 'width: 120px' },
+        { name: 'lastLoginIp', label: '最后登录时间', field: 'lastLoginIp', style: 'width: 200px' },
+        { name: 'remarks', label: '备注', align: 'left', field: 'remarks' },
+        { name: 'status', label: '状态', field: 'status', align: 'left', sortable: true, style: 'width: 80px' },
+        { name: 'createDate', label: '创建时间', field: 'createDate', sortable: true, style: 'width: 120px' },
         { name: 'action', label: '操作', align: 'center', field: 'action', style: 'width: 180px' }
       ],
-      role: {},
+      user: {},
       data: [],
       form: {
         username: null
@@ -159,7 +184,7 @@ export default {
         params: { current: page, size: rowsPerPage, username: filter }
       }).then(response => {
         const { code, data } = response.data
-        if (code === 0 && data) {
+        if (code === '0' && data) {
           this.pagination.page = data.current
           this.pagination.rowsNumber = data.total
           this.pagination.rowsPerPage = data.size
