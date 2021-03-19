@@ -253,21 +253,6 @@ public class HttpClientUtil {
 		return null;
 	}
 
-	public static void main(String[] args) {
-
-		String url = "https://app.cckeji.cc/code/huashi.php";
-
-		Map<String, Object> params = new HashMap<>();
-		params.put("msgId", "11111");
-
-		try {
-			post(url, params);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	/**
 	 * POST请求（默认连接数）
 	 *
