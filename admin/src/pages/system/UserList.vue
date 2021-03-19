@@ -20,33 +20,22 @@
       <div class="my-table">
         <div class="my-search">
           <div class="row q-col-gutter-md">
-            <div class="col-12 col-sm-6 col-lg-3">
-              <label for="">消息ID</label>
+            <div class="col-12 col-sm-3 col-lg-3">
+              <label for="">登录账号</label>
               <q-input
                 outlined
                 dense
-                v-model.trim="form.name"
-                placeholder="请输入消息ID"
+                v-model.trim="form.username"
+                placeholder="请输入登录账号"
               >
               </q-input>
             </div>
             <div class="col-12 col-sm-6 col-lg-3 offset-lg-1">
-              <label for="">手机号码</label>
+              <label for="">状态</label>
               <q-input
                 outlined
                 dense
-                v-model.trim="form.name"
-                placeholder="请输入手机号码"
-              >
-              </q-input>
-            </div>
-            <div class="col-12 col-sm-12 col-lg-3 offset-lg-1">
-              <label for="">消息内容</label>
-              <q-input
-                outlined
-                dense
-                v-model.trim="form.name"
-                placeholder="请输入消息内容"
+                v-model.trim="form.status"
               >
               </q-input>
             </div>
@@ -58,7 +47,6 @@
           row-key="id"
           :pagination.sync="pagination"
           :loading="loading"
-          :filter="roleName"
           @request="onRequest"
           binary-state-sort
           square
@@ -122,11 +110,10 @@
 
 <script>
 export default {
-  name: 'RoleList',
+  name: 'UserList',
   data () {
     return {
       loading: false,
-      roleName: null,
       pagination: {
         sortBy: null,
         descending: false,
@@ -135,17 +122,20 @@ export default {
         rowsNumber: 10
       },
       columns: [
-        { name: 'mobile', label: '手机号码', align: 'left', field: 'mobile', style: 'width: 100px' },
-        { name: 'content', label: '消息内容', align: 'left', field: 'content' },
-        { name: 'fee', label: '字数/拆分条数', align: 'right', field: 'fee', sortable: true, style: 'width: 100px' },
-        { name: 'createTime', label: '发送时间', align: 'center', field: 'createTime', sortable: true, style: 'width: 100px' },
-        { name: 'receiptTime', label: '回执时间', align: 'center', field: 'receiptTime', sortable: true, style: 'width: 100px' },
-        { name: 'status', label: '状态', align: 'left', field: 'status', sortable: true, style: 'width: 100px' },
-        { name: 'remarks', label: '备注', align: 'center', field: 'remarks', style: 'width: 180px' }
+        { name: 'username', label: '登录账号', field: 'username', style: 'width: 100px' },
+        { name: 'nickname', label: '用户昵称', field: 'nickname', style: 'width: 100px' },
+        { name: 'userType', label: '用户类型', field: 'userType' },
+        { name: 'roles', label: '角色', field: 'roles', style: 'width: 100px' },
+        { name: 'lastLoginIp', label: '最后登录时间', field: 'lastLoginIp', style: 'width: 100px' },
+        { name: 'phone', label: '办公电话', field: 'phone', sortable: true, style: 'width: 100px' },
+        { name: 'status', label: '状态', field: 'status', sortable: true, style: 'width: 100px' },
+        { name: 'action', label: '操作', align: 'center', field: 'action', style: 'width: 180px' }
       ],
       role: {},
       data: [],
-      form: {}
+      form: {
+        username: null
+      }
     }
   },
   mounted () {
@@ -166,7 +156,7 @@ export default {
       await this.$fetchData({
         url: '/user/record',
         method: 'GET',
-        params: { current: page, size: rowsPerPage, roleName: filter }
+        params: { current: page, size: rowsPerPage, username: filter }
       }).then(response => {
         const { code, data } = response.data
         if (code === 0 && data) {
