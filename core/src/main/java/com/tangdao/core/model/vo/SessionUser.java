@@ -7,18 +7,18 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
-
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * 
  * <p>
- * TODO 描述
+ * TODO 会话用户
  * </p>
  *
- * @author ruyang@gmail.com
- * @since 2020年6月15日
+ * @author ruyang
+ * @since 2021年3月19日
  */
 @Getter
 @Setter
@@ -28,7 +28,7 @@ public class SessionUser implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private String id;
 
 	private String username;
@@ -40,13 +40,13 @@ public class SessionUser implements Serializable {
 	}
 
 	/**
-	 *  TODO 是否包含claim信息
+	 * TODO 是否包含claim信息
 	 * 
 	 * @param key Key
 	 * @return
 	 */
 	public boolean hasClaim(String key) {
-		if (StringUtils.isBlank(key))
+		if (StrUtil.isBlank(key))
 			return false;
 		return this.claims.containsKey(key);
 	}
@@ -58,7 +58,7 @@ public class SessionUser implements Serializable {
 	 * @return
 	 */
 	public Object getClaim(String key) {
-		if (StringUtils.isBlank(key))
+		if (StrUtil.isBlank(key))
 			return null;
 		return this.claims.get(key);
 	}

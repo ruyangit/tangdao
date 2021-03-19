@@ -9,60 +9,41 @@ export default function () {
     },
     menus: [
       {
-        id: 'overview',
-        name: '概览',
-        icon: 'broken_image',
-        path: 'overview'
-      },
-      {
-        id: 'sms',
-        name: '短信',
-        icon: 'layers',
-        path: 'sms',
+        id: 'sys',
+        name: '系统管理',
+        icon: 'settings',
+        path: 'sys',
         opened: true,
         children: [
           {
-            id: 'sms-record',
-            name: '短信记录',
-            path: 'record'
+            id: 'user',
+            name: '用户列表',
+            path: 'user'
           },
           {
-            id: 'sms-fail-record',
-            name: '失败记录',
-            path: 'fail-record'
+            id: 'role',
+            name: '角色列表',
+            path: 'role'
           },
           {
-            id: 'sms-reply-record',
-            name: '回复记录',
-            path: 'reply-record'
+            id: 'dict',
+            name: '字典管理',
+            path: 'dict'
           },
           {
-            id: 'sms-receipt-analysis',
-            name: '回执分析',
-            path: 'receipt-analysis'
-          }
-        ]
-      },
-      {
-        id: 'setting',
-        name: '设置',
-        icon: 'settings',
-        path: 'setting',
-        children: [
-          {
-            id: 'setting-blacklist',
-            name: '黑名单管理',
-            path: 'blacklist'
+            id: 'config',
+            name: '配置列表',
+            path: 'config'
           },
           {
-            id: 'setting-replyurl',
-            name: '回调配置',
-            path: 'replyurl'
+            id: 'job',
+            name: '调度管理',
+            path: 'job'
           },
           {
-            id: 'setting-account',
-            name: '账户管理',
-            path: 'account'
+            id: 'log',
+            name: '日志监控',
+            path: 'log'
           }
         ]
       }

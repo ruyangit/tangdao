@@ -164,7 +164,7 @@ export default {
       const filter = props.filter
       this.loading = true
       await this.$fetchData({
-        url: '/sms/record',
+        url: '/user/record',
         method: 'GET',
         params: { current: page, size: rowsPerPage, roleName: filter }
       }).then(response => {

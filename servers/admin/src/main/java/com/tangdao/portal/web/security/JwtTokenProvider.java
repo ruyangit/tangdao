@@ -52,6 +52,8 @@ public class JwtTokenProvider {
 
 		AuthUser authUser = (AuthUser) authentication.getPrincipal();
 		claims.put("id", authUser.getId());
+		claims.put("userType", authUser.getUserType());
+		claims.put("mgrType", authUser.getMgrType());
 		return Jwts.builder().setClaims(claims).setExpiration(validity).signWith(SignatureAlgorithm.HS256, SECRET_KEY)
 				.compact();
 	}
@@ -68,11 +70,13 @@ public class JwtTokenProvider {
 		List<GrantedAuthority> authorities = AuthorityUtils
 				.commaSeparatedStringToAuthorityList((String) claims.get(AUTHORITIES_KEY));
 
-		AuthUser principal = new AuthUser();
-		principal.setId((String) claims.get("id"));
-		principal.setUsername(claims.getSubject());
-		principal.setToken(token);
-		return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+		AuthUser authUser = new AuthUser();
+		authUser.setId((String) claims.get("id"));
+		authUser.setUsername(claims.getSubject());
+		authUser.setUserType((String) claims.get("userType"));
+		authUser.setMgrType((String) claims.get("mgrType"));
+		authUser.setToken(token);
+		return new UsernamePasswordAuthenticationToken(authUser, "", authorities);
 	}
 
 	/**

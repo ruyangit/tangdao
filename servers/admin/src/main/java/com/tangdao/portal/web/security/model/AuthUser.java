@@ -35,6 +35,10 @@ public class AuthUser implements UserDetails {
 	
 	private String password;
 	
+	private String userType;
+	
+	private String mgrType;
+	
 	private String token;
 
 	@Override

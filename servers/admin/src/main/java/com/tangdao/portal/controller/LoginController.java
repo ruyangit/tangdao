@@ -48,4 +48,5 @@ public class LoginController extends BaseController {
 		result.put("username", user.getUsername());
 		return success(result);
 	}
+	
 }

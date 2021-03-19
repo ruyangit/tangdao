@@ -2,7 +2,7 @@
   "name": "tangdao",
   "version": "0.0.1",
   "description": "TangDao Service",
-  "productName": "ShortCloud",
+  "productName": "企业应用系统",
   "author": "ruyang <ruyangit@163.com>",
   "private": true,
   "scripts": {

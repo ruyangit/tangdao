@@ -39,6 +39,8 @@ public class UserDetailsServiceImpl implements IUserDetailsService {
 		AuthUser authUser = new AuthUser();
 		authUser.setId("1");
 		authUser.setUsername("system");
+		authUser.setUserType("1");
+		authUser.setMgrType("1");
 		BCryptPasswordEncoder bpe = new BCryptPasswordEncoder();
 		authUser.setPassword(bpe.encode("system"));
 		return authUser;

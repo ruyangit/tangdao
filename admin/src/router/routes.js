@@ -15,7 +15,14 @@ const routes = [
       { path: '', redirect: { name: 'overview' } },
       { path: 'single', name: 'single-page', meta: { sidebar: true }, component: () => import('pages/SinglePage.vue') },
       { path: 'overview', name: 'overview', meta: {}, component: () => import('pages/Index.vue') },
-      { path: 'sms/record', name: 'sms-record', meta: {}, component: () => import('pages/sms/MtMessageSubmitList.vue') }
+      {
+        path: 'sys',
+        component: () => import('layouts/BlankLayout.vue'),
+        children: [
+          { path: 'user', name: 'user', meta: {}, component: () => import('pages/system/UserList.vue') }
+        ]
+      }
+
     ]
   },
 

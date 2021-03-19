@@ -3,8 +3,6 @@
  */
 package com.tangdao.core.model.domain;
 
-import java.util.Date;
-
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.core.model.DataEntity;
@@ -22,8 +20,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_user")
-public class User extends DataEntity<User> {
+@TableName("sys_role")
+public class Role extends DataEntity<Role> {
 
 	/**
 	 * 
@@ -33,36 +31,12 @@ public class User extends DataEntity<User> {
 	@TableId
 	private String id;
 
-	private String username;
+	private String roleCode;
 	
-	private String password;
-	
-	private String nickname;
-	
-	private String userType;
-	
-	private String phone;
-	
-	private String address;
-	
-	private String zipCode;
-	
-	private String companyName;
-	
-	private String companyCode;
-	
-	private String wechat;
-	
-	private String dingding;
-	
-	private String mgrType;
+	private String roleName;
 	
 	private String status;
 	
 	private String remarks;
 	
-	private String lastLoginIp;
-	
-	private Date lastLoginDate;
-
 }
