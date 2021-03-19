@@ -7,6 +7,7 @@ import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tangdao.core.model.DataEntity;
 
 import lombok.Getter;
@@ -63,6 +64,7 @@ public class User extends DataEntity<User> {
 	
 	private String lastLoginIp;
 	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date lastLoginDate;
 
 }
