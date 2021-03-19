@@ -1,6 +1,10 @@
 
 const routes = [
   {
+    path: '/403',
+    component: () => import('pages/Error403.vue')
+  },
+  {
     path: '/user',
     component: () => import('layouts/UserLayout.vue'),
     children: [
@@ -14,14 +18,15 @@ const routes = [
     children: [
       { path: '', redirect: { name: 'overview' } },
       { path: 'single', name: 'single-page', meta: { sidebar: true }, component: () => import('pages/SinglePage.vue') },
-      { path: 'overview', name: 'overview', meta: {}, component: () => import('pages/Index.vue') },
+      { path: 'overview', name: 'overview', component: () => import('pages/Index.vue') },
       {
         path: 'sys',
         component: () => import('layouts/BlankLayout.vue'),
         children: [
           { path: '', redirect: { name: 'overview' } },
-          { path: 'user', name: 'user', meta: { title: '用户列表' }, component: () => import('pages/system/UserList.vue') },
-          { path: 'role', name: 'role', meta: { title: '角色列表' }, component: () => import('pages/system/RoleList.vue') }
+          { path: 'user', name: 'user', component: () => import('pages/system/UserList.vue') },
+          { path: 'role', name: 'role', component: () => import('pages/system/RoleList.vue') },
+          { path: 'job', name: 'job', component: () => import('pages/form/AdvancedForm.vue') }
         ]
       }
 

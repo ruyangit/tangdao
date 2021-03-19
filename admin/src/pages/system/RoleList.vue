@@ -20,7 +20,7 @@
       <div class="my-table">
         <div class="my-search">
           <div class="row q-col-gutter-md">
-            <div class="col-12 col-sm-3 col-lg-3">
+            <div class="col-12 col-sm-3 col-lg-2">
               <label for="">角色名称</label>
               <q-input
                 outlined
@@ -30,17 +30,12 @@
               >
               </q-input>
             </div>
-            <div class="col-12 col-sm-2 col-lg-2 offset-lg-1">
-              <label for="">状态</label>
-              <q-input
-                outlined
-                dense
-                v-model.trim="form.status"
-              >
-              </q-input>
-            </div>
-            <div class="col-12 col-sm-2 col-lg-2">
-              <q-btn label="查询" />
+            <div class="col-12 col-sm-1 col-lg-1">
+              <q-btn
+                color="primary"
+                label="查询"
+                :class="`wd-80 ${$q.screen.gt.xs?'sbtn':''}`"
+              />
             </div>
           </div>
         </div>
@@ -69,7 +64,7 @@
                 :props="props"
               >
                 <router-link
-                  :to="`user/form/${props.row.id}`"
+                  :to="`role/form/${props.row.id}`"
                   class="text-primary"
                 >{{ props.row.roleCode|| '-' }}</router-link>
               </q-td>
@@ -81,7 +76,7 @@
               <q-td
                 key="remarks"
                 :props="props"
-              >{{ '--' }}</q-td>
+              >{{ props.row.remarks }}</q-td>
               <q-td
                 key="status"
                 :props="props"
@@ -117,7 +112,8 @@
 
 <script>
 export default {
-  name: 'UserList',
+  name: 'RoleList',
+  meta: { title: '角色列表' },
   data () {
     return {
       loading: false,
@@ -130,9 +126,9 @@ export default {
       },
       columns: [
         { name: 'roleCode', label: '角色代码', align: 'left', field: 'roleCode', style: 'width: 120px' },
-        { name: 'roleName', label: '角色名称', align: 'left', field: 'roleName', style: 'width: 100px' },
+        { name: 'roleName', label: '角色名称', align: 'left', field: 'roleName', style: 'width: 200px' },
         { name: 'remarks', label: '备注', align: 'left', field: 'remarks' },
-        { name: 'status', label: '状态', field: 'status', align: 'left', sortable: true, style: 'width: 80px' },
+        { name: 'status', label: '状态', field: 'status', align: 'left', sortable: true, style: 'width: 100px' },
         { name: 'createDate', label: '创建时间', field: 'createDate', sortable: true, style: 'width: 120px' },
         { name: 'action', label: '操作', align: 'center', field: 'action', style: 'width: 180px' }
       ],
@@ -159,7 +155,7 @@ export default {
       const filter = props.filter
       this.loading = true
       await this.$fetchData({
-        url: '/user/record',
+        url: '/role/record',
         method: 'GET',
         params: { current: page, size: rowsPerPage, roleName: filter }
       }).then(response => {

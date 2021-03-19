@@ -20,27 +20,23 @@
       <div class="my-table">
         <div class="my-search">
           <div class="row q-col-gutter-md">
-            <div class="col-12 col-sm-3 col-lg-3">
-              <label for="">登录账号</label>
+            <div class="col-12 col-sm-3 col-lg-2">
+              <label for="username">登录账号</label>
               <q-input
                 outlined
                 dense
+                no-error-icon
                 v-model.trim="form.username"
                 placeholder="请输入登录账号"
               >
               </q-input>
             </div>
-            <div class="col-12 col-sm-2 col-lg-2 offset-lg-1">
-              <label for="">状态</label>
-              <q-input
-                outlined
-                dense
-                v-model.trim="form.status"
-              >
-              </q-input>
-            </div>
-            <div class="col-12 col-sm-2 col-lg-2">
-              <q-btn label="查询" />
+            <div class="col-12 col-sm-1 col-lg-1">
+              <q-btn
+                color="primary"
+                label="查询"
+                :class="`wd-80 ${$q.screen.gt.xs?'sbtn':''}`"
+              />
             </div>
           </div>
         </div>
@@ -134,6 +130,7 @@
 <script>
 export default {
   name: 'UserList',
+  meta: { title: '用户列表' },
   data () {
     return {
       loading: false,
