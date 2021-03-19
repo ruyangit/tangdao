@@ -6,14 +6,19 @@ package com.tangdao.core.context;
 import com.tangdao.core.model.vo.SessionUser;
 
 /**
+ * 
  * <p>
  * TODO 描述
  * </p>
  *
- * @author ruyang@gmail.com
- * @since 2020年6月15日
+ * @author ruyang
+ * @since 2021年3月19日
  */
 public class SessionContext {
+
+	/**
+	 * 
+	 */
 	private static final ThreadLocal<SessionUser> LOCAL = ThreadLocal.withInitial(SessionUser::new);
 
 	/**
