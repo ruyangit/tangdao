@@ -15,5 +15,5 @@ import com.tangdao.core.model.domain.User;
  * @since 2021年3月9日
  */
 public class UserService extends BaseService<UserMapper, User> {
-	
+
 }

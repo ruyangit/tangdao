@@ -4,10 +4,13 @@
 package com.tangdao.admin.web.security;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -16,9 +19,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.admin.web.security.model.AuthUser;
 import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
 import com.tangdao.core.exception.BusinessException;
+import com.tangdao.core.model.domain.User;
+import com.tangdao.core.service.UserService;
+import com.tangdao.core.utils.IpUtil;
+import com.tangdao.core.utils.ServletUtil;
 
 import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -34,11 +42,16 @@ import io.jsonwebtoken.ExpiredJwtException;
 @Component
 public class AuthProvider {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	private UserService userService;
 
 	public AuthUser login(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String token = resolveToken(request);
@@ -86,6 +99,14 @@ public class AuthProvider {
 					password);
 			Authentication authentication = authenticationManager.authenticate(authenticationToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
+
+			User user = new User();
+			user.setLastLoginIp(IpUtil.getClientIp(ServletUtil.getRequest()));
+			user.setLastLoginDate(new Date());
+			// 更新登录用户信息
+			userService.update(user, Wrappers.<User>lambdaUpdate().eq(User::getUsername, username));
+			// 写入登录日志
+			log.info("用户【" + username + "】登录，IP地址：" + user.getLastLoginIp() + ".");
 			return jwtTokenProvider.createToken(authentication);
 		} catch (Exception ex) {
 			if (ex instanceof InternalAuthenticationServiceException) {
