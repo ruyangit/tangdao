@@ -23,7 +23,4 @@ import java.lang.annotation.Target;
 public @interface LogOpt {
 
 	String logTitle();
-
-	boolean ignore() default false;
-
 }

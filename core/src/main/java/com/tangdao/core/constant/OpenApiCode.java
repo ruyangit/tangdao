@@ -23,6 +23,12 @@ public class OpenApiCode {
 
 	// 推送至用户侧成功码
 	public static final String DELIVER_SUCCESS = "DELIVRD";
+	
+	// YES-0
+	public static final String YES = "0";
+	
+	// NO-1
+	public static final String NO="1";
 
 	public enum CommonApiCode implements ErrorCode {
 		COMMON_SUCCESS("0", "调用成功"), COMMON_REQUEST_EXCEPTION("C0001", "请求参数不匹配"),
