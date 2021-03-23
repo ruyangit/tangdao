@@ -3,7 +3,7 @@
  */
 package com.tangdao.core.model.dto;
 
-import java.io.Serializable;
+import java.util.List;
 
 import com.tangdao.core.model.domain.User;
 
@@ -20,17 +20,17 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class UserDTO implements Serializable {
+public class UserDTO extends User {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private User user;
-
 	private String oldUsername;
+	
+	private String roleId;
 
-	private String roleIds;
+	private List<String> roleIds;
 
 }
