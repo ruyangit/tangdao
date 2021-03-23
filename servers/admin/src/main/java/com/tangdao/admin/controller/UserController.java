@@ -33,7 +33,7 @@ public class UserController extends BaseController {
 	@Autowired
 	private UserService userService;
 
-	@GetMapping("record")
+	@GetMapping("/record")
 	public CommonResponse record(Page<User> page, User user) {
 		LambdaQueryWrapper<User> queryWrapper = Wrappers.<User>lambdaQuery();
 		if (StrUtil.isNotBlank(user.getUsername())) {

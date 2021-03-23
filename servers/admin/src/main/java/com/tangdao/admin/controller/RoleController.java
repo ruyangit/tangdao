@@ -33,7 +33,7 @@ public class RoleController extends BaseController {
 	@Autowired
 	private RoleService roleService;
 
-	@GetMapping("record")
+	@GetMapping("/record")
 	public CommonResponse record(Page<Role> page, Role role) {
 		LambdaQueryWrapper<Role> queryWrapper = Wrappers.<Role>lambdaQuery();
 		if (StrUtil.isNotBlank(role.getRoleCode())) {
