@@ -41,10 +41,15 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 		this.success(StringUtils.EMPTY);
 		return this;
 	}
+	
+	public CommonResponse message(String message) {
+		this.put(MESSAGE, message);
+		return this;
+	}
 
 	public CommonResponse success(String message) {
 		this.put(CODE, OpenApiCode.SUCCESS);
-		this.put(MESSAGE, message);
+		this.message(message);
 		return this;
 	}
 

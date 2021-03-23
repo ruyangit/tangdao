@@ -51,7 +51,7 @@ public abstract class BaseController {
 	/**
 	 * 失败消息
 	 * @param message
-	 * @return{"code":"F", "message":""}
+	 * @return{"code":"xxxxx", "message":""}
 	 */
     protected CommonResponse fail(ErrorCode errorCode) {
     	return CommonResponse.createCommonResponse().fail(errorCode);

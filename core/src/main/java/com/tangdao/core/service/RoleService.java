@@ -32,7 +32,7 @@ public class RoleService extends BaseService<RoleMapper, Role> {
 	 * TODO 检查角色代码是否存在
 	 * @param oldRoleCode
 	 * @param roleCode
-	 * @return
+	 * @return 存在-true，不存在-false
 	 */
 	public boolean checkRoleCodeExists(String oldRoleCode, String roleCode) {
 		if (oldRoleCode != null && oldRoleCode.equals(roleCode)) {

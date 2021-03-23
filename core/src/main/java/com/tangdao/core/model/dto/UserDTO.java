@@ -1,10 +1,11 @@
 /**
  *
  */
-package com.tangdao.core.model.domain;
+package com.tangdao.core.model.dto;
 
 import java.io.Serializable;
-import java.util.List;
+
+import com.tangdao.core.model.domain.User;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,22 +16,21 @@ import lombok.Setter;
  * </p>
  *
  * @author ruyang
- * @since 2021年3月19日
+ * @since 2021年3月23日
  */
 @Getter
 @Setter
-public class UserRole implements Serializable {
+public class UserDTO implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private String userId;
-	
-	private String roleId;
-	
-	// 角色列表
-	private List<String> roleIds;
+
+	private User user;
+
+	private String oldUsername;
+
+	private String roleIds;
 
 }
