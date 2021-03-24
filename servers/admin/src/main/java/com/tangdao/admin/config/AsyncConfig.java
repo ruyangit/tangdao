@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tangdao.admin.config.async;
+package com.tangdao.admin.config;
 
 import java.util.concurrent.ThreadPoolExecutor;
 

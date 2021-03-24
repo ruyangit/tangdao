@@ -4,7 +4,18 @@ import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月24日
+ */
+@Component
 public class SpringUtils implements ApplicationContextAware, DisposableBean{
 
 	private static ApplicationContext applicationContext = null;
