@@ -16,7 +16,10 @@
 	</parent>
 
 	<modules>
+		<module>model</module>
 		<module>core</module>
+		<module>service-api</module>
+		<module>service-provider</module>
 		<module>servers/admin</module>
 	</modules>
 
