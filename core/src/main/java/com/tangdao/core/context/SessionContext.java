@@ -3,6 +3,9 @@
  */
 package com.tangdao.core.context;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.tangdao.core.model.vo.SessionUser;
 
 /**
@@ -19,42 +22,40 @@ public class SessionContext {
 	/**
 	 * 
 	 */
+	private static Logger logger = LoggerFactory.getLogger(SessionContext.class);
+
 	private static final ThreadLocal<SessionUser> LOCAL = ThreadLocal.withInitial(SessionUser::new);
 
-	/**
-	 * TODO 获取session信息
-	 *
-	 * @return session
-	 */
-	public static SessionUser getSession() {
+	public static SessionUser get() {
+		if (LOCAL.get() == null) {
+			logger.error("session context not exist");
+			return null;
+		}
 		return LOCAL.get();
 	}
 
-	/**
-	 * TODO 获取当前登录用户的id
-	 *
-	 * @return id
-	 */
 	public static String getId() {
-		SessionUser session = getSession();
-		if (session == null)
-			return null; // 临时模拟数据
-		return session.getId();
+		SessionUser session = get();
+		if (session != null) {
+			return session.getId();
+		}
+		return null;
 	}
 
-	/**
-	 * TODO 设置session信息
-	 *
-	 * @param session session
-	 */
-	public static void setSession(SessionUser session) {
+	public static void set(SessionUser session) {
+		if (LOCAL.get() != null) {
+			LOCAL.remove();
+		}
 		LOCAL.set(session);
 	}
 
-	/**
-	 * TODO 移除session信息
-	 */
-	public static void removeSession() {
-		LOCAL.remove();
+	public static void remove() {
+		try {
+			if (LOCAL.get() != null) {
+				LOCAL.remove();
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 	}
 }

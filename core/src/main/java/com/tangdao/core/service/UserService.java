@@ -23,7 +23,7 @@ import com.tangdao.core.model.vo.UserRole;
  */
 @Service
 public class UserService extends BaseService<UserMapper, User> {
-
+	
 	/**
 	 * 
 	 * TODO 根据用户名查询

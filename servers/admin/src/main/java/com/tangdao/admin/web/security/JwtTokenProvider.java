@@ -109,6 +109,6 @@ public class JwtTokenProvider {
 		claims.put("mgrType", authUser.getMgrType());
 		claims.put("token", authUser.getToken());
 		session.setClaims(claims);
-		SessionContext.setSession(session);
+		SessionContext.set(session);
 	}
 }

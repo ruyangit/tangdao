@@ -3,25 +3,26 @@
  */
 package com.tangdao.core.utils;
 
+import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.mapping.SqlCommandType;
-import org.springframework.core.MethodParameter;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.HandlerMethod;
 
+import com.alibaba.fastjson.JSON;
 import com.tangdao.core.annotation.LogOpt;
-import com.tangdao.core.annotation.LoginUser;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.context.SessionContext;
 import com.tangdao.core.model.domain.Log;
 import com.tangdao.core.model.vo.SessionUser;
 import com.tangdao.core.service.LogService;
 import com.tangdao.core.web.SpringUtils;
+import com.tangdao.core.web.filter.BodyReaderHttpServletRequestWrapper;
 
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -125,7 +126,7 @@ public class LogUtil {
 		log.setRequestUri(StrUtil.maxLength(request.getRequestURI(), 255));
 		log.setRequestMethod(request.getMethod());
 		log.setRequestParams(request.getParameterMap());
-		
+
 		// 描述
 		if (handlerMethod != null) {
 			log.setDescription(handlerMethod.toString());
@@ -133,18 +134,19 @@ public class LogUtil {
 
 		// POST（JSON）
 		if (handlerMethod != null && StrUtil.isBlank(log.getRequestParams())) {
-			MethodParameter[] parameters = handlerMethod.getMethodParameters();
-			if (parameters != null && parameters.length > 0) {
-				if (parameters[0].hasMethodAnnotation(RequestBody.class)) {
-					System.out.println(parameters[0]);
-				}
+			try {
+				BodyReaderHttpServletRequestWrapper rw = new BodyReaderHttpServletRequestWrapper(request);
+				log.setRequestParams(StrUtil.maxLength(StrUtil.trim(
+						Base64.decodeStr(JSON.toJSONString(rw.getRequestBody())).replace("\n", "").replace("\t", "")),
+						5000));
+			} catch (IOException e) {
 			}
 		}
 		// 耗时
 		log.setExecuteTime(executeTime);
 
 		// 操作用户
-		SessionUser user = SessionContext.getSession();
+		SessionUser user = SessionContext.get();
 		if (user != null) {
 			log.setCreateBy(user.getId());
 			log.setCreateByName(user.getUsername());
