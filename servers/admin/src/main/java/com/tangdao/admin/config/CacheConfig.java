@@ -50,9 +50,9 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 @EnableCaching
 public class CacheConfig extends CachingConfigurerSupport {
-	
+
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
+
 	@Value("${redis.host:localhost}")
 	private String host;
 	@Value("${redis.port:6379}")
@@ -79,13 +79,13 @@ public class CacheConfig extends CachingConfigurerSupport {
 	private Integer maxIdle;
 	@Value("${redis.jedis.pool.max-wait:3000}")
 	private Integer maxWait;
-	
+
 	/**
 	 * 默认10分钟
 	 */
 	@Value("${redis.region.default:600}")
 	private Long regionDefault;
-	
+
 	@Value("${redis.region.cachenames:}")
 	public List<String> regionCachenames;
 
@@ -220,17 +220,18 @@ public class CacheConfig extends CachingConfigurerSupport {
 	/**
 	 * 
 	 * TODO 自定义缓存配置
+	 * 
 	 * @return
 	 */
 	private Map<String, RedisCacheConfiguration> getRedisCacheConfigurationMap() {
 		Map<String, RedisCacheConfiguration> redisCacheConfigurationMap = new HashMap<>();
-		if(CollUtil.isNotEmpty(regionCachenames)) {
-			regionCachenames.stream().forEach(value->{
-				if(value!=null) {
+		if (CollUtil.isNotEmpty(regionCachenames)) {
+			regionCachenames.stream().forEach(value -> {
+				if (value != null) {
 					int index = value.lastIndexOf("::");
-					if(index > -1) {
+					if (index > -1) {
 						String cacheName = value.substring(0, index);
-						Long withTtl = Long.parseLong(value.substring(index+2, value.length()));
+						Long withTtl = Long.parseLong(value.substring(index + 2, value.length()));
 						log.debug("redis custom cachename: {}::{}", cacheName, withTtl);
 						redisCacheConfigurationMap.put(cacheName, this.getRedisCacheConfigurationWithTtl(withTtl));
 					}
@@ -243,6 +244,7 @@ public class CacheConfig extends CachingConfigurerSupport {
 	/**
 	 * 
 	 * TODO 設置缓存时间
+	 * 
 	 * @param second 秒
 	 * @return
 	 */

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.annotation.Resource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AcknowledgeMode;
@@ -17,6 +15,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.api.ChannelAwareMessageListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.tangdao.core.constant.RabbitConstant;
@@ -35,35 +34,28 @@ import cn.hutool.core.util.StrUtil;
  */
 public class RabbitMessageQueueManager {
 
-	@Resource
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Autowired
 	private RabbitAdmin rabbitAdmin;
-	@Resource
+
+	@Autowired
 	private ConnectionFactory rabbitConnectionFactory;
 
 	@Value("${mq.rabbit.consumers}")
 	private int concurrentConsumers;
+
 	@Value("${mq.rabbit.maxconsumers}")
 	private int maxConcurrentConsumers;
 
 	@Value("${mq.rabbit.consumers.direct:5}")
 	private int directConcurrentConsumers;
+
 	@Value("${mq.rabbit.maxconsumers.direct:20}")
 	private int directMaxConcurrentConsumers;
 
-	// @Value("${mq.rabbit.threadnum}")
-	// private int rabbitPrefetchCount;
-
 	@Value("${mq.rabbit.prefetch}")
 	private int rabbitPrefetchCount;
-
-	private Logger logger = LoggerFactory.getLogger(getClass());
-
-	// public static volatile Lock lock = new ReentrantLock();
-	// public static volatile Condition APPLICATION_INIT_COMPLETE_CONDITION =
-	// lock.newCondition();
-
-	// @Resource
-	// private SimpleMessageListenerContainer simpleMessageListenerContainer;
 
 	/**
 	 * 创建指定消费者数量消息队列

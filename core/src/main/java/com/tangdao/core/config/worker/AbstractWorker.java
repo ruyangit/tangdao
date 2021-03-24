@@ -28,7 +28,7 @@ import cn.hutool.core.util.StrUtil;
  * @since 2021年3月8日
  */
 public abstract class AbstractWorker<E> implements Runnable {
-	
+
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected ApplicationContext applicationContext;

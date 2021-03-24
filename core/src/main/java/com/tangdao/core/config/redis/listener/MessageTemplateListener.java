@@ -16,5 +16,6 @@ public class MessageTemplateListener extends MessageListenerAdapter {
 
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
+
 	}
 }

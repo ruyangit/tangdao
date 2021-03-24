@@ -31,13 +31,13 @@ import com.tangdao.core.web.aspect.DemoAspect;
 @Configuration
 @EnableCaching
 public class WebMvcConfig implements WebMvcConfigurer {
-	
+
 	@Bean
 	@ConditionalOnProperty(prefix = "admin", name = "demo", havingValue = "true", matchIfMissing = true)
 	public DemoAspect demoAspect() {
 		return new DemoAspect();
 	}
-	
+
 	@Bean
 	public SpringUtils springUtils() {
 		return new SpringUtils();
@@ -55,14 +55,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 		source.registerCorsConfiguration("/**", config);
 		return new CorsFilter(source);
 	}
-	
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-    }
-    
-    @Override
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+	}
+
+	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 		resolvers.add(new LoginUserArgumentResolver());
 	}
