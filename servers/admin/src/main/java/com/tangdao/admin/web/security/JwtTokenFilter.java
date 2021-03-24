@@ -47,7 +47,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 				jwtTokenProvider.validateToken(token);
 				Authentication authentication = jwtTokenProvider.getAuthentication(token);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
-				jwtTokenProvider.putSessionContext(authentication);
+				jwtTokenProvider.setSessionContext(authentication);
 			}
 			filterChain.doFilter(request, response);
 		} catch (ExpiredJwtException e) {

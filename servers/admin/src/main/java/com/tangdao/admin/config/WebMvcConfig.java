@@ -13,11 +13,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.tangdao.admin.web.security.resolver.LoginUserArgumentResolver;
 import com.tangdao.core.web.aspect.DemoAspect;
+import com.tangdao.core.web.interceptor.LogInterceptor;
 
 /**
  * <p>
@@ -59,6 +62,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 		resolvers.add(new LoginUserArgumentResolver());
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		InterceptorRegistration registration = registry.addInterceptor(new LogInterceptor());
+		registration.excludePathPatterns("/api/**");
 	}
 
 }

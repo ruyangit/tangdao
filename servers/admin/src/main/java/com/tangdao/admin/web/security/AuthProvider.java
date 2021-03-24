@@ -23,8 +23,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.admin.web.security.model.AuthUser;
 import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
 import com.tangdao.core.exception.BusinessException;
+import com.tangdao.core.model.domain.Log;
 import com.tangdao.core.model.domain.User;
 import com.tangdao.core.service.UserService;
+import com.tangdao.core.utils.LogUtil;
 
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
@@ -98,13 +100,18 @@ public class AuthProvider {
 					password);
 			Authentication authentication = authenticationManager.authenticate(authenticationToken);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-
+			
+			// 存储会话用户
+			jwtTokenProvider.setSessionContext(authentication);
+			
+			// 更新登录用户信息
 			User user = new User();
 			user.setLastLoginIp(NetUtil.getLocalhostStr());
 			user.setLastLoginDate(new Date());
-			// 更新登录用户信息
 			userService.update(user, Wrappers.<User>lambdaUpdate().eq(User::getUsername, username));
+
 			// 写入登录日志
+			LogUtil.saveLog("登录", Log.TYPE_LOGIN_LOGOUT);
 			log.info("用户【" + username + "】登录，IP地址：" + user.getLastLoginIp() + ".");
 			return jwtTokenProvider.createToken(authentication);
 		} catch (Exception ex) {

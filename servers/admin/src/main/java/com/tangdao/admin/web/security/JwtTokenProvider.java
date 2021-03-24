@@ -93,11 +93,11 @@ public class JwtTokenProvider {
 
 	/**
 	 * 
-	 * TODO
+	 * TODO 
 	 * 
 	 * @param authentication
 	 */
-	public void putSessionContext(Authentication authentication) {
+	public void setSessionContext(Authentication authentication) {
 		AuthUser authUser = (AuthUser) authentication.getPrincipal();
 		//
 		SessionUser session = new SessionUser();

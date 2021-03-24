@@ -51,12 +51,24 @@ public class LogUtil {
 	 * @param elements
 	 * @return
 	 */
-	private static String stackTraceToString(String exceptionName, String exceptionMessage, StackTraceElement[] elements) {
+	private static String stackTraceToString(String exceptionName, String exceptionMessage,
+			StackTraceElement[] elements) {
 		StringBuffer strbuff = new StringBuffer();
 		for (StackTraceElement stet : elements) {
 			strbuff.append(stet + "\n");
 		}
 		return exceptionName + ":" + exceptionMessage + "\n\t" + strbuff.toString();
+	}
+
+	/**
+	 * 
+	 * TODO 保存日志
+	 * 
+	 * @param logTitle
+	 * @param logType
+	 */
+	public static void saveLog(String logTitle, String logType) {
+		saveLog(ServletUtil.getRequest(), null, logTitle, logType, null, 0);
 	}
 
 	/**
@@ -80,6 +92,9 @@ public class LogUtil {
 			if (hm.getMethod().getAnnotation(LogOpt.class) != null && StrUtil.isNotBlank(logTitle)) {
 				logTitle = hm.getMethod().getAnnotation(LogOpt.class).logTitle();
 			}
+		}
+		if (StrUtil.isEmpty(logTitle)) {
+
 		}
 		log.setLogTitle(logTitle);
 		log.setLogType(logType);
@@ -111,7 +126,7 @@ public class LogUtil {
 		}
 		log.setCreateDate(new Date());
 
-		log.setIsException(throwable != null ? Global.YES : Global.NO);
+		log.setIsException(throwable == null ? Global.YES : Global.NO);
 		if (throwable != null) {
 			log.setExceptionInfo(stackTraceToString(throwable.getClass().getName(), throwable.getMessage(),
 					throwable.getStackTrace()));
