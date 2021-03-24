@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.constant.OpenApiCode;
 import com.tangdao.core.model.domain.User;
-import com.tangdao.core.model.domain.UserRole;
 import com.tangdao.core.model.dto.UserDTO;
 import com.tangdao.core.service.UserService;
 import com.tangdao.core.web.BaseController;
@@ -55,21 +54,13 @@ public class UserController extends BaseController {
 		if (userService.checkUsernameExists(user.getOldUsername(), user.getUsername())) {
 			return renderResult(OpenApiCode.FALSE, "保存用户'" + user.getUsername() + "'失败，登录账号已存在");
 		}
-		userService.save(user);
-		UserRole userRole = new UserRole();
-		userRole.setUserId(user.getId());
-		userRole.setRoleId(user.getRoleId());
-		userRole.setRoleIds(user.getRoleIds());
-		userService.insertUserRole(userRole);
+		userService.createUser(user);
 		return renderResult(OpenApiCode.TRUE, "保存成功");
 	}
 
 	@PostMapping("/delete")
 	public CommonResponse delete(@RequestBody UserDTO user) {
-		userService.removeById(user.getId());
-		UserRole userRole = new UserRole();
-		userRole.setUserId(user.getId());
-		userService.deleteUserRole(userRole);
+		userService.deleteUser(user);
 		return renderResult(OpenApiCode.TRUE, "刪除成功");
 	}
 }
