@@ -22,5 +22,17 @@ import java.lang.annotation.Target;
 @Documented
 public @interface LogOpt {
 
+	/**
+	 * 
+	 * TODO 日志标题
+	 * @return
+	 */
 	String logTitle();
+
+	/**
+	 * 
+	 * TODO 是否需要日志
+	 * @return
+	 */
+	boolean needLog() default false;
 }

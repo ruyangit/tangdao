@@ -91,14 +91,9 @@ public class Log implements Serializable {
     private String diffModifyData;
 
     /**
-     * 业务主键
+     * 描述
      */
-    private String bizKey;
-
-    /**
-     * 业务类型
-     */
-    private String bizType;
+    private String description;
 
     /**
      * 操作IP地址
@@ -156,7 +151,7 @@ public class Log implements Serializable {
 	public void setRequestParams(String requestParams) {
 		this.requestParams = requestParams;
 	}
-
+	
 	/**
 	 * 设置请求参数
 	 * @param paramMap

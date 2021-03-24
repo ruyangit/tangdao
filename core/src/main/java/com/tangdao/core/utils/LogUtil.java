@@ -8,10 +8,13 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.mapping.SqlCommandType;
+import org.springframework.core.MethodParameter;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.HandlerMethod;
 
 import com.tangdao.core.annotation.LogOpt;
+import com.tangdao.core.annotation.LoginUser;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.context.SessionContext;
 import com.tangdao.core.model.domain.Log;
@@ -84,18 +87,23 @@ public class LogUtil {
 	 */
 	public static void saveLog(HttpServletRequest request, Object handler, String logTitle, String logType,
 			Throwable throwable, long executeTime) {
-		//
-		Log log = new Log();
-		if (handler instanceof HandlerMethod) {
-			HandlerMethod hm = ((HandlerMethod) handler);
-			// 标题
-			if (hm.getMethod().getAnnotation(LogOpt.class) != null && StrUtil.isNotBlank(logTitle)) {
-				logTitle = hm.getMethod().getAnnotation(LogOpt.class).logTitle();
+		HandlerMethod handlerMethod = null;
+		if (handler instanceof HandlerMethod && (handlerMethod = (HandlerMethod) handler) != null) {
+			// 日志标题
+			LogOpt logOpt = handlerMethod.getMethod().getAnnotation(LogOpt.class);
+			if (logOpt != null && StrUtil.isNotBlank(logTitle)) {
+				logTitle = handlerMethod.getMethod().getAnnotation(LogOpt.class).logTitle();
+			}
+			// 不需要日志
+			if (logOpt != null && logOpt.needLog()) {
+				return;
 			}
 		}
 		if (StrUtil.isEmpty(logTitle)) {
-
+			logTitle = "";
 		}
+		// 对象
+		Log log = new Log();
 		log.setLogTitle(logTitle);
 		log.setLogType(logType);
 		if (StrUtil.isEmpty(logType)) {
@@ -115,17 +123,36 @@ public class LogUtil {
 		log.setDeviceName(userAgent.getOs().getName());
 		log.setBrowserName(userAgent.getBrowser().getName());
 		log.setRequestUri(StrUtil.maxLength(request.getRequestURI(), 255));
-		log.setRequestParams(request.getParameterMap());
 		log.setRequestMethod(request.getMethod());
+		log.setRequestParams(request.getParameterMap());
+		
+		// 描述
+		if (handlerMethod != null) {
+			log.setDescription(handlerMethod.toString());
+		}
+
+		// POST（JSON）
+		if (handlerMethod != null && StrUtil.isBlank(log.getRequestParams())) {
+			MethodParameter[] parameters = handlerMethod.getMethodParameters();
+			if (parameters != null && parameters.length > 0) {
+				if (parameters[0].hasMethodAnnotation(RequestBody.class)) {
+					System.out.println(parameters[0]);
+				}
+			}
+		}
+		// 耗时
 		log.setExecuteTime(executeTime);
 
+		// 操作用户
 		SessionUser user = SessionContext.getSession();
 		if (user != null) {
 			log.setCreateBy(user.getId());
 			log.setCreateByName(user.getUsername());
 		}
+		// 操作时间
 		log.setCreateDate(new Date());
 
+		// 是否异常
 		log.setIsException(throwable == null ? Global.YES : Global.NO);
 		if (throwable != null) {
 			log.setExceptionInfo(stackTraceToString(throwable.getClass().getName(), throwable.getMessage(),
