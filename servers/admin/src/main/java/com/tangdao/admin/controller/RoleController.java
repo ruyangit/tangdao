@@ -33,8 +33,8 @@ public class RoleController extends BaseController {
 	@Autowired
 	private RoleService roleService;
 
-	@GetMapping("/record")
-	public CommonResponse record(Page<Role> page, Role role) {
+	@GetMapping("/page")
+	public CommonResponse page(Page<Role> page, Role role) {
 		LambdaQueryWrapper<Role> queryWrapper = Wrappers.<Role>lambdaQuery();
 		if (StrUtil.isNotBlank(role.getRoleCode())) {
 			queryWrapper.likeRight(Role::getRoleCode, role.getRoleCode());
@@ -46,5 +46,11 @@ public class RoleController extends BaseController {
 			queryWrapper.eq(Role::getStatus, role.getStatus());
 		}
 		return renderResult(roleService.page(page, queryWrapper));
+	}
+
+	@GetMapping("/list")
+	public CommonResponse list(Role role) {
+		LambdaQueryWrapper<Role> queryWrapper = Wrappers.<Role>lambdaQuery();
+		return renderResult(roleService.list(queryWrapper));
 	}
 }

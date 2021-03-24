@@ -24,19 +24,6 @@ public class OpenApiCode {
 	// 推送至用户侧成功码
 	public static final String DELIVER_SUCCESS = "DELIVRD";
 
-	// YES-0
-	public static final String YES = "0";
-
-	// NO-1
-	public static final String NO = "1";
-	
-	// true
-	public static final Boolean TRUE = true;
-	
-	// false
-	public static final Boolean FALSE = false;
-	
-
 	public enum CommonApiCode implements ErrorCode {
 		COMMON_SUCCESS("0", "调用成功"), COMMON_REQUEST_EXCEPTION("C0001", "请求参数异常"),
 		COMMON_REQUEST_ENCODING_ERROR("C0002", "参数内容编码不正确"), COMMON_REQUEST_TIMESTAMPS_EXPIRED("C0003", "时间戳已过期"),

@@ -12,7 +12,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.web.method.HandlerMethod;
 
 import com.tangdao.core.annotation.LogOpt;
-import com.tangdao.core.constant.OpenApiCode;
+import com.tangdao.core.config.Global;
 import com.tangdao.core.context.SessionContext;
 import com.tangdao.core.model.domain.Log;
 import com.tangdao.core.model.vo.SessionUser;
@@ -110,7 +110,7 @@ public class LogUtil {
 		}
 		log.setCreateDate(new Date());
 
-		log.setIsException(throwable != null ? OpenApiCode.YES : OpenApiCode.NO);
+		log.setIsException(throwable != null ? Global.YES : Global.NO);
 		if (throwable != null) {
 			log.setExceptionInfo(stackTraceToString(throwable.getClass().getName(), throwable.getMessage(),
 					throwable.getStackTrace()));
