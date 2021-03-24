@@ -3,6 +3,8 @@
  */
 package com.tangdao.core.service;
 
+import org.springframework.stereotype.Service;
+
 import com.tangdao.core.dao.DictTypeMapper;
 import com.tangdao.core.model.domain.DictType;
 
@@ -14,6 +16,7 @@ import com.tangdao.core.model.domain.DictType;
  * @author ruyang
  * @since 2020年12月29日
  */
+@Service
 public class DictTypeService extends BaseService<DictTypeMapper, DictType> {
 
 }

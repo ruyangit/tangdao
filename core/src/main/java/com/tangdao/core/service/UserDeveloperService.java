@@ -18,6 +18,15 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 
+/**
+ * 
+ * <p>
+ * TODO 描述
+ * </p>
+ *
+ * @author ruyang
+ * @since 2021年3月24日
+ */
 @Service
 public class UserDeveloperService extends BaseService<UserDeveloperMapper, UserDeveloper> {
 

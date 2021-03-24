@@ -3,6 +3,7 @@
  */
 package com.tangdao.core.service;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -20,6 +21,7 @@ import com.tangdao.core.model.dto.UserDTO;
  * @author ruyang
  * @since 2021年3月9日
  */
+@Service
 public class UserService extends BaseService<UserMapper, User> {
 
 	/**

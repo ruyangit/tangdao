@@ -34,27 +34,6 @@ public class UserContext {
 
 	}
 
-	public enum UserBalanceType {
-		DEFAULT(0, "默认余额"), SMS(1, "短信余额"), FS(2, "流量余额"), VS(3, "语音余额"), MMS(4, "彩信余额");
-
-		private int value;
-
-		private String title;
-
-		private UserBalanceType(int value, String title) {
-			this.value = value;
-			this.title = title;
-		}
-
-		public int getValue() {
-			return value;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-	}
-
 	public enum UserStatus {
 		YES(0, "有效"), NO(1, "无效");
 

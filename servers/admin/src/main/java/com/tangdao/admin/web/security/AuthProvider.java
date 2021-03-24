@@ -25,9 +25,8 @@ import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
 import com.tangdao.core.exception.BusinessException;
 import com.tangdao.core.model.domain.User;
 import com.tangdao.core.service.UserService;
-import com.tangdao.core.utils.IPUtil;
-import com.tangdao.core.utils.ServletUtil;
 
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -101,7 +100,7 @@ public class AuthProvider {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 			User user = new User();
-			user.setLastLoginIp(IPUtil.getClientIp(ServletUtil.getRequest()));
+			user.setLastLoginIp(NetUtil.getLocalhostStr());
 			user.setLastLoginDate(new Date());
 			// 更新登录用户信息
 			userService.update(user, Wrappers.<User>lambdaUpdate().eq(User::getUsername, username));

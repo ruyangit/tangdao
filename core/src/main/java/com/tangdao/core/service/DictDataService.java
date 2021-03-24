@@ -5,11 +5,12 @@ package com.tangdao.core.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.core.context.CommonContext.Status;
-import com.tangdao.core.context.SettingsContext.DictType;
 import com.tangdao.core.dao.DictDataMapper;
 import com.tangdao.core.model.domain.DictData;
+import com.tangdao.core.model.domain.DictType;
 
 /**
  * <p>
@@ -19,26 +20,27 @@ import com.tangdao.core.model.domain.DictData;
  * @author ruyang
  * @since 2020年12月29日
  */
+@Service
 public class DictDataService extends BaseService<DictDataMapper, DictData> {
 
 	public List<DictData> findByDictType(DictType dictType) {
 		return super.list(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType).eq(DictData::getStatus,
-				Status.NORMAL));
+				DictData.NORMAL));
 	}
 
-	public DictData getByDictTypeAndLabel(DictType dictType, String label) {
+	public DictData getByDictTypeAndLabel(DictType dictType, String dictLabel) {
 		return super.getOne(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType)
-				.eq(DictData::getStatus, Status.NORMAL).eq(DictData::getDictLabel, label));
+				.eq(DictData::getStatus, DictData.NORMAL).eq(DictData::getDictLabel, dictLabel));
 	}
 
-	public DictData getByDictTypeAndValue(DictType dictType, String value) {
+	public DictData getByDictTypeAndValue(DictType dictType, String dictValue) {
 		return super.getOne(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType)
-				.eq(DictData::getStatus, Status.NORMAL).eq(DictData::getDictValue, value));
+				.eq(DictData::getStatus, DictData.NORMAL).eq(DictData::getDictValue, dictValue));
 	}
-	
-	public DictData getByDictTypeAndKey(DictType dictType, String key) {
+
+	public DictData getByDictTypeAndKey(DictType dictType, String dictKey) {
 		return super.getOne(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType)
-				.eq(DictData::getStatus, Status.NORMAL).eq(DictData::getDictKey, key));
+				.eq(DictData::getStatus, DictData.NORMAL).eq(DictData::getDictKey, dictKey));
 	}
 
 }

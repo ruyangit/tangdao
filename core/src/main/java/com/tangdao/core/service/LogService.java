@@ -3,6 +3,8 @@
  */
 package com.tangdao.core.service;
 
+import org.springframework.stereotype.Service;
+
 import com.tangdao.core.dao.LogMapper;
 import com.tangdao.core.model.domain.Log;
 
@@ -14,7 +16,7 @@ import com.tangdao.core.model.domain.Log;
  * @author ruyang
  * @since 2021年3月9日
  */
+@Service
 public class LogService extends BaseService<LogMapper, Log> {
 
-	
 }

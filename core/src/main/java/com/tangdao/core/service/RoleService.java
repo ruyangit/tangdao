@@ -3,6 +3,8 @@
  */
 package com.tangdao.core.service;
 
+import org.springframework.stereotype.Service;
+
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.dao.RoleMapper;
 import com.tangdao.core.model.domain.Role;
@@ -15,6 +17,7 @@ import com.tangdao.core.model.domain.Role;
  * @author ruyang
  * @since 2021年3月9日
  */
+@Service
 public class RoleService extends BaseService<RoleMapper, Role> {
 
 	/**

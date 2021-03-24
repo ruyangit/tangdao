@@ -37,8 +37,6 @@ public class RabbitMessageQueueManager {
 
 	@Resource
 	private RabbitAdmin rabbitAdmin;
-//    @Resource
-//    private MessageConverter  messageConverter;
 	@Resource
 	private ConnectionFactory rabbitConnectionFactory;
 
@@ -77,7 +75,7 @@ public class RabbitMessageQueueManager {
 	public void createQueue(String queueName, boolean isDirectProtocol,
 			ChannelAwareMessageListener channelAwareMessageListener) throws Exception {
 		try {
-			DirectExchange exchange = new DirectExchange(RabbitConstant.EXCHANGE_SMS, true, false);
+			DirectExchange exchange = new DirectExchange(RabbitConstant.EXCHANGE_MQ, true, false);
 			rabbitAdmin.declareExchange(exchange);
 
 			Queue queue = new Queue(queueName, true, false, false, setQueueFeatures());
