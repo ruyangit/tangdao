@@ -23,7 +23,7 @@ import com.tangdao.core.model.domain.SmsMoMessageReceive;
 import com.tangdao.core.model.domain.SmsMtMessageDeliver;
 import com.tangdao.core.model.domain.SmsPassageParameter;
 import com.tangdao.core.model.vo.ProviderSendVo;
-import com.tangdao.core.utils.MobileCatagoryUtil;
+import com.tangdao.core.utils.MobileTypeUtil;
 import com.tangdao.exchanger.resolver.sms.AbstractSmsProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.constant.CmppConstant;
 import com.tangdao.exchanger.template.handler.RequestTemplateHandler;
@@ -324,7 +324,7 @@ public class CmppProxySender extends AbstractSmsProxySender {
 		CMPPSubmitRepMessage submitRepMsg = null;
 		for (int index = 1; index <= contentList.size(); index++) {
 			submitMsg = getCMPPSubmitMessage(contentList.size(), index, serviceId, tpUdhi, msgFmt, spid, validTime,
-					atTime, chargeNumber, srcTerminalId, mobile.split(MobileCatagoryUtil.DATA_SPLIT_CHARCATOR),
+					atTime, chargeNumber, srcTerminalId, mobile.split(MobileTypeUtil.DATA_SPLIT_CHARCATOR),
 					contentList.get(index - 1), reserve);
 
 			CMPPSubmitRepMessage repMsg = (CMPPSubmitRepMessage) cmppManageProxy.send(submitMsg);

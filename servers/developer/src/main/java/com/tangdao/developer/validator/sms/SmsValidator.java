@@ -9,7 +9,7 @@ import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
 import com.tangdao.core.constant.UserBalanceConstant;
 import com.tangdao.core.context.CommonContext.PlatformType;
 import com.tangdao.core.service.UserBalanceService;
-import com.tangdao.core.utils.MobileCatagoryUtil;
+import com.tangdao.core.utils.MobileTypeUtil;
 import com.tangdao.developer.exception.ValidateException;
 import com.tangdao.developer.request.AuthorizationRequest;
 import com.tangdao.developer.request.sms.SmsSendRequest;
@@ -75,7 +75,7 @@ public class SmsValidator extends Validator {
 		}
 
 		// 总手机号码数量
-		int mobiles = smsSendRequest.getMobile().split(MobileCatagoryUtil.DATA_SPLIT_CHARCATOR).length;
+		int mobiles = smsSendRequest.getMobile().split(MobileTypeUtil.DATA_SPLIT_CHARCATOR).length;
 
 		// 暂时先不加
 //        isBeyondMobileSize(mobiles);

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
 import com.tangdao.core.context.CommonContext.AppType;
-import com.tangdao.core.utils.IpUtil;
+import com.tangdao.core.utils.IPUtil;
 import com.tangdao.developer.validator.AuthorizationValidator;
 
 /**
@@ -72,7 +72,7 @@ public class BasicApiSupport {
 	 * @return
 	 */
 	protected String getClientIp() {
-		return IpUtil.getClientIp(request);
+		return IPUtil.getClientIp(request);
 	}
 
 }

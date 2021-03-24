@@ -23,9 +23,9 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang
  * @since 2021年3月11日
  */
-public class IpUtil {
+public class IPUtil {
 
-	private static Logger logger = LoggerFactory.getLogger(IpUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(IPUtil.class);
 
 	/**
 	 * 

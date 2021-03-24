@@ -93,7 +93,7 @@ public class LogUtil {
 			}
 		}
 		log.setServerAddr(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());
-		log.setRemoteAddr(IpUtil.getClientIp(request));
+		log.setRemoteAddr(IPUtil.getClientIp(request));
 		log.setUserAgent(request.getHeader("User-Agent"));
 		UserAgent userAgent = UserAgentUtil.parse(log.getUserAgent());
 		log.setDeviceName(userAgent.getOs().getName());

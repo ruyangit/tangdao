@@ -22,7 +22,7 @@ import com.tangdao.core.model.domain.SmsMoMessageReceive;
 import com.tangdao.core.model.domain.SmsMtMessageDeliver;
 import com.tangdao.core.model.domain.SmsPassageParameter;
 import com.tangdao.core.model.vo.ProviderSendVo;
-import com.tangdao.core.utils.MobileCatagoryUtil;
+import com.tangdao.core.utils.MobileTypeUtil;
 import com.tangdao.exchanger.resolver.sms.AbstractSmsProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.constant.CmppConstant;
 import com.tangdao.exchanger.resolver.sms.sgip.constant.SgipConstant;
@@ -222,7 +222,7 @@ public class SgipProxySender extends AbstractSmsProxySender {
 			msgFmt = SgipConstant.MSG_FMT_UCS2;
 		}
 
-		String[] mobiles = mobile.split(MobileCatagoryUtil.DATA_SPLIT_CHARCATOR);
+		String[] mobiles = mobile.split(MobileTypeUtil.DATA_SPLIT_CHARCATOR);
 		for (int i = 0; i < mobiles.length; i++) {
 			mobiles[i] = MOBILE_PREFIX_NUMBER + mobiles[i];
 		}

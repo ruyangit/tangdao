@@ -20,7 +20,7 @@ import com.tangdao.core.model.domain.SmsPassageAccess;
 import com.tangdao.core.model.domain.SmsPassageParameter;
 import com.tangdao.core.model.vo.ProviderSendVo;
 import com.tangdao.core.service.proxy.ISmsProviderService;
-import com.tangdao.core.utils.MobileCatagoryUtil;
+import com.tangdao.core.utils.MobileTypeUtil;
 import com.tangdao.exchanger.resolver.sms.cmpp.v2.CmppProxySender;
 import com.tangdao.exchanger.resolver.sms.cmpp.v3.Cmpp3ProxySender;
 import com.tangdao.exchanger.resolver.sms.http.SmsHttpSender;
@@ -84,7 +84,7 @@ public class SmsProviderService implements ISmsProviderService {
 
 		// 获取通道对应的流速设置
 		RateLimiter rateLimiter = getRateLimiter(parameter.getPassageId(), parameter.getPacketsSize());
-		String[] mobiles = mobile.split(MobileCatagoryUtil.DATA_SPLIT_CHARCATOR);
+		String[] mobiles = mobile.split(MobileTypeUtil.DATA_SPLIT_CHARCATOR);
 
 		// 目前HTTP用途并不是很大（因为取决于HTTP自身的瓶颈）
 		List<String[]> packets = recombineMobilesByLimitSpeedInSecond(mobiles,
@@ -224,7 +224,7 @@ public class SmsProviderService implements ISmsProviderService {
 
 			index = i * groupMobileSize;
 			for (int j = 0; j < groupMobileSize && index < totalMobileSize; j++) {
-				builder.append(mobiles[index++]).append(MobileCatagoryUtil.DATA_SPLIT_CHARCATOR);
+				builder.append(mobiles[index++]).append(MobileTypeUtil.DATA_SPLIT_CHARCATOR);
 				roundSize++;
 			}
 

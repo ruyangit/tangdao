@@ -31,7 +31,7 @@ import com.tangdao.core.constant.ErrorCode;
  * @since 2020年12月24日
  */
 public class ServletUtil {
-
+	
 	/**
 	 * 获取当前请求对象
 	 * web.xml: <listener><listener-class>
