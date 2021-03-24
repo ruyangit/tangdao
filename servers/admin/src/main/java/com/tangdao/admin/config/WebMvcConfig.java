@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.tangdao.admin.web.security.resolver.LoginUserArgumentResolver;
+import com.tangdao.core.web.SpringUtils;
 import com.tangdao.core.web.aspect.DemoAspect;
 
 /**
@@ -35,6 +36,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@ConditionalOnProperty(prefix = "admin", name = "demo", havingValue = "true", matchIfMissing = true)
 	public DemoAspect demoAspect() {
 		return new DemoAspect();
+	}
+	
+	@Bean
+	public SpringUtils springUtils() {
+		return new SpringUtils();
 	}
 
 	@Bean

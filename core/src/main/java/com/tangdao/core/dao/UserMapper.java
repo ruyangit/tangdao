@@ -5,7 +5,7 @@ package com.tangdao.core.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.tangdao.core.model.domain.User;
-import com.tangdao.core.model.domain.UserRole;
+import com.tangdao.core.model.vo.UserRole;
 
 /**
  * 

@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.tangdao.core.dao.UserMapper;
 import com.tangdao.core.model.domain.User;
-import com.tangdao.core.model.domain.UserRole;
 import com.tangdao.core.model.dto.UserDTO;
+import com.tangdao.core.model.vo.UserRole;
 
 /**
  * <p>

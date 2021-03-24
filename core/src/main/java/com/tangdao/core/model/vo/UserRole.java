@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model.domain;
+package com.tangdao.core.model.vo;
 
 import java.io.Serializable;
 import java.util.List;
