@@ -43,8 +43,8 @@ import com.tangdao.core.model.domain.SmsMtMessageDeliver;
 import com.tangdao.core.model.domain.SmsMtMessagePush;
 import com.tangdao.core.model.domain.SmsMtMessageSubmit;
 import com.tangdao.core.model.vo.SmsPushReport;
-import com.tangdao.core.utils.HttpClientUtil;
-import com.tangdao.core.utils.HttpClientUtil.RetryResponse;
+import com.tangdao.core.utils.HttpUtil;
+import com.tangdao.core.utils.HttpUtil.RetryResponse;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -525,7 +525,7 @@ public class SmsMtMessagePushService extends BaseService<SmsMtMessagePushMapper,
 				String pushContent = translateBodies(urlBody.getValue());
 
 				// print result and cost time
-				RetryResponse response = HttpClientUtil.postBody(urlBody.getKey(), pushContent, 1);
+				RetryResponse response = HttpUtil.postBody(urlBody.getKey(), pushContent, 1);
 				logger.info("Url [" + urlBody.getKey() + "] push body [" + pushContent + "]'s result is "
 						+ response.isSuccess() + ", it costs {} ms ", (System.currentTimeMillis() - startTime));
 

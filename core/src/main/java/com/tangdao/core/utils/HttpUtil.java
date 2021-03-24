@@ -50,7 +50,7 @@ import cn.hutool.core.util.StrUtil;
  * @author ruyang
  * @since 2021年3月10日
  */
-public class HttpClientUtil {
+public class HttpUtil {
 
 	/**
 	 * 从连接池中获取连接时间
@@ -100,7 +100,7 @@ public class HttpClientUtil {
 	 */
 	private static final String HOST_SEPARATOR = ":";
 
-	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
+	private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
 	/**
 	 * 推送回执信息，如果用户回执success才算正常接收，否则重试，达到重试上限次数，抛弃
@@ -152,12 +152,6 @@ public class HttpClientUtil {
 		return HttpClients.custom().setConnectionManager(LOCAL_HTTP_CLIENT_FACTORY.get(hostAndPort)).build();
 	}
 
-	/**
-	 * 创建HttpClient对象
-	 *
-	 * @return
-	 * @create 2015年12月18日
-	 */
 	private static PoolingHttpClientConnectionManager bindHttpClientConnectionManager(int maxTotal, int maxPerRoute) {
 		ConnectionSocketFactory plainsf = PlainConnectionSocketFactory.getSocketFactory();
 		LayeredConnectionSocketFactory sslsf = SSLConnectionSocketFactory.getSocketFactory();
@@ -430,7 +424,7 @@ public class HttpClientUtil {
 			// 设置参数信息
 			setHttpParameters(httpPost, params);
 
-			httpClient = HttpClientUtil.getHttpClient(url, maxTotal, maxPerRoute);
+			httpClient = HttpUtil.getHttpClient(url, maxTotal, maxPerRoute);
 			// 提交post请求
 			response = httpClient.execute(httpPost);
 			// 获取响应内容
@@ -523,7 +517,7 @@ public class HttpClientUtil {
 			// 设置参数信息
 			setHttpParameters(httpPost, params, encoding);
 
-			httpClient = HttpClientUtil.getHttpClient(url, maxTotal, maxPerRoute);
+			httpClient = HttpUtil.getHttpClient(url, maxTotal, maxPerRoute);
 			// 提交post请求
 			response = httpClient.execute(httpPost);
 			// 获取响应内容
@@ -605,7 +599,7 @@ public class HttpClientUtil {
 		CloseableHttpResponse response;
 		CloseableHttpClient httpClient = null;
 		try {
-			httpClient = HttpClientUtil.getHttpClient(url, DEFAULT_MAX_TOTAL, DEFAULT_MAX_PER_ROUTE);
+			httpClient = HttpUtil.getHttpClient(url, DEFAULT_MAX_TOTAL, DEFAULT_MAX_PER_ROUTE);
 
 			// 设置头信息
 			setHttpHeaders(httpPost, headers);
@@ -695,13 +689,6 @@ public class HttpClientUtil {
 		return retryResponse;
 	}
 
-	/**
-	 * 重试回执信息
-	 * 
-	 * @author zhengying
-	 * @version V1.0
-	 * @date 2018年4月24日 下午11:19:15
-	 */
 	public static class RetryResponse {
 
 		/**

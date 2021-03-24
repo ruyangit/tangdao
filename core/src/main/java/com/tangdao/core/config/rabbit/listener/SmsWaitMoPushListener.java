@@ -20,8 +20,8 @@ import com.tangdao.core.context.PassageContext.PushStatus;
 import com.tangdao.core.dao.SmsMoMessagePushMapper;
 import com.tangdao.core.model.domain.SmsMoMessagePush;
 import com.tangdao.core.model.domain.SmsMoMessageReceive;
-import com.tangdao.core.utils.HttpClientUtil;
-import com.tangdao.core.utils.HttpClientUtil.RetryResponse;
+import com.tangdao.core.utils.HttpUtil;
+import com.tangdao.core.utils.HttpUtil.RetryResponse;
 
 /**
  * 
@@ -57,7 +57,7 @@ public class SmsWaitMoPushListener extends AbstartRabbitListener {
 					new SimplePropertyPreFilter("sid", "mobile", "content", "destnationNo", "receiveTime"),
 					SerializerFeature.WriteMapNullValue, SerializerFeature.WriteNullStringAsEmpty);
 
-			retryResponse = HttpClientUtil.postBody(report.getPushUrl(), pushContent, 1);
+			retryResponse = HttpUtil.postBody(report.getPushUrl(), pushContent, 1);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		} finally {
