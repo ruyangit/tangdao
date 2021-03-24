@@ -29,6 +29,13 @@ public class OpenApiCode {
 
 	// NO-1
 	public static final String NO = "1";
+	
+	// true
+	public static final Boolean TRUE = true;
+	
+	// false
+	public static final Boolean FALSE = false;
+	
 
 	public enum CommonApiCode implements ErrorCode {
 		COMMON_SUCCESS("0", "调用成功"), COMMON_REQUEST_EXCEPTION("C0001", "请求参数异常"),

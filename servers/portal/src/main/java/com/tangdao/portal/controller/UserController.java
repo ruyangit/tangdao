@@ -28,6 +28,6 @@ public class UserController extends BaseController {
 	@GetMapping("record")
 	public CommonResponse record(@LoginUser SessionUser user) {
 		System.out.println(JSON.toJSONString(user));
-		return success(null);
+		return renderResult(null);
 	}
 }

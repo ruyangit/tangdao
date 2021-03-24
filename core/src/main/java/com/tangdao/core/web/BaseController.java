@@ -1,59 +1,56 @@
 package com.tangdao.core.web;
 
-import java.util.Map;
-
 import com.tangdao.core.CommonResponse;
-import com.tangdao.core.constant.ErrorCode;
-
-import cn.hutool.core.map.MapUtil;
 
 /**
  * 
  * <p>
- * TODO 描述
+ * TODO 抽象
  * </p>
  *
- * @author ruyang@gmail.com
- * @since 2020年4月2日
+ * @author ruyang
+ * @since 2021年3月24日
  */
 public abstract class BaseController {
 
 	/**
-	 * 成功消息
+	 * 
+	 * TODO
+	 * 
+	 * @param result
 	 * @param message
-	 * @return {"code":"0"}
+	 * @return
 	 */
-	protected CommonResponse success(Boolean result) {
-		Map<String, Object> data = MapUtil.newHashMap();
-		data.put("result", result);
-		return CommonResponse.createCommonResponse().success().setData(data);
+	protected CommonResponse renderResult(Boolean result, String message) {
+		return renderResult(result, message, null);
 	}
-	
+
 	/**
-	 * 成功消息
-	 * @param message
-	 * @return {"code":"0", "data":""}
-	 */
-	protected CommonResponse success(Object data) {
-		return CommonResponse.createCommonResponse().success().setData(data);
-	}
-	
-	/**
-	 * 成功消息
+	 * 
+	 * TODO
+	 * 
+	 * @param result
 	 * @param message
 	 * @param data
-	 * @return {"code":"0", "message":"", "data":""}
+	 * @return
 	 */
-	protected CommonResponse success(String message, Object data) {
-		return CommonResponse.createCommonResponse().success(message).setData(data);
+	protected CommonResponse renderResult(Boolean result, String message, Object data) {
+		CommonResponse commonResponse = renderResult(data);
+		commonResponse.putData("result", result);
+		commonResponse.message(message);
+		return commonResponse;
 	}
-	
+
 	/**
-	 * 失败消息
-	 * @param message
-	 * @return{"code":"xxxxx", "message":""}
+	 * 
+	 * TODO
+	 * 
+	 * @param data
+	 * @return
 	 */
-    protected CommonResponse fail(ErrorCode errorCode) {
-    	return CommonResponse.createCommonResponse().fail(errorCode);
-    }
+	protected CommonResponse renderResult(Object data) {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.setData(data);
+		return commonResponse;
+	}
 }

@@ -23,7 +23,7 @@ import com.tangdao.core.web.BaseController;
 /**
  * 
  * <p>
- * TODO 登录
+ * TODO 认证接口
  * </p>
  *
  * @author ruyang
@@ -43,10 +43,10 @@ public class LoginController extends BaseController {
 			response.addHeader(WebSecurityConfig.AUTHORIZATION_HEADER,
 					WebSecurityConfig.TOKEN_PREFIX + user.getToken());
 		}
-		JSONObject result = new JSONObject();
-		result.put(WebSecurityConfig.ACCESS_TOKEN, user.getToken());
-		result.put("username", user.getUsername());
-		return success(result);
+		JSONObject data = new JSONObject();
+		data.put(WebSecurityConfig.ACCESS_TOKEN, user.getToken());
+		data.put("username", user.getUsername());
+		return renderResult(data);
 	}
-	
+
 }

@@ -20,7 +20,7 @@ import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
- * TODO 描述
+ * TODO 角色接口
  * </p>
  *
  * @author ruyang
@@ -45,6 +45,6 @@ public class RoleController extends BaseController {
 		if (StrUtil.isNotBlank(role.getStatus())) {
 			queryWrapper.eq(Role::getStatus, role.getStatus());
 		}
-		return success(roleService.page(page, queryWrapper));
+		return renderResult(roleService.page(page, queryWrapper));
 	}
 }

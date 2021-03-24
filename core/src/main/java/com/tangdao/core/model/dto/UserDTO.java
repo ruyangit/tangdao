@@ -32,5 +32,5 @@ public class UserDTO extends User {
 	private String roleId;
 
 	private List<String> roleIds;
-
+	
 }
