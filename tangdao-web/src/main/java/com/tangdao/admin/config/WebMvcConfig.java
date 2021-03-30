@@ -39,7 +39,7 @@ import com.tangdao.core.web.interceptor.LogInterceptor;
 public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Bean
-	@ConditionalOnProperty(prefix = "admin", name = "demo", havingValue = "true", matchIfMissing = true)
+	@ConditionalOnProperty(prefix = "tangdao-web", name = "demo", havingValue = "true", matchIfMissing = true)
 	public DemoAspect demoAspect() {
 		return new DemoAspect();
 	}
