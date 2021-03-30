@@ -17,6 +17,11 @@ public class RedisConstant {
 	 * 用户列表
 	 */
 	public static final String RED_USER_LIST = "red_user_list";
+	
+	/**
+	 * 配置列表
+	 */
+	public static final String RED_CONFIG_LIST = "red_config_list";
 
 	/**
 	 * 开发者列表

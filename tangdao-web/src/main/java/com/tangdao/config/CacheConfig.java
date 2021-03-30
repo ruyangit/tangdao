@@ -232,7 +232,6 @@ public class CacheConfig extends CachingConfigurerSupport {
 					if (index > -1) {
 						String cacheName = value.substring(0, index);
 						Long withTtl = Long.parseLong(value.substring(index + 2, value.length()));
-						log.debug("redis custom cachename: {}::{}", cacheName, withTtl);
 						redisCacheConfigurationMap.put(cacheName, this.getRedisCacheConfigurationWithTtl(withTtl));
 					}
 				}

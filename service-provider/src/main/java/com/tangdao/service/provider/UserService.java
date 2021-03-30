@@ -14,6 +14,8 @@ import com.tangdao.service.model.domain.User;
 import com.tangdao.service.model.dto.UserDTO;
 import com.tangdao.service.model.vo.UserRole;
 
+import cn.hutool.core.collection.CollUtil;
+
 /**
  * <p>
  * TODO 用户服务
@@ -85,11 +87,14 @@ public class UserService extends BaseService<UserMapper, User> {
 	@Transactional(rollbackFor = Exception.class)
 	public boolean createUser(UserDTO user) {
 		super.save(user);
-		UserRole userRole = new UserRole();
-		userRole.setUserId(user.getId());
-		userRole.setRoleId(user.getRoleId());
-		userRole.setRoleIds(user.getRoleIds());
-		this.insertUserRole(userRole);
+		// 保存角色
+		if(CollUtil.isNotEmpty(user.getRoleIds())) {
+			UserRole userRole = new UserRole();
+			userRole.setUserId(user.getId());
+			userRole.setRoleId(user.getRoleId());
+			userRole.setRoleIds(user.getRoleIds());
+			this.insertUserRole(userRole);
+		}
 		return true;
 	}
 

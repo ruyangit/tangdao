@@ -4,6 +4,7 @@
 package com.tangdao.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,6 +56,11 @@ public class UserController extends BaseController {
 			return renderResult(Global.FALSE, "保存用户'" + user.getUsername() + "'失败，登录账号已存在");
 		}
 		if (StrUtil.isEmpty(user.getId())) {
+			BCryptPasswordEncoder bpe = new BCryptPasswordEncoder();
+			if(StrUtil.isEmpty(user.getPassword())) {
+				user.setPassword("Tangdao");
+			}
+			user.setPassword(bpe.encode(user.getPassword()));
 			userService.createUser(user);
 		} else {
 			userService.updateById(user);
