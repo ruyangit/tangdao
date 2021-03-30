@@ -1,7 +1,7 @@
 package com.tangdao.service.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.service.model.domain.UserDeveloper;
+import com.tangdao.service.model.domain.Developer;
 
 /**
  * 
@@ -12,6 +12,6 @@ import com.tangdao.service.model.domain.UserDeveloper;
  * @author ruyang
  * @since 2021年3月10日
  */
-public interface UserDeveloperMapper extends BaseMapper<UserDeveloper>{
+public interface DeveloperMapper extends BaseMapper<Developer>{
 
 }

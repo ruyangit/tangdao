@@ -21,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_user_developer")
-public class UserDeveloper extends DataEntity<UserDeveloper> {
+public class Developer extends DataEntity<Developer> {
 
 	private static final long serialVersionUID = 1652989610979690232L;
 
