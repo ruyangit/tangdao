@@ -34,8 +34,6 @@ public class WebExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
-		e.printStackTrace();
-		
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
 		commonResponse.fail(CommonApiCode.COMMON_SERVER_EXCEPTION);
 		commonResponse.put("message_description", ExceptionUtil.getMessage(e));

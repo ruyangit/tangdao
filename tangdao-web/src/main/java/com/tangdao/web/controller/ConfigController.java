@@ -37,8 +37,8 @@ public class ConfigController extends BaseController {
 	@Autowired
 	private ConfigService configService;
 
-	@GetMapping
-	public CommonResponse getByConfigKey(String configKey) {
+	@GetMapping("/get")
+	public CommonResponse get(String configKey) {
 		return renderResult(configService.getByConfigKey(configKey));
 	}
 
@@ -49,7 +49,7 @@ public class ConfigController extends BaseController {
 			queryWrapper.likeRight(Config::getConfigName, config.getConfigName());
 		}
 		if (StrUtil.isNotBlank(config.getConfigKey())) {
-			queryWrapper.likeRight(Config::getConfigKey, config.getConfigKey());
+			queryWrapper.like(Config::getConfigKey, config.getConfigKey());
 		}
 		return renderResult(configService.page(page, queryWrapper));
 	}

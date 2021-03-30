@@ -36,8 +36,8 @@ public abstract class BaseController {
 	 */
 	protected CommonResponse renderResult(Boolean result, String message, Object data) {
 		CommonResponse commonResponse = renderResult(data);
-		commonResponse.putData("result", result);
 		commonResponse.message(message);
+		commonResponse.result(result);
 		return commonResponse;
 	}
 
@@ -49,8 +49,6 @@ public abstract class BaseController {
 	 * @return
 	 */
 	protected CommonResponse renderResult(Object data) {
-		CommonResponse commonResponse = CommonResponse.createCommonResponse();
-		commonResponse.setData(data);
-		return commonResponse;
+		return CommonResponse.createCommonResponse(data);
 	}
 }

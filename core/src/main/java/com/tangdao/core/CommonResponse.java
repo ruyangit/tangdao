@@ -32,6 +32,8 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 
 	private static final String DATA = "data";
 
+	private static final String RESULT = "result";
+
 	private CommonResponse() {
 		super();
 		this.success();
@@ -39,17 +41,39 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 
 	public CommonResponse success() {
 		this.success(StringUtils.EMPTY);
+		this.result(true);
 		return this;
 	}
-	
+
+	public CommonResponse result(Boolean result) {
+		this.put(RESULT, result);
+		return this;
+	}
+
+	public CommonResponse code(String code) {
+		this.put(CODE, code);
+		return this;
+	}
+
 	public CommonResponse message(String message) {
 		this.put(MESSAGE, message);
 		return this;
 	}
 
+	public CommonResponse data(Object data) {
+		this.put(DATA, data);
+		return this;
+	}
+
 	public CommonResponse success(String message) {
-		this.put(CODE, OpenApiCode.SUCCESS);
+		this.code(OpenApiCode.SUCCESS);
 		this.message(message);
+		return this;
+	}
+
+	public CommonResponse success(String message, Object data) {
+		this.success(message);
+		this.data(data);
 		return this;
 	}
 
@@ -59,13 +83,10 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 	}
 
 	public CommonResponse fail(String code, String message) {
-		this.put(CODE, code);
-		this.put(MESSAGE, message);
+		this.code(code);
+		this.message(message);
+		this.result(false);
 		return this;
-	}
-
-	public CommonResponse setData(Object data) {
-		return putData(DATA, data);
 	}
 
 	public CommonResponse putData(String key, Object data) {
@@ -82,7 +103,7 @@ public class CommonResponse extends LinkedHashMap<String, Object> {
 	public static CommonResponse createCommonResponse(Object data) {
 		CommonResponse commonResponse = new CommonResponse();
 		commonResponse.success();
-		commonResponse.setData(data);
+		commonResponse.data(data);
 		return commonResponse;
 	}
 }
