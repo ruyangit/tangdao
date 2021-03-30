@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -50,8 +48,6 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 @EnableCaching
 public class CacheConfig extends CachingConfigurerSupport {
-
-	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Value("${redis.host:localhost}")
 	private String host;
@@ -209,7 +205,6 @@ public class CacheConfig extends CachingConfigurerSupport {
 
 	@Bean
 	public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
-		log.debug("redis cache-manager default:{}", this.regionDefault);
 		RedisCacheManager redisCacheManager = RedisCacheManager.builder(connectionFactory)
 				.cacheDefaults(getRedisCacheConfigurationWithTtl(this.regionDefault))
 				.withInitialCacheConfigurations(getRedisCacheConfigurationMap()).transactionAware().build();
