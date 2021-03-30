@@ -71,6 +71,7 @@
 			<artifactId>hutool-crypto</artifactId>
 			<version>${hutool.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-core</artifactId>
@@ -81,6 +82,7 @@
 			<artifactId>mybatis-plus-extension</artifactId>
 			<version>${mybatis-plus.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-messaging</artifactId>

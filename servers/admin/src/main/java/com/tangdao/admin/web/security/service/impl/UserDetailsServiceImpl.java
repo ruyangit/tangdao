@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.admin.web.security.model.AuthUser;
 import com.tangdao.admin.web.security.service.IUserDetailsService;
-import com.tangdao.core.model.domain.User;
-import com.tangdao.core.service.UserService;
+import com.tangdao.model.domain.User;
+import com.tangdao.service.provider.UserService;
 
 /**
  * <p>

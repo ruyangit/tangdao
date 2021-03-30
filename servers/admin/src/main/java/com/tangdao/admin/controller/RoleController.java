@@ -15,10 +15,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.config.Global;
-import com.tangdao.core.model.domain.Role;
-import com.tangdao.core.model.dto.RoleDTO;
-import com.tangdao.core.service.RoleService;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.model.domain.Role;
+import com.tangdao.model.dto.RoleDTO;
+import com.tangdao.service.provider.RoleService;
 
 import cn.hutool.core.util.StrUtil;
 

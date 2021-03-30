@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import com.tangdao.admin.web.security.model.AuthUser;
 import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.model.vo.SessionUser;
+import com.tangdao.core.model.SessionUser;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

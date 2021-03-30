@@ -15,10 +15,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
 import com.tangdao.core.config.Global;
-import com.tangdao.core.model.domain.User;
-import com.tangdao.core.model.dto.UserDTO;
-import com.tangdao.core.service.UserService;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.model.domain.User;
+import com.tangdao.model.dto.UserDTO;
+import com.tangdao.service.provider.UserService;
 
 import cn.hutool.core.util.StrUtil;
 

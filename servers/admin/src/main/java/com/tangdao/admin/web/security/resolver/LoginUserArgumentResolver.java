@@ -11,7 +11,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.tangdao.core.annotation.LoginUser;
 import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.model.vo.SessionUser;
+import com.tangdao.core.model.SessionUser;
 
 /**
  * <p>

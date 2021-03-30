@@ -16,9 +16,9 @@ import com.alibaba.fastjson.JSON;
 import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.model.domain.Log;
-import com.tangdao.core.model.vo.SessionUser;
-import com.tangdao.core.service.LogService;
+import com.tangdao.core.model.SysLog;
+import com.tangdao.core.model.SessionUser;
+import com.tangdao.core.service.ILogService;
 import com.tangdao.core.web.SpringUtils;
 import com.tangdao.core.web.filter.BodyReaderHttpServletRequestWrapper;
 
@@ -43,7 +43,7 @@ public class LogUtil {
 	 * 静态内部类，延迟加载，懒汉式，线程安全的单例模式
 	 */
 	private static final class Static {
-		private static LogService logService = SpringUtils.getBean(LogService.class);
+		private static ILogService logService = SpringUtils.getBean(ILogService.class);
 		private static TaskExecutor taskExecutor = SpringUtils.getBean(TaskExecutor.class);
 	}
 
@@ -104,17 +104,17 @@ public class LogUtil {
 			logTitle = "";
 		}
 		// 对象
-		Log log = new Log();
+		SysLog log = new SysLog();
 		log.setLogTitle(logTitle);
 		log.setLogType(logType);
 		if (StrUtil.isEmpty(logType)) {
 			String sqlCommandTypes = ObjectUtil.toString(request.getAttribute(SqlCommandType.class.getName()));
 			if (StrUtil.containsAny("," + sqlCommandTypes + ",", ",INSERT,", ",UPDATE,", ",DELETE,")) {
-				log.setLogType(Log.TYPE_UPDATE);
+				log.setLogType(SysLog.TYPE_UPDATE);
 			} else if (StrUtil.contains("," + sqlCommandTypes + ",", ",SELECT,")) {
-				log.setLogType(Log.TYPE_SELECT);
+				log.setLogType(SysLog.TYPE_SELECT);
 			} else {
-				log.setLogType(Log.TYPE_ACCESS);
+				log.setLogType(SysLog.TYPE_ACCESS);
 			}
 		}
 		log.setServerAddr(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());

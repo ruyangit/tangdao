@@ -6,7 +6,7 @@ package com.tangdao.core.context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tangdao.core.model.vo.SessionUser;
+import com.tangdao.core.model.SessionUser;
 
 /**
  * 
