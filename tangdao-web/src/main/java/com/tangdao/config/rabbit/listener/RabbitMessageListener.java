@@ -1,4 +1,4 @@
-package com.tangdao.core.config.rabbit.listener;
+package com.tangdao.config.rabbit.listener;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -6,7 +6,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.rabbitmq.client.Channel;
-import com.tangdao.core.config.rabbit.AbstartRabbitListener;
+import com.tangdao.config.rabbit.AbstartRabbitListener;
 import com.tangdao.core.constant.RabbitConstant;
 
 /**

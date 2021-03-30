@@ -1,4 +1,4 @@
-package com.tangdao.core.config.rabbit;
+package com.tangdao.config.rabbit;
 
 import java.util.HashMap;
 import java.util.Map;
