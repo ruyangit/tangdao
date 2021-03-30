@@ -12,10 +12,10 @@
 		<relativePath>../../</relativePath>
 	</parent>
 
-	<artifactId>tangdao-developer</artifactId>
+	<artifactId>tangdao-server-developer</artifactId>
 	
 	<properties>
-		<finalName>tangdao-developer</finalName>
+		<finalName>tangdao-developer-web</finalName>
 	</properties>
 
 	<dependencies>
