@@ -51,7 +51,7 @@ public class UserController extends BaseController {
 
 	@PostMapping("/save")
 	public CommonResponse save(@RequestBody UserDTO user) {
-		if (userService.checkUsernameExists(user.getOldUsername(), user.getUsername())) {
+		if (!userService.checkUsernameExists(user.getOldUsername(), user.getUsername())) {
 			return renderResult(Global.FALSE, "保存用户'" + user.getUsername() + "'失败，登录账号已存在");
 		}
 		if (StrUtil.isEmpty(user.getId())) {

@@ -42,7 +42,7 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
 		}
 		Object status = getFieldValByName(STATUS_FIELD, metaObject);
 		if (status == null) {
-			setFieldValByName(STATUS_FIELD, UserStatus.YES, metaObject);
+			setFieldValByName(STATUS_FIELD, UserStatus.YES.getValue(), metaObject);
 		}
 
 		this.updateFill(metaObject);
