@@ -4,8 +4,8 @@
 package com.tangdao.service.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.model.domain.User;
-import com.tangdao.model.vo.UserRole;
+import com.tangdao.service.model.domain.User;
+import com.tangdao.service.model.vo.UserRole;
 
 /**
  * 

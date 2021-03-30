@@ -4,7 +4,7 @@
 package com.tangdao.service.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.model.domain.DictType;
+import com.tangdao.service.model.domain.DictType;
 
 /**
  * 

@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.model.domain.DictData;
-import com.tangdao.model.domain.DictType;
 import com.tangdao.service.mapper.DictDataMapper;
+import com.tangdao.service.model.domain.DictData;
+import com.tangdao.service.model.domain.DictType;
 
 /**
  * <p>

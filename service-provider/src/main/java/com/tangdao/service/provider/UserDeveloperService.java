@@ -3,8 +3,8 @@ package com.tangdao.service.provider;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.service.BaseService;
-import com.tangdao.model.domain.UserDeveloper;
 import com.tangdao.service.mapper.UserDeveloperMapper;
+import com.tangdao.service.model.domain.UserDeveloper;
 
 /**
  * 

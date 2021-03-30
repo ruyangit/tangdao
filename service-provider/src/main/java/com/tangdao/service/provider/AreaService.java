@@ -3,8 +3,9 @@ package com.tangdao.service.provider;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.service.BaseService;
-import com.tangdao.model.domain.Area;
+import com.tangdao.service.IAreaService;
 import com.tangdao.service.mapper.AreaMapper;
+import com.tangdao.service.model.domain.Area;
 
 /**
  * 
@@ -16,6 +17,6 @@ import com.tangdao.service.mapper.AreaMapper;
  * @since 2021年3月10日
  */
 @Service
-public class AreaService extends BaseService<AreaMapper, Area> {
+public class AreaService extends BaseService<AreaMapper, Area> implements IAreaService{
 
 }

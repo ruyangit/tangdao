@@ -1,4 +1,4 @@
-package com.tangdao.model.domain;
+package com.tangdao.service.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

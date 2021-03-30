@@ -24,7 +24,7 @@ import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
 import com.tangdao.core.exception.BusinessException;
 import com.tangdao.core.model.SysLog;
 import com.tangdao.core.utils.LogUtil;
-import com.tangdao.model.domain.User;
+import com.tangdao.service.model.domain.User;
 import com.tangdao.service.provider.UserService;
 import com.tangdao.web.security.model.AuthUser;
 

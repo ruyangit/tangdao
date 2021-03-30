@@ -1,9 +1,9 @@
 /**
  *
  */
-package com.tangdao.model.dto;
+package com.tangdao.service.model.dto;
 
-import com.tangdao.model.domain.Role;
+import com.tangdao.service.model.domain.Role;
 
 import lombok.Getter;
 import lombok.Setter;

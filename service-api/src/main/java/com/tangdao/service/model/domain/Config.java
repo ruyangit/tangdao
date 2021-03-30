@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.model.domain;
+package com.tangdao.service.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,12 +16,12 @@ import lombok.Setter;
  * </p>
  *
  * @author ruyang
- * @since 2021年3月8日
+ * @since 2021年3月10日
  */
 @Getter
 @Setter
-@TableName("sys_role")
-public class Role extends DataEntity<Role> {
+@TableName("sys_config")
+public class Config extends DataEntity<Config> {
 
 	/**
 	 * 
@@ -31,12 +31,11 @@ public class Role extends DataEntity<Role> {
 	@TableId
 	private String id;
 
-	private String roleCode;
-	
-	private String roleName;
-	
-	private String status;
-	
+	private String configName;
+
+	private String configKey;
+
+	private String configValue;
+
 	private String remarks;
-	
 }

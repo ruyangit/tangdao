@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.model.domain;
+package com.tangdao.service.model.domain;
 
 import java.util.Date;
 

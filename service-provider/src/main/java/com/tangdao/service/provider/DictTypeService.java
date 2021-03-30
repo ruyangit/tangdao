@@ -6,8 +6,8 @@ package com.tangdao.service.provider;
 import org.springframework.stereotype.Service;
 
 import com.tangdao.core.service.BaseService;
-import com.tangdao.model.domain.DictType;
 import com.tangdao.service.mapper.DictTypeMapper;
+import com.tangdao.service.model.domain.DictType;
 
 /**
  * <p>

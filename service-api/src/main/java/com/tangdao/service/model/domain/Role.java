@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.model.domain;
+package com.tangdao.service.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -16,30 +16,27 @@ import lombok.Setter;
  * </p>
  *
  * @author ruyang
- * @since 2021年3月10日
+ * @since 2021年3月8日
  */
 @Getter
 @Setter
-@TableName("sys_dict_data")
-public class DictData extends DataEntity<DictData>{
+@TableName("sys_role")
+public class Role extends DataEntity<Role> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	@TableId
 	private String id;
 
-	private String dictType;
+	private String roleCode;
 	
-	private String dictKey;
+	private String roleName;
 	
-	private String dictLabel;
-	
-	private String dictValue;
-
 	private String status;
 	
 	private String remarks;
+	
 }

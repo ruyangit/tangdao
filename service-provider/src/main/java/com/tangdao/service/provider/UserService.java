@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.tangdao.core.service.BaseService;
-import com.tangdao.model.domain.User;
-import com.tangdao.model.dto.UserDTO;
-import com.tangdao.model.vo.UserRole;
 import com.tangdao.service.mapper.UserMapper;
+import com.tangdao.service.model.domain.User;
+import com.tangdao.service.model.dto.UserDTO;
+import com.tangdao.service.model.vo.UserRole;
 
 /**
  * <p>

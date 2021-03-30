@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.model.vo;
+package com.tangdao.service.model.vo;
 
 import java.io.Serializable;
 import java.util.List;

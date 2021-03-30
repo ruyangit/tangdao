@@ -1,11 +1,11 @@
 /**
  *
  */
-package com.tangdao.model.dto;
+package com.tangdao.service.model.dto;
 
 import java.util.List;
 
-import com.tangdao.model.domain.User;
+import com.tangdao.service.model.domain.User;
 
 import lombok.Getter;
 import lombok.Setter;

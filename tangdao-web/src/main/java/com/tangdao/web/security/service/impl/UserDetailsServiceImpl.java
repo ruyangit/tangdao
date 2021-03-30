@@ -10,7 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.model.domain.User;
+import com.tangdao.service.model.domain.User;
 import com.tangdao.service.provider.UserService;
 import com.tangdao.web.security.model.AuthUser;
 import com.tangdao.web.security.service.IUserDetailsService;
