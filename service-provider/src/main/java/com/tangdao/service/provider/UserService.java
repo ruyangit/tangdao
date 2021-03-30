@@ -12,7 +12,7 @@ import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.User;
 import com.tangdao.model.dto.UserDTO;
 import com.tangdao.model.vo.UserRole;
-import com.tangdao.service.dao.UserMapper;
+import com.tangdao.service.mapper.UserMapper;
 
 /**
  * <p>

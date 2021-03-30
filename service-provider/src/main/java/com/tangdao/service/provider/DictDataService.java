@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.DictData;
 import com.tangdao.model.domain.DictType;
-import com.tangdao.service.dao.DictDataMapper;
+import com.tangdao.service.mapper.DictDataMapper;
 
 /**
  * <p>

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.Area;
-import com.tangdao.service.dao.AreaMapper;
+import com.tangdao.service.mapper.AreaMapper;
 
 /**
  * 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.model.domain.Config;
-import com.tangdao.service.dao.ConfigMapper;
+import com.tangdao.service.mapper.ConfigMapper;
 
 /**
  * <p>

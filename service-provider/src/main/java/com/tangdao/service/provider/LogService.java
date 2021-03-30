@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.tangdao.core.model.SysLog;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.core.service.ILogService;
-import com.tangdao.service.dao.LogMapper;
+import com.tangdao.service.mapper.LogMapper;
 
 /**
  * <p>
