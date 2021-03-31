@@ -107,6 +107,9 @@
                 placeholder="请输入联系地址"
                 class="q-mt-sm"
               >
+                <template v-slot:append>
+                  <q-icon name="place" />
+                </template>
               </q-input>
             </div>
 
