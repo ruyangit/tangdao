@@ -37,6 +37,11 @@
           label="产品宣传页"
           to="/single"
         />
+        <q-btn
+          flat
+          :label="`${$q.lang.nativeName}`"
+          @click="watchLang"
+        />
       </div>
       <q-space />
 
@@ -288,6 +293,26 @@ export default {
         }
       }
     })
+  },
+  methods: {
+    watchLang () {
+      // console.log(this.$i18n.locale)
+      if (this.$i18n.locale === 'en-us') {
+        this.$i18n.locale = 'zh-hans'
+        import(
+          'quasar/lang/zh-hans'
+        ).then(lang => {
+          this.$q.lang.set(lang.default)
+        })
+      } else if (this.$i18n.locale === 'zh-hans') {
+        this.$i18n.locale = 'en-us'
+        import(
+          'quasar/lang/en-us'
+        ).then(lang => {
+          this.$q.lang.set(lang.default)
+        })
+      }
+    }
   }
 }
 </script>

@@ -60,6 +60,8 @@ a
 .my-table
   background: $light
   & .q-table
+    & th,td
+      padding: 8px 10px
     &__container
       border-radius: 4px
     &__card
@@ -72,7 +74,7 @@ a
           background: $grey-3
       & tbody
         & td
-          height: 38px
+          height: 40px
           &.action
             & > a
               margin-right: 10px
@@ -106,37 +108,6 @@ a
       max-height: 35px
 
 .my-form
-  & .q-label
-    display: inline-block
-    flex-grow: 0
-    overflow: hidden
-    white-space: nowrap
-    text-align: right
-    vertical-align: middle
-    &.text-left
-      text-align: left
-    & > label
-      position: relative
-      display: inline-flex
-      align-items: center
-      line-height: 40px
-    &::after
-      content: ":"
-      position: relative
-      top: -1px
-      margin: 0 15px 0 3px
-      font-weight: 400
-    &.required::before
-      content: "*"
-      position: relative
-      top: 1px
-      margin: 0 5px 0 10px
-      font-weight: 400
-      color: $negative
-  & .q-value
-    color: rgba(0,0,0,.65)
-    display: inline-block
-    line-height: 40px
   & .q-field
     &__bottom--animated
       left: -5px

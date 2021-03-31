@@ -3,5 +3,5 @@ import zhCN from './zh-cn'
 
 export default {
   'en-us': enUS,
-  'zh-cn': zhCN
+  'zh-hans': zhCN
 }

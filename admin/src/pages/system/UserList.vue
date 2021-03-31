@@ -13,7 +13,7 @@
           />
           <q-breadcrumbs-el label="用户列表" />
         </q-breadcrumbs>
-        <!-- <div class="my-page-header-subtitle">用户信息管理</div> -->
+        <div class="my-page-header-subtitle">{{$t('nativeName')}}</div>
       </div>
     </div>
 
@@ -51,6 +51,7 @@
               color="primary"
               label="新增用户"
               class="btn wd-90"
+              to="/sys/user/form"
             />
             <q-btn-dropdown
               color="primary"
