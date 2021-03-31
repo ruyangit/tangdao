@@ -12,7 +12,7 @@ const status = {
     color: 'positive'
   },
   2: {
-    label: '停用',
+    label: '无效',
     color: 'negative'
   }
 }

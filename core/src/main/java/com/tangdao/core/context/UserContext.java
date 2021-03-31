@@ -34,26 +34,6 @@ public class UserContext {
 
 	}
 
-	public enum UserStatus {
-		YES("0", "有效"), NO("1", "无效");
-
-		private String value;
-		private String title;
-
-		private UserStatus(String value, String title) {
-			this.value = value;
-			this.title = title;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public String getTitle() {
-			return title;
-		}
-	}
-
 	public enum BalanceStatus {
 		AVAIABLE("0", "可用"), WARNING("1", "告警中");
 

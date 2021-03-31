@@ -13,31 +13,72 @@
           />
           <q-breadcrumbs-el label="用户列表" />
         </q-breadcrumbs>
+        <!-- <div class="my-page-header-subtitle">用户信息管理</div> -->
       </div>
     </div>
 
     <div class="my-page-body">
       <div class="my-table">
         <div class="my-search">
-          <div class="row q-col-gutter-md">
-            <div class="col-12 col-sm-3 col-lg-2">
-              <label for="username">登录账号</label>
-              <q-input
-                outlined
-                dense
-                no-error-icon
-                v-model.trim="form.username"
-                placeholder="请输入登录账号"
-              >
-              </q-input>
-            </div>
-            <div class="col-12 col-sm-1 col-lg-1">
-              <q-btn
-                color="primary"
-                label="查询"
-                :class="`wd-80 ${$q.screen.gt.xs?'sbtn':''}`"
-              />
-            </div>
+          <div class="q-gutter-md row items-start">
+            <q-input
+              outlined
+              dense
+              v-model.trim="form.username"
+              placeholder="请输入登录账号"
+              style="width: 250px"
+            >
+            </q-input>
+            <q-select
+              outlined
+              dense
+              emit-value
+              map-options
+              options-dense
+              v-model="form.status"
+              :options="[{label: '正常', value: 0 },{label: '无效', value: 2}]"
+              label="用户状态"
+              style="width: 150px"
+            />
+            <q-btn
+              color="primary"
+              label="查询"
+              class="btn wd-80"
+            />
+            <q-space />
+            <q-btn
+              outline
+              color="primary"
+              label="新增用户"
+              class="btn wd-90"
+            />
+            <q-btn-dropdown
+              color="primary"
+              label="更多"
+              class="btn"
+            >
+              <q-list>
+                <q-item
+                  dense
+                  clickable
+                  v-close-popup
+                >
+                  <q-item-section>
+                    <q-item-label>导入</q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item
+                  dense
+                  clickable
+                  v-close-popup
+                >
+                  <q-item-section>
+                    <q-item-label>导出</q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-btn-dropdown>
           </div>
         </div>
         <q-table
@@ -197,7 +238,7 @@ export default {
       const filter = props.filter
       this.loading = true
       await this.$fetchData({
-        url: '/user/record',
+        url: '/user/page',
         method: 'GET',
         params: { current: page, size: rowsPerPage, username: filter }
       }).then(response => {

@@ -9,7 +9,7 @@ import org.apache.ibatis.reflection.MetaObject;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.context.UserContext.UserStatus;
+import com.tangdao.core.model.BaseModel;
 
 import cn.hutool.core.util.StrUtil;
 
@@ -42,7 +42,7 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
 		}
 		Object status = getFieldValByName(STATUS_FIELD, metaObject);
 		if (status == null) {
-			setFieldValByName(STATUS_FIELD, UserStatus.YES.getValue(), metaObject);
+			setFieldValByName(STATUS_FIELD, BaseModel.NORMAL, metaObject);
 		}
 
 		this.updateFill(metaObject);

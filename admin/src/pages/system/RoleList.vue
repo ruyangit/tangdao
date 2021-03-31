@@ -19,24 +19,38 @@
     <div class="my-page-body">
       <div class="my-table">
         <div class="my-search">
-          <div class="row q-col-gutter-md">
-            <div class="col-12 col-sm-3 col-lg-2">
-              <label for="">角色名称</label>
-              <q-input
-                outlined
-                dense
-                v-model.trim="form.roleName"
-                placeholder="请输入角色名称"
-              >
-              </q-input>
-            </div>
-            <div class="col-12 col-sm-1 col-lg-1">
-              <q-btn
-                color="primary"
-                label="查询"
-                :class="`wd-80 ${$q.screen.gt.xs?'sbtn':''}`"
-              />
-            </div>
+          <div class="q-gutter-md row items-start">
+            <q-input
+              outlined
+              dense
+              v-model.trim="form.roleName"
+              placeholder="请输入角色名称"
+              style="width: 250px"
+            >
+            </q-input>
+            <q-select
+              outlined
+              dense
+              emit-value
+              map-options
+              options-dense
+              v-model="form.status"
+              :options="[{label: '正常', value: 0 },{label: '无效', value: 2}]"
+              label="角色状态"
+              style="width: 150px"
+            />
+            <q-btn
+              color="primary"
+              label="查询"
+              class="btn wd-80"
+            />
+            <q-space />
+            <q-btn
+              outline
+              color="primary"
+              label="新增角色"
+              class="btn wd-90"
+            />
           </div>
         </div>
         <q-table
@@ -155,7 +169,7 @@ export default {
       const filter = props.filter
       this.loading = true
       await this.$fetchData({
-        url: '/role/record',
+        url: '/role/page',
         method: 'GET',
         params: { current: page, size: rowsPerPage, roleName: filter }
       }).then(response => {
