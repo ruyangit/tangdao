@@ -5,7 +5,7 @@ package com.tangdao.service.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.model.DataEntity;
+import com.tangdao.core.model.TreeEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_dict_data")
-public class DictData extends DataEntity<DictData>{
+public class DictData extends TreeEntity<DictData>{
 
 	/**
 	 * 

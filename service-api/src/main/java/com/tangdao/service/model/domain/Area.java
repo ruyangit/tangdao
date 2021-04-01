@@ -21,13 +21,11 @@ public class Area extends DataEntity<Area> {
 	private static final long serialVersionUID = 1L;
 
 	@TableId
-	private String areaCode; // 区域编码
-	
+	private String id; // 区域编码
+
 	private String areaName;
 
-	public static final Integer AREA_CODE_ALLOVER_COUNTRY = 0;
-	
-	public Area() {
-		super();
-	}
+	private String status;
+
+	private String remarks;
 }

@@ -22,7 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class DataEntity<T> extends BaseModel {
+public abstract class DataEntity<T> extends BaseModel {
 
 	/**
 	 * 
