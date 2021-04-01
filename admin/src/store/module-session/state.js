@@ -56,10 +56,10 @@ export default function () {
         path: 'sys/log'
       },
       {
-        id: 'image',
+        id: 'icons',
         name: '字体图标',
         icon: 'font_download',
-        path: 'image'
+        path: 'icons'
       }
     ]
   }
