@@ -16,8 +16,8 @@ import com.alibaba.fastjson.JSON;
 import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.model.SysLog;
 import com.tangdao.core.model.SessionUser;
+import com.tangdao.core.model.SysLog;
 import com.tangdao.core.service.ILogService;
 import com.tangdao.core.web.SpringUtils;
 import com.tangdao.core.web.filter.BodyReaderHttpServletRequestWrapper;
@@ -38,7 +38,7 @@ import cn.hutool.http.useragent.UserAgentUtil;
  * @since 2021年3月19日
  */
 public class LogUtil {
-
+	
 	/**
 	 * 静态内部类，延迟加载，懒汉式，线程安全的单例模式
 	 */
@@ -136,11 +136,11 @@ public class LogUtil {
 		if (handlerMethod != null && StrUtil.isBlank(log.getRequestParams())) {
 			try {
 				BodyReaderHttpServletRequestWrapper rw = new BodyReaderHttpServletRequestWrapper(request);
+//				log.setRequestParams(StrUtil.maxLength(JSON.toJSONString(rw.getRequestBody()), 5000));
 				log.setRequestParams(StrUtil.maxLength(StrUtil.trim(
 						Base64.decodeStr(JSON.toJSONString(rw.getRequestBody())).replace("\n", "").replace("\t", "")),
 						5000));
-			} catch (IOException e) {
-			}
+			} catch (IOException e) {}
 		}
 		// 耗时
 		log.setExecuteTime(executeTime);

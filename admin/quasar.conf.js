@@ -114,8 +114,8 @@ module.exports = function (ctx) {
         'SessionStorage',
         // 'Cookies',
         'Meta',
-        'Notify'
-        // 'Dialog'
+        'Notify',
+        'Dialog'
       ],
 
       config: {
