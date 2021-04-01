@@ -32,9 +32,9 @@ export default function () {
             path: 'role'
           },
           {
-            id: 'dict',
+            id: 'dictType',
             name: '字典管理',
-            path: 'dict'
+            path: 'dictType'
           },
           {
             id: 'config',

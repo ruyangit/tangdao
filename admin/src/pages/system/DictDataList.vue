@@ -128,8 +128,8 @@
 
 <script>
 export default {
-  name: 'DictList',
-  meta: { title: '字典管理' },
+  name: 'DictDataList',
+  meta: { title: '字典数据' },
   data () {
     return {
       loading: false,
@@ -170,7 +170,7 @@ export default {
       this.form.current = page
       this.form.size = rowsPerPage
       await this.$fetchData({
-        url: '/dict/page',
+        url: '/dictType/page',
         method: 'GET',
         params: this.form
       }).then(response => {
