@@ -33,7 +33,10 @@
       </q-banner>
       <div class="row">
         <div class="col-md-8 col-12">
-        <QHighcharts :options="elevationOptions"  id="container"/>
+          <QHighcharts
+            :options="elevationOptions"
+            id="container"
+          />
         </div>
         <div :class="`col-md-4 col-12 ${$q.screen.gt.sm?'q-pl-md':'q-mt-md'}`">
           <q-card flat>
@@ -68,8 +71,15 @@
             <q-card-section class="text-subitle2">
               <q-scroll-area style="height:280px">
                 <div class="row q-col-gutter-md">
-                  <div class="col-12 col-sm-6 col-md-4" v-for="i in 8" :key="i">
-                    <q-card flat class="bg-primary text-white" >
+                  <div
+                    class="col-12 col-sm-6 col-md-4"
+                    v-for="i in 8"
+                    :key="i"
+                  >
+                    <q-card
+                      flat
+                      class="bg-primary text-white"
+                    >
                       <q-card-section>
                         <div class="text-h6 row no-wrap items-center">
                           <div class="ellipsis text-capitalize">Title</div>
@@ -86,7 +96,7 @@
           </q-card>
         </div>
       </div>
-     </div>
+    </div>
   </q-page>
 </template>
 
@@ -99,6 +109,7 @@ annotationsInit(Highcharts)
 
 export default {
   name: 'PageIndex',
+  meta: { title: '分析页' },
   data () {
     return {
       elevationData: []

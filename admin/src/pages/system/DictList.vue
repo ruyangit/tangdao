@@ -19,7 +19,7 @@
     </div>
     <div class="my-page-body">
       <div class="row q-col-gutter-md">
-        <div class="col-12 col-sm-4 col-lg-4">
+        <div class="col-12 col-lg-3">
           <q-card
             flat
             class="fit"
@@ -50,69 +50,70 @@
               />
             </q-card-section>
             <q-separator />
-            <q-card-section class="q-pa-sm">
-              <q-input
-                dense
-                label="请输入菜单名称搜索"
-              >
-                <template v-slot:append>
-                  <q-icon name="search" />
-                </template>
-              </q-input>
+            <q-card-section class="q-pa-none q-mb-lg">
+              <q-list separator>
+                <q-item-label
+                  header
+                  class="q-pa-none"
+                >
+                  <q-input
+                    dense
+                    label="请输入字典类型名称"
+                  >
+                    <template v-slot:append>
+                      <q-icon name="search" />
+                    </template>
+                  </q-input>
+                </q-item-label>
+                <q-item
+                  clickable
+                  v-ripple
+                >
+                  <q-item-section>
+                    <q-item-label>Content filtering</q-item-label>
+                    <q-item-label caption>
+                      Set the content filtering level to restrict
+                      apps that can be downloaded
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+
+                <q-item
+                  clickable
+                  v-ripple
+                >
+                  <q-item-section>
+                    <q-item-label>Password</q-item-label>
+                    <q-item-label caption>
+                      Require password for purchase or use
+                      password to restrict purchase
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
             </q-card-section>
-            <q-scroll-area
-              class="fit"
-              style="background:#fff;"
-            >
-              123123123
-            </q-scroll-area>
           </q-card>
         </div>
-        <div class="col-12 col-sm-8 col-lg-8">
+        <div class="col-12 col-lg-9">
           <q-card
             flat
             class="fit"
           >
-            <q-card-section>
-              <q-icon
-                name="content_paste"
-                size="18px"
-              /> 编辑菜单
+            <q-card-section class="row q-pa-sm">
+              <q-btn
+                flat
+                icon="apps"
+                label="字典列表"
+              />
+              <q-space />
+              <q-btn
+                outline
+                color="primary"
+                label="新增数据"
+              />
             </q-card-section>
             <q-separator />
-            <q-form
-              class="my-form"
-              @submit="onSubmit"
-            >
-              <q-card-section class="row q-col-gutter-md">
-                <div class="col-12 col-md-6 col-lg-4">
-                  <label for="name">菜单名称</label>
-                  <q-input
-                    outlined
-                    dense
-                    no-error-icon
-                    v-model.trim="form.name"
-                    placeholder="请输入菜单名称"
-                    :rules="[ val => val && val.length > 0 || '请设置菜单名称']"
-                    class="q-mt-sm"
-                  >
-                  </q-input>
-                </div>
-              </q-card-section>
-              <q-card-actions class="q-pa-md">
-                <q-btn
-                  color="primary"
-                  class="wd-80"
-                  type="submit"
-                >保存</q-btn>
-                <q-btn
-                  outline
-                  color="primary"
-                  class="wd-80"
-                  type="reset"
-                >重置</q-btn>
-              </q-card-actions>
-            </q-form>
+
           </q-card>
 
         </div>
@@ -123,7 +124,8 @@
 
 <script>
 export default {
-  name: 'Menu',
+  name: 'DictList',
+  meta: { title: '字典管理' },
   data () {
     return {
       loading: false,

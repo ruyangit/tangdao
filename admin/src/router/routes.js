@@ -28,7 +28,7 @@ const routes = [
           { path: 'user/form', name: 'userForm', component: () => import('pages/system/UserForm.vue') },
           { path: 'role', name: 'role', component: () => import('pages/system/RoleList.vue') },
           { path: 'config', name: 'config', component: () => import('pages/system/ConfigList.vue') },
-          { path: 'dict', name: 'dict', component: () => import('pages/system/DictData.vue') },
+          { path: 'dict', name: 'dict', component: () => import('src/pages/system/DictList.vue') },
           { path: 'log', name: 'log', component: () => import('pages/system/LogList.vue') },
           { path: 'job', name: 'job', component: () => import('pages/form/AdvancedForm.vue') }
         ]
