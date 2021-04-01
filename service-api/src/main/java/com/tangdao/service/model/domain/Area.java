@@ -2,7 +2,7 @@ package com.tangdao.service.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tangdao.core.model.DataEntity;
+import com.tangdao.core.model.TreeEntity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_area")
-public class Area extends DataEntity<Area> {
+public class Area extends TreeEntity<Area> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -24,6 +24,8 @@ public class Area extends DataEntity<Area> {
 	private String id; // 区域编码
 
 	private String areaName;
+	
+	private String areaType;
 
 	private String status;
 
