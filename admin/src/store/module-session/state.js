@@ -18,6 +18,7 @@ export default function () {
           {
             id: 'user',
             name: '用户列表',
+            icon: 'supervised_user_circle',
             path: 'user'
           },
           {
@@ -39,13 +40,14 @@ export default function () {
             id: 'job',
             name: '调度管理',
             path: 'job'
-          },
-          {
-            id: 'log',
-            name: '日志监控',
-            path: 'log'
           }
         ]
+      },
+      {
+        id: 'log',
+        name: '日志监控',
+        icon: 'library_books',
+        path: 'sys/log'
       }
     ]
   }

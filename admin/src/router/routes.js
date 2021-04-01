@@ -27,6 +27,7 @@ const routes = [
           { path: 'user', name: 'user', component: () => import('pages/system/UserList.vue') },
           { path: 'user/form', name: 'userForm', component: () => import('pages/system/UserForm.vue') },
           { path: 'role', name: 'role', component: () => import('pages/system/RoleList.vue') },
+          { path: 'log', name: 'log', component: () => import('pages/system/LogList.vue') },
           { path: 'job', name: 'job', component: () => import('pages/form/AdvancedForm.vue') }
         ]
       }
