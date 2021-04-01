@@ -113,7 +113,7 @@
                 <a
                   class="text-primary"
                   href="javascript:;"
-                  v-biz-delete:refresh="{data:{ id: props.row.id }, url:'/sys/user/delete'}"
+                  v-biz-delete:refresh="{data:{ id: props.row.id }, url:'/sys/role/delete'}"
                 >删除</a>
               </q-td>
             </q-tr>
@@ -159,18 +159,18 @@ export default {
     onRefresh () {
       this.pagination.page = 0
       this.onRequest({
-        pagination: this.pagination,
-        filter: null
+        pagination: this.pagination
       })
     },
     async onRequest (props) {
       const { page, rowsPerPage, sortBy, descending } = props.pagination
-      const filter = props.filter
       this.loading = true
+      this.form.current = page
+      this.form.size = rowsPerPage
       await this.$fetchData({
         url: '/role/page',
         method: 'GET',
-        params: { current: page, size: rowsPerPage, roleName: filter }
+        params: this.form
       }).then(response => {
         const { code, data } = response.data
         if (code === '0' && data) {

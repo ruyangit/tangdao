@@ -230,18 +230,18 @@ export default {
     onRefresh () {
       this.pagination.page = 0
       this.onRequest({
-        pagination: this.pagination,
-        filter: null
+        pagination: this.pagination
       })
     },
     async onRequest (props) {
       const { page, rowsPerPage, sortBy, descending } = props.pagination
-      const filter = props.filter
       this.loading = true
+      this.form.current = page
+      this.form.size = rowsPerPage
       await this.$fetchData({
         url: '/user/page',
         method: 'GET',
-        params: { current: page, size: rowsPerPage, username: filter }
+        params: this.form
       }).then(response => {
         const { code, data } = response.data
         if (code === '0' && data) {
