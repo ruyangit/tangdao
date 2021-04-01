@@ -6,10 +6,11 @@ package com.tangdao.web.security.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
+import com.tangdao.core.exception.BusinessException;
 import com.tangdao.service.model.domain.User;
 import com.tangdao.service.provider.UserService;
 import com.tangdao.web.security.model.AuthUser;
@@ -34,15 +35,14 @@ public class UserDetailsServiceImpl implements IUserDetailsService {
 		// TODO Auto-generated method stub
 		User user = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
 		if (user == null) {
-//			throw new BusinessException(CommonApiCode.COMMON_APPKEY_INVALID);
+			throw new BusinessException(CommonApiCode.COMMON_APPKEY_INVALID);
 		}
 		AuthUser authUser = new AuthUser();
-		authUser.setId("1");
-		authUser.setUsername("system");
-		authUser.setUserType("1");
-		authUser.setMgrType("1");
-		BCryptPasswordEncoder bpe = new BCryptPasswordEncoder();
-		authUser.setPassword(bpe.encode("system"));
+		authUser.setId(user.getId());
+		authUser.setUsername(user.getUsername());
+		authUser.setUserType(user.getUserType());
+		authUser.setMgrType(user.getMgrType());
+		authUser.setPassword(user.getPassword());
 		return authUser;
 	}
 

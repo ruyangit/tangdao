@@ -276,8 +276,6 @@
 <script>
 export default {
   name: 'UserForm',
-  components: {
-  },
   meta: { title: '用户表单' },
   data () {
     return {
@@ -298,7 +296,8 @@ export default {
       selected: [],
       form: {
         userType: '1',
-        mgrType: '1'
+        mgrType: '1',
+        userIds: []
       }
     }
   },
@@ -315,15 +314,14 @@ export default {
     },
     async onRequest (props) {
       const { page, rowsPerPage, sortBy, descending } = props.pagination
-      const filter = props.filter
       this.loading = true
       await this.$fetchData({
         url: '/role/page',
         method: 'GET',
-        params: { current: page, size: rowsPerPage, roleName: filter }
+        params: { current: page, size: rowsPerPage, status: '0' }
       }).then(response => {
-        const { code, data } = response.data
-        if (code === '0' && data) {
+        const { result, data } = response.data
+        if (result && data) {
           this.pagination.page = data.current
           this.pagination.rowsNumber = data.total
           this.pagination.rowsPerPage = data.size
@@ -339,8 +337,26 @@ export default {
         this.loading = false
       }, 1000)
     },
-    onSubmit () {
-
+    async onSubmit () {
+      this.loading = true
+      this.form.userIds = this.selected ? this.selected.map(item => item.id) : []
+      await this.$fetchData({
+        url: '/user/save',
+        data: this.form
+      }).then(response => {
+        const { result, message } = response.data
+        if (result) {
+          this.$q.notify({ type: 'positive', message })
+          this.$router.go(-1)
+        } else {
+          this.$q.notify({ message })
+        }
+      }).catch(error => {
+        console.error(error)
+      })
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
     }
   }
 }

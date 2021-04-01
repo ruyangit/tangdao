@@ -93,7 +93,6 @@ module.exports = function (ctx) {
     framework: {
       iconSet: 'material-icons', // Quasar icon set
       lang: 'en-us', // Quasar language pack
-      config: {},
 
       // Possible values for "importStrategy":
       // * 'auto' - (DEFAULT) Auto-import needed Quasar components & directives
@@ -109,14 +108,19 @@ module.exports = function (ctx) {
 
       // Quasar plugins
       plugins: [
-        'Loading',
+        // 'Loading',
+        // 'LoadingBar',
         'LocalStorage',
         'SessionStorage',
-        'Cookies',
+        // 'Cookies',
         'Meta',
-        'Notify',
-        'Dialog'
-      ]
+        'Notify'
+        // 'Dialog'
+      ],
+
+      config: {
+        loadingBar: {}
+      },
     },
 
     // animations: 'all', // --- includes all animations
