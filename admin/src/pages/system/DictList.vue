@@ -52,18 +52,8 @@
             <q-separator />
             <q-card-section class="q-pa-none q-mb-lg">
               <q-list separator>
-                <q-item-label
-                  header
-                  class="q-pa-none"
-                >
-                  <q-input
-                    dense
-                    label="请输入字典类型名称"
-                  >
-                    <template v-slot:append>
-                      <q-icon name="search" />
-                    </template>
-                  </q-input>
+                <q-item-label header>
+                  字典管理
                 </q-item-label>
                 <q-item
                   clickable
@@ -103,7 +93,7 @@
               <q-btn
                 flat
                 icon="apps"
-                label="字典列表"
+                label="字典数据"
               />
               <q-space />
               <q-btn

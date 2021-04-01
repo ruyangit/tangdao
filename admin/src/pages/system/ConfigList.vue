@@ -140,7 +140,7 @@ export default {
         { name: 'configKey', label: '配置键', align: 'left', field: 'configKey', style: 'width: 260px' },
         { name: 'configValue', label: '配置值', align: 'left', field: 'configValue', style: 'width: 200px' },
         { name: 'remarks', label: '备注', align: 'left', field: 'remarks' },
-        { name: 'createDate', label: '创建时间', field: 'createDate', sortable: true, style: 'width: 120px' },
+        { name: 'createDate', label: '创建时间', field: 'createDate', align: 'left', sortable: true, style: 'width: 120px' },
         { name: 'action', label: '操作', align: 'center', field: 'action', style: 'width: 180px' }
       ],
       data: [],

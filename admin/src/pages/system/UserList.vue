@@ -213,7 +213,7 @@ export default {
         { name: 'lastLoginIp', label: '最后登录时间', field: 'lastLoginIp', style: 'width: 200px' },
         { name: 'remarks', label: '备注', align: 'left', field: 'remarks' },
         { name: 'status', label: '状态', field: 'status', align: 'left', sortable: true, style: 'width: 80px' },
-        { name: 'createDate', label: '创建时间', field: 'createDate', sortable: true, style: 'width: 120px' },
+        { name: 'createDate', label: '创建时间', field: 'createDate', align: 'left', sortable: true, style: 'width: 120px' },
         { name: 'action', label: '操作', align: 'center', field: 'action', style: 'width: 180px' }
       ],
       user: {},
