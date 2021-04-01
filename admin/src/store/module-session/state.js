@@ -18,12 +18,13 @@ export default function () {
           {
             id: 'user',
             name: '用户列表',
-            icon: 'supervised_user_circle',
+            icon: 'account_box',
             path: 'user'
           },
           {
             id: 'role',
             name: '角色列表',
+            icon: 'security',
             path: 'role'
           },
           {
@@ -35,13 +36,14 @@ export default function () {
             id: 'config',
             name: '配置列表',
             path: 'config'
-          },
-          {
-            id: 'job',
-            name: '调度管理',
-            path: 'job'
           }
         ]
+      },
+      {
+        id: 'job',
+        name: '调度管理',
+        icon: 'insert_chart_outlined',
+        path: 'sys/job'
       },
       {
         id: 'log',
