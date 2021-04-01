@@ -9,22 +9,26 @@ export default function () {
     },
     menus: [
       {
+        id: 'overview',
+        name: '分析页',
+        icon: 'broken_image',
+        path: 'overview'
+      },
+      {
         id: 'sys',
         name: '系统管理',
-        icon: 'settings',
+        icon: 'settings_applications',
         path: 'sys',
         opened: true,
         children: [
           {
             id: 'user',
             name: '用户列表',
-            icon: 'account_box',
             path: 'user'
           },
           {
             id: 'role',
             name: '角色列表',
-            icon: 'security',
             path: 'role'
           },
           {
@@ -42,14 +46,20 @@ export default function () {
       {
         id: 'job',
         name: '调度管理',
-        icon: 'insert_chart_outlined',
+        icon: 'insert_chart',
         path: 'sys/job'
       },
       {
         id: 'log',
         name: '日志监控',
-        icon: 'library_books',
+        icon: 'casino',
         path: 'sys/log'
+      },
+      {
+        id: 'image',
+        name: '字体图标',
+        icon: 'font_download',
+        path: 'image'
       }
     ]
   }

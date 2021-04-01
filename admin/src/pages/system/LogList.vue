@@ -134,7 +134,13 @@
               :props="props"
             >
               <q-td colspan="100%">
-                <div class="text-left">This is expand slot for row above: {{ props.row.username }}.</div>
+                <div class="text-left">
+                  {{ props.row.serverAddr }}{{ props.row.requestUri }}<br />
+                  {{ props.row.description }}<br />
+                  {{ props.row.requestMethod }}<br />
+                  {{ props.row.requestParams }}<br />
+                  {{ props.row.userAgent }}<br />
+                </div>
               </q-td>
             </q-tr>
           </template>
@@ -155,8 +161,8 @@ export default {
         sortBy: null,
         descending: false,
         page: 1,
-        rowsPerPage: 20,
-        rowsNumber: 20
+        rowsPerPage: 15,
+        rowsNumber: 15
       },
       columns: [
         { name: 'expand', field: 'expand' },

@@ -31,7 +31,8 @@ const routes = [
           { path: 'log', name: 'log', component: () => import('pages/system/LogList.vue') },
           { path: 'job', name: 'job', component: () => import('pages/form/AdvancedForm.vue') }
         ]
-      }
+      },
+      { path: 'image', name: 'image', component: () => import('pages/form/Image.vue') }
 
     ]
   },
