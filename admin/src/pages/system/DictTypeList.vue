@@ -125,10 +125,17 @@
     </div>
     <q-dialog v-model="dictTypeEdit">
       <q-card style="width: 600px">
-        <q-card-section class="text-subtitle1">
-          新增字典
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6"> 新增字典</div>
+          <q-space />
+          <q-btn
+            icon="close"
+            flat
+            round
+            dense
+            v-close-popup
+          />
         </q-card-section>
-        <q-separator />
         <q-form
           class="my-form gutter"
           @submit="onSubmit"
@@ -226,6 +233,12 @@
             />
           </q-card-actions>
         </q-form>
+        <q-inner-loading :showing="loading">
+          <q-spinner-hourglass
+            size="sm"
+            color="primary"
+          />
+        </q-inner-loading>
       </q-card>
     </q-dialog>
   </q-page>
@@ -257,8 +270,10 @@ export default {
       form: {
         dictName: null
       },
-      dictTypeEdit: true,
-      dictTypeForm: {}
+      dictTypeEdit: false,
+      dictTypeForm: {
+        status: '0'
+      }
     }
   },
   mounted () {
@@ -298,8 +313,26 @@ export default {
         this.loading = false
       }, 1000)
     },
-    onSubmit () {
-
+    async onSubmit () {
+      this.loading = true
+      await this.$fetchData({
+        url: '/dictType/save',
+        data: this.dictTypeForm
+      }).then(response => {
+        const { result, message } = response.data
+        if (result) {
+          this.$q.notify({ type: 'positive', message })
+          this.dictTypeEdit = false
+          this.onRefresh()
+        } else {
+          this.$q.notify({ message })
+        }
+      }).catch(error => {
+        console.error(error)
+      })
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
     }
   }
 }

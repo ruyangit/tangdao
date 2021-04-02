@@ -57,4 +57,10 @@ public class DictTypeController extends BaseController {
 		dictTypeService.saveOrUpdate(dictType);
 		return renderResult(Global.TRUE, "保存成功");
 	}
+	
+	@PostMapping("/delete")
+	public CommonResponse delete(@RequestBody DictTypeDTO dictType) {
+		dictTypeService.deleteDictType(dictType);
+		return renderResult(Global.TRUE, "删除成功");
+	}
 }

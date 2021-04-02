@@ -6,6 +6,7 @@ package com.tangdao.service.provider;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
@@ -42,6 +43,11 @@ public class DictDataService extends BaseService<DictDataMapper, DictData> {
 	public DictData getByDictTypeAndKey(DictType dictType, String dictKey) {
 		return super.getOne(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType)
 				.eq(DictData::getStatus, DictData.NORMAL).eq(DictData::getDictKey, dictKey));
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
+	public boolean deleteByDictType(String dictType) {
+		return super.remove(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType));
 	}
 
 }
