@@ -12,7 +12,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.service.mapper.DictDataMapper;
 import com.tangdao.service.model.domain.DictData;
-import com.tangdao.service.model.domain.DictType;
+
+import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -25,29 +26,34 @@ import com.tangdao.service.model.domain.DictType;
 @Service
 public class DictDataService extends BaseService<DictDataMapper, DictData> {
 
-	public List<DictData> findByDictType(DictType dictType) {
-		return super.list(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType).eq(DictData::getStatus,
-				DictData.NORMAL));
-	}
-
-	public DictData getByDictTypeAndLabel(DictType dictType, String dictLabel) {
-		return super.getOne(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType)
-				.eq(DictData::getStatus, DictData.NORMAL).eq(DictData::getDictLabel, dictLabel));
-	}
-
-	public DictData getByDictTypeAndValue(DictType dictType, String dictValue) {
-		return super.getOne(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType)
-				.eq(DictData::getStatus, DictData.NORMAL).eq(DictData::getDictValue, dictValue));
-	}
-
-	public DictData getByDictTypeAndKey(DictType dictType, String dictKey) {
-		return super.getOne(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType)
-				.eq(DictData::getStatus, DictData.NORMAL).eq(DictData::getDictKey, dictKey));
-	}
-	
 	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteByDictType(String dictType) {
 		return super.remove(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType));
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public boolean saveOrUpdate(DictData dictData) {
+		if (StrUtil.isEmpty(dictData.getPid()) || DictData.ROOT_ID.equals(dictData.getPid())) {
+			dictData.setPid(DictData.ROOT_ID);
+			dictData.setPids(dictData.getPid() + ",");
+			dictData.setTreeNames(dictData.getDictLabel());
+		}
+		// 赋值父类数据
+		if (!DictData.ROOT_ID.equals(dictData.getPid())) {
+			DictData pDictData = super.getById(dictData.getPid());
+			dictData.setPids(pDictData.getPids() + pDictData + ",");
+			dictData.setTreeNames(pDictData.getTreeNames() + "/");
+		}
+
+		// 保存或更新数据
+		super.saveOrUpdate(dictData);
+
+		List<DictData> children = super.list(
+				Wrappers.<DictData>lambdaQuery().like(DictData::getPids, dictData.getId()));
+		children.stream().forEach(item -> {
+
+		});
+		return true;
 	}
 
 }

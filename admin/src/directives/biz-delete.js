@@ -16,21 +16,16 @@ export default {
               data: binding.value.data
             }).then(response => {
               vnode.context.loading = false
-              const { code, message, data } = response.data
-              if (code === 0 && data) {
-                _that.$q.notify({
-                  type: 'positive',
-                  message: '删除成功'
-                })
+              const { result, message } = response.data
+              if (result) {
+                _that.$q.notify({ type: 'positive', message })
                 if (binding.arg === 'refresh' && vnode.context.onRefresh) {
                   vnode.context.onRefresh()
                 } else if (binding.arg === 'goback') {
                   vnode.context.$router.go(-1)
                 }
               } else {
-                _that.$q.notify({
-                  message
-                })
+                _that.$q.notify({ message })
               }
             }).catch(error => {
               vnode.context.loading = false

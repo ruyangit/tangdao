@@ -20,23 +20,25 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class TreeEntity<T> extends DataEntity<T> {
+public abstract class TreeEntity<T> extends DataEntity<T> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String pid;
+	public static String ROOT_ID = "0";
 
-	private String pids;
+	public String pid;
 
-	private Integer treeSort;
+	public String pids;
 
-	private String treeNames;
+	public Integer treeSort;
+
+	public String treeNames;
 
 	@TableField(exist = false)
-	protected List<T> children;
+	public List<T> children;
 
 	public void addChild(T node) {
 		this.children.add(node);

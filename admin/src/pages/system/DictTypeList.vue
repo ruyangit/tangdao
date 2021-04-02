@@ -51,7 +51,7 @@
               color="primary"
               label="新增字典"
               class="btn wd-90"
-              @click="dictTypeEdit = true"
+              @click="onAdd"
             />
           </div>
         </div>
@@ -79,16 +79,24 @@
                 key="dictName"
                 :props="props"
               >
-                <router-link
-                  :to="`user/form/${props.row.id}`"
+                <a
                   class="text-primary"
-                >{{ props.row.dictName|| '-' }}</router-link>
+                  href="javascript:;"
+                  @click="onEdit(props.row)"
+                >{{ props.row.dictName|| '-' }}</a>
               </q-td>
               <q-td
                 key="dictType"
                 :props="props"
                 class="text--line2-f"
-              >{{ props.row.dictType }}</q-td>
+              >
+                <router-link
+                  class="text-primary"
+                  :to="`/sys/dictType/dictData/${props.row.dictType}`"
+                >
+                  {{ props.row.dictType }}
+                </router-link>
+              </q-td>
               <q-td
                 key="remarks"
                 :props="props"
@@ -108,14 +116,15 @@
                 :props="props"
                 class="q-gutter-xs action"
               >
-                <router-link
-                  :to="`user/form/${props.row.id}`"
-                  class="text-primary"
-                >编辑</router-link>
                 <a
                   class="text-primary"
                   href="javascript:;"
-                  v-biz-delete:refresh="{data:{ id: props.row.id }, url:'/sys/dict/delete'}"
+                  @click="onEdit(props.row)"
+                >编辑</a>
+                <a
+                  class="text-primary"
+                  href="javascript:;"
+                  v-biz-delete:refresh="{data:{ id: props.row.id }, url:'/dictType/delete'}"
                 >删除</a>
               </q-td>
             </q-tr>
@@ -126,7 +135,7 @@
     <q-dialog v-model="dictTypeEdit">
       <q-card style="width: 600px">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6"> 新增字典</div>
+          <div class="text-h6"> {{dictTypeForm.id?'编辑':'新增'}}字典</div>
           <q-space />
           <q-btn
             icon="close"
@@ -185,7 +194,7 @@
               </div>
               <div class="col-12">
                 <label
-                  for="dictType"
+                  for="status"
                   class="q-label"
                 >状态</label>
                 <div class="q-mt-sm">
@@ -272,7 +281,8 @@ export default {
       },
       dictTypeEdit: false,
       dictTypeForm: {
-        status: '0'
+        status: '0',
+        oldDictType: null
       }
     }
   },
@@ -313,6 +323,21 @@ export default {
         this.loading = false
       }, 1000)
     },
+    onAdd () {
+      this.dictTypeForm = this.$options.data().dictTypeForm
+      this.dictTypeEdit = true
+    },
+    onEdit (data) {
+      this.dictTypeForm = {
+        id: data.id,
+        dictName: data.dictName,
+        dictType: data.dictType,
+        oldDictType: data.dictType,
+        status: data.status,
+        remarks: data.remarks
+      }
+      this.dictTypeEdit = true
+    },
     async onSubmit () {
       this.loading = true
       await this.$fetchData({
@@ -321,6 +346,9 @@ export default {
       }).then(response => {
         const { result, message } = response.data
         if (result) {
+          // 初始化
+          this.dictTypeForm = this.$options.data().dictTypeForm
+
           this.$q.notify({ type: 'positive', message })
           this.dictTypeEdit = false
           this.onRefresh()

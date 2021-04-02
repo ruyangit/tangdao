@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
@@ -37,6 +38,13 @@ public class DictTypeController extends BaseController {
 	@Autowired
 	private DictTypeService dictTypeService;
 
+	@GetMapping
+	public CommonResponse one(String column, String value) {
+		QueryWrapper<DictType> queryWrapper = new QueryWrapper<DictType>();
+		queryWrapper.eq(column, value);
+		return renderResult(dictTypeService.getOne(queryWrapper));
+	}
+
 	@GetMapping("/page")
 	public CommonResponse page(Page<DictType> page, DictType dictType) {
 		LambdaQueryWrapper<DictType> queryWrapper = Wrappers.<DictType>lambdaQuery();
@@ -57,7 +65,7 @@ public class DictTypeController extends BaseController {
 		dictTypeService.saveOrUpdate(dictType);
 		return renderResult(Global.TRUE, "保存成功");
 	}
-	
+
 	@PostMapping("/delete")
 	public CommonResponse delete(@RequestBody DictTypeDTO dictType) {
 		dictTypeService.deleteDictType(dictType);

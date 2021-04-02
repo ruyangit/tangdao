@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
@@ -37,9 +38,11 @@ public class ConfigController extends BaseController {
 	@Autowired
 	private ConfigService configService;
 
-	@GetMapping("/get")
-	public CommonResponse get(String configKey) {
-		return renderResult(configService.getByConfigKey(configKey));
+	@GetMapping
+	public CommonResponse one(String column, Object value) {
+		QueryWrapper<Config> queryWrapper = new QueryWrapper<Config>();
+		queryWrapper.eq(column, value);
+		return renderResult(configService.getOne(queryWrapper));
 	}
 
 	@GetMapping("/page")

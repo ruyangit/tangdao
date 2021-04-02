@@ -23,7 +23,7 @@ import com.tangdao.service.model.dto.DictTypeDTO;
  */
 @Service
 public class DictTypeService extends BaseService<DictTypeMapper, DictType> {
-	
+
 	@Autowired
 	private DictDataService dictDataService;
 
@@ -36,7 +36,7 @@ public class DictTypeService extends BaseService<DictTypeMapper, DictType> {
 		}
 		return false;
 	}
-	
+
 	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteDictType(DictTypeDTO dictType) {
 		DictType dt = super.getById(dictType.getId());

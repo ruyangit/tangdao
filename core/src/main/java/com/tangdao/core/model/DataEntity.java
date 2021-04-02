@@ -33,25 +33,25 @@ public abstract class DataEntity<T> extends BaseModel {
 	 * 
 	 */
 	@TableField(fill = FieldFill.INSERT)
-	protected String createBy; // 新增人
+	public String createBy; // 新增人
 
 	/**
 	 * 
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(fill = FieldFill.INSERT)
-	protected Date createDate; // 新增时间
+	public Date createDate; // 新增时间
 
 	/**
 	 * 
 	 */
 	@TableField(fill = FieldFill.INSERT_UPDATE)
-	protected String updateBy; // 更新人
+	public String updateBy; // 更新人
 
 	/**
 	 * 
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(fill = FieldFill.INSERT_UPDATE)
-	protected Date updateDate; // 更新时间
+	public Date updateDate; // 更新时间
 }

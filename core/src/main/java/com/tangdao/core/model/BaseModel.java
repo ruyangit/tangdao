@@ -60,7 +60,7 @@ public abstract class BaseModel implements Serializable {
 	 * 脚本缓存
 	 */
 	@TableField(exist = false)
-	private LinkedHashMap<String, Object> dataSqlMap;
+	public LinkedHashMap<String, Object> dataSqlMap;
 
 	public void setDataSqlMap(String key, Object value) {
 		this.getDataSqlMap().put(key, value);

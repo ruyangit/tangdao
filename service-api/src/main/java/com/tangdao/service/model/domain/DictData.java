@@ -33,8 +33,6 @@ public class DictData extends TreeEntity<DictData>{
 
 	private String dictType;
 	
-	private String dictKey;
-	
 	private String dictLabel;
 	
 	private String dictValue;
