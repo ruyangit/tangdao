@@ -29,6 +29,7 @@ const routes = [
           { path: 'role', name: 'role', component: () => import('pages/system/RoleList.vue') },
           { path: 'config', name: 'config', component: () => import('pages/system/ConfigList.vue') },
           { path: 'dictType', name: 'dictType', component: () => import('src/pages/system/DictTypeList.vue') },
+          { path: 'dictType/dictData/:dictType', name: 'dictTypeData', component: () => import('src/pages/system/DictDataList.vue') },
           { path: 'log', name: 'log', component: () => import('pages/system/LogList.vue') },
           { path: 'job', name: 'job', component: () => import('pages/form/AdvancedForm.vue') }
         ]

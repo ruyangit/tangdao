@@ -13,6 +13,16 @@
           />
           <q-breadcrumbs-el label="字典管理" />
         </q-breadcrumbs>
+        <div class="row q-col-gutter-md">
+          <div>
+            <div class="my-page-header-subtitle">字典数据</div>
+            <div class="q-mt-sm">{{ `${dictTypeForm.dictName } [${dictTypeForm.dictType }]`}}</div>
+          </div>
+          <q-space />
+          <div class="row wrap content-end">
+            {{ dictTypeForm.remarks}}
+          </div>
+        </div>
       </div>
     </div>
 
@@ -23,8 +33,8 @@
             <q-input
               outlined
               dense
-              v-model.trim="form.dictName"
-              placeholder="请输入字典名称"
+              v-model.trim="form.dictLabel"
+              placeholder="请输入字典标签"
               style="width: 250px"
             >
             </q-input>
@@ -49,9 +59,9 @@
             <q-btn
               outline
               color="primary"
-              label="新增字典"
+              label="新增数据"
               class="btn wd-90"
-              to="/sys/user/form"
+              @click="onAdd"
             />
           </div>
         </div>
@@ -76,19 +86,27 @@
           <template v-slot:body="props">
             <q-tr :props="props">
               <q-td
-                key="dictName"
+                key="dictLabel"
                 :props="props"
               >
-                <router-link
-                  :to="`user/form/${props.row.id}`"
+                <a
                   class="text-primary"
-                >{{ props.row.dictName|| '-' }}</router-link>
+                  href="javascript:;"
+                  @click="onEdit(props.row)"
+                >{{ props.row.dictLabel }}</a>
+              </q-td>
+              <q-td
+                key="dictValue"
+                :props="props"
+              >
+                {{ props.row.dictValue }}
               </q-td>
               <q-td
                 key="dictType"
                 :props="props"
-                class="text--line2-f"
-              >{{ props.row.dictType }}</q-td>
+              >
+                {{ props.row.dictType }}
+              </q-td>
               <q-td
                 key="remarks"
                 :props="props"
@@ -102,20 +120,21 @@
               <q-td
                 key="createDate"
                 :props="props"
-              >{{ props.row.createDate || '-' }}</q-td>
+              >{{ props.row.createDate }}</q-td>
               <q-td
                 key="action"
                 :props="props"
                 class="q-gutter-xs action"
               >
-                <router-link
-                  :to="`user/form/${props.row.id}`"
-                  class="text-primary"
-                >编辑</router-link>
                 <a
                   class="text-primary"
                   href="javascript:;"
-                  v-biz-delete:refresh="{data:{ id: props.row.id }, url:'/sys/dict/delete'}"
+                  @click="onEdit(props.row)"
+                >编辑</a>
+                <a
+                  class="text-primary"
+                  href="javascript:;"
+                  v-biz-delete:refresh="{data:{ id: props.row.id }, url:'/dictData/delete'}"
                 >删除</a>
               </q-td>
             </q-tr>
@@ -123,6 +142,126 @@
         </q-table>
       </div>
     </div>
+    <q-dialog v-model="dictDataEdit">
+      <q-card style="width: 600px">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6"> {{dictDataForm.id?'编辑':'新增'}}数据</div>
+          <q-space />
+          <q-btn
+            icon="close"
+            flat
+            round
+            dense
+            v-close-popup
+          />
+        </q-card-section>
+        <q-form
+          class="my-form gutter"
+          @submit="onSubmit"
+        >
+          <q-card-section
+            style="max-height: 48vh; height: 48vh;"
+            class="scroll"
+          >
+            <q-card-section class="row q-col-gutter-md">
+              <div class="col-12">
+                <label
+                  for="dictLabel"
+                  class="q-label required"
+                >
+                  <span>字典标签</span>
+                  <!-- <q-icon
+                    name="error_outline"
+                    class="q-icon"
+                  /> -->
+                </label>
+                <q-input
+                  outlined
+                  dense
+                  no-error-icon
+                  v-model.trim="dictDataForm.dictLabel"
+                  placeholder="请输入字典标签"
+                  :rules="[ val => val && val.length > 0 || '请设置字典标签']"
+                  class="q-mt-sm"
+                >
+                </q-input>
+              </div>
+              <div class="col-12">
+                <label
+                  for="dictLabel"
+                  class="q-label required"
+                >
+                  <span>字典键值</span>
+                </label>
+                <q-input
+                  outlined
+                  dense
+                  no-error-icon
+                  v-model.trim="dictDataForm.dictValue"
+                  placeholder="请输入字典键值"
+                  :rules="[ val => val && val.length > 0 || '请设置字典键值']"
+                  class="q-mt-sm"
+                >
+                </q-input>
+              </div>
+              <div class="col-12">
+                <label
+                  for="status"
+                  class="q-label"
+                >状态</label>
+                <div class="q-mt-sm">
+                  <q-option-group
+                    inline
+                    dense
+                    v-model="dictDataForm.status"
+                    color="primary"
+                    :options="[
+                      {label: '正常', value: '0'},
+                      {label: '禁用', value: '2'}
+                    ]"
+                  />
+                </div>
+              </div>
+              <div class="col-12">
+                <label for="remarks">备注</label>
+                <q-input
+                  dense
+                  outlined
+                  no-error-icon
+                  v-model="dictDataForm.remarks"
+                  autogrow
+                  :input-style="{ minHeight: '80px' }"
+                  class="q-mt-sm"
+                />
+              </div>
+            </q-card-section>
+
+          </q-card-section>
+          <q-separator />
+          <q-card-actions align="right">
+            <q-btn
+              outline
+              label="关闭"
+              color="primary"
+              v-close-popup
+              class="wd-80"
+            />
+            <q-btn
+              label="保存"
+              color="primary"
+              type="submit"
+              class="wd-80"
+            />
+          </q-card-actions>
+        </q-form>
+        <q-inner-loading :showing="loading">
+          <q-spinner-hourglass
+            size="sm"
+            color="primary"
+          />
+        </q-inner-loading>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -141,7 +280,8 @@ export default {
         rowsNumber: 10
       },
       columns: [
-        { name: 'dictName', label: '字典名称', align: 'left', field: 'dictName', style: 'width: 120px' },
+        { name: 'dictLabel', label: '字典标签', align: 'left', field: 'dictLabel', style: 'width: 120px' },
+        { name: 'dictValue', label: '字典键值', align: 'left', field: 'dictValue', style: 'width: 100px' },
         { name: 'dictType', label: '字典类型', align: 'left', field: 'dictType', style: 'width: 100px' },
         { name: 'remarks', label: '备注', align: 'left', field: 'remarks' },
         { name: 'status', label: '状态', field: 'status', align: 'left', sortable: true, style: 'width: 80px' },
@@ -151,11 +291,17 @@ export default {
       data: [],
       form: {
         dictName: null
+      },
+      dictTypeForm: {},
+      dictDataEdit: false,
+      dictDataForm: {
+        status: '0'
       }
     }
   },
   mounted () {
     this.onRefresh()
+    this.onGetDictType(this.$route.params.dictType)
   },
   methods: {
     onRefresh () {
@@ -170,7 +316,7 @@ export default {
       this.form.current = page
       this.form.size = rowsPerPage
       await this.$fetchData({
-        url: '/dictType/page',
+        url: '/dictData/page',
         method: 'GET',
         params: this.form
       }).then(response => {
@@ -183,6 +329,70 @@ export default {
           this.pagination.sortBy = sortBy
           this.pagination.descending = descending
           this.data = data.records
+        }
+      }).catch(error => {
+        console.error(error)
+      })
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
+    },
+    async onGetDictType (value) {
+      this.loading = true
+      await this.$fetchData({
+        url: '/dictType?column=dict_type',
+        method: 'GET',
+        params: { value }
+      }).then(response => {
+        const { result, data } = response.data
+        if (result && data) {
+          this.dictTypeForm = {
+            id: data.id,
+            dictName: data.dictName,
+            dictType: data.dictType,
+            status: data.status,
+            remarks: data.remarks
+          }
+        }
+      }).catch(error => {
+        console.error(error)
+      })
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
+    },
+    onAdd () {
+      this.dictDataForm = this.$options.data().dictDataForm
+      this.dictDataForm.dictType = this.dictTypeForm.dictType
+      this.dictDataEdit = true
+    },
+    onEdit (data) {
+      this.dictDataForm = {
+        id: data.id,
+        dictLabel: data.dictLabel,
+        dictValue: data.dictValue,
+        dictType: data.dictType,
+        status: data.status,
+        remarks: data.remarks
+      }
+      this.dictDataEdit = true
+    },
+    async onSubmit () {
+      this.loading = true
+      await this.$fetchData({
+        url: '/dictData/save',
+        data: this.dictDataForm
+      }).then(response => {
+        const { result, message } = response.data
+        if (result) {
+          // 初始化
+          this.dictDataForm = this.$options.data().dictDataForm
+
+          this.$q.notify({ type: 'positive', message })
+          this.dictDataEdit = false
+          this.onRefresh()
+        } else {
+          this.$q.notify({ message })
         }
       }).catch(error => {
         console.error(error)
