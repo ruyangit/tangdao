@@ -20,7 +20,7 @@
 		<module>service-api</module>
 		<module>service-provider</module>
 		<module>tangdao-web</module>
-		<module>servers/developer</module>
+<!--		<module>servers/developer</module>-->
 	</modules>
 
 	<properties>
