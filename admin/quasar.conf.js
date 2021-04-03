@@ -48,10 +48,10 @@ module.exports = function (ctx) {
     build: {
       env: ctx.dev
         ? { // so on dev we'll have
-          API_HOST: process.env.API_HOST || 'http://127.0.0.1:4001'
+          API_HOST: process.env.API_HOST || 'http://localhost:4001'
         }
         : { // and on build (production):
-          API_HOST: 'http://121.37.180.48:12002'
+          API_HOST: 'http://localhost:4001'
         },
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
