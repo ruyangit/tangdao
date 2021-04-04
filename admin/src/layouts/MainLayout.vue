@@ -54,25 +54,33 @@
       persistent
     >
       <q-card style="width:400px">
-        <q-card-section>
-          <div class="text-h6">操作提示</div>
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6"> 操作提示</div>
+          <q-space />
+          <q-btn
+            icon="close"
+            flat
+            round
+            dense
+            v-close-popup
+          />
         </q-card-section>
-        <q-separator />
         <q-card-section class="row items-center">
+          <div class="">{{reset.message ||'未知异常，请重新登陆后操作'}}</div>
           <div class="q-ml-sm">{{reset.code}}</div>
-          <div class="q-ml-sm">{{reset.message ||'未知异常，请重新登陆后操作'}}</div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn
             flat
-            label="关闭"
+            label="取消"
             color="primary"
+            class="wd-80"
             v-close-popup
           />
           <q-btn
-            flat
             label="重新登录"
             color="primary"
+            class="wd-80"
             @click="$router.push({ path: '/user/login' })"
           />
         </q-card-actions>

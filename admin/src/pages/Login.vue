@@ -99,21 +99,19 @@ export default {
       }
     }
   },
-
   methods: {
-    onSubmit () {
+    async onSubmit () {
       this.loading = true
-      this.$store.dispatch('session/loginAction', this.form).then(response => {
+      await this.$store.dispatch('session/loginAction', this.form).then(response => {
+        this.loading = false
         const params = { redirect: this.$route.query.redirect || '/' }
         this.$router.push({ path: params.redirect })
       }).catch(error => {
         this.$q.notify({ message: error.message || '登录失败' })
-      }).finally(
         this.loading = false
-      )
+      })
     }
   },
-
   mounted () {
     this.$store.commit('session/resetMutation', { login: false })
   }
