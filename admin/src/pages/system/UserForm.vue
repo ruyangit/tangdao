@@ -246,15 +246,17 @@
           flat
           class="fit q-mt-md"
         >
-          <q-card-actions>
+          <q-card-actions class="q-pa-md">
             <q-btn
               color="primary"
               class="wd-80"
               type="submit"
             >保存</q-btn>
             <q-btn
+              flat
               class="wd-80"
               type="reset"
+              color="primary"
             >重置</q-btn>
 
             <q-space />
