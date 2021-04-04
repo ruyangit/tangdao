@@ -51,7 +51,7 @@ module.exports = function (ctx) {
           API_HOST: process.env.API_HOST || 'http://localhost:4001'
         }
         : { // and on build (production):
-          API_HOST: 'http://localhost:4001'
+          API_HOST: 'http://121.4.215.23:30000/gwapi/v2'
         },
       vueRouterMode: 'hash', // available values: 'hash', 'history'
 
