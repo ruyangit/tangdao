@@ -1,4 +1,8 @@
 export default {
   isoName: 'en-us',
-  nativeName: '英文(US)'
+  nativeName: 'English (US)',
+  header: {
+    accountSettings: 'Account Settings'
+  }
+
 }
