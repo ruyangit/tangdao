@@ -150,7 +150,7 @@
           @submit="onSubmit"
         >
           <q-card-section
-            style="max-height: 48vh; height: 48vh;"
+            style="height: 430px"
             class="scroll"
           >
             <q-card-section class="row q-col-gutter-md">
@@ -228,8 +228,8 @@
           <q-separator />
           <q-card-actions align="right">
             <q-btn
-              outline
-              label="关闭"
+              flat
+              label="取消"
               color="primary"
               v-close-popup
               class="wd-80"

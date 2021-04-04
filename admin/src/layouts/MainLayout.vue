@@ -66,13 +66,13 @@
           />
         </q-card-section>
         <q-card-section class="row items-center">
-          <div class="q-ml-md">{{reset.message ||'未知异常，请重新登陆后操作'}}</div>
+          <div class="">{{reset.message ||'未知异常，请重新登陆后操作'}}</div>
           <div class="q-ml-sm">{{reset.code}}</div>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn
-            outline
-            label="关闭"
+            flat
+            label="取消"
             color="primary"
             class="wd-80"
             v-close-popup
