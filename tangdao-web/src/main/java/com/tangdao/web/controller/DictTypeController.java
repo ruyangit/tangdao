@@ -39,7 +39,7 @@ public class DictTypeController extends BaseController {
 	private DictTypeService dictTypeService;
 
 	@GetMapping
-	public CommonResponse one(String column, String value) {
+	public CommonResponse field(String column, String value) {
 		QueryWrapper<DictType> queryWrapper = new QueryWrapper<DictType>();
 		queryWrapper.eq(column, value);
 		return renderResult(dictTypeService.getOne(queryWrapper));

@@ -39,7 +39,7 @@ public class ConfigController extends BaseController {
 	private ConfigService configService;
 
 	@GetMapping
-	public CommonResponse one(String column, Object value) {
+	public CommonResponse field(String column, Object value) {
 		QueryWrapper<Config> queryWrapper = new QueryWrapper<Config>();
 		queryWrapper.eq(column, value);
 		return renderResult(configService.getOne(queryWrapper));

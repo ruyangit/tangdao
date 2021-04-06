@@ -119,7 +119,7 @@ module.exports = function (ctx) {
       ],
 
       config: {
-        loadingBar: {}
+        // notify: { position: 'top-right' }
       },
     },
 

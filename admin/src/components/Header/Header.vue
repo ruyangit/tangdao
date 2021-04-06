@@ -230,7 +230,7 @@
       <q-btn
         stretch
         flat
-        label="Account Settings"
+        :label="$t('header.accountSettings')"
         :icon="`img:https://cdn.quasar.dev/img/boy-avatar.png`"
       >
         <q-menu>
