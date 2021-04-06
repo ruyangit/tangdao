@@ -58,7 +58,7 @@ public class UserController extends BaseController {
 		if (StrUtil.isEmpty(user.getId())) {
 			BCryptPasswordEncoder bpe = new BCryptPasswordEncoder();
 			if(StrUtil.isEmpty(user.getPassword())) {
-				user.setPassword("Tangdao");
+				user.setPassword("123456");
 			}
 			user.setPassword(bpe.encode(user.getPassword()));
 			userService.createUser(user);
