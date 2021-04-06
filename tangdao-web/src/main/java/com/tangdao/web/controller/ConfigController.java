@@ -4,6 +4,7 @@
 package com.tangdao.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,6 +48,7 @@ public class ConfigController extends BaseController {
 		return renderResult(configService.getOne(queryWrapper));
 	}
 
+	@PreAuthorize(value="hasAuthority('iam:config:view')")
 	@LogOpt(logTitle = "获取列表分页数据")
 	@GetMapping("/page")
 	public CommonResponse page(Page<Config> page, Config config) {

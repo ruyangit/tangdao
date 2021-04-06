@@ -5,6 +5,8 @@ package com.tangdao.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -26,8 +28,22 @@ import cn.hutool.core.util.ObjectUtil;
  */
 @RestControllerAdvice
 public class WebExceptionHandler {
-	
+
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	@ExceptionHandler(AuthenticationException.class)
+	public @ResponseBody Object authenticationException(AuthenticationException e) {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(CommonApiCode.COMMON_AUTHENTICATION_FAILED);
+		return commonResponse;
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public @ResponseBody Object accessDeniedException(AccessDeniedException e) {
+		CommonResponse commonResponse = CommonResponse.createCommonResponse();
+		commonResponse.fail(CommonApiCode.COMMON_ACCESS_DENIED);
+		return commonResponse;
+	}
 
 	@ExceptionHandler(BusinessException.class)
 	public @ResponseBody Object businessException(BusinessException e) {

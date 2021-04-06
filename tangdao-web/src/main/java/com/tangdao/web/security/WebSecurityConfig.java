@@ -3,31 +3,21 @@
  */
 package com.tangdao.web.security;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsUtils;
 
-import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
-import com.tangdao.core.utils.ServletUtil;
 import com.tangdao.web.security.service.IUserDetailsService;
 
 /**
@@ -39,6 +29,8 @@ import com.tangdao.web.security.service.IUserDetailsService;
  * @since 2021年3月12日
  */
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true, securedEnabled = true) // 自定义方法级安全校验
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -61,9 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll().antMatchers("/api/**")
 				.permitAll().antMatchers("/**").authenticated();
-		// 异常
-		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint())
-				.accessDeniedHandler(accessDeniedHandler());
 
 		http.headers().frameOptions().disable();
 		http.headers().cacheControl();
@@ -86,25 +75,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
-
-	public AuthenticationEntryPoint authenticationEntryPoint() {
-		return new AuthenticationEntryPoint() {
-			public void commence(HttpServletRequest request, HttpServletResponse response,
-					AuthenticationException authException) throws IOException, ServletException {
-				// TODO Auto-generated method stub
-				ServletUtil.responseJson(response, CommonApiCode.COMMON_AUTHENTICATION_FAILED);
-			}
-		};
-	}
-
-	public AccessDeniedHandler accessDeniedHandler() {
-		return new AccessDeniedHandler() {
-			public void handle(HttpServletRequest request, HttpServletResponse response,
-					AccessDeniedException accessDeniedException) throws IOException, ServletException {
-				// TODO Auto-generated method stub
-				ServletUtil.responseJson(response, CommonApiCode.COMMON_ACCESS_DENIED);
-			}
-		};
 	}
 }
