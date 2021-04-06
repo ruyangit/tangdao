@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,7 +28,7 @@ import com.tangdao.web.security.service.IUserDetailsService;
  * @since 2021年3月12日
  */
 @Configuration
-//@EnableWebSecurity
+@EnableWebSecurity
 //@EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true, securedEnabled = true) // 自定义方法级安全校验
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -45,12 +46,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtTokenFilter jwtTokenFilter;
 
+	@Autowired
+	private UserAuthenticationEntryPoint userAuthenticationEntryPoint;
+
+	@Autowired
+	private UserAccessDeniedHandler userAccessDeniedHandler;
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().cors() // We don't need CSRF for JWT based authentication
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 				.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll().antMatchers("/api/**")
 				.permitAll().antMatchers("/**").authenticated();
+
+		http.exceptionHandling().authenticationEntryPoint(userAuthenticationEntryPoint)
+				.accessDeniedHandler(userAccessDeniedHandler);
 
 		http.headers().frameOptions().disable();
 		http.headers().cacheControl();
@@ -74,4 +84,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
+
 }
