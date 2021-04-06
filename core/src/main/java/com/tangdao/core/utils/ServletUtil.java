@@ -157,7 +157,7 @@ public class ServletUtil {
 	 * @return
 	 */
 	public static String getClientIP() {
-		return getClientIPByHeader(getRequest());
+		return getClientIP(getRequest());
 	}
 	
 	/**
