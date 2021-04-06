@@ -85,6 +85,7 @@
 <script>
 export default {
   name: 'UserLogin',
+  meta: { title: '用户登录' },
   components: {
     QBrandColor: () => import('components/BrandColor/BrandColor'),
     QLottieWeb: () => import('components/LottieWeb/LottieWeb')

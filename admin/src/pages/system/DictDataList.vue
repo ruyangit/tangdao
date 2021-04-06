@@ -436,6 +436,7 @@ export default {
     },
     async onGetDictType (value) {
       this.loading = true
+      this.form.dictType = value
       await this.$fetchData({
         url: '/dictType?column=dict_type',
         method: 'GET',
