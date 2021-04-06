@@ -265,7 +265,7 @@
                 label="Logout"
                 push
                 size="sm"
-                @click="$router.push({ path: '/user/login' })"
+                @click="$router.push({ path: '/user/login' , query: { 'redirect': $route.path }})"
               />
             </div>
           </div>

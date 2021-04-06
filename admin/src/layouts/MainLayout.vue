@@ -81,7 +81,7 @@
             label="重新登录"
             color="primary"
             class="wd-80"
-            @click="$router.push({ path: '/user/login' })"
+            @click="$router.push({ path: '/user/login', query: { 'redirect': $route.path }})"
           />
         </q-card-actions>
       </q-card>

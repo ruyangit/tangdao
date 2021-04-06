@@ -166,7 +166,7 @@
           @submit="onSubmit"
         >
           <q-card-section
-            style="height: 580px;"
+            style="height: 570px;"
             class="scroll"
           >
             <q-card-section class="row q-col-gutter-md">
