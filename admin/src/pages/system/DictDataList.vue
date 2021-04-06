@@ -108,6 +108,12 @@
                 {{ props.row.dictType }}
               </q-td>
               <q-td
+                key="treeSort"
+                :props="props"
+              >
+                {{ props.row.treeSort }}
+              </q-td>
+              <q-td
                 key="remarks"
                 :props="props"
               >{{ props.row.remarks }}</q-td>
@@ -143,7 +149,7 @@
       </div>
     </div>
     <q-dialog v-model="dictDataEdit">
-      <q-card style="width: 600px">
+      <q-card style="max-width: 760px">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6"> {{dictDataForm.id?'编辑':'新增'}}数据</div>
           <q-space />
@@ -160,11 +166,11 @@
           @submit="onSubmit"
         >
           <q-card-section
-            style="height: 480px;"
+            style="height: 580px;"
             class="scroll"
           >
             <q-card-section class="row q-col-gutter-md">
-              <div class="col-12">
+              <div class="col-6">
                 <label
                   for="dictLabel"
                   class="q-label required"
@@ -182,6 +188,23 @@
                   v-model.trim="dictDataForm.dictLabel"
                   placeholder="请输入字典标签"
                   :rules="[ val => val && val.length > 0 || '请设置字典标签']"
+                  class="q-mt-sm"
+                >
+                </q-input>
+              </div>
+              <div class="col-6">
+                <label
+                  for="dictLabel"
+                  class="q-label "
+                >
+                  <span>上级标签</span>
+                </label>
+                <q-input
+                  outlined
+                  dense
+                  no-error-icon
+                  v-model.trim="dictDataForm.pid"
+                  placeholder="请输入字典标签"
                   class="q-mt-sm"
                 >
                 </q-input>
@@ -204,6 +227,78 @@
                 >
                 </q-input>
               </div>
+              <div class="col-6">
+                <label
+                  for="treeSort"
+                  class="q-label required"
+                >
+                  <span>排序</span>
+                </label>
+                <q-input
+                  outlined
+                  dense
+                  no-error-icon
+                  v-model.number="dictDataForm.treeSort"
+                  type="number"
+                  placeholder="请输入排序值"
+                  :rules="[ val => val && val !==null & val !== '' || '请设置排序值']"
+                  class="q-mt-sm"
+                >
+                </q-input>
+              </div>
+              <div class="col-6">
+                <label
+                  for="description"
+                  class="q-label "
+                >
+                  <span>字典描述</span>
+                </label>
+                <q-input
+                  outlined
+                  dense
+                  no-error-icon
+                  v-model.trim="dictDataForm.description"
+                  placeholder="请输入字典描述"
+                  class="q-mt-sm"
+                >
+                </q-input>
+              </div>
+              <div class="col-6">
+                <label
+                  for="cssStyle"
+                  class="q-label "
+                >
+                  <span>CSS样式</span>
+                </label>
+                <q-input
+                  outlined
+                  dense
+                  no-error-icon
+                  v-model.trim="dictDataForm.cssStyle"
+                  placeholder="请输入CSS样式"
+                  class="q-mt-sm"
+                >
+                </q-input>
+              </div>
+
+              <div class="col-6">
+                <label
+                  for="cssClass"
+                  class="q-label "
+                >
+                  <span>CSS类名</span>
+                </label>
+                <q-input
+                  outlined
+                  dense
+                  no-error-icon
+                  v-model.trim="dictDataForm.cssClass"
+                  placeholder="请输入CSS类名"
+                  class="q-mt-sm"
+                >
+                </q-input>
+              </div>
+
               <div class="col-12">
                 <label
                   for="status"
@@ -280,9 +375,10 @@ export default {
         rowsNumber: 10
       },
       columns: [
-        { name: 'dictLabel', label: '字典标签', align: 'left', field: 'dictLabel', style: 'width: 120px' },
-        { name: 'dictValue', label: '字典键值', align: 'left', field: 'dictValue', style: 'width: 100px' },
-        { name: 'dictType', label: '字典类型', align: 'left', field: 'dictType', style: 'width: 100px' },
+        { name: 'dictLabel', label: '字典标签', align: 'left', field: 'dictLabel', style: 'width: 150px' },
+        { name: 'dictValue', label: '字典键值', align: 'left', field: 'dictValue', style: 'width: 300px' },
+        { name: 'dictType', label: '字典类型', align: 'left', field: 'dictType', style: 'width: 200px' },
+        { name: 'treeSort', label: '排序', align: 'left', field: 'treeSort', style: 'width: 100px' },
         { name: 'remarks', label: '备注', align: 'left', field: 'remarks' },
         { name: 'status', label: '状态', field: 'status', align: 'left', sortable: true, style: 'width: 80px' },
         { name: 'createDate', label: '创建时间', field: 'createDate', align: 'left', sortable: true, style: 'width: 120px' },
@@ -295,6 +391,7 @@ export default {
       dictTypeForm: {},
       dictDataEdit: false,
       dictDataForm: {
+        treeSort: 10,
         status: '0'
       }
     }
@@ -367,14 +464,11 @@ export default {
       this.dictDataEdit = true
     },
     onEdit (data) {
-      this.dictDataForm = {
-        id: data.id,
-        dictLabel: data.dictLabel,
-        dictValue: data.dictValue,
-        dictType: data.dictType,
-        status: data.status,
-        remarks: data.remarks
-      }
+      this.dictDataForm = data
+      delete this.dictDataForm.createBy
+      delete this.dictDataForm.createDate
+      delete this.dictDataForm.updateBy
+      delete this.dictDataForm.updateDate
       this.dictDataEdit = true
     },
     async onSubmit () {

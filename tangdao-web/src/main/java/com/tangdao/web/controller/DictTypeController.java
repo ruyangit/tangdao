@@ -57,6 +57,9 @@ public class DictTypeController extends BaseController {
 		if (StrUtil.isNotBlank(dictType.getDictType())) {
 			queryWrapper.like(DictType::getDictType, dictType.getDictType());
 		}
+		if (StrUtil.isNotBlank(dictType.getStatus())) {
+			queryWrapper.eq(DictType::getStatus, dictType.getStatus());
+		}
 		return renderResult(dictTypeService.page(page, queryWrapper));
 	}
 

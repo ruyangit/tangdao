@@ -150,7 +150,7 @@
           @submit="onSubmit"
         >
           <q-card-section
-            style="height: 430px"
+            style="height: 410px"
             class="scroll"
           >
             <q-card-section class="row q-col-gutter-md">

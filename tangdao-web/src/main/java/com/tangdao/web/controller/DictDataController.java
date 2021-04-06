@@ -47,6 +47,9 @@ public class DictDataController extends BaseController {
 		if (StrUtil.isNotBlank(dictData.getDictType())) {
 			queryWrapper.eq(DictData::getDictType, dictData.getDictType());
 		}
+		if (StrUtil.isNotBlank(dictData.getStatus())) {
+			queryWrapper.eq(DictData::getStatus, dictData.getStatus());
+		}
 		return renderResult(dictDataService.page(page, queryWrapper));
 	}
 	
