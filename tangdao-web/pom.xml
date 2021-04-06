@@ -66,6 +66,8 @@
 	</dependencies>
 
 	<build>
+		<finalName>${finalName}</finalName>
+		<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/classes/</outputDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
