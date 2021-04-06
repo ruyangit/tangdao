@@ -93,8 +93,8 @@ export default {
     return {
       loading: false,
       form: {
-        username: '',
-        password: '',
+        username: 'system',
+        password: 'system',
         rememberMe: false
       }
     }
