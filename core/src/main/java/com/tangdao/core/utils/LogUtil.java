@@ -23,7 +23,6 @@ import com.tangdao.core.web.SpringUtils;
 import com.tangdao.core.web.filter.BodyReaderHttpServletRequestWrapper;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.useragent.UserAgent;
@@ -118,7 +117,7 @@ public class LogUtil {
 			}
 		}
 		log.setServerAddr(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());
-		log.setRemoteAddr(NetUtil.getLocalhostStr());
+		log.setRemoteAddr(ServletUtil.getClientIP());
 		log.setUserAgent(request.getHeader("User-Agent"));
 		UserAgent userAgent = UserAgentUtil.parse(log.getUserAgent());
 		log.setDeviceName(userAgent.getOs().getName());
