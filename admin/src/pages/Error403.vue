@@ -17,7 +17,7 @@
         color="white"
         text-color="blue"
         unelevated
-        v-go-back.single
+        to="/"
         label="Go Home"
         no-caps
       />
