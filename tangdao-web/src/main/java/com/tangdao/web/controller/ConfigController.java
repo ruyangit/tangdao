@@ -48,7 +48,7 @@ public class ConfigController extends BaseController {
 		return renderResult(configService.getOne(queryWrapper));
 	}
 
-	@PreAuthorize(value="hasAuthority('iam:config:view')")
+	@PreAuthorize(value="hasAuthority('sys:config:view')")
 	@LogOpt(logTitle = "获取列表分页数据")
 	@GetMapping("/page")
 	public CommonResponse page(Page<Config> page, Config config) {
