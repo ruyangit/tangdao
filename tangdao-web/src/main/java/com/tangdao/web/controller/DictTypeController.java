@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
+import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.service.model.domain.DictType;
@@ -38,6 +39,7 @@ public class DictTypeController extends BaseController {
 	@Autowired
 	private DictTypeService dictTypeService;
 
+	@LogOpt(logTitle = "根据指定列获取详细数据")
 	@GetMapping
 	public CommonResponse field(String column, String value) {
 		QueryWrapper<DictType> queryWrapper = new QueryWrapper<DictType>();
@@ -45,6 +47,7 @@ public class DictTypeController extends BaseController {
 		return renderResult(dictTypeService.getOne(queryWrapper));
 	}
 
+	@LogOpt(logTitle = "获取列表分页数据")
 	@GetMapping("/page")
 	public CommonResponse page(Page<DictType> page, DictType dictType) {
 		LambdaQueryWrapper<DictType> queryWrapper = Wrappers.<DictType>lambdaQuery();
@@ -57,6 +60,7 @@ public class DictTypeController extends BaseController {
 		return renderResult(dictTypeService.page(page, queryWrapper));
 	}
 
+	@LogOpt(logTitle = "新增或更新数据")
 	@PostMapping("/save")
 	public CommonResponse save(@RequestBody DictTypeDTO dictType) {
 		if (!dictTypeService.checkDictTypeExists(dictType.getOldDictType(), dictType.getDictType())) {
@@ -66,6 +70,7 @@ public class DictTypeController extends BaseController {
 		return renderResult(Global.TRUE, "保存成功");
 	}
 
+	@LogOpt(logTitle = "根据主键删除数据")
 	@PostMapping("/delete")
 	public CommonResponse delete(@RequestBody DictTypeDTO dictType) {
 		dictTypeService.deleteDictType(dictType);

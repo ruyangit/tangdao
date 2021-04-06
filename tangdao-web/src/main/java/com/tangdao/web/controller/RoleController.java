@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
+import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.service.model.domain.Role;
@@ -37,6 +38,7 @@ public class RoleController extends BaseController {
 	@Autowired
 	private RoleService roleService;
 
+	@LogOpt(logTitle = "获取列表分页数据")
 	@GetMapping("/page")
 	public CommonResponse page(Page<Role> page, Role role) {
 		LambdaQueryWrapper<Role> queryWrapper = Wrappers.<Role>lambdaQuery();
@@ -52,12 +54,14 @@ public class RoleController extends BaseController {
 		return renderResult(roleService.page(page, queryWrapper));
 	}
 
+	@LogOpt(logTitle = "获取列表数据")
 	@GetMapping("/list")
 	public CommonResponse list(Role role) {
 		LambdaQueryWrapper<Role> queryWrapper = Wrappers.<Role>lambdaQuery();
 		return renderResult(roleService.list(queryWrapper));
 	}
 
+	@LogOpt(logTitle = "新增或更新数据")
 	@PostMapping("/save")
 	public CommonResponse save(@RequestBody RoleDTO role) {
 		if (roleService.checkRoleCodeExists(role.getOldRoleCode(), role.getRoleCode())) {
@@ -67,6 +71,7 @@ public class RoleController extends BaseController {
 		return renderResult(Global.TRUE, "保存成功");
 	}
 	
+	@LogOpt(logTitle = "根据主键删除数据")
 	@PostMapping("/delete")
 	public CommonResponse delete(@RequestBody RoleDTO role) {
 		roleService.removeById(role.getId());

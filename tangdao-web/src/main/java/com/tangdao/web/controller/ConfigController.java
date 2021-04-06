@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
+import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.service.model.domain.Config;
@@ -38,6 +39,7 @@ public class ConfigController extends BaseController {
 	@Autowired
 	private ConfigService configService;
 
+	@LogOpt(logTitle = "根据指定列获取详细数据")
 	@GetMapping
 	public CommonResponse field(String column, Object value) {
 		QueryWrapper<Config> queryWrapper = new QueryWrapper<Config>();
@@ -45,6 +47,7 @@ public class ConfigController extends BaseController {
 		return renderResult(configService.getOne(queryWrapper));
 	}
 
+	@LogOpt(logTitle = "获取列表分页数据")
 	@GetMapping("/page")
 	public CommonResponse page(Page<Config> page, Config config) {
 		LambdaQueryWrapper<Config> queryWrapper = Wrappers.<Config>lambdaQuery();
@@ -57,6 +60,7 @@ public class ConfigController extends BaseController {
 		return renderResult(configService.page(page, queryWrapper));
 	}
 
+	@LogOpt(logTitle = "新增或更新数据")
 	@PostMapping("/save")
 	public CommonResponse save(@RequestBody ConfigDTO config) {
 		if (!configService.checkConfigKeyExists(config.getOldConfigKey(), config.getConfigKey())) {
@@ -64,5 +68,12 @@ public class ConfigController extends BaseController {
 		}
 		configService.saveOrUpdate(config);
 		return renderResult(Global.TRUE, "保存成功");
+	}
+	
+	@LogOpt(logTitle = "根据主键删除数据")
+	@PostMapping("/delete")
+	public CommonResponse delete(@RequestBody ConfigDTO config) {
+		configService.removeById(config);
+		return renderResult(Global.TRUE, "删除成功");
 	}
 }

@@ -41,6 +41,7 @@
               color="primary"
               label="查询"
               class="btn wd-80"
+              @click="onRefresh"
             />
             <q-space />
             <q-btn

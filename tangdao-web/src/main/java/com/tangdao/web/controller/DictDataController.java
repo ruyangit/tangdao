@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
+import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.service.model.domain.DictData;
@@ -36,6 +37,7 @@ public class DictDataController extends BaseController {
 	@Autowired
 	private DictDataService dictDataService;
 
+	@LogOpt(logTitle = "获取列表分页数据")
 	@GetMapping("/page")
 	public CommonResponse page(Page<DictData> page, DictData dictData) {
 		LambdaQueryWrapper<DictData> queryWrapper = Wrappers.<DictData>lambdaQuery();
@@ -48,12 +50,14 @@ public class DictDataController extends BaseController {
 		return renderResult(dictDataService.page(page, queryWrapper));
 	}
 	
+	@LogOpt(logTitle = "新增或更新数据")
 	@PostMapping("/save")
 	public CommonResponse save(@RequestBody DictData dictData) {
 		dictDataService.saveOrUpdate(dictData);
 		return renderResult(Global.TRUE, "保存成功");
 	}
 
+	@LogOpt(logTitle = "根据主键删除数据")
 	@PostMapping("/delete")
 	public CommonResponse delete(@RequestBody DictData dictData) {
 		dictDataService.removeById(dictData);

@@ -3,6 +3,8 @@
  */
 package com.tangdao.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,6 +26,8 @@ import cn.hutool.core.util.ObjectUtil;
  */
 @RestControllerAdvice
 public class WebExceptionHandler {
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@ExceptionHandler(BusinessException.class)
 	public @ResponseBody Object businessException(BusinessException e) {
@@ -34,6 +38,7 @@ public class WebExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	private @ResponseBody Object handleException(Exception e) {
+		logger.error(e.getMessage(), e);
 		CommonResponse commonResponse = CommonResponse.createCommonResponse();
 		commonResponse.fail(CommonApiCode.COMMON_SERVER_EXCEPTION);
 		commonResponse.put("message_description", ExceptionUtil.getMessage(e));

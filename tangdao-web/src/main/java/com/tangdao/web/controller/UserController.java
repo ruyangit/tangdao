@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tangdao.core.CommonResponse;
+import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.web.BaseController;
 import com.tangdao.service.model.domain.User;
@@ -38,6 +39,7 @@ public class UserController extends BaseController {
 	@Autowired
 	private UserService userService;
 
+	@LogOpt(logTitle = "获取列表分页数据")
 	@GetMapping("/page")
 	public CommonResponse page(Page<User> page, User user) {
 		LambdaQueryWrapper<User> queryWrapper = Wrappers.<User>lambdaQuery();
@@ -50,6 +52,7 @@ public class UserController extends BaseController {
 		return renderResult(userService.page(page, queryWrapper));
 	}
 
+	@LogOpt(logTitle = "新增或更新数据")
 	@PostMapping("/save")
 	public CommonResponse save(@RequestBody UserDTO user) {
 		if (!userService.checkUsernameExists(user.getOldUsername(), user.getUsername())) {
@@ -57,7 +60,7 @@ public class UserController extends BaseController {
 		}
 		if (StrUtil.isEmpty(user.getId())) {
 			BCryptPasswordEncoder bpe = new BCryptPasswordEncoder();
-			if(StrUtil.isEmpty(user.getPassword())) {
+			if (StrUtil.isEmpty(user.getPassword())) {
 				user.setPassword("123456");
 			}
 			user.setPassword(bpe.encode(user.getPassword()));
@@ -68,6 +71,7 @@ public class UserController extends BaseController {
 		return renderResult(Global.TRUE, "保存成功");
 	}
 
+	@LogOpt(logTitle = "根据主键删除数据")
 	@PostMapping("/delete")
 	public CommonResponse delete(@RequestBody UserDTO user) {
 		userService.deleteUser(user);

@@ -9,6 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import cn.hutool.core.util.StrUtil;
+
 /**
  * <p>
  * TODO 描述
@@ -25,14 +27,32 @@ public @interface LogOpt {
 	/**
 	 * 
 	 * TODO 日志标题
+	 * 
 	 * @return
 	 */
-	String logTitle();
+	String logTitle() default StrUtil.EMPTY;
+
+	/**
+	 * 
+	 * TODO 日志描述
+	 * 
+	 * @return
+	 */
+	String description() default StrUtil.EMPTY;
 
 	/**
 	 * 
 	 * TODO 是否需要日志
+	 * 
 	 * @return
 	 */
-	boolean needLog() default false;
+	boolean needLog() default true;
+
+	/**
+	 * 
+	 * TODO 是否需要数据
+	 * 
+	 * @return
+	 */
+	boolean needData() default false;
 }

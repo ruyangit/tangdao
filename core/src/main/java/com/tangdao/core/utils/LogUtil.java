@@ -9,11 +9,11 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.ibatis.mapping.SqlCommandType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.web.method.HandlerMethod;
 
 import com.alibaba.fastjson.JSON;
-import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.context.SessionContext;
 import com.tangdao.core.model.SessionUser;
@@ -38,6 +38,8 @@ import cn.hutool.http.useragent.UserAgentUtil;
  */
 public class LogUtil {
 	
+	private static Logger logger = LoggerFactory.getLogger(LogUtil.class);
+
 	/**
 	 * 静态内部类，延迟加载，懒汉式，线程安全的单例模式
 	 */
@@ -71,7 +73,7 @@ public class LogUtil {
 	 * @param logType
 	 */
 	public static void saveLog(String logTitle, String logType) {
-		saveLog(ServletUtil.getRequest(), null, logTitle, logType, null, 0);
+		saveLog(ServletUtil.getRequest(), logTitle, logType, null, null, null, 0);
 	}
 
 	/**
@@ -85,20 +87,9 @@ public class LogUtil {
 	 * @param throwable
 	 * @param executeTime
 	 */
-	public static void saveLog(HttpServletRequest request, Object handler, String logTitle, String logType,
-			Throwable throwable, long executeTime) {
-		HandlerMethod handlerMethod = null;
-		if (handler instanceof HandlerMethod && (handlerMethod = (HandlerMethod) handler) != null) {
-			// 日志标题
-			LogOpt logOpt = handlerMethod.getMethod().getAnnotation(LogOpt.class);
-			if (logOpt != null && StrUtil.isNotBlank(logTitle)) {
-				logTitle = handlerMethod.getMethod().getAnnotation(LogOpt.class).logTitle();
-			}
-			// 不需要日志
-			if (logOpt != null && logOpt.needLog()) {
-				return;
-			}
-		}
+	public static void saveLog(HttpServletRequest request, String logTitle, String logType, String description,
+			Object data, Throwable throwable, long executeTime) {
+
 		if (StrUtil.isEmpty(logTitle)) {
 			logTitle = "";
 		}
@@ -119,7 +110,7 @@ public class LogUtil {
 		log.setServerAddr(request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort());
 		log.setRemoteAddr(ServletUtil.getClientIP());
 		log.setUserAgent(request.getHeader("User-Agent"));
-		
+
 		UserAgent userAgent = UserAgentUtil.parse(log.getUserAgent());
 		log.setDeviceName(userAgent.getOs().getName());
 		log.setBrowserName(userAgent.getBrowser().getName());
@@ -127,20 +118,27 @@ public class LogUtil {
 		log.setRequestMethod(request.getMethod());
 		log.setRequestParams(request.getParameterMap());
 
-		// 描述
-		if (handlerMethod != null) {
-			log.setDescription(handlerMethod.toString());
+		try {
+			if (data != null) {
+				log.setDiffModifyData(JSON.toJSONString(data));
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
 
+		log.setDescription(description);
+
 		// POST（JSON）
-		if (handlerMethod != null && StrUtil.isBlank(log.getRequestParams())) {
+		if (StrUtil.isBlank(log.getRequestParams())) {
 			try {
 				BodyReaderHttpServletRequestWrapper rw = new BodyReaderHttpServletRequestWrapper(request);
 //				log.setRequestParams(StrUtil.maxLength(JSON.toJSONString(rw.getRequestBody()), 5000));
 				log.setRequestParams(StrUtil.maxLength(StrUtil.trim(
 						Base64.decodeStr(JSON.toJSONString(rw.getRequestBody())).replace("\n", "").replace("\t", "")),
 						5000));
-			} catch (IOException e) {}
+			} catch (IOException e) {
+				logger.error(e.getMessage(), e);
+			}
 		}
 		// 耗时
 		log.setExecuteTime(executeTime);
@@ -166,10 +164,14 @@ public class LogUtil {
 			return;
 		}
 
-		// 保存日志
-		Static.taskExecutor.execute(() -> {
-			Static.logService.save(log);
-		});
+		try {
+			// 保存日志
+			Static.taskExecutor.execute(() -> {
+				Static.logService.save(log);
+			});
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 
 	}
 

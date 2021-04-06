@@ -21,8 +21,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.tangdao.core.web.aspect.DemoAspect;
+import com.tangdao.core.web.aspect.LogAspect;
 import com.tangdao.core.web.filter.BodyReaderFilter;
-import com.tangdao.core.web.interceptor.LogInterceptor;
 import com.tangdao.web.security.resolver.LoginUserArgumentResolver;
 
 /**
@@ -42,6 +42,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@ConditionalOnProperty(prefix = "tangdao-web", name = "demo", havingValue = "true", matchIfMissing = true)
 	public DemoAspect demoAspect() {
 		return new DemoAspect();
+	}
+
+	@Bean
+	@ConditionalOnProperty(prefix = "tangdao-web", name = "log", havingValue = "true", matchIfMissing = true)
+	public LogAspect LogAspect() {
+		return new LogAspect();
 	}
 
 	@Bean
@@ -78,7 +84,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new LogInterceptor()).excludePathPatterns("/api/**", "/log/**").addPathPatterns("/**");
 	}
 
 }
