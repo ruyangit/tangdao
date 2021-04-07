@@ -4,7 +4,8 @@ import Vue from 'vue'
 const requireComponent = require.context('../components', true, /[a-z0-9]+\.(jsx?|vue)$/i)
 
 const components = [
-  './Status/Status.vue'
+  './Status/Status.vue',
+  './Category/CategoryModal.vue'
 ]
 // For each matching file name...
 components.forEach(fileName => {
