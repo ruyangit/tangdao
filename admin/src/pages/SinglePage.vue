@@ -91,8 +91,8 @@ export default {
         { id: '6', label: '客户' },
         { id: '7', label: '设置' }
       ],
-      value1: [],
-      selected1: ['1']
+      value1: ['1-2'],
+      selected1: ['1-4']
     }
   },
   watch: {
