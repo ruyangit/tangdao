@@ -1,175 +1,148 @@
 <template>
-  <q-card :style="`width: ${width || 560}px`">
-    <slot name="header"></slot>
-    <q-card-section class="q-pa-none">
-      <q-tabs
-        dense
-        v-model="tab"
-        active-color="primary"
-        indicator-color="primary"
-        align="left"
-        class="text-grey"
-        :breakpoint="0"
-        narrow-indicator
-      >
-        <q-tab
-          v-for="(item, index) in tabs"
-          :key="item.id"
-          :name="item.id"
-          :label="item.label"
-          @click="focusTab(item, index)"
-        />
-      </q-tabs>
-    </q-card-section>
-    <q-separator />
-    <q-card-section
-      :style="bodyStyle"
-      class="scroll"
+  <q-dialog
+    v-model="fixed"
+    persistent
+  >
+    <Category
+      v-model="selected"
+      :treeData="list"
+      bodyStyle="height:320px"
     >
-      <div
-        class="row justify-center"
-        v-if="dataList.length===0"
+      <q-card-section
+        class="row items-center q-pb-md"
+        slot="header"
       >
-        没有可用数据
-      </div>
-      <div
-        class="row q-col-gutter-xs"
-        v-else
-      >
-        <div
-          class="col-3 q-pa-xs my-item"
-          v-for="item in dataList"
-          :key="item.id"
-        >
-          <div
-            class=""
-            @click="openTab(item)"
-          >
-            <q-checkbox
-              dense
-              v-model="item.checkable"
-              :trueValue="item.id"
-              :falseValue="null"
-              :label="!item.children?item.label:null"
-              @input="change(item)"
-            />
-            <span v-if="item.children">{{item.label}}（{{item.children.length}}）</span>
-          </div>
-        </div>
-      </div>
-      <q-inner-loading :showing="loading">
-        <q-spinner-hourglass
-          size="sm"
-          color="primary"
+        <div class="text-h6">类型选择</div>
+        <q-space />
+        <q-btn
+          round
+          dense
+          flat
+          icon="search"
+          size="12px"
         />
-      </q-inner-loading>
-    </q-card-section>
-    <slot name="footer"></slot>
-  </q-card>
+      </q-card-section>
+      <q-card-actions
+        slot="footer"
+        class="row"
+      >
+        <!-- <div v-if="!selected && selected.length>0">已选择{{selected}}</div> -->
+        {{selected}}
+        <q-space />
+        <q-btn
+          flat
+          label="取消"
+          color="primary"
+          class="wd-80"
+          v-close-popup
+        />
+        <q-btn
+          label="确认"
+          color="primary"
+          class="wd-80"
+          @click="onSubmit"
+        />
+      </q-card-actions>
+    </Category>
+  </q-dialog>
 </template>
 
 <script>
-// strategy: none,strict,leaf,some?
+
+import Category from './Category.vue'
 export default {
   name: 'CategoryModal',
+  components: {
+    Category
+  },
   props: {
-    treeData: {
-      type: Array,
-      default: () => { }
-    },
-    multiple: {
-      type: Boolean,
-      default: false
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    width: {
-      default: 560
-    },
-    bodyStyle: {
-      default: 'max-height:360px'
-    },
+    toggle: Boolean,
     value: Array
   },
   data () {
     return {
-      tabs: [{ id: '0', label: '全部数据' }],
-      tab: '0',
-      tabIndex: 0,
-      list: this.treeData,
-      selected: this.value
+      selected: this.value,
+      list: [
+        {
+          id: '1',
+          label: '系统管理',
+          children: [
+            {
+              id: '1-1',
+              label: '组织管理',
+              children: [
+                { id: '1-1-1', label: '用户管理' },
+                { id: '1-1-2', label: '机构管理' },
+                { id: '1-1-3', label: '公司管理' },
+                { id: '1-1-4', label: '岗位管理' }
+              ]
+            },
+            {
+              id: '1-2',
+              label: '权限管理',
+              children: [
+                { id: '1-2-1', label: '角色管理' },
+                { id: '1-2-2', label: '系统管理员' },
+                { id: '1-2-3', label: '安全审计' }
+              ]
+            },
+            {
+              id: '1-3',
+              label: '系统设置',
+              children: [
+                { id: '1-3-1', label: '菜单管理' },
+                { id: '1-3-2', label: '资源管理' },
+                { id: '1-3-3', label: '参数管理' },
+                { id: '1-3-4', label: '字典管理' },
+                { id: '1-3-5', label: '行政区划' }
+              ]
+            },
+            {
+              id: '1-4',
+              label: '系统监控',
+              children: [
+                { id: '1-4-1', label: '系统日志' },
+                { id: '1-4-2', label: '数据监控' },
+                { id: '1-4-3', label: '缓存管理' },
+                { id: '1-4-4', label: '服务器监控' },
+                { id: '1-4-5', label: '作业管理' }
+              ]
+            }
+          ]
+        },
+        { id: '2', label: '消息管理' },
+        { id: '3', label: '流程管理' },
+        { id: '4', label: '企业' },
+        { id: '5', label: '办公' },
+        { id: '6', label: '客户' },
+        { id: '7', label: '设置' }
+      ]
     }
   },
   computed: {
-    dataList () {
-      if (this.selected && this.list) {
-        this.list.map(item => {
-          if (this.selected.some(ele => ele === item.id)) {
-            item.checkable = item.id
-          }
-        })
+    fixed: {
+      get () {
+        return this.toggle
+      },
+      set () {
+        this.selected = this.value
+        this.list = this.$options.data().list
+        this.$emit('update:toggle', false)
       }
-      if (!this.list) {
-        return []
-      }
-      return this.list
     }
   },
+  watch: {
+  },
+  mounted () {
+  },
   methods: {
-    change (data) {
-      if (this.multiple) {
-        if (data.id === data.checkable) {
-          if (this.selected.indexOf(data.id) < 0) {
-            this.selected.push(data.id)
-          }
-        } else {
-          this.selected.splice(this.selected.indexOf(data.id), 1)
-        }
-        this.$emit('input', this.selected)
-      } else {
-        this.list.map(item => {
-          if (!(item.id === data.id)) {
-            delete item.checkable
-          }
-        })
-        this.$emit('input', data.checkable ? [data.id] : null)
-      }
-    },
-    focusTab (data, index) {
-      this.tab = data.id
-      this.tabIndex = index
-      if (data.id === '0') {
-        this.list = this.treeData
-      } else {
-        this.list = data.children
-      }
-    },
-    openTab (data) {
-      if (data.children && data.children.length) {
-        this.tabIndex = this.tabIndex + 1
-        this.tabs.splice(this.tabIndex)
-        this.tabs.push(data)
-        this.tab = data.id
-        this.list = data.children
-      } else if (data.isWait) {
-        this.$emit('event', 'load', {
-          data: data,
-          callback: () => {
-            this.openTab(data)
-          }
-        })
-      } else {
-        this.change(data)
-      }
+    onSubmit () {
+      this.$emit('input', this.selected)
+      this.$emit('update:toggle', false)
     }
   }
 }
 </script>
 
 <style lang="sass" scoped>
-.my-item:hover
-  background-color: #eee
-  cursor: pointer
 </style>
