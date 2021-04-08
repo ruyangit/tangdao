@@ -1,16 +1,6 @@
 <template>
-  <q-card style="width: 560px">
-    <q-card-section class="row items-center q-pb-md">
-      <div class="text-h6">类型选择 - {{tabValue}}</div>
-      <q-space />
-      <q-btn
-        round
-        dense
-        flat
-        icon="search"
-        size="12px"
-      />
-    </q-card-section>
+  <q-card :style="`width: ${width || 560}px`">
+    <slot name="header"></slot>
     <q-card-section class="q-pa-none">
       <q-tabs
         dense
@@ -33,13 +23,22 @@
     </q-card-section>
     <q-separator />
     <q-card-section
-      style="height: 380px;"
+      :style="bodyStyle"
       class="scroll"
     >
-      <div class="row q-col-gutter-xs">
+      <div
+        class="row justify-center"
+        v-if="dataList.length===0"
+      >
+        没有可用数据
+      </div>
+      <div
+        class="row q-col-gutter-xs"
+        v-else
+      >
         <div
           class="col-3 q-pa-xs my-item"
-          v-for="item in list"
+          v-for="item in dataList"
           :key="item.id"
         >
           <div
@@ -52,44 +51,91 @@
               :trueValue="item.id"
               :falseValue="null"
               :label="!item.children?item.label:null"
-              @input="change"
+              @input="change(item)"
             />
             <span v-if="item.children">{{item.label}}（{{item.children.length}}）</span>
           </div>
         </div>
       </div>
+      <q-inner-loading :showing="loading">
+        <q-spinner-hourglass
+          size="sm"
+          color="primary"
+        />
+      </q-inner-loading>
     </q-card-section>
+    <slot name="footer"></slot>
   </q-card>
 </template>
 
 <script>
+// strategy: none,strict,leaf,some?
 export default {
   name: 'CategoryModal',
   props: {
     treeData: {
       type: Array,
       default: () => { }
-    }
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    width: {
+      default: 560
+    },
+    bodyStyle: {
+      default: 'max-height:360px'
+    },
+    value: Array
   },
   data () {
     return {
       tabs: [{ id: '0', label: '全部数据' }],
       tab: '0',
       tabIndex: 0,
-      tabValue: '0',
-      list: this.treeData
+      list: this.treeData,
+      selected: this.value
     }
   },
-  mounted () {
-    console.log(this.treeData)
+  computed: {
+    dataList () {
+      if (this.selected && this.list) {
+        this.list.map(item => {
+          if (this.selected.some(ele => ele === item.id)) {
+            item.checkable = item.id
+          }
+        })
+      }
+      if (!this.list) {
+        return []
+      }
+      return this.list
+    }
   },
   methods: {
-    change (value, event) {
-      if (event) {
-        event.stopPropagation()
-        event.preventDefault()
+    change (data) {
+      if (this.multiple) {
+        if (data.id === data.checkable) {
+          if (this.selected.indexOf(data.id) < 0) {
+            this.selected.push(data.id)
+          }
+        } else {
+          this.selected.splice(this.selected.indexOf(data.id), 1)
+        }
+        this.$emit('input', this.selected)
+      } else {
+        this.list.map(item => {
+          if (!(item.id === data.id)) {
+            delete item.checkable
+          }
+        })
+        this.$emit('input', data.checkable ? [data.id] : null)
       }
-      this.tabValue = value
     },
     focusTab (data, index) {
       this.tab = data.id
@@ -107,8 +153,15 @@ export default {
         this.tabs.push(data)
         this.tab = data.id
         this.list = data.children
+      } else if (data.isWait) {
+        this.$emit('event', 'load', {
+          data: data,
+          callback: () => {
+            this.openTab(data)
+          }
+        })
       } else {
-        this.change(data.id)
+        this.change(data)
       }
     }
   }

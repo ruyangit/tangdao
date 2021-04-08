@@ -5,7 +5,71 @@
       src="img/vther.jpg"
     />
     <div class="q-pa-md">
-      <q-category-modal :treeData="list" />
+      <!-- {{value1}} -->
+    </div>
+    <div class="q-pa-md full-width row  justify-center  ">
+      <q-category-modal
+        v-model="value1"
+        :treeData="list1"
+        bodyStyle="height:320px"
+        multiple
+      >
+        <q-card-section
+          class="row items-center q-pb-md"
+          slot="header"
+        >
+          <div class="text-h6">类型选择</div>
+          <q-space />
+          <q-btn
+            round
+            dense
+            flat
+            icon="search"
+            size="12px"
+          />
+        </q-card-section>
+        <q-card-actions
+          slot="footer"
+          align="right"
+        >
+          <q-btn
+            flat
+            label="取消"
+            color="primary"
+            class="wd-80"
+          />
+          <q-btn
+            label="确认"
+            color="primary"
+            class="wd-80"
+          />
+        </q-card-actions>
+      </q-category-modal>
+    </div>
+    <div class="q-pa-md full-width row  justify-center  ">
+      <q-category-modal
+        v-model="value1"
+        :treeData="list1"
+        multiple
+      >
+        <!-- <q-card-section
+          class="row items-center q-pb-md"
+          slot="header"
+        >
+          <div class="text-h6">类型选择</div>
+          <q-space />
+          <q-btn
+            round
+            dense
+            flat
+            icon="search"
+            size="12px"
+          />
+        </q-card-section> -->
+        <!-- <q-card-actions slot="footer">
+          asdfsafsad
+        </q-card-actions> -->
+      </q-category-modal>
     </div>
     <!-- <div
       class="q-pa-md"
@@ -95,7 +159,8 @@ export default {
   name: 'page1',
   data () {
     return {
-      list: [
+      list: null,
+      list1: [
         {
           id: '1',
           label: '系统管理',
@@ -149,7 +214,13 @@ export default {
         { id: '5', label: '办公' },
         { id: '6', label: '客户' },
         { id: '7', label: '设置' }
-      ]
+      ],
+      value1: ['1', '1-4', '1-4-1']
+    }
+  },
+  watch: {
+    value1 () {
+      console.log(this.value1)
     }
   }
 }
