@@ -7,13 +7,19 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tangdao.core.model.ChildVo;
 import com.tangdao.core.model.TreeEntity;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -25,6 +31,28 @@ import cn.hutool.core.collection.CollUtil;
  */
 public abstract class TreeService<M extends BaseMapper<T>, T extends TreeEntity<T>> extends BaseService<M, T>
 		implements IService<T> {
+	
+	public List<ChildVo> getTreeList(String pid) {
+		QueryWrapper<T> queryWrapper = new QueryWrapper<T>();
+		queryWrapper.eq("status", T.NORMAL);
+//		if (StrUtil.isNotBlank(pid)) {
+//			queryWrapper.eq(T::getPid, pid);
+//		}
+//		queryWrapper.orderByAsc(T::getTreeSort);
+		List<T> sourceList = super.list(queryWrapper);
+		if (CollUtil.isEmpty(sourceList)) {
+			return CollUtil.newArrayList();
+		}
+		List<ChildVo> list = sourceList.stream().map(node -> {
+			ChildVo nodeVo = new ChildVo();
+			nodeVo.setId(node.getPrimaryVal());
+			nodeVo.setPid(node.getPid());
+			nodeVo.setLabel(node.getTreeNameVal());
+			nodeVo.setStatus(node.getStatus());
+			return nodeVo;
+		}).collect(Collectors.toList());
+		return getChildren(list);
+	}
 
 	/**
 	 * 

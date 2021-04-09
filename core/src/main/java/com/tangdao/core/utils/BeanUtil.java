@@ -11,7 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.tangdao.core.annotation.TreeName;
 import com.tangdao.core.config.Global;
+import com.tangdao.core.constant.OpenApiCode.CommonApiCode;
+import com.tangdao.core.exception.BusinessException;
 
 import cn.hutool.core.collection.CollUtil;
 
@@ -59,5 +62,23 @@ public class BeanUtil extends cn.hutool.core.bean.BeanUtil {
 			PK_NID_ENTITY_CACHE.put(clazz.getName(), pk);
 		}
 		return PK_NID_ENTITY_CACHE.get(clazz.getName());
+	}
+
+	/**
+	 * 
+	 * @param clazz
+	 * @return
+	 */
+	public static String getTreeNameKey(Class<?> clazz) {
+		List<Field> fields = ReflectionKit.getFieldList(clazz);
+		if (CollUtil.isNotEmpty(fields)) {
+			for (Field field : fields) {
+				TreeName tableId = field.getAnnotation(TreeName.class);
+				if (tableId != null) {
+					return field.getName();
+				}
+			}
+		}
+		throw new BusinessException(CommonApiCode.COMMON_ANNOTATION_EXCEPTION, "请配置 @TreeName 属性");
 	}
 }

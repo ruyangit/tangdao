@@ -53,26 +53,32 @@ public abstract class DataEntity<T> extends BaseModel {
 	@TableField(fill = FieldFill.INSERT_UPDATE)
 	public Date updateDate; // 更新时间
 
+	@JsonIgnore
+	@TableField(exist = false)
+	private String primaryKey;
+
+	@JsonIgnore
+	@TableField(exist = false)
+	private String primaryVal;
+
 	/**
 	 * 
 	 */
-	@Override
-	@JsonIgnore
 	public String getPrimaryKey() {
-		return BeanUtil.getPrimaryKey(this.getClass());
+		if (StrUtil.isBlank(primaryKey)) {
+			this.primaryKey = BeanUtil.getPrimaryKey(this.getClass());
+		}
+		return this.primaryKey;
 	}
 
 	/**
 	 * 
 	 */
-	@Override
-	@JsonIgnore
-	public String getPrimaryKeyVal() {
-		String pkKey = null;
-		if (StrUtil.isEmpty(pkKey = getPrimaryKey())) {
-			return null;
+	public String getPrimaryVal() {
+		if (StrUtil.isBlank(primaryVal)) {
+			this.primaryVal = StrUtil.toString(BeanUtil.getFieldValue(this, getPrimaryKey()));
 		}
-		return StrUtil.toString(BeanUtil.getFieldValue(this, pkKey));
+		return this.primaryVal;
 	}
 
 }

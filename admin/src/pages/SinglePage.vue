@@ -44,7 +44,29 @@
         @finish="onFinish"
       >
       </Category> -->
+      <q-btn
+        @click="drawer=!drawer"
+        label="切换"
+      />
     </div>
+    <q-drawer
+      side="right"
+      v-model="drawer"
+      show-if-above
+      elevated
+      :width="280"
+      :breakpoint="200"
+      content-class="bg-grey-3"
+    >
+      <q-scroll-area class="fit">
+        <div class="q-pa-sm">
+          <div
+            v-for="n in 50"
+            :key="n"
+          >Drawer {{ n }} / 50</div>
+        </div>
+      </q-scroll-area>
+    </q-drawer>
   </div>
 </template>
 
@@ -57,6 +79,7 @@ export default {
   },
   data () {
     return {
+      drawer: false,
       search: '',
       loading: true,
       toggle1: false,
@@ -116,7 +139,7 @@ export default {
         { id: '7', label: '设置' }
       ],
       list: [],
-      value: '341824',
+      value: '610423',
       selected1: []
     }
   },

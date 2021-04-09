@@ -30,6 +30,6 @@ public class AreaController extends BaseController {
 //	@LogOpt(logTitle = "获取节点数据")
 	@GetMapping("/tree")
 	public CommonResponse tree() {
-		return renderResult(areaService.tree(null));
+		return renderResult(areaService.getTreeList(null));
 	}
 }

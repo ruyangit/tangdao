@@ -5,9 +5,6 @@ package com.tangdao.core.model;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -51,17 +48,4 @@ public abstract class BaseModel implements Serializable {
 	 * 草稿
 	 */
 	public static final String DRAFT = "9";
-	/**
-	 * 主键名
-	 */
-	@JsonIgnore
-	@TableField(exist = false)
-	private String primaryKey;
-	/**
-	 * 主键值
-	 */
-	@JsonIgnore
-	@TableField(exist = false)
-	private String primaryKeyVal;
-
 }
