@@ -6,6 +6,7 @@
     />
     <div class="q-pa-md full-width row  justify-center  ">
       <q-category-modal
+        title="选择类型"
         v-model="selected1"
         :toggle.sync="toggle1"
       />

@@ -99,8 +99,8 @@ export default {
       tab: '0',
       tabIndex: 0,
       list: this.treeData,
-      selected: this.value,
-      selectedObject: []
+      selected: this.value
+      // ,selectedObject: []
     }
   },
   computed: {
@@ -121,14 +121,16 @@ export default {
   },
   mounted () {
     if (!this.multiple) {
-      this.selected.forEach(ele => {
-        const data = this.getNode(ele, this.treeData)
-        if (data && data.palls) {
-          data.palls.forEach(ele => {
-            this.openTab(ele)
-          })
-        }
-      })
+      if (this.selected && this.selected.length > 0) {
+        this.selected.forEach(ele => {
+          const data = this.getNode(ele, this.treeData)
+          if (data && data.palls) {
+            data.palls.forEach(ele => {
+              this.openTab(ele)
+            })
+          }
+        })
+      }
     }
   },
   methods: {
@@ -137,28 +139,18 @@ export default {
         if (data.id === data.checkable) {
           if (this.selected.indexOf(data.id) < 0) {
             this.selected.push(data.id)
-            // const daa = this.getNode(data.id, this.treeData)
-            // if (daa[1]) {
-            //   this.selectedLabel.push(daa[1].label)
-            // }
           }
         } else {
           this.selected.splice(this.selected.indexOf(data.id), 1)
-          // this.selectedLabel.splice(this.selected.indexOf(data.id), 1)
         }
       } else {
         if (data.checkable) {
           this.selected = [data.id]
-          // this.selectedLabel = [data.label]
-          // const daa = this.getNode(data.id, this.treeData)
-          // if (daa[1]) {
-          // }
           this.list.map(item => {
             delete item.checkable
           })
         } else {
           this.selected = []
-          // this.selectedLabel = []
         }
       }
       this.$emit('input', this.selected)
@@ -179,13 +171,6 @@ export default {
         this.tabs.push(data)
         this.tab = data.id
         this.list = data.children
-      } else if (data.isWait) {
-        this.$emit('event', 'load', {
-          data: data,
-          callback: () => {
-            this.openTab(data)
-          }
-        })
       } else {
         this.change(data)
       }

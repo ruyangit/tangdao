@@ -4,6 +4,7 @@
     persistent
   >
     <Category
+      ref="category"
       v-model="selected"
       :treeData="list"
       bodyStyle="height:320px"
@@ -12,7 +13,10 @@
         class="row items-center q-pb-md"
         slot="header"
       >
-        <div class="text-h6">类型选择</div>
+        <div
+          class="text-h6"
+          v-text="title"
+        ></div>
         <q-space />
         <q-btn
           round
@@ -26,8 +30,7 @@
         slot="footer"
         class="row"
       >
-        <!-- <div v-if="!selected && selected.length>0">已选择{{selected}}</div> -->
-        {{selected}}
+        <div v-if="treeNames">{{treeNames}}</div>
         <q-space />
         <q-btn
           flat
@@ -56,12 +59,17 @@ export default {
     Category
   },
   props: {
+    title: {
+      type: String,
+      default: ''
+    },
     toggle: Boolean,
     value: Array
   },
   data () {
     return {
       selected: this.value,
+      selectedObject: [],
       list: [
         {
           id: '1',
@@ -129,11 +137,34 @@ export default {
         this.list = this.$options.data().list
         this.$emit('update:toggle', false)
       }
+    },
+    treeNames () {
+      if (this.selectedObject[0]) {
+        const tempTreeNames = [this.selectedObject[0].label]
+        if (this.selectedObject[0].palls) {
+          this.selectedObject[0].palls.forEach(ele => {
+            tempTreeNames.unshift(ele.label)
+          })
+        }
+        return tempTreeNames.join('>')
+      }
+      return null
     }
   },
-  watch: {
-  },
   mounted () {
+    // this.$nextTick(function () {
+    //   console.log(this.$refs)
+    // })
+  },
+  watch: {
+    selected () {
+      if (this.selected && this.selected[0]) {
+        const node = this.$refs.category.getNode(this.selected[0], this.list)
+        this.selectedObject = [node]
+      } else {
+        this.selectedObject = []
+      }
+    }
   },
   methods: {
     onSubmit () {

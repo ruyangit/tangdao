@@ -44,7 +44,7 @@
 import * as materialIconsSet from '@quasar/extras/material-icons'
 import { copyToClipboard } from 'quasar'
 export default {
-  name: 'FontImage',
+  name: 'Icons',
   meta: { title: '字体图标' },
   data () {
     return {
