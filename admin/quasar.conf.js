@@ -218,7 +218,7 @@ module.exports = function (ctx) {
     vendor: {
       /* 禁用vendor块: */
       // disable: true,
-      remove: ['lottie-web', 'highcharts']
+      remove: ['lottie-web', 'highcharts', '@quasar']
     }
   }
 }
