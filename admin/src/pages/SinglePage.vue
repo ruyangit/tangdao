@@ -5,9 +5,9 @@
       src="img/vther.jpg"
     />
     <div class="q-pa-md full-width row  justify-center  ">
-      <!-- <q-category-modal
+      <q-category-modal
         title="选择类型"
-        v-model="selected1"
+        v-model="value"
         :toggle.sync="toggle1"
         @finish="onFinish"
       />
@@ -15,27 +15,27 @@
         label="选择类型"
         color="primary"
         @click="toggle1 = true"
-      /> -->
+      />
     </div>
 
     <div class="q-pa-md full-width row  justify-center  ">
-      <Category
+      <!-- <Category
         v-model="value"
         :options="list"
         :loading="loading"
         @finish="onFinish"
       >
-      </Category>
+      </Category> -->
     </div>
   </div>
 </template>
 
 <script>
-import Category from '../components/Category/Category.vue'
+// import Category from '../components/Category/Category.vue'
 export default {
   name: 'page1',
   components: {
-    Category
+    // Category
   },
   data () {
     return {
@@ -102,15 +102,15 @@ export default {
     }
   },
   watch: {
-    value () {
-      console.log(this.value)
-    },
-    selected1 () {
-      console.log(this.selected1)
-    }
+    // value () {
+    //   console.log(this.value)
+    // },
+    // selected1 () {
+    //   console.log(this.selected1)
+    // }
   },
   mounted () {
-    this.onRequest()
+    // this.onRequest()
   },
   methods: {
     async onRequest () {
@@ -128,8 +128,10 @@ export default {
         this.loading = false
       }, 1000)
     },
-    onFinish ({ selectedOptions }) {
+    onFinish ({ selected, selectedOptions }) {
+      console.log(selected)
       console.log(selectedOptions)
+      console.log(this.value)
     }
   }
 }

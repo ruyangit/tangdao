@@ -71,7 +71,7 @@
 <script>
 // strategy: none,strict,leaf,some?
 export default {
-  name: 'Category',
+  name: 'Category11',
   props: {
     options: {
       type: Array,

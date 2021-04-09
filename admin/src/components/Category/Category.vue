@@ -30,7 +30,8 @@
         class="row justify-center"
         v-if="dataList.length===0"
       >
-        没有可用数据
+        <span v-if="loading">正在加载...</span>
+        <span v-else>没有可用数据</span>
       </div>
       <div
         class="row q-col-gutter-xs"
@@ -47,7 +48,7 @@
               v-model="selected"
               :val="item.id"
               :label="!item.children?item.label:null"
-              :disable="item.status==='2':true:false"
+              :disable="(item.status && item.status === '2') ? true : false"
               @input="change(item)"
             />
             <span v-if="item.children">{{item.label}}（{{item.children.length}}）</span>
@@ -66,7 +67,6 @@
 </template>
 
 <script>
-// strategy: none,strict,leaf,some?
 export default {
   name: 'Category',
   props: {
@@ -82,7 +82,7 @@ export default {
     },
     bodyStyle: {
       type: String,
-      default: 'max-height:360px'
+      default: 'max-height:350px'
     }
   },
   data () {
