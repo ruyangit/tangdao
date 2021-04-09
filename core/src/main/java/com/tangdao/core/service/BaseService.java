@@ -5,15 +5,13 @@ package com.tangdao.core.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
-import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
+import com.tangdao.core.utils.BeanUtil;
 
 /**
  * <p>
@@ -28,31 +26,17 @@ public abstract class BaseService<M extends BaseMapper<T>, T> extends ServiceImp
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
-	 * 构建mybatis-plus的query
+	 * 
+	 * TODO 状态更新
+	 * @param pkVal  主鍵值
+	 * @param status 更新状态
+	 * @return
 	 */
-	public QueryChainWrapper<T> query() {
-		return ChainWrappers.queryChain(this.getBaseMapper());
+	@Transactional(rollbackFor = Exception.class)
+	public boolean updateStatus(String pkVal, String status) {
+		UpdateWrapper<T> updateWrapper = new UpdateWrapper<T>();
+		updateWrapper.set("status", status);
+		updateWrapper.eq(BeanUtil.getPrimaryKey(getEntityClass()), pkVal);
+		return super.update(updateWrapper);
 	}
-
-	/**
-	 * 构建mybatis-plus的lambdaQuery
-	 */
-	public LambdaQueryChainWrapper<T> lambdaQuery() {
-		return ChainWrappers.lambdaQueryChain(this.getBaseMapper());
-	}
-
-	/**
-	 * 构建mybatis-plus的update
-	 */
-	public UpdateChainWrapper<T> update() {
-		return ChainWrappers.updateChain(this.getBaseMapper());
-	}
-
-	/**
-	 * 构建mybatis-plus的lambdaUpdate
-	 */
-	public LambdaUpdateChainWrapper<T> lambdaUpdate() {
-		return ChainWrappers.lambdaUpdateChain(this.getBaseMapper());
-	}
-
 }

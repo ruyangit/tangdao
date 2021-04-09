@@ -4,9 +4,9 @@
 package com.tangdao.core.model;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,11 +22,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public abstract class BaseModel implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	
 	/**
 	 * 正常
 	 */
@@ -55,14 +51,17 @@ public abstract class BaseModel implements Serializable {
 	 * 草稿
 	 */
 	public static final String DRAFT = "9";
-
 	/**
-	 * 脚本缓存
+	 * 主键名
 	 */
+	@JsonIgnore
 	@TableField(exist = false)
-	public LinkedHashMap<String, Object> dataSqlMap;
+	private String primaryKey;
+	/**
+	 * 主键值
+	 */
+	@JsonIgnore
+	@TableField(exist = false)
+	private String primaryKeyVal;
 
-	public void setDataSqlMap(String key, Object value) {
-		this.getDataSqlMap().put(key, value);
-	}
 }

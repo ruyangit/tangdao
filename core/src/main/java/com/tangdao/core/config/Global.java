@@ -25,4 +25,36 @@ public class Global {
 	// false
 	public static final Boolean FALSE = false;
 
+	// 0
+	public static final String ROOT_ID = "0";
+
+	/***
+	 * 默认字段名定义
+	 */
+	public enum FieldName {
+		/**
+		 * 主键属性名
+		 */
+		id,
+		/**
+		 * 状态
+		 */
+		status,
+		/**
+		 * 创建时间
+		 */
+		createDate,
+		/**
+		 * 修改时间
+		 */
+		updateDate,
+		/**
+		 * 创建人
+		 */
+		createBy,
+		/**
+		 * 修改人
+		 */
+		updateBy
+	}
 }

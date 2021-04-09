@@ -8,6 +8,7 @@ import java.util.Date;
 import org.apache.ibatis.reflection.MetaObject;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.tangdao.core.config.Global;
 import com.tangdao.core.context.SessionContext;
 import com.tangdao.core.model.BaseModel;
 
@@ -23,26 +24,20 @@ import cn.hutool.core.util.StrUtil;
  */
 public class DateMetaObjectHandler implements MetaObjectHandler {
 
-	private String CREATE_BY_FIELD = "createBy";
-	private String CREATE_DATE_FIELD = "createDate";
-	private String UPDATE_BY_FIELD = "updateBy";
-	private String UPDATE_DATE_FIELD = "updateDate";
-	private String STATUS_FIELD = "status";
-
 	@Override
 	public void insertFill(MetaObject metaObject) {
 		// TODO Auto-generated method stub
-		Object createDate = getFieldValByName(CREATE_DATE_FIELD, metaObject);
+		Object createDate = getFieldValByName(Global.FieldName.createDate.name(), metaObject);
 		if (createDate == null) {
-			setFieldValByName(CREATE_DATE_FIELD, new Date(), metaObject);
+			setFieldValByName(Global.FieldName.createDate.name(), new Date(), metaObject);
 		}
-		Object createBy = getFieldValByName(CREATE_BY_FIELD, metaObject);
+		Object createBy = getFieldValByName(Global.FieldName.createBy.name(), metaObject);
 		if (createBy == null && StrUtil.isNotBlank(SessionContext.getId())) {
-			setFieldValByName(CREATE_BY_FIELD, SessionContext.getId(), metaObject);
+			setFieldValByName(Global.FieldName.createBy.name(), SessionContext.getId(), metaObject);
 		}
-		Object status = getFieldValByName(STATUS_FIELD, metaObject);
+		Object status = getFieldValByName(Global.FieldName.status.name(), metaObject);
 		if (status == null) {
-			setFieldValByName(STATUS_FIELD, BaseModel.NORMAL, metaObject);
+			setFieldValByName(Global.FieldName.status.name(), BaseModel.NORMAL, metaObject);
 		}
 
 		this.updateFill(metaObject);
@@ -51,13 +46,13 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
 	@Override
 	public void updateFill(MetaObject metaObject) {
 		// TODO Auto-generated method stub
-		Object updateDate = getFieldValByName(UPDATE_DATE_FIELD, metaObject);
+		Object updateDate = getFieldValByName(Global.FieldName.updateDate.name(), metaObject);
 		if (updateDate == null) {
-			setFieldValByName(UPDATE_DATE_FIELD, new Date(), metaObject);
+			setFieldValByName(Global.FieldName.updateDate.name(), new Date(), metaObject);
 		}
-		Object updateBy = getFieldValByName(UPDATE_BY_FIELD, metaObject);
+		Object updateBy = getFieldValByName(Global.FieldName.updateBy.name(), metaObject);
 		if (updateBy == null && StrUtil.isNotBlank(SessionContext.getId())) {
-			setFieldValByName(UPDATE_BY_FIELD, SessionContext.getId(), metaObject);
+			setFieldValByName(Global.FieldName.updateBy.name(), SessionContext.getId(), metaObject);
 		}
 	}
 

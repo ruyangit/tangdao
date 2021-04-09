@@ -27,8 +27,6 @@ public abstract class TreeEntity<T> extends DataEntity<T> {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static String ROOT_ID = "0";
-
 	public String pid;
 
 	public String pids;
@@ -36,6 +34,8 @@ public abstract class TreeEntity<T> extends DataEntity<T> {
 	public Integer treeSort;
 
 	public String treeNames;
+	
+	private String status;
 
 	@TableField(exist = false)
 	public List<T> children;
@@ -43,5 +43,4 @@ public abstract class TreeEntity<T> extends DataEntity<T> {
 	public void addChild(T node) {
 		this.children.add(node);
 	}
-
 }

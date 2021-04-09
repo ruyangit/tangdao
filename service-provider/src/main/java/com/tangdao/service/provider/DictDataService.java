@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.tangdao.core.config.Global;
 import com.tangdao.core.service.BaseService;
 import com.tangdao.service.mapper.DictDataMapper;
 import com.tangdao.service.model.domain.DictData;
@@ -33,13 +34,13 @@ public class DictDataService extends BaseService<DictDataMapper, DictData> {
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean saveOrUpdate(DictData dictData) {
-		if (StrUtil.isEmpty(dictData.getPid()) || DictData.ROOT_ID.equals(dictData.getPid())) {
-			dictData.setPid(DictData.ROOT_ID);
+		if (StrUtil.isEmpty(dictData.getPid()) || Global.ROOT_ID.equals(dictData.getPid())) {
+			dictData.setPid(Global.ROOT_ID);
 			dictData.setPids(dictData.getPid() + ",");
 			dictData.setTreeNames(dictData.getDictLabel());
 		}
 		// 赋值父类数据
-		if (!DictData.ROOT_ID.equals(dictData.getPid())) {
+		if (!Global.ROOT_ID.equals(dictData.getPid())) {
 			DictData pDictData = super.getById(dictData.getPid());
 			dictData.setPids(pDictData.getPids() + pDictData + ",");
 			dictData.setTreeNames(pDictData.getTreeNames() + "/");

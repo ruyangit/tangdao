@@ -24,10 +24,9 @@ public class Area extends TreeEntity<Area> {
 	private String id; // 区域编码
 
 	private String areaName;
-	
+
 	private String areaType;
 
-	private String status;
-
 	private String remarks;
+
 }

@@ -6,7 +6,8 @@
     <Category
       ref="category"
       v-model="selected"
-      :treeData="list"
+      :options="lists"
+      :loading="loading"
       bodyStyle="height:320px"
     >
       <q-card-section
@@ -68,63 +69,11 @@ export default {
   },
   data () {
     return {
+      loading: false,
+      search: false,
       selected: this.value,
       selectedObject: [],
-      list: [
-        {
-          id: '1',
-          label: '系统管理',
-          children: [
-            {
-              id: '1-1',
-              label: '组织管理',
-              children: [
-                { id: '1-1-1', label: '用户管理' },
-                { id: '1-1-2', label: '机构管理' },
-                { id: '1-1-3', label: '公司管理' },
-                { id: '1-1-4', label: '岗位管理' }
-              ]
-            },
-            {
-              id: '1-2',
-              label: '权限管理',
-              children: [
-                { id: '1-2-1', label: '角色管理' },
-                { id: '1-2-2', label: '系统管理员' },
-                { id: '1-2-3', label: '安全审计' }
-              ]
-            },
-            {
-              id: '1-3',
-              label: '系统设置',
-              children: [
-                { id: '1-3-1', label: '菜单管理' },
-                { id: '1-3-2', label: '资源管理' },
-                { id: '1-3-3', label: '参数管理' },
-                { id: '1-3-4', label: '字典管理' },
-                { id: '1-3-5', label: '行政区划' }
-              ]
-            },
-            {
-              id: '1-4',
-              label: '系统监控',
-              children: [
-                { id: '1-4-1', label: '系统日志' },
-                { id: '1-4-2', label: '数据监控' },
-                { id: '1-4-3', label: '缓存管理' },
-                { id: '1-4-4', label: '服务器监控' },
-                { id: '1-4-5', label: '作业管理' }
-              ]
-            }
-          ]
-        },
-        { id: '2', label: '消息管理' },
-        { id: '3', label: '流程管理' },
-        { id: '4', label: '企业' },
-        { id: '5', label: '办公' },
-        { id: '6', label: '客户' },
-        { id: '7', label: '设置' }
-      ]
+      lists: []
     }
   },
   computed: {
@@ -134,40 +83,62 @@ export default {
       },
       set () {
         this.selected = this.value
-        this.list = this.$options.data().list
+        // this.lists = this.$options.data().lists
         this.$emit('update:toggle', false)
       }
     },
     treeNames () {
       if (this.selectedObject[0]) {
-        const tempTreeNames = [this.selectedObject[0].label]
+        const tempTreeNames = []
         if (this.selectedObject[0].palls) {
           this.selectedObject[0].palls.forEach(ele => {
-            tempTreeNames.unshift(ele.label)
+            tempTreeNames.push(ele.label)
           })
         }
+        tempTreeNames.push(this.selectedObject[0].label)
         return tempTreeNames.join('>')
       }
       return null
     }
   },
-  mounted () {
-    // this.$nextTick(function () {
-    //   console.log(this.$refs)
-    // })
+  created () {
+    this.onRequest()
   },
   watch: {
     selected () {
       if (this.selected && this.selected[0]) {
-        const node = this.$refs.category.getNode(this.selected[0], this.list)
+        const node = this.$refs.category.getNode(this.selected[0], this.lists)
         this.selectedObject = [node]
       } else {
         this.selectedObject = []
       }
     }
+    // ,
+    // fixed () {
+    //   if (this.fixed && this.lists.length === 0) {
+    //     this.getData()
+    //   }
+    // }
   },
   methods: {
+    async onRequest () {
+      this.loading = true
+      await this.$fetchData({
+        url: '/api/tree',
+        method: 'GET'
+      }).then(response => {
+        const { result, data } = response.data
+        if (result && data) {
+          this.lists = data
+        }
+      })
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
+    },
     onSubmit () {
+      const selectedOptions = this.$refs.category.getNode(this.selected[0], this.lists)
+      this.$emit('finish', { selectedOptions })
       this.$emit('input', this.selected)
       this.$emit('update:toggle', false)
     }

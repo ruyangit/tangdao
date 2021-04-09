@@ -5,22 +5,25 @@
       src="img/vther.jpg"
     />
     <div class="q-pa-md full-width row  justify-center  ">
-      <q-category-modal
+      <!-- <q-category-modal
         title="选择类型"
         v-model="selected1"
         :toggle.sync="toggle1"
+        @finish="onFinish"
       />
       <q-btn
         label="选择类型"
         color="primary"
         @click="toggle1 = true"
-      />
+      /> -->
     </div>
 
     <div class="q-pa-md full-width row  justify-center  ">
       <Category
-        v-model="value1"
-        :treeData="list1"
+        v-model="value"
+        :options="list"
+        :loading="loading"
+        @finish="onFinish"
       >
       </Category>
     </div>
@@ -36,6 +39,7 @@ export default {
   },
   data () {
     return {
+      loading: true,
       toggle1: false,
       list1: [
         {
@@ -92,16 +96,40 @@ export default {
         { id: '6', label: '客户' },
         { id: '7', label: '设置' }
       ],
-      value1: ['1-2'],
-      selected1: ['1-4']
+      list: [],
+      value: '341824',
+      selected1: []
     }
   },
   watch: {
-    value1 () {
-      console.log(this.value1)
+    value () {
+      console.log(this.value)
     },
     selected1 () {
       console.log(this.selected1)
+    }
+  },
+  mounted () {
+    this.onRequest()
+  },
+  methods: {
+    async onRequest () {
+      this.loading = true
+      await this.$fetchData({
+        url: '/api/tree',
+        method: 'GET'
+      }).then(response => {
+        const { result, data } = response.data
+        if (result && data) {
+          this.list = data
+        }
+      })
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
+    },
+    onFinish ({ selectedOptions }) {
+      console.log(selectedOptions)
     }
   }
 }

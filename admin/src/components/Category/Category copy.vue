@@ -41,13 +41,16 @@
           v-for="item in dataList"
           :key="item.id"
         >
-          <div @click="openTab(item)">
-            <q-radio
+          <div
+            class=""
+            @click="openTab(item)"
+          >
+            <q-checkbox
               dense
-              v-model="selected"
-              :val="item.id"
+              v-model="item.checkable"
+              :trueValue="item.id"
+              :falseValue="null"
               :label="!item.children?item.label:null"
-              :disable="item.status==='2':true:false"
               @input="change(item)"
             />
             <span v-if="item.children">{{item.label}}（{{item.children.length}}）</span>
@@ -70,20 +73,25 @@
 export default {
   name: 'Category',
   props: {
-    options: Array,
-    value: [String, Number],
+    options: {
+      type: Array,
+      default: () => { }
+    },
+    multiple: {
+      type: Boolean,
+      default: false
+    },
     loading: {
       type: Boolean,
       default: false
     },
     width: {
-      type: Number,
       default: 560
     },
     bodyStyle: {
-      type: String,
       default: 'max-height:360px'
-    }
+    },
+    value: Array
   },
   data () {
     return {
@@ -96,29 +104,55 @@ export default {
   },
   computed: {
     dataList () {
-      if (this.list.length === 0) {
-        return this.options
+      if (this.selected.length === 0) {
+        return this.list
       }
-      return this.list
+      if (this.list) {
+        this.list.map(item => {
+          if (this.selected.some(ele => ele === item.id)) {
+            item.checkable = item.id
+          }
+        })
+        return this.list
+      }
+      return []
     }
   },
-  watch: {
-    options () {
-      const data = this.getNode(this.value, this.options)
-      if (data && data.palls) {
-        data.palls.forEach(ele => {
-          this.openTab(ele)
+  mounted () {
+    if (!this.multiple) {
+      if (this.selected && this.selected.length > 0) {
+        this.selected.forEach(ele => {
+          const data = this.getNode(ele, this.options)
+          if (data && data.palls) {
+            data.palls.forEach(ele => {
+              this.openTab(ele)
+            })
+          }
         })
       }
     }
   },
   methods: {
     change (data) {
-      const eventParams = {
-        selected: this.selected,
-        selectedOptions: this.getNode(data.id, this.options)
+      if (this.multiple) {
+        if (data.id === data.checkable) {
+          if (this.selected.indexOf(data.id) < 0) {
+            this.selected.push(data.id)
+          }
+        } else {
+          this.selected.splice(this.selected.indexOf(data.id), 1)
+        }
+      } else {
+        if (data.checkable) {
+          this.selected = [data.id]
+          this.list.map(item => {
+            delete item.checkable
+          })
+        } else {
+          this.selected = []
+        }
       }
-      this.$emit('finish', eventParams)
+      this.$emit('input', this.selected)
     },
     focusTab (data, index) {
       this.tab = data.id
