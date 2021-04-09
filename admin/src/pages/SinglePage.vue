@@ -6,18 +6,36 @@
     />
     <div class="q-pa-md full-width row  justify-center  ">
       <q-category-modal
-        title="选择类型"
+        title="选择地址"
         v-model="value"
         :toggle.sync="toggle1"
         @finish="onFinish"
       />
       <q-btn
-        label="选择类型"
+        label="选择地址"
         color="primary"
         @click="toggle1 = true"
       />
     </div>
-
+    <div class="q-pa-md full-width row  justify-center  ">
+      <q-input
+        outlined
+        dense
+        no-error-icon
+        v-model.trim="search"
+        placeholder="搜索"
+      >
+        <template v-slot:append>
+          <q-btn
+            round
+            flat
+            dense
+            icon="search"
+            color="primary"
+          />
+        </template>
+      </q-input>
+    </div>
     <div class="q-pa-md full-width row  justify-center  ">
       <!-- <Category
         v-model="value"
@@ -39,6 +57,7 @@ export default {
   },
   data () {
     return {
+      search: '',
       loading: true,
       toggle1: false,
       list1: [
