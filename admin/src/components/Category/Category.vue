@@ -104,15 +104,19 @@ export default {
   },
   watch: {
     options () {
+      this.load()
+    }
+  },
+  methods: {
+    load () {
       const data = this.getNode(this.value, this.options)
       if (data && data.palls) {
         data.palls.forEach(ele => {
           this.openTab(ele)
         })
       }
-    }
-  },
-  methods: {
+      this.change({ id: this.value })
+    },
     change (data) {
       const eventParams = {
         selected: this.selected,

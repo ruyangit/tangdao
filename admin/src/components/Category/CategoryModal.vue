@@ -6,8 +6,9 @@
     <Category
       ref="category"
       v-model="selected"
-      :options="lists"
+      :options="list"
       :loading="loading"
+      @finish="onFinish"
       bodyStyle="height:320px"
     >
       <q-card-section
@@ -64,16 +65,16 @@ export default {
       type: String,
       default: ''
     },
-    toggle: Boolean,
-    value: Array
+    value: [String, Number],
+    toggle: Boolean
   },
   data () {
     return {
       loading: false,
       search: false,
+      list: [],
       selected: this.value,
-      selectedObject: [],
-      lists: []
+      selectedOptions: null
     }
   },
   computed: {
@@ -83,42 +84,32 @@ export default {
       },
       set () {
         this.selected = this.value
-        // this.lists = this.$options.data().lists
+        this.selectedOptions = this.$options.data().selectedOptions
         this.$emit('update:toggle', false)
       }
     },
     treeNames () {
-      if (this.selectedObject[0]) {
+      if (this.selectedOptions) {
         const tempTreeNames = []
-        if (this.selectedObject[0].palls) {
-          this.selectedObject[0].palls.forEach(ele => {
+        if (this.selectedOptions.palls) {
+          this.selectedOptions.palls.forEach(ele => {
             tempTreeNames.push(ele.label)
           })
         }
-        tempTreeNames.push(this.selectedObject[0].label)
+        tempTreeNames.push(this.selectedOptions.label)
         return tempTreeNames.join('>')
       }
       return null
     }
   },
-  created () {
-    this.onRequest()
-  },
   watch: {
-    selected () {
-      if (this.selected && this.selected[0]) {
-        const node = this.$refs.category.getNode(this.selected[0], this.lists)
-        this.selectedObject = [node]
+    fixed () {
+      if (this.fixed) {
+        this.onRequest()
       } else {
-        this.selectedObject = []
+        this.list = []
       }
     }
-    // ,
-    // fixed () {
-    //   if (this.fixed && this.lists.length === 0) {
-    //     this.getData()
-    //   }
-    // }
   },
   methods: {
     async onRequest () {
@@ -129,17 +120,23 @@ export default {
       }).then(response => {
         const { result, data } = response.data
         if (result && data) {
-          this.lists = data
+          this.list = data
         }
       })
       setTimeout(() => {
         this.loading = false
       }, 1000)
     },
+    onFinish ({ selected, selectedOptions }) {
+      this.selected = selected
+      this.selectedOptions = selectedOptions
+    },
     onSubmit () {
-      const selectedOptions = this.$refs.category.getNode(this.selected[0], this.lists)
-      this.$emit('finish', { selectedOptions })
       this.$emit('input', this.selected)
+      this.$emit('finish', {
+        selected: this.selected,
+        selectedOptions: this.selectedOptions
+      })
       this.$emit('update:toggle', false)
     }
   }

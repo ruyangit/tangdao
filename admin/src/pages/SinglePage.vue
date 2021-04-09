@@ -131,7 +131,7 @@ export default {
     onFinish ({ selected, selectedOptions }) {
       console.log(selected)
       console.log(selectedOptions)
-      console.log(this.value)
+      // console.log(this.value)
     }
   }
 }
