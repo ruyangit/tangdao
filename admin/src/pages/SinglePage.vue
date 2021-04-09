@@ -49,7 +49,7 @@
         label="切换"
       />
     </div>
-    <q-drawer
+    <!-- <q-drawer
       side="right"
       v-model="drawer"
       show-if-above
@@ -66,7 +66,7 @@
           >Drawer {{ n }} / 50</div>
         </div>
       </q-scroll-area>
-    </q-drawer>
+    </q-drawer> -->
   </div>
 </template>
 
