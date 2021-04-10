@@ -1,5 +1,5 @@
 <template>
-  <q-card :style="`width: ${width || 560}px`">
+  <q-card style="width: 560px">
     <slot name="header"></slot>
     <q-card-section class="q-pa-none">
       <q-tabs
@@ -75,10 +75,6 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    },
-    width: {
-      type: Number,
-      default: 560
     },
     bodyStyle: {
       type: String,

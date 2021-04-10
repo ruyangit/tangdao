@@ -126,7 +126,6 @@
               <q-td
                 key="nickname"
                 :props="props"
-                class="text--line2-f"
               >{{ props.row.nickname }}</q-td>
               <q-td
                 key="userType"
