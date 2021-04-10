@@ -203,7 +203,7 @@
                   title="上级标签"
                   v-model="dictDataForm.pid"
                   :toggle.sync="toggle"
-                  :url="`/dictData/treeData?dictType=${form.dictType}`"
+                  :url="`/dictData/treeData?dictType=${form.dictType}&excludeCode=${dictDataForm.id}`"
                   @finish="onFinish"
                 />
                 <q-input

@@ -70,12 +70,16 @@ public class DictDataController extends BaseController {
 
 	@LogOpt(logTitle = "获取节点数据")
 	@GetMapping("/treeData")
-	public CommonResponse tree(DictData dictData) {
+	public CommonResponse tree(DictData dictData, String excludeCode) {
 		LambdaQueryWrapper<DictData> quearyWrapper = Wrappers.<DictData>lambdaQuery().eq(DictData::getStatus,
 				Area.NORMAL);
 		quearyWrapper.eq(DictData::getDictType, dictData.getDictType());
-		if(StrUtil.isNotBlank(dictData.getPid())) {
+		if (StrUtil.isNotBlank(dictData.getPid())) {
 			quearyWrapper.eq(DictData::getPid, dictData.getPid());
+		}
+		if (StrUtil.isNotBlank(excludeCode)) {
+			quearyWrapper.ne(DictData::getId, excludeCode);
+			quearyWrapper.notLike(DictData::getPids, "," + excludeCode + ",");
 		}
 		quearyWrapper.orderByAsc(DictData::getTreeSort);
 		return renderResult(dictDataService.getTreeList(quearyWrapper));
