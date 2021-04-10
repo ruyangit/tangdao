@@ -6,10 +6,7 @@ package com.tangdao.core.model;
 import java.util.List;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.tangdao.core.utils.BeanUtil;
 
-import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,27 +42,5 @@ public abstract class TreeEntity<T> extends DataEntity<T> {
 
 	public void addChild(T node) {
 		this.children.add(node);
-	}
-
-	@JsonIgnore
-	@TableField(exist = false)
-	private String treeNameKey;
-
-	@JsonIgnore
-	@TableField(exist = false)
-	private String treeNameVal;
-
-	public String getTreeNameKey() {
-		if (StrUtil.isBlank(treeNameKey)) {
-			this.treeNameKey = BeanUtil.getTreeNameKey(this.getClass());
-		}
-		return this.treeNameKey;
-	}
-
-	public String getTreeNameVal() {
-		if (StrUtil.isBlank(treeNameVal)) {
-			this.treeNameVal = StrUtil.toString(BeanUtil.getFieldValue(this, getTreeNameKey()));
-		}
-		return this.treeNameVal;
 	}
 }

@@ -9,17 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tangdao.core.model.ChildVo;
 import com.tangdao.core.model.TreeEntity;
+import com.tangdao.core.utils.ColumnUtil;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -45,9 +42,9 @@ public abstract class TreeService<M extends BaseMapper<T>, T extends TreeEntity<
 		}
 		List<ChildVo> list = sourceList.stream().map(node -> {
 			ChildVo nodeVo = new ChildVo();
-			nodeVo.setId(node.getPrimaryVal());
+			nodeVo.setId((String)ColumnUtil.getPKAttrVal(node));
 			nodeVo.setPid(node.getPid());
-			nodeVo.setLabel(node.getTreeNameVal());
+			nodeVo.setLabel((String)ColumnUtil.getTreeNameAttrVal(node));
 			nodeVo.setStatus(node.getStatus());
 			return nodeVo;
 		}).collect(Collectors.toList());

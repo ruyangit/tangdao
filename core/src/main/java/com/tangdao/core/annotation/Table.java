@@ -15,15 +15,12 @@ import java.lang.annotation.Target;
  * </p>
  *
  * @author ruyangit@gmail.com
- * @since 2021年4月9日
+ * @since 2018年4月10日
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
-public @interface TreeName {
+@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+public @interface Table {
 
-	/**
-     * 字段名（该值可无）
-     */
-    String value() default "";
+	Column[] columns();
 }

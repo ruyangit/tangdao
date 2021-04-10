@@ -9,6 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.context.annotation.Import;
+
 /**
  * <p>
  * TODO 描述
@@ -17,12 +19,13 @@ import java.lang.annotation.Target;
  * @author ruyangit@gmail.com
  * @since 2021年4月10日
  */
-@Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
-public @interface TableTree {
+@Target(ElementType.TYPE)
+@Documented
+@Import(TableScannerRegistrar.class)
+public @interface TableScan {
 
-	String primaryKey();
+	String[] value() default {};
 	
-	String treeNameKey();
+	String[] basePackages() default {};
 }

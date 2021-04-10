@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import com.tangdao.core.DateMetaObjectHandler;
+import com.tangdao.core.annotation.TableScan;
 import com.tangdao.core.web.interceptor.SqlCommitTypeInterceptor;
 
 /**
@@ -24,8 +25,9 @@ import com.tangdao.core.web.interceptor.SqlCommitTypeInterceptor;
 @Configuration
 @EnableTransactionManagement
 @MapperScan("com.tangdao.*.mapper")
+@TableScan("com.tangdao.*.model.domain")
 public class MybatisConfig {
-
+	
 	/**
 	 * 
 	 * TODO 分页拦截器
