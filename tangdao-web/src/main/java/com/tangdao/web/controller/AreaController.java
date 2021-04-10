@@ -8,8 +8,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.tangdao.core.CommonResponse;
+import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.service.model.domain.Area;
 import com.tangdao.service.provider.AreaService;
 
 /**
@@ -21,15 +25,17 @@ import com.tangdao.service.provider.AreaService;
  * @since 2021年4月9日
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/area")
 public class AreaController extends BaseController {
 
 	@Autowired
 	private AreaService areaService;
 
-//	@LogOpt(logTitle = "获取节点数据")
-	@GetMapping("/tree")
+	@LogOpt(logTitle = "获取节点数据")
+	@GetMapping("/treeData")
 	public CommonResponse tree() {
-		return renderResult(areaService.getTreeList(null));
+		LambdaQueryWrapper<Area> quearyWrapper = Wrappers.<Area>lambdaQuery().eq(Area::getStatus, Area.NORMAL)
+				.orderByAsc(Area::getTreeSort);
+		return renderResult(areaService.getTreeList(quearyWrapper));
 	}
 }

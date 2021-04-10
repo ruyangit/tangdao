@@ -37,6 +37,14 @@ public class Global {
 		 */
 		id,
 		/**
+		 * 
+		 */
+		pid,
+		/**
+		 * 
+		 */
+		pids,
+		/**
 		 * 状态
 		 */
 		status,

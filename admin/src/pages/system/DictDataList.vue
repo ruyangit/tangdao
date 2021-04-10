@@ -16,7 +16,7 @@
         <div class="row q-col-gutter-md">
           <div>
             <div class="my-page-header-subtitle">字典数据</div>
-            <div class="q-mt-sm">{{ `${dictTypeForm.dictName } [${dictTypeForm.dictType }]`}}</div>
+            <div class="q-mt-sm">{{ `${dictTypeForm.dictName || '-'} [${dictTypeForm.dictType ||'-'}]`}}</div>
           </div>
           <q-space />
           <div class="row wrap content-end">
@@ -199,13 +199,22 @@
                 >
                   <span>上级标签</span>
                 </label>
+                <q-category-modal
+                  title="上级标签"
+                  v-model="dictDataForm.pid"
+                  :toggle.sync="toggle"
+                  :url="`/dictData/treeData?dictType=${form.dictType}`"
+                  @finish="onFinish"
+                />
                 <q-input
                   outlined
                   dense
                   no-error-icon
-                  v-model.trim="dictDataForm.pid"
-                  placeholder="请输入字典标签"
+                  v-model.trim="dictDataForm.pname"
+                  placeholder="请选择上级标签"
                   class="q-mt-sm"
+                  readonly
+                  @click="toggle=true"
                 >
                 </q-input>
               </div>
@@ -393,7 +402,8 @@ export default {
       dictDataForm: {
         treeSort: 10,
         status: '0'
-      }
+      },
+      toggle: false
     }
   },
   mounted () {
@@ -471,6 +481,12 @@ export default {
       delete this.dictDataForm.updateBy
       delete this.dictDataForm.updateDate
       this.dictDataEdit = true
+    },
+    onFinish ({ selected, selectedOptions }) {
+      console.log(selected)
+      console.log(selectedOptions)
+      this.dictDataForm.pid = selected
+      this.dictDataForm.pname = selectedOptions.label
     },
     async onSubmit () {
       this.loading = true

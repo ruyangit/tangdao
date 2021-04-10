@@ -18,26 +18,5 @@ import com.tangdao.service.model.domain.Area;
  */
 @Service
 public class AreaService extends TreeService<AreaMapper, Area> implements IAreaService {
-
-//	public List<ChildVo> tree(String pid) {
-//		LambdaQueryWrapper<Area> queryWrapper = Wrappers.<Area>lambdaQuery();
-//		queryWrapper.eq(Area::getStatus, Area.NORMAL);
-//		if (StrUtil.isNotBlank(pid)) {
-//			queryWrapper.eq(Area::getPid, pid);
-//		}
-//		queryWrapper.orderByAsc(Area::getTreeSort);
-//		List<Area> sourceList = super.list(queryWrapper);
-//		if (CollUtil.isEmpty(sourceList)) {
-//			return CollUtil.newArrayList();
-//		}
-//		List<ChildVo> list = sourceList.stream().map(area -> {
-//			ChildVo nodeVo = new ChildVo();
-//			nodeVo.setId(area.getId());
-//			nodeVo.setPid(area.getPid());
-//			nodeVo.setLabel(area.getAreaName());
-//			nodeVo.setStatus(area.getStatus());
-//			return nodeVo;
-//		}).collect(Collectors.toList());
-//		return getChildren(list);
-//	}
+	
 }

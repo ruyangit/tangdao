@@ -3,18 +3,13 @@
  */
 package com.tangdao.service.provider;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.tangdao.core.config.Global;
-import com.tangdao.core.service.BaseService;
+import com.tangdao.core.service.TreeService;
 import com.tangdao.service.mapper.DictDataMapper;
 import com.tangdao.service.model.domain.DictData;
-
-import cn.hutool.core.util.StrUtil;
 
 /**
  * <p>
@@ -25,36 +20,10 @@ import cn.hutool.core.util.StrUtil;
  * @since 2020年12月29日
  */
 @Service
-public class DictDataService extends BaseService<DictDataMapper, DictData> {
+public class DictDataService extends TreeService<DictDataMapper, DictData> {
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteByDictType(String dictType) {
 		return super.remove(Wrappers.<DictData>lambdaQuery().eq(DictData::getDictType, dictType));
 	}
-
-	@Transactional(rollbackFor = Exception.class)
-	public boolean saveOrUpdate(DictData dictData) {
-		if (StrUtil.isEmpty(dictData.getPid()) || Global.ROOT_ID.equals(dictData.getPid())) {
-			dictData.setPid(Global.ROOT_ID);
-			dictData.setPids(dictData.getPid() + ",");
-			dictData.setTreeNames(dictData.getDictLabel());
-		}
-		// 赋值父类数据
-		if (!Global.ROOT_ID.equals(dictData.getPid())) {
-			DictData pDictData = super.getById(dictData.getPid());
-			dictData.setPids(pDictData.getPids() + pDictData + ",");
-			dictData.setTreeNames(pDictData.getTreeNames() + "/");
-		}
-
-		// 保存或更新数据
-		super.saveOrUpdate(dictData);
-
-		List<DictData> children = super.list(
-				Wrappers.<DictData>lambdaQuery().like(DictData::getPids, dictData.getId()));
-		children.stream().forEach(item -> {
-
-		});
-		return true;
-	}
-
 }

@@ -17,6 +17,7 @@ import com.tangdao.core.CommonResponse;
 import com.tangdao.core.annotation.LogOpt;
 import com.tangdao.core.config.Global;
 import com.tangdao.core.web.BaseController;
+import com.tangdao.service.model.domain.Area;
 import com.tangdao.service.model.domain.DictData;
 import com.tangdao.service.provider.DictDataService;
 
@@ -52,7 +53,7 @@ public class DictDataController extends BaseController {
 		}
 		return renderResult(dictDataService.page(page, queryWrapper));
 	}
-	
+
 	@LogOpt(logTitle = "新增或更新数据")
 	@PostMapping("/save")
 	public CommonResponse save(@RequestBody DictData dictData) {
@@ -63,7 +64,20 @@ public class DictDataController extends BaseController {
 	@LogOpt(logTitle = "根据主键删除数据")
 	@PostMapping("/delete")
 	public CommonResponse delete(@RequestBody DictData dictData) {
-		dictDataService.removeById(dictData);
+		dictDataService.deleteyIdAndChildren(dictData);
 		return renderResult(Global.TRUE, "删除成功");
+	}
+
+	@LogOpt(logTitle = "获取节点数据")
+	@GetMapping("/treeData")
+	public CommonResponse tree(DictData dictData) {
+		LambdaQueryWrapper<DictData> quearyWrapper = Wrappers.<DictData>lambdaQuery().eq(DictData::getStatus,
+				Area.NORMAL);
+		quearyWrapper.eq(DictData::getDictType, dictData.getDictType());
+		if(StrUtil.isNotBlank(dictData.getPid())) {
+			quearyWrapper.eq(DictData::getPid, dictData.getPid());
+		}
+		quearyWrapper.orderByAsc(DictData::getTreeSort);
+		return renderResult(dictDataService.getTreeList(quearyWrapper));
 	}
 }

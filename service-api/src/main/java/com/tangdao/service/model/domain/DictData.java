@@ -5,6 +5,8 @@ package com.tangdao.service.model.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.tangdao.core.annotation.Column;
+import com.tangdao.core.annotation.Table;
 import com.tangdao.core.model.TreeEntity;
 
 import lombok.Getter;
@@ -20,6 +22,10 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Table(
+		columns = { 
+		@Column(attrName = "id", isPK = true),
+		@Column(attrName = "dictLabel", isTreeName = true) })
 @TableName("sys_dict_data")
 public class DictData extends TreeEntity<DictData>{
 

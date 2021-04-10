@@ -9,6 +9,7 @@
         title="选择地址"
         v-model="value"
         :toggle.sync="toggle1"
+        url="/area/treeData"
         @finish="onFinish"
       />
       <q-btn

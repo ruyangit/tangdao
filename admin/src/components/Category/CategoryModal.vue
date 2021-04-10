@@ -66,6 +66,14 @@ export default {
       default: ''
     },
     value: [String, Number],
+    options: {
+      type: Array,
+      default: () => { }
+    },
+    url: {
+      type: String,
+      default: ''
+    },
     toggle: Boolean
   },
   data () {
@@ -105,7 +113,11 @@ export default {
   watch: {
     fixed () {
       if (this.fixed) {
-        this.onRequest()
+        if (this.options) {
+          this.list = this.options
+        } else if (this.url) {
+          this.onRequest()
+        }
       } else {
         this.list = []
       }
@@ -115,7 +127,7 @@ export default {
     async onRequest () {
       this.loading = true
       await this.$fetchData({
-        url: '/api/tree',
+        url: this.url,
         method: 'GET'
       }).then(response => {
         const { result, data } = response.data
