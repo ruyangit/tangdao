@@ -15,8 +15,8 @@ import org.springframework.core.task.TaskExecutor;
 
 import com.alibaba.fastjson.JSON;
 import com.tangdao.core.config.Global;
-import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.model.SessionUser;
+import com.tangdao.core.context.SessionContextHolder;
+import com.tangdao.core.context.SessionUser;
 import com.tangdao.core.model.SysLog;
 import com.tangdao.core.service.ILogService;
 import com.tangdao.core.web.SpringUtils;
@@ -144,7 +144,7 @@ public class LogUtil {
 		log.setExecuteTime(executeTime);
 
 		// 操作用户
-		SessionUser user = SessionContext.get();
+		SessionUser user = SessionContextHolder.get();
 		if (user != null) {
 			log.setCreateBy(user.getId());
 			log.setCreateByName(user.getUsername());

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.tangdao.core.model;
+package com.tangdao.core.context;
 
 import java.io.Serializable;
 import java.util.HashMap;

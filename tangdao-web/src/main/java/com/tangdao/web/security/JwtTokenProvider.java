@@ -14,8 +14,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Component;
 
-import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.model.SessionUser;
+import com.tangdao.core.context.SessionContextHolder;
+import com.tangdao.core.context.SessionUser;
 import com.tangdao.web.security.model.AuthUser;
 
 import io.jsonwebtoken.Claims;
@@ -109,6 +109,6 @@ public class JwtTokenProvider {
 		claims.put("mgrType", authUser.getMgrType());
 		claims.put("token", authUser.getToken());
 		session.setClaims(claims);
-		SessionContext.set(session);
+		SessionContextHolder.set(session);
 	}
 }

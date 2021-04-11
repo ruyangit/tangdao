@@ -10,8 +10,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.tangdao.core.annotation.LoginUser;
-import com.tangdao.core.context.SessionContext;
-import com.tangdao.core.model.SessionUser;
+import com.tangdao.core.context.SessionContextHolder;
+import com.tangdao.core.context.SessionUser;
 
 /**
  * <p>
@@ -33,9 +33,9 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		try {
-			return SessionContext.get();
+			return SessionContextHolder.get();
 		} finally {
-			SessionContext.remove();
+			SessionContextHolder.remove();
 		}
 	}
 

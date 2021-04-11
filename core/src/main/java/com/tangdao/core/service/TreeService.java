@@ -51,7 +51,6 @@ public abstract class TreeService<M extends BaseMapper<T>, T extends TreeEntity<
 			nodeVo.setId((String) ColumnUtil.getPKAttrVal(node));
 			nodeVo.setPid(node.getPid());
 			nodeVo.setLabel((String) ColumnUtil.getTreeNameAttrVal(node));
-			nodeVo.setStatus(node.getStatus());
 			return nodeVo;
 		}).collect(Collectors.toList());
 		return getChildren(list);

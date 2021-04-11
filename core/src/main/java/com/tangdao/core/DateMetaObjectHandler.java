@@ -9,7 +9,7 @@ import org.apache.ibatis.reflection.MetaObject;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.tangdao.core.config.Global;
-import com.tangdao.core.context.SessionContext;
+import com.tangdao.core.context.SessionContextHolder;
 import com.tangdao.core.model.BaseModel;
 
 import cn.hutool.core.util.StrUtil;
@@ -32,8 +32,8 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
 			setFieldValByName(Global.FieldName.createDate.name(), new Date(), metaObject);
 		}
 		Object createBy = getFieldValByName(Global.FieldName.createBy.name(), metaObject);
-		if (createBy == null && StrUtil.isNotBlank(SessionContext.getId())) {
-			setFieldValByName(Global.FieldName.createBy.name(), SessionContext.getId(), metaObject);
+		if (createBy == null && StrUtil.isNotBlank(SessionContextHolder.getId())) {
+			setFieldValByName(Global.FieldName.createBy.name(), SessionContextHolder.getId(), metaObject);
 		}
 		Object status = getFieldValByName(Global.FieldName.status.name(), metaObject);
 		if (status == null) {
@@ -51,8 +51,8 @@ public class DateMetaObjectHandler implements MetaObjectHandler {
 			setFieldValByName(Global.FieldName.updateDate.name(), new Date(), metaObject);
 		}
 		Object updateBy = getFieldValByName(Global.FieldName.updateBy.name(), metaObject);
-		if (updateBy == null && StrUtil.isNotBlank(SessionContext.getId())) {
-			setFieldValByName(Global.FieldName.updateBy.name(), SessionContext.getId(), metaObject);
+		if (updateBy == null && StrUtil.isNotBlank(SessionContextHolder.getId())) {
+			setFieldValByName(Global.FieldName.updateBy.name(), SessionContextHolder.getId(), metaObject);
 		}
 	}
 
