@@ -17,6 +17,7 @@ import com.tangdao.core.web.BaseController;
 import com.tangdao.service.model.domain.User;
 
 import cn.hutool.system.SystemUtil;
+import cn.hutool.system.oshi.OshiUtil;
 
 /**
  * <p>
@@ -47,8 +48,11 @@ public class ServerController extends BaseController {
 		data.put("totalThreadCount", SystemUtil.getTotalThreadCount());
 		data.put("osInfo", SystemUtil.getOsInfo());
 		data.put("userInfo", SystemUtil.getUserInfo());
-//		data.put("javaSpecInfo", SystemUtil.getJavaSpecInfo());
-//		data.put("jvmSpecInfo", SystemUtil.getJvmSpecInfo());
+		data.put("oshiMemory", OshiUtil.getMemory());
+		data.put("oshiOs", OshiUtil.getOs());
+		data.put("oshiProcessor", OshiUtil.getProcessor());
+		data.put("oshiSensors", OshiUtil.getSensors());
+		data.put("oshiSystem", OshiUtil.getSystem());
 		
 		return renderResult(Global.TRUE,"系统信息", data);
 	}

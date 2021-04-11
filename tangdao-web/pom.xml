@@ -50,6 +50,21 @@
 			<version>${hutool.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.github.oshi</groupId>
+			<artifactId>oshi-core</artifactId>
+			<version>${oshi.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jna</artifactId>
+					<groupId>net.java.dev.jna</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
@@ -59,8 +74,8 @@
 			<artifactId>mybatis-plus-boot-starter</artifactId>
 			<version>${mybatis-plus.version}</version>
 		</dependency>
-		
-		<!-- tangdao -->		
+
+		<!-- tangdao -->
 		<dependency>
 			<groupId>com.tangdao</groupId>
 			<artifactId>tangdao-service-provider</artifactId>
