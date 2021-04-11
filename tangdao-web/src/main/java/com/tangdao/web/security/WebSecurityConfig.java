@@ -56,8 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().cors() // We don't need CSRF for JWT based authentication
 				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll().antMatchers("/api/**")
-				.permitAll().antMatchers("/**").authenticated();
+				.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+				.antMatchers("/actuator", "/api/**").permitAll().antMatchers("/**").authenticated();
 
 		http.exceptionHandling().authenticationEntryPoint(userAuthenticationEntryPoint)
 				.accessDeniedHandler(userAccessDeniedHandler);

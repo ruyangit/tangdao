@@ -56,6 +56,12 @@ export default function () {
         path: 'sys/log'
       },
       {
+        id: 'server',
+        name: '服务器监控',
+        icon: 'stairs',
+        path: 'sys/server'
+      },
+      {
         id: 'icons',
         name: '字体图标',
         icon: 'font_download',

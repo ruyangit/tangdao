@@ -16,7 +16,10 @@
         <div class="row q-col-gutter-md">
           <div>
             <div class="my-page-header-subtitle">字典数据</div>
-            <div class="q-mt-sm">{{ `${dictTypeForm.dictName || '-'} [${dictTypeForm.dictType ||'-'}]`}}</div>
+            <div
+              class="q-mt-sm"
+              v-show="dictTypeForm.dictName"
+            >{{ `${dictTypeForm.dictName } [${dictTypeForm.dictType }]`}}</div>
           </div>
           <q-space />
           <div class="row wrap content-end">
@@ -203,10 +206,31 @@
                   title="上级标签"
                   v-model="dictDataForm.pid"
                   :toggle.sync="toggle"
-                  :url="`/dictData/treeData?dictType=${form.dictType}&excludeCode=${dictDataForm.id}`"
+                  :url="`/dictData/treeData?dictType=${form.dictType}&excludeCode=${dictDataForm.id||''}`"
                   @finish="onFinish"
                 />
-                <q-input
+                <q-field
+                  outlined
+                  dense
+                  class="q-mt-sm"
+                >
+                  <template v-slot:append>
+                    <q-btn
+                      flat
+                      dense
+                      size="12px"
+                      icon="search"
+                      @click="toggle=true"
+                    />
+                  </template>
+                  <template v-slot:control>
+                    <div
+                      class="self-center full-width no-outline"
+                      tabindex="0"
+                    >{{dictDataForm.pname||'请选择上级标签'}}</div>
+                  </template>
+                </q-field>
+                <!-- <q-input
                   outlined
                   dense
                   no-error-icon
@@ -214,9 +238,8 @@
                   placeholder="请选择上级标签"
                   class="q-mt-sm"
                   readonly
-                  @click="toggle=true"
                 >
-                </q-input>
+                </q-input> -->
               </div>
               <div class="col-12">
                 <label
@@ -483,8 +506,8 @@ export default {
       this.dictDataEdit = true
     },
     onFinish ({ selected, selectedOptions }) {
-      console.log(selected)
-      console.log(selectedOptions)
+      // console.log(selected)
+      // console.log(selectedOptions)
       this.dictDataForm.pid = selected
       this.dictDataForm.pname = selectedOptions.label
     },
