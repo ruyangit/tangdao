@@ -1,0 +1,136 @@
+<template>
+  <q-page class="my-page">
+    <div class="row items-center justify-between">
+      <div class="my-page-header">
+        <q-breadcrumbs align="left">
+          <q-breadcrumbs-el
+            label="首页"
+            to="/"
+          />
+          <q-breadcrumbs-el label="服务器监控" />
+        </q-breadcrumbs>
+        <div class="row q-col-gutter-md">
+          <div>
+            <div class="my-page-header-subtitle">系统运行状况</div>
+          </div>
+          <q-space />
+          <div class="row wrap content-end text-subtitle2">
+            {{data.oshiOsName}}({{data.oshiOsArch}})
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="my-page-body">
+      <div class="row container">
+        <div class="col-12 col-md-6 col-lg-4 q-pa-sm">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">CPU</div>
+              <div class="text-subtitle2">{{data.oshiProcessorIdentifierName}}</div>
+            </q-card-section>
+            <q-card-section class="text-h4">
+              {{data.oshiProcessorLogicalProcessorCount + ' Cores'}}
+            </q-card-section>
+          </q-card>
+          <q-card
+            class="q-mt-md"
+            v-if="data.hostInfo"
+          >
+            <q-card-section>
+              <div class="text-h6">Host</div>
+              <div class="text-subtitle2">{{data.hostInfo.name}}</div>
+            </q-card-section>
+            <q-card-section>
+              {{data.hostInfo.address}}
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 q-pa-sm">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">Memory Usage</div>
+              <div :class="`text-subtitle2 ${data.oshiMemoryUsage>=80?'text-negative':null}`">{{data.oshiMemoryUsage || 0}}%</div>
+            </q-card-section>
+            <q-card-section class="text-h4 row">
+              <div>{{`${data.oshiMemoryAvailable} / ${data.oshiMemoryTotal}`}}</div>
+            </q-card-section>
+          </q-card>
+          <q-card class="q-mt-md">
+            <q-card-section>
+              <div class="text-h6">JVM Memory Usage</div>
+              <div :class="`text-subtitle2 ${data.jvmMemoryUsage>=80?'text-negative':null}`">{{data.jvmMemoryUsage}} %</div>
+            </q-card-section>
+            <q-card-section class="text-h4 row">
+              <div>{{`${data.jvmMemoryAvailable} / ${data.jvmMemoryTotal}`}}</div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-12 col-md-12 col-lg-4 q-pa-sm">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">Disk Usage</div>
+            </q-card-section>
+            <q-card-section class="text-h4">
+              <div
+                v-for="(disk, index) in data.oshiOsFileSystemDisks"
+                :key="index"
+              >
+                <div>{{`${disk.diskAvailable} / ${disk.diskTotal}`}}</div>
+                <div :class="`text-weight-bolder text-right text-h6 q-mt-md ${disk.diskUsage>=80?'text-negative':null}`">{{disk.diskUsage}} %</div>
+                <div class="text-body1 q-mt-md q-mb-lg">{{disk.mount}}</div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 q-pa-sm">
+          <q-card>
+            <q-card-section>
+              <div class="text-h6">Uptime</div>
+              <div class="text-subtitle2">{{data.javaStartTime}}</div>
+            </q-card-section>
+            <q-card-section class="text-h4">
+              {{data.javaRunTime}}
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
+    </div>
+  </q-page>
+</template>
+
+<script>
+export default {
+  name: 'Server',
+  meta: { title: '服务器监控' },
+  data () {
+    return {
+      data: {}
+    }
+  },
+  mounted () {
+    this.onRequest()
+  },
+  methods: {
+    async onRequest () {
+      this.loading = true
+      await this.$fetchData({
+        url: '/api/rt',
+        method: 'GET'
+      }).then(response => {
+        const { result, data } = response.data
+        if (result && data) {
+          this.data = data
+          console.log(this.data)
+        }
+      }).catch(error => {
+        console.error(error)
+      })
+      setTimeout(() => {
+        this.loading = false
+      }, 1000)
+    }
+  }
+}
+</script>
+<style lang="sass" scoped>
+</style>

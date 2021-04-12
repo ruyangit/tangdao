@@ -59,7 +59,7 @@ export default function () {
         id: 'server',
         name: '服务器监控',
         icon: 'stairs',
-        path: 'sys/server'
+        path: 'server'
       },
       {
         id: 'icons',

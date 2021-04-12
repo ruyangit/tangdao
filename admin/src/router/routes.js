@@ -34,7 +34,8 @@ const routes = [
           { path: 'job', name: 'job', component: () => import('pages/form/AdvancedForm.vue') }
         ]
       },
-      { path: 'icons', name: 'icons', component: () => import('src/pages/form/Icons.vue') }
+      { path: 'icons', name: 'icons', component: () => import('src/pages/form/Icons.vue') },
+      { path: 'server', name: 'server', component: () => import('src/pages/Server.vue') }
     ]
   },
 
