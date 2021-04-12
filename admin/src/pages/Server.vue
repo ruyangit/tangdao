@@ -11,7 +11,9 @@
         </q-breadcrumbs>
         <div class="row q-col-gutter-md">
           <div>
-            <div class="my-page-header-subtitle">系统运行状况</div>
+            <div class="my-page-header-subtitle">
+              系统运行状况
+            </div>
           </div>
           <q-space />
           <div class="row wrap content-end text-subtitle2">
@@ -85,7 +87,18 @@
         <div class="col-12 col-md-6 col-lg-4 q-pa-sm">
           <q-card>
             <q-card-section>
-              <div class="text-h6">Uptime</div>
+              <div class="text-h6 row">
+                <div>Uptime</div>
+                <q-space />
+                <q-btn
+                  dense
+                  flat
+                  color="primary"
+                  :loading="loading"
+                >
+                  正常
+                </q-btn>
+              </div>
               <div class="text-subtitle2">{{data.javaStartTime}}</div>
             </q-card-section>
             <q-card-section class="text-h4">
@@ -104,6 +117,7 @@ export default {
   meta: { title: '服务器监控' },
   data () {
     return {
+      loading: true,
       data: {}
     }
   },
@@ -120,7 +134,6 @@ export default {
         const { result, data } = response.data
         if (result && data) {
           this.data = data
-          console.log(this.data)
         }
       }).catch(error => {
         console.error(error)
