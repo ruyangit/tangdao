@@ -34,6 +34,9 @@ public abstract class TreeEntity<T> extends DataEntity<T> {
 	public String treeNames;
 
 	public Integer treeSort;
+	
+	@TableField(exist = false)
+	public T parent;
 
 	@TableField(exist = false)
 	public List<T> children;
