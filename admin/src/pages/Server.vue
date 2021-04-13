@@ -11,8 +11,17 @@
         </q-breadcrumbs>
         <div class="row q-col-gutter-md">
           <div>
-            <div class="my-page-header-subtitle">
+            <div class="my-page-header-subtitle relative-position">
               系统运行状况
+              <q-btn
+                dense
+                flat
+                color="positive"
+                :loading="loading"
+                style="top:-2px"
+              >
+                <q-icon name="check_circle" />
+              </q-btn>
             </div>
           </div>
           <q-space />
@@ -66,6 +75,31 @@
               <div>{{`${data.jvmMemoryAvailable} / ${data.jvmMemoryTotal}`}}</div>
             </q-card-section>
           </q-card>
+          <q-card class="q-mt-md">
+            <q-card-section>
+              <div class="text-h6">JVM Heap Memory Usage</div>
+            </q-card-section>
+            <q-card-section class="text-h4 row">
+              <div>{{data.jvmHeapMemoryInit}}</div>
+              <q-space />
+              <div class="text-caption">Init</div>
+            </q-card-section>
+            <q-card-section class="text-h4 row">
+              <div>{{data.jvmHeapMemoryMax}}</div>
+              <q-space />
+              <div class="text-caption">Max</div>
+            </q-card-section>
+            <q-card-section class="text-h4 row">
+              <div>{{data.jvmHeapMemoryUsed}}</div>
+              <q-space />
+              <div class="text-caption">Used</div>
+            </q-card-section>
+            <q-card-section class="text-h4 row">
+              <div>{{data.jvmHeapMemoryCommitted}}</div>
+              <q-space />
+              <div class="text-caption">Committed</div>
+            </q-card-section>
+          </q-card>
         </div>
         <div class="col-12 col-md-12 col-lg-4 q-pa-sm">
           <q-card>
@@ -89,15 +123,6 @@
             <q-card-section>
               <div class="text-h6 row">
                 <div>Uptime</div>
-                <q-space />
-                <q-btn
-                  dense
-                  flat
-                  color="primary"
-                  :loading="loading"
-                >
-                  正常
-                </q-btn>
               </div>
               <div class="text-subtitle2">{{data.javaStartTime}}</div>
             </q-card-section>
