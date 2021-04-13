@@ -31,7 +31,7 @@ const routes = [
           { path: 'dictType', name: 'dictType', component: () => import('src/pages/system/DictTypeList.vue') },
           { path: 'dictType/dictData/:dictType', name: 'dictTypeData', component: () => import('src/pages/system/DictDataList.vue') },
           { path: 'log', name: 'log', component: () => import('pages/system/LogList.vue') },
-          { path: 'job', name: 'job', component: () => import('pages/form/AdvancedForm.vue') }
+          { path: 'job', name: 'job', component: () => import('pages/scheduler/JobList.vue') }
         ]
       },
       { path: 'icons', name: 'icons', component: () => import('src/pages/form/Icons.vue') },
