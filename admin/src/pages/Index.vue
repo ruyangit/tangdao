@@ -40,8 +40,8 @@
           />
         </template>
       </q-banner>
-      <div class="row">
-        <div class="col col-md-6 col-lg-3">
+      <div class="row q-col-gutter-md">
+        <div class="col-12 col-md-6 col-lg-3">
           <q-card flat>
             <q-card-section class="row">
               <div class="col-7">
@@ -60,8 +60,65 @@
             </q-card-section>
           </q-card>
         </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <q-card flat>
+            <q-card-section class="row">
+              <div class="col-7">
+                <div class="text-h6">21,605</div>
+                <div class="text-overline text-negative">Click Bind</div>
+                <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
+              </div>
+              <div class="col-5">
+                <div class="chart-ten">
+                  <div
+                    id="flotChart3"
+                    class="flot-chart"
+                  ></div>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <q-card flat>
+            <q-card-section class="row">
+              <div class="col-7">
+                <div class="text-h6">1,605</div>
+                <div class="text-overline text-accent">User Bind</div>
+                <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
+              </div>
+              <div class="col-5">
+                <div class="chart-ten">
+                  <div
+                    id="flotChart3"
+                    class="flot-chart"
+                  ></div>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-12 col-md-6 col-lg-3">
+          <q-card flat>
+            <q-card-section class="row">
+              <div class="col-7">
+                <div class="text-h6">1,605</div>
+                <div class="text-overline text-positive">Auth Bind</div>
+                <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
+              </div>
+              <div class="col-5">
+                <div class="chart-ten">
+                  <div
+                    id="flotChart3"
+                    class="flot-chart"
+                  ></div>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
       </div>
-      <div class="row q-col-gutter-md q-mt-md">
+      <div class="row q-col-gutter-md q-mt-none">
         <div class="col-12 col-md-8">
           <QHighcharts
             :options="elevationOptions"
