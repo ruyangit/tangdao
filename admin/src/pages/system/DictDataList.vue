@@ -498,6 +498,10 @@ export default {
       this.dictDataEdit = true
     },
     onEdit (data) {
+      if (data) {
+        const tns = data.treeNames.split('/')
+        data.pname = tns[tns.length - 2]
+      }
       this.dictDataForm = data
       delete this.dictDataForm.createBy
       delete this.dictDataForm.createDate

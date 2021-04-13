@@ -90,6 +90,9 @@ public abstract class TreeService<M extends BaseMapper<T>, T extends TreeEntity<
 		return targetList;
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean save(T entity) {
@@ -112,6 +115,9 @@ public abstract class TreeService<M extends BaseMapper<T>, T extends TreeEntity<
 		return super.save(entity);
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public boolean updateById(T entity) {
@@ -148,6 +154,12 @@ public abstract class TreeService<M extends BaseMapper<T>, T extends TreeEntity<
 		return true;
 	}
 
+	/**
+	 * 
+	 * TODO
+	 * @param entity
+	 * @return
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	public boolean deleteyIdAndChildren(T entity) {
 		QueryWrapper<T> queryWrapper = new QueryWrapper<T>();

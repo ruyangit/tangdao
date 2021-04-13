@@ -28,12 +28,12 @@ public abstract class TreeEntity<T> extends DataEntity<T> {
 	private static final long serialVersionUID = 1L;
 
 	public String pid;
-
+	
 	public String pids;
 
-	public Integer treeSort;
-
 	public String treeNames;
+
+	public Integer treeSort;
 
 	@TableField(exist = false)
 	public List<T> children;
