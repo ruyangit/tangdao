@@ -161,11 +161,11 @@
             <q-card-section class="text-subtitle2">
               权限管理
             </q-card-section>
-            <q-card-section class="row">
-              <div class="col-3 q-pa-sm">用户</div>
-              <div class="col-3 q-pa-sm">用户组</div>
-              <div class="col-3 q-pa-sm">自定义策略</div>
-              <div class="col-3 q-pa-sm">系统角色</div>
+            <q-card-section class="row q-col-gutter-sm">
+              <div class="col-6 col-md-3 q-pa-sm">用户</div>
+              <div class="col-6 col-md-3 q-pa-sm">用户组</div>
+              <div class="col-6 col-md-3 q-pa-sm">自定义策略</div>
+              <div class="col-6 col-md-3 q-pa-sm">系统角色</div>
             </q-card-section>
           </q-card>
         </div>
