@@ -11,6 +11,6 @@ package com.tangdao.scheduler.provider;
  * @author ruyang
  * @since 2021年4月13日
  */
-public class ScheduleJobLogService {
+public class SchedulerJobLogService {
 
 }

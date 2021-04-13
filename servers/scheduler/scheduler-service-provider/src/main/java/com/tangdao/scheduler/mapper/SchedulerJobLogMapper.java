@@ -4,7 +4,7 @@
 package com.tangdao.scheduler.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.tangdao.scheduler.model.domain.ScheduleJob;
+import com.tangdao.scheduler.model.domain.SchedulerJobLog;
 
 /**
  * <p>
@@ -14,6 +14,6 @@ import com.tangdao.scheduler.model.domain.ScheduleJob;
  * @author ruyang
  * @since 2021年4月13日
  */
-public interface ScheduleJobMapper extends BaseMapper<ScheduleJob> {
+public interface SchedulerJobLogMapper extends BaseMapper<SchedulerJobLog> {
 
 }

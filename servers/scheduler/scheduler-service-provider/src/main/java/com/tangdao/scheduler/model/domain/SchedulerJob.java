@@ -20,7 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName
-public class ScheduleJob extends DataEntity<ScheduleJob> {
+public class SchedulerJob extends DataEntity<SchedulerJob> {
 
 	/**
 	 * 
