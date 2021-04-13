@@ -32,6 +32,8 @@ public class Area extends TreeEntity<Area> {
 	private String areaName;
 
 	private String areaType;
+	
+	private String status;
 
 	private String remarks;
 
