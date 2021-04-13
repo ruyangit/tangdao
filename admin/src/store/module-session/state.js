@@ -10,7 +10,7 @@ export default function () {
     menus: [
       {
         id: 'overview',
-        name: '分析页',
+        name: '控制台总览',
         icon: 'broken_image',
         path: 'overview'
       },

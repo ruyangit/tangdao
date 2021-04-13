@@ -9,7 +9,16 @@
           />
           <q-breadcrumbs-el label="控制台总览" />
         </q-breadcrumbs>
-        <div class="my-page-header-subtitle">中枢分析数据概览</div>
+        <div class="row">
+          <div>
+            <div class="my-page-header-subtitle">产品与服务</div>
+            <!-- <div class="q-mt-sm text-caption">您好, admin</div> -->
+          </div>
+          <q-space />
+          <div class="row wrap content-end">
+            您好, system
+          </div>
+        </div>
       </div>
     </div>
     <div class="my-page-body">
@@ -32,13 +41,34 @@
         </template>
       </q-banner>
       <div class="row">
-        <div class="col-md-8 col-12">
+        <div class="col col-md-6 col-lg-3">
+          <q-card flat>
+            <q-card-section class="row">
+              <div class="col-7">
+                <div class="text-h6">3,605</div>
+                <div class="text-overline text-primary">Click Through</div>
+                <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
+              </div>
+              <div class="col-5">
+                <div class="chart-ten">
+                  <div
+                    id="flotChart3"
+                    class="flot-chart"
+                  ></div>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
+      <div class="row q-col-gutter-md q-mt-md">
+        <div class="col-12 col-md-8">
           <QHighcharts
             :options="elevationOptions"
             id="container"
           />
         </div>
-        <div :class="`col-md-4 col-12 ${$q.screen.gt.sm?'q-pl-md':'q-mt-md'}`">
+        <div class="col-12 col-md-4">
           <q-card flat>
             <q-card-section>
               <div class="row no-wrap items-center">
@@ -66,32 +96,19 @@
                 </div>
               </q-linear-progress>
             </q-card-section>
-
-            <q-separator />
-            <q-card-section class="text-subitle2">
-              <q-scroll-area style="height:280px">
-                <div class="row q-col-gutter-md">
-                  <div
-                    class="col-12 col-sm-6 col-md-4"
-                    v-for="i in 8"
-                    :key="i"
-                  >
-                    <q-card
-                      flat
-                      class="bg-primary text-white"
-                    >
-                      <q-card-section>
-                        <div class="text-h6 row no-wrap items-center">
-                          <div class="ellipsis text-capitalize">Title</div>
-                        </div>
-                      </q-card-section>
-                      <q-card-section>
-                        Quasar Tools
-                      </q-card-section>
-                    </q-card>
-                  </div>
-                </div>
-              </q-scroll-area>
+          </q-card>
+          <q-card
+            flat
+            class="q-mt-md"
+          >
+            <q-card-section class="text-subtitle2">
+              权限管理
+            </q-card-section>
+            <q-card-section class="row">
+              <div class="col-3 q-pa-sm">用户</div>
+              <div class="col-3 q-pa-sm">用户组</div>
+              <div class="col-3 q-pa-sm">自定义策略</div>
+              <div class="col-3 q-pa-sm">系统角色</div>
             </q-card-section>
           </q-card>
         </div>
@@ -108,10 +125,11 @@ import annotationsInit from 'highcharts/modules/annotations'
 annotationsInit(Highcharts)
 
 export default {
-  name: 'PageIndex',
-  meta: { title: '分析页' },
+  name: 'Index',
+  meta: { title: '控制台总览' },
   data () {
     return {
+      tab: 'ProductAndService',
       elevationData: []
     }
   },

@@ -20,7 +20,7 @@
               outlined
               dense
               v-model.trim="form.dictName"
-              placeholder="请输入字典名称"
+              placeholder="请输入任务名称"
               style="width: 250px"
             >
             </q-input>
@@ -32,7 +32,7 @@
               options-dense
               v-model="form.status"
               :options="[{label: '正常', value: 0 },{label: '无效', value: 2}]"
-              label="字典状态"
+              label="任务状态"
               style="width: 150px"
             />
             <q-btn
@@ -45,7 +45,7 @@
             <q-btn
               outline
               color="primary"
-              label="新增字典"
+              label="新增任务"
               class="btn wd-90"
               @click="onAdd"
             />
@@ -131,7 +131,7 @@
     <q-dialog v-model="dictTypeEdit">
       <q-card style="width: 600px">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6"> {{dictTypeForm.id?'编辑':'新增'}}字典</div>
+          <div class="text-h6"> {{dictTypeForm.id?'编辑':'新增'}}任务</div>
           <q-space />
           <q-btn
             icon="close"
@@ -155,7 +155,7 @@
                   for="dictName"
                   class="q-label required"
                 >
-                  <span>字典名称</span>
+                  <span>任务名称</span>
                   <!-- <q-icon
                     name="error_outline"
                     class="q-icon"
@@ -166,8 +166,8 @@
                   dense
                   no-error-icon
                   v-model.trim="dictTypeForm.dictName"
-                  placeholder="请输入字典名称"
-                  :rules="[ val => val && val.length > 0 || '请设置字典名称']"
+                  placeholder="请输入任务名称"
+                  :rules="[ val => val && val.length > 0 || '请设置任务名称']"
                   class="q-mt-sm"
                 >
                 </q-input>
@@ -176,14 +176,14 @@
                 <label
                   for="dictType"
                   class="q-label required"
-                >字典类型</label>
+                >任务类型</label>
                 <q-input
                   outlined
                   dense
                   no-error-icon
                   v-model.trim="dictTypeForm.dictType"
-                  placeholder="请输入字典类型"
-                  :rules="[ val => val && val.length > 0 || '请设置字典类型']"
+                  placeholder="请输入任务类型"
+                  :rules="[ val => val && val.length > 0 || '请设置任务类型']"
                   class="q-mt-sm"
                 >
                 </q-input>
@@ -251,8 +251,8 @@
 
 <script>
 export default {
-  name: 'DictTypeList',
-  meta: { title: '字典管理' },
+  name: 'JobList',
+  meta: { title: '调度管理' },
   data () {
     return {
       loading: false,
@@ -264,8 +264,8 @@ export default {
         rowsNumber: 10
       },
       columns: [
-        { name: 'dictName', label: '字典名称', align: 'left', field: 'dictName', style: 'width: 120px' },
-        { name: 'dictType', label: '字典类型', align: 'left', field: 'dictType', style: 'width: 100px' },
+        { name: 'dictName', label: '任务名称', align: 'left', field: 'dictName', style: 'width: 120px' },
+        { name: 'dictType', label: '任务类型', align: 'left', field: 'dictType', style: 'width: 100px' },
         { name: 'remarks', label: '备注', align: 'left', field: 'remarks' },
         { name: 'status', label: '状态', field: 'status', align: 'left', sortable: true, style: 'width: 80px' },
         { name: 'createDate', label: '创建时间', field: 'createDate', align: 'left', sortable: true, style: 'width: 120px' },

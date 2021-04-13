@@ -60,7 +60,7 @@
           <q-card>
             <q-card-section>
               <div class="text-h6">Memory Usage</div>
-              <div :class="`text-subtitle2 ${data.oshiMemoryUsage>=80?'text-negative':null}`">{{data.oshiMemoryUsage || 0}}%</div>
+              <div :class="`text-subtitle2 ${data.oshiMemoryUsage>=80?'text-negative':null}`">{{data.oshiMemoryUsage || 0}} %</div>
             </q-card-section>
             <q-card-section class="text-h4 row">
               <div>{{`${data.oshiMemoryAvailable} / ${data.oshiMemoryTotal}`}}</div>
@@ -69,7 +69,7 @@
           <q-card class="q-mt-md">
             <q-card-section>
               <div class="text-h6">JVM Memory Usage</div>
-              <div :class="`text-subtitle2 ${data.jvmMemoryUsage>=80?'text-negative':null}`">{{data.jvmMemoryUsage}} %</div>
+              <div :class="`text-subtitle2 ${data.jvmMemoryUsage>=80?'text-negative':null}`">{{data.jvmMemoryUsage || 0}} %</div>
             </q-card-section>
             <q-card-section class="text-h4 row">
               <div>{{`${data.jvmMemoryAvailable} / ${data.jvmMemoryTotal}`}}</div>
