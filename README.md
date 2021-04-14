@@ -30,24 +30,6 @@ $ quasar dev
 
 #### 使用说明
 ```
-Stylesheet
-
-```
-```
-Scripts
-
-```
-```
-Dashboard
-
-```
-```
-Apps
-
-```
-```
-Pages
-
 ```
 
 #### References
@@ -68,6 +50,5 @@ Pages
         <td></td>
         <td></td>
     </tr>
-    
     </tbody>
 </table>
