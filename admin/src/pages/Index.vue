@@ -274,7 +274,7 @@
         </div>
         <div class="col-12 col-md-4">
           <q-card flat>
-            <q-card-section horizontal>
+            <!-- <q-card-section horizontal>
               <q-card-section class="q-pt-xs">
                 <div class="text-overline">我的账户</div>
                 <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
@@ -290,7 +290,7 @@
                 />
               </q-card-section>
             </q-card-section>
-            <q-separator />
+            <q-separator /> -->
             <q-card-actions>
               <q-btn
                 flat
