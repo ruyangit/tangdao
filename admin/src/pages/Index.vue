@@ -11,7 +11,7 @@
         </q-breadcrumbs>
         <div class="row">
           <div>
-            <div class="my-page-header-subtitle">产品与服务</div>
+            <div class="my-page-header-subtitle">我的工作台</div>
             <!-- <div class="q-mt-sm text-caption">您好, admin</div> -->
           </div>
           <q-space />
@@ -50,12 +50,10 @@
                 <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
               </div>
               <div class="col-5">
-                <div class="chart-ten">
-                  <div
-                    id="flotChart3"
-                    class="flot-chart"
-                  ></div>
-                </div>
+                <div
+                  ref="echarts1"
+                  style="height:100%;width:100%;"
+                ></div>
               </div>
             </q-card-section>
           </q-card>
@@ -69,12 +67,10 @@
                 <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
               </div>
               <div class="col-5">
-                <div class="chart-ten">
-                  <div
-                    id="flotChart3"
-                    class="flot-chart"
-                  ></div>
-                </div>
+                <div
+                  ref="echarts2"
+                  style="height:100%;width:100%;"
+                ></div>
               </div>
             </q-card-section>
           </q-card>
@@ -88,12 +84,10 @@
                 <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
               </div>
               <div class="col-5">
-                <div class="chart-ten">
-                  <div
-                    id="flotChart3"
-                    class="flot-chart"
-                  ></div>
-                </div>
+                <div
+                  ref="echarts3"
+                  style="height:100%;width:100%;"
+                ></div>
               </div>
             </q-card-section>
           </q-card>
@@ -102,17 +96,15 @@
           <q-card flat>
             <q-card-section class="row">
               <div class="col-7">
-                <div class="text-h6">1,605</div>
+                <div class="text-h6">12,605</div>
                 <div class="text-overline text-positive">Auth Bind</div>
                 <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
               </div>
               <div class="col-5">
-                <div class="chart-ten">
-                  <div
-                    id="flotChart3"
-                    class="flot-chart"
-                  ></div>
-                </div>
+                <div
+                  ref="echarts4"
+                  style="height:100%;width:100%;"
+                ></div>
               </div>
             </q-card-section>
           </q-card>
@@ -120,19 +112,212 @@
       </div>
       <div class="row q-col-gutter-md q-mt-none">
         <div class="col-12 col-md-8">
-          <QHighcharts
-            :options="elevationOptions"
-            id="container"
-          />
+          <q-card flat>
+            <q-card-section>
+              <div class="row no-wrap items-center">
+                <div class="col text-subtitle2 ellipsis">
+                  收入增涨统计
+                </div>
+                <div class="col-auto text-grey text-caption row no-wrap items-center">
+
+                </div>
+              </div>
+            </q-card-section>
+            <q-card-section class="row q-pt-none q-pb-none">
+              <div class="col-5">
+                <div class="text-h6">122,605</div>
+                <div class="text-overline text-primary">Auth Bind</div>
+                <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
+              </div>
+              <div class="col-5 offset-1">
+                <div class="text-h6">62,605</div>
+                <div class="text-overline text-positive">客户平均增涨</div>
+                <div class="text-body2 text-grey-14 ">No. of clicks to ad that consist of a single impression.</div>
+              </div>
+            </q-card-section>
+            <q-card-section>
+              <div
+                ref="echarts11"
+                style="height:230px;width:100%;"
+              ></div>
+            </q-card-section>
+          </q-card>
+          <q-card
+            flat
+            class="q-mt-md"
+          >
+            <q-card-section class="text-subtitle2">
+              进行中的项目
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+              <q-markup-table
+                flat
+                bordered
+              >
+                <thead>
+                  <tr>
+                    <th class="text-center wd-60"></th>
+                    <th class="text-left">Dessert (100g serving)</th>
+                    <th class="text-right">Calories</th>
+                    <th class="text-right">Fat (g)</th>
+                    <th class="text-right">Carbs (g)</th>
+                    <th class="text-right">Protein (g)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-center">
+                      <q-icon
+                        name="save_alt"
+                        size="14px"
+                        color="primary"
+                      />
+                    </td>
+                    <td class="text-left">Frozen Yogurt</td>
+                    <td class="text-right">159</td>
+                    <td class="text-right">6</td>
+                    <td class="text-right">24</td>
+                    <td class="text-right">
+                      <q-linear-progress
+                        :value="0.18"
+                        class="q-mt-md"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">
+                      <q-icon
+                        name="save_alt"
+                        size="14px"
+                        color="primary"
+                      />
+                    </td>
+                    <td class="text-left">Ice cream sandwich</td>
+                    <td class="text-right">237</td>
+                    <td class="text-right">9</td>
+                    <td class="text-right">37</td>
+                    <td class="text-right">
+                      <q-linear-progress
+                        :value="0.12"
+                        color="warning"
+                        class="q-mt-sm"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">
+                      <q-icon
+                        name="save_alt"
+                        size="14px"
+                        color="primary"
+                      />
+                    </td>
+                    <td class="text-left">Eclair</td>
+                    <td class="text-right">262</td>
+                    <td class="text-right">16</td>
+                    <td class="text-right">23</td>
+                    <td class="text-right">
+                      <q-linear-progress
+                        :value="0.80"
+                        color="secondary"
+                        class="q-mt-sm"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">
+                      <q-icon
+                        name="save_alt"
+                        size="14px"
+                        color="primary"
+                      />
+                    </td>
+                    <td class="text-left">Cupcake</td>
+                    <td class="text-right">305</td>
+                    <td class="text-right">3.7</td>
+                    <td class="text-right">67</td>
+                    <td class="text-right">
+                      <q-linear-progress
+                        :value="0.49"
+                        rounded
+                        color="accent"
+                        class="q-mt-sm"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="text-center">
+                      <q-icon
+                        name="save_alt"
+                        size="14px"
+                        color="primary"
+                      />
+                    </td>
+                    <td class="text-left">Gingerbread</td>
+                    <td class="text-right">356</td>
+                    <td class="text-right">16</td>
+                    <td class="text-right">49</td>
+                    <td class="text-right">
+                      <q-linear-progress
+                        :value="0.36"
+                        rounded
+                        color="purple"
+                        track-color="orange"
+                        class="q-mt-sm"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </q-markup-table>
+            </q-card-section>
+          </q-card>
         </div>
         <div class="col-12 col-md-4">
           <q-card flat>
+            <q-card-section horizontal>
+              <q-card-section class="q-pt-xs">
+                <div class="text-overline">我的账户</div>
+                <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
+                <div class="text-caption text-grey">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                </div>
+              </q-card-section>
+              <q-card-section class="col-5 flex flex-center">
+                <q-img
+                  :ratio="1"
+                  class="rounded-borders"
+                  src="https://cdn.quasar.dev/img/boy-avatar.png"
+                />
+              </q-card-section>
+            </q-card-section>
+            <q-separator />
+            <q-card-actions>
+              <q-btn
+                flat
+                round
+                icon="event"
+              />
+              <q-btn flat>
+                7:30PM
+              </q-btn>
+              <q-btn
+                flat
+                color="primary"
+              >
+                Reserve
+              </q-btn>
+            </q-card-actions>
+          </q-card>
+          <q-card
+            flat
+            class="q-mt-md"
+          >
             <q-card-section>
               <div class="row no-wrap items-center">
                 <div class="col text-subtitle2 ellipsis">
                   我的资源
                 </div>
-                <div class="col-auto text-grey text-caption row no-wrap items-center">
+                <div class="col-auto text-caption text-grey ">
                   总量（128G）
                 </div>
               </div>
@@ -171,216 +356,329 @@
         </div>
       </div>
     </div>
+    <q-resize-observer @resize="onResize" />
   </q-page>
 </template>
 
 <script>
 import axios from 'axios'
-import Highcharts from 'highcharts'
-import { Chart } from 'highcharts-vue'
-import annotationsInit from 'highcharts/modules/annotations'
-annotationsInit(Highcharts)
-
+// import Highcharts from 'highcharts'
+// import { Chart } from 'highcharts-vue'
+// import annotationsInit from 'highcharts/modules/annotations'
+// annotationsInit(Highcharts)
+import * as echarts from 'echarts/core'
+import {
+  GridComponent
+} from 'echarts/components'
+import {
+  BarChart,
+  LineChart,
+  PieChart
+} from 'echarts/charts'
+import {
+  CanvasRenderer
+} from 'echarts/renderers'
+echarts.use(
+  [GridComponent, BarChart, LineChart, PieChart, CanvasRenderer]
+)
+var base = +new Date(1968, 9, 3)
+var oneDay = 24 * 3600 * 1000
+var date = []
+var data = [Math.random() * 300]
+for (var i = 1; i < 1000; i++) {
+  var now = new Date(base += oneDay)
+  date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'))
+  data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]))
+}
+var base1 = +new Date(2020, 1, 1)
+var data1 = [[base1, Math.random() * 300]]
+var data2 = [[base1, Math.random() * 300]]
+var data3 = [[base1, Math.random() * 300]]
+for (var j = 1; j < 356; j++) {
+  var now1 = new Date(base1 += oneDay)
+  let temp = Math.round((Math.random() - 0.5) * 20 + data1[j - 1][1])
+  if (temp <= 0) {
+    temp = Math.round(Math.random() * 20 + data1[j - 1][1])
+  }
+  data1.push([
+    [now1.getFullYear(), now1.getMonth() + 1, now1.getDate()].join('/'),
+    temp
+  ])
+  data2.push([
+    [now1.getFullYear(), now1.getMonth() + 1, now1.getDate()].join('/'),
+    Math.round((Math.random() - 0.5) * 20 + data1[j - 1][1] + 80)
+  ])
+  data3.push([
+    [now1.getFullYear(), now1.getMonth() + 1, now1.getDate()].join('/'),
+    Math.round((Math.random() - 0.5) * 20 + data2[j - 1][1] + 180)
+  ])
+}
 export default {
   name: 'Index',
   meta: { title: '控制台总览' },
   data () {
     return {
       tab: 'ProductAndService',
-      elevationData: []
+      timeData: [],
+      echartsOpt: {},
+      option1: {
+        grid: {
+          top: 10,
+          left: 20,
+          right: 0,
+          bottom: 10
+        },
+        xAxis: {
+          show: false,
+          type: 'category',
+          data: ['1', '2', '3', '4', '5', '6', '7', '13', '14', '15', '16', '17']
+        },
+        yAxis: {
+          show: false,
+          type: 'value'
+        },
+        series: [
+          {
+            type: 'bar',
+            stack: 'total',
+
+            data: [0, 0, 1201, 1994, 690, 1330, 820, 1201, 1994, 690, 300, 0],
+            itemStyle: {
+              color: '#66a4fb'
+            }
+          },
+          {
+            type: 'bar',
+            stack: 'total',
+            data: [1920, 1430, 1560, 1380, 1990, 1230, 1210, 1430, 1560, 1380, 1990, 1230, 1210],
+            itemStyle: {
+              color: '#e5e9f2'
+            }
+          }
+        ],
+        animation: false
+      },
+      option2: {
+        grid: {
+          top: 10,
+          left: 20,
+          right: 0,
+          bottom: 10
+        },
+        xAxis: {
+          show: false,
+          type: 'category',
+          data: date
+        },
+        yAxis: {
+          show: false,
+          type: 'value'
+        },
+        series: [
+          {
+            type: 'line',
+            symbol: 'none',
+            sampling: 'lttb',
+            itemStyle: {
+              color: 'rgb(255, 70, 131)'
+            },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                offset: 0,
+                color: 'rgb(255, 158, 68)'
+              }, {
+                offset: 1,
+                color: 'rgb(255, 70, 131)'
+              }])
+            },
+            data: data
+          }
+        ],
+        animation: false
+      },
+      option3: {
+        grid: {
+          top: 10,
+          left: 20,
+          right: 0,
+          bottom: 10
+        },
+        xAxis: {
+          type: 'category',
+          show: false
+        },
+        yAxis: {
+          type: 'value',
+          show: false
+        },
+        series: [{
+          data: [10, 50, 36, 85, 98, 72, 79, 88, 80],
+          type: 'line',
+          smooth: true,
+          show: false,
+          symbol: 'none',
+          animationDuration: 1000,
+          lineStyle: {
+            color: '#9C27B0'
+          }
+        }],
+        animation: false
+      },
+      option4: {
+        grid: {
+          top: 10,
+          left: 20,
+          right: 0,
+          bottom: 10
+        },
+        legend: {
+          top: '5%',
+          left: 'center'
+        },
+        series: [
+          {
+            type: 'pie',
+            radius: ['40%', '70%'],
+            avoidLabelOverlap: false,
+            itemStyle: {
+              borderRadius: 3,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            label: {
+              show: false,
+              position: 'center'
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: 1048 },
+              { value: 735 },
+              { value: 580 },
+              { value: 484 },
+              { value: 300 }
+            ]
+          }
+        ],
+        animation: false
+      },
+      option11: {
+        grid: {
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0'
+        },
+        xAxis: {
+          show: false,
+          type: 'time'
+        },
+        yAxis: {
+          show: false,
+          type: 'value'
+        },
+        series: [
+          {
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            lineStyle: {
+              width: 0
+            },
+            itemStyle: {
+              color: '#d1e6fa'
+            },
+            areaStyle: {
+              color: '#66a4fb'
+            },
+            data: data1
+          },
+          {
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            lineStyle: {
+              width: 0
+            },
+            areaStyle: {},
+            itemStyle: {
+              color: '#66a4fb'
+            },
+            data: data2
+          },
+          {
+            type: 'line',
+            smooth: true,
+            symbol: 'none',
+            itemStyle: {
+              color: '#d1e6fa'
+            },
+            data: data3
+          }
+        ]
+      },
+      animation: false
     }
   },
   components: {
-    QHighcharts: Chart
   },
   computed: {
     elevationOptions () {
-      return {
-        chart: {
-          type: 'area',
-          zoomType: 'x',
-          panning: true,
-          panKey: 'shift'
-        },
-        title: {
-          text: '2017年环法德法国第八站：Dole站'
-        },
-        annotations: [{
-          labelOptions: {
-            backgroundColor: 'rgba(255,255,255,0.5)',
-            verticalAlign: 'top',
-            y: 15
-          },
-          labels: [{
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 27.98,
-              y: 255
-            },
-            text: 'Arbois'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 45.5,
-              y: 611
-            },
-            text: 'Montrond'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 63,
-              y: 651
-            },
-            text: 'Mont-sur-Monnet'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 84,
-              y: 789
-            },
-            x: -10,
-            text: 'Bonlieu'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 129.5,
-              y: 382
-            },
-            text: 'Chassal'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 159,
-              y: 443
-            },
-            text: 'Saint-Claude'
-          }]
-        }, {
-          labels: [{
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 101.44,
-              y: 1026
-            },
-            x: -30,
-            text: 'Col de la Joux'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 138.5,
-              y: 748
-            },
-            text: 'Côte de Viry'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 176.4,
-              y: 1202
-            },
-            text: 'Montée de la Combe<br>de Laisia Les Molunes'
-          }]
-        }, {
-          labelOptions: {
-            shape: 'connector',
-            align: 'right',
-            justify: false,
-            crop: true,
-            style: {
-              fontSize: '0.8em',
-              textOutline: '1px white'
-            }
-          },
-          labels: [{
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 96.2,
-              y: 783
-            },
-            text: '6.1 km climb<br>4.6% on avg.'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 134.5,
-              y: 540
-            },
-            text: '7.6 km climb<br>5.2% on avg.'
-          }, {
-            point: {
-              xAxis: 0,
-              yAxis: 0,
-              x: 172.2,
-              y: 925
-            },
-            text: '11.7 km climb<br>6.4% on avg.'
-          }]
-        }],
-        xAxis: {
-          labels: {
-            format: '{value} km'
-          },
-          minRange: 5,
-          title: {
-            text: '距离'
-          }
-        },
-        yAxis: {
-          startOnTick: true,
-          endOnTick: false,
-          maxPadding: 0.35,
-          title: {
-            text: null
-          },
-          labels: {
-            format: '{value} m'
-          }
-        },
-        tooltip: {
-          headerFormat: '距离: {point.x:.1f} km<br>',
-          pointFormat: '海拔：{point.y} m ',
-          shared: true
-        },
-        legend: {
-          enabled: false
-        },
-        series: [{
-          data: this.elevationData,
-          lineColor: Highcharts.getOptions().colors[1],
-          color: Highcharts.getOptions().colors[2],
-          fillOpacity: 0.5,
-          name: '海拔',
-          marker: {
-            enabled: false
-          },
-          threshold: null
-        }]
-      }
+      return null
     }
   },
   mounted () {
-    this.elevationDataInit()
+    const chart1 = echarts.init(this.$refs.echarts1)
+    chart1.setOption(this.option1)
+    const chart2 = echarts.init(this.$refs.echarts2)
+    chart2.setOption(this.option2)
+    const chart3 = echarts.init(this.$refs.echarts3)
+    chart3.setOption(this.option3)
+    const chart4 = echarts.init(this.$refs.echarts4)
+    chart4.setOption(this.option4)
+    const chart11 = echarts.init(this.$refs.echarts11)
+    chart11.setOption(this.option11)
+    chart11.showLoading()
+    setTimeout(function () {
+      chart11.hideLoading()
+    }, 1500)
+    // window.onresize = () => {
+    //   chart1.resize()
+    //   chart2.resize()
+    //   chart3.resize()
+    //   chart4.resize()
+    //   chart11.resize()
+    // }
+
+    this.echartsOpt = {
+      chart1, chart2, chart3, chart4, chart11
+    }
+
+    this.onDataInit()
+  },
+  destroyed () {
+    window.onresize = null
   },
   methods: {
-    elevationDataInit () {
+    async onDataInit () {
       this.$store.commit('basic/globalLoadingMutAction', true)
-      axios.get('json/elevation.json').then(response => {
+      await axios.get('json/timeData.json').then(response => {
         const { status, data } = response
         if (status === 200) {
-          this.elevationData = data
+          this.timeData = data
         }
-      }).finally(e => {
-        this.$store.commit('basic/globalLoadingMutAction', false)
       })
+      this.$store.commit('basic/globalLoadingMutAction', false)
+    },
+    onResize () {
+      if (this.echartsOpt && this.echartsOpt.chart1) {
+        this.echartsOpt.chart1.resize()
+        this.echartsOpt.chart2.resize()
+        this.echartsOpt.chart3.resize()
+        this.echartsOpt.chart4.resize()
+        this.echartsOpt.chart11.resize()
+      }
     }
   }
 }
