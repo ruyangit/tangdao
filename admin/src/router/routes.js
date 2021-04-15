@@ -5,6 +5,10 @@ const routes = [
     component: () => import('pages/Error403.vue')
   },
   {
+    path: '/test',
+    component: () => import('pages/Test.vue')
+  },
+  {
     path: '/user',
     component: () => import('layouts/UserLayout.vue'),
     children: [
