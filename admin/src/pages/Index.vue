@@ -178,10 +178,7 @@
                     <td class="text-right">6</td>
                     <td class="text-right">24</td>
                     <td class="text-right">
-                      <q-linear-progress
-                        :value="0.18"
-                        class="q-mt-md"
-                      />
+                      <q-linear-progress :value="0.18" />
                     </td>
                   </tr>
                   <tr>
@@ -200,7 +197,6 @@
                       <q-linear-progress
                         :value="0.12"
                         color="warning"
-                        class="q-mt-sm"
                       />
                     </td>
                   </tr>
@@ -220,7 +216,6 @@
                       <q-linear-progress
                         :value="0.80"
                         color="secondary"
-                        class="q-mt-sm"
                       />
                     </td>
                   </tr>
@@ -241,7 +236,6 @@
                         :value="0.49"
                         rounded
                         color="accent"
-                        class="q-mt-sm"
                       />
                     </td>
                   </tr>
@@ -263,7 +257,6 @@
                         rounded
                         color="purple"
                         track-color="orange"
-                        class="q-mt-sm"
                       />
                     </td>
                   </tr>

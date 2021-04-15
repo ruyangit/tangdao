@@ -65,6 +65,12 @@
             <q-card-section class="text-h4 row">
               <div>{{`${data.oshiMemoryAvailable} / ${data.oshiMemoryTotal}`}}</div>
             </q-card-section>
+            <q-card-section v-if="data.oshiMemoryUsage">
+              <q-linear-progress
+                :value="data.oshiMemoryUsage/100"
+                :color="`${data.oshiMemoryUsage>=80?'negative':null}`"
+              />
+            </q-card-section>
           </q-card>
           <q-card class="q-mt-md">
             <q-card-section>
@@ -74,8 +80,15 @@
             <q-card-section class="text-h4 row">
               <div>{{`${data.jvmMemoryAvailable} / ${data.jvmMemoryTotal}`}}</div>
             </q-card-section>
+            <q-card-section v-if="data.jvmMemoryUsage">
+              <q-linear-progress
+                :value="data.jvmMemoryUsage/100"
+                :color="`${data.jvmMemoryUsage>=80?'negative':null}`"
+              />
+            </q-card-section>
           </q-card>
-          <q-card class="q-mt-md">
+          <q-card class="
+                q-mt-md">
             <q-card-section>
               <div class="text-h6">JVM Heap Memory Usage</div>
             </q-card-section>
@@ -110,10 +123,17 @@
               <div
                 v-for="(disk, index) in data.oshiOsFileSystemDisks"
                 :key="index"
+                class="q-mb-md"
               >
                 <div>{{`${disk.diskAvailable} / ${disk.diskTotal}`}}</div>
                 <div :class="`text-weight-bolder text-right text-h6 q-mt-md ${disk.diskUsage>=80?'text-negative':null}`">{{disk.diskUsage}} %</div>
-                <div class="text-body1 q-mt-md q-mb-lg">{{disk.mount}}</div>
+                <div class="text-body1 q-mt-md q-mb-md">{{disk.mount}}</div>
+                <div v-if="disk.diskUsage">
+                  <q-linear-progress
+                    :value="disk.diskUsage/100"
+                    :color="`${disk.diskUsage>=80?'negative':null}`"
+                  />
+                </div>
               </div>
             </q-card-section>
           </q-card>

@@ -4,177 +4,272 @@
       width="100%"
       src="img/vther.jpg"
     />
-    <div class="q-pa-md full-width row  justify-center  ">
-      <!-- <q-category-modal
-        title="选择地址"
-        v-model="value"
-        :toggle.sync="toggle1"
-        url="/area/treeData"
-        @finish="onFinish"
-      />
-      <q-btn
-        label="选择地址"
-        color="primary"
-        @click="toggle1 = true"
-      /> -->
-    </div>
-    <div class="q-pa-md full-width row  justify-center  ">
-      <!-- <q-input
-        outlined
+    <div class="container">
+      <q-tabs
+        v-model="tab"
         dense
-        no-error-icon
-        v-model.trim="search"
-        placeholder="搜索"
+        align="left"
+        class="text-primary"
+        :breakpoint="0"
       >
-        <template v-slot:append>
-          <q-btn
-            round
-            flat
-            dense
-            icon="search"
-            color="primary"
-          />
-        </template>
-      </q-input> -->
-    </div>
-    <div class="q-pa-md full-width row  justify-center  ">
-      <!-- <Category
-        v-model="value"
-        :options="list"
-        :loading="loading"
-        @finish="onFinish"
-      >
-      </Category> -->
-      <!-- <q-btn
-        @click="drawer=!drawer"
-        label="切换"
-      /> -->
-    </div>
-    <!-- <q-drawer
-      side="right"
-      v-model="drawer"
-      show-if-above
-      elevated
-      :width="280"
-      :breakpoint="200"
-      content-class="bg-grey-3"
-    >
-      <q-scroll-area class="fit">
-        <div class="q-pa-sm">
-          <div
-            v-for="n in 50"
-            :key="n"
-          >Drawer {{ n }} / 50</div>
+        <q-tab
+          name="mails"
+          label="Followers 340"
+        />
+        <q-tab
+          name="alarms"
+          label="Following 1,563"
+        />
+        <q-tab
+          name="alarms1"
+          label="Request 19"
+        />
+      </q-tabs>
+      <q-separator />
+      <div class="row">
+        <div class="col-12 col-md-9 q-pa-md">
+          <div class="row q-col-gutter-md">
+            <div
+              class="col-12 col-md-6 col-lg-3"
+              v-for="(item,index) in 9"
+              :key="index"
+            >
+              <q-card flat>
+                <q-img src="https://placeimg.com/1024/768/nature" />
+
+                <q-card-section>
+                  <q-btn
+                    fab
+                    color="primary"
+                    icon="place"
+                    class="absolute"
+                    style="top: 0; right: 12px; transform: translateY(-50%);"
+                  />
+
+                  <div class="row no-wrap items-center">
+                    <div class="col text-h6 ellipsis">
+                      Cafe Basilico {{item}}
+                    </div>
+                    <div class="col-auto text-grey text-caption q-pt-md row no-wrap items-center">
+                      <q-icon name="place" />
+                      250 ft
+                    </div>
+                  </div>
+
+                  <!-- <q-rating
+                    v-model="stars"
+                    :max="5"
+                    size="32px"
+                  /> -->
+                </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                  <div class="text-subtitle1">
+                    $・Italian, Cafe
+                  </div>
+                  <div class="text-caption text-grey">
+                    Small plates, salads & sandwiches in an intimate setting.
+                  </div>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions>
+                  <q-btn
+                    flat
+                    round
+                    icon="event"
+                  />
+                  <q-btn
+                    flat
+                    color="primary"
+                  >
+                    Reserve
+                  </q-btn>
+                </q-card-actions>
+              </q-card>
+            </div>
+          </div>
         </div>
-      </q-scroll-area>
-    </q-drawer> -->
+        <div class="col-12 col-md-3 q-pa-sm">
+          <q-list>
+            <q-item>
+              <q-item-section>
+                <q-item-label overline>OVERLINE</q-item-label>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section
+                side
+                top
+              >
+                <q-item-label caption>5 min ago</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item-label header>List Header</q-item-label>
+
+            <q-item>
+              <q-item-section avatar>
+                <q-icon
+                  color="primary"
+                  name="bluetooth"
+                />
+              </q-item-section>
+              <q-item-section>List item</q-item-section>
+              <q-item-section side>
+                <q-item-label caption>meta</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item>
+              <q-item-section
+                top
+                avatar
+              >
+                <q-avatar
+                  color="primary"
+                  text-color="white"
+                  icon="bluetooth"
+                />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label
+                  caption
+                  lines="2"
+                >Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section
+                side
+                top
+              >
+                <q-item-label caption>5 min ago</q-item-label>
+                <q-icon
+                  name="star"
+                  color="yellow"
+                />
+              </q-item-section>
+            </q-item>
+
+            <q-item>
+              <q-item-section
+                top
+                avatar
+              >
+                <q-avatar
+                  color="primary"
+                  text-color="white"
+                  square
+                  icon="bluetooth"
+                />
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section
+                side
+                top
+              >
+                <q-item-label caption>meta</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-item>
+              <q-item-section
+                top
+                avatar
+              >
+                <q-avatar>
+                  <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                </q-avatar>
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section
+                side
+                top
+              >
+                <q-badge label="10k" />
+              </q-item-section>
+            </q-item>
+
+            <q-separator
+              spaced
+              inset="item"
+            />
+
+            <q-item>
+              <q-item-section
+                top
+                avatar
+              >
+                <q-avatar rounded>
+                  <img src="https://cdn.quasar.dev/img/boy-avatar.png">
+                </q-avatar>
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section
+                side
+                top
+              >
+                <q-item-label caption>meta</q-item-label>
+              </q-item-section>
+            </q-item>
+
+            <q-separator spaced />
+
+            <q-item>
+              <q-item-section
+                top
+                thumbnail
+                class="q-ml-none"
+              >
+                <img src="https://cdn.quasar.dev/img/mountains.jpg">
+              </q-item-section>
+
+              <q-item-section>
+                <q-item-label>Single line item</q-item-label>
+                <q-item-label caption>Secondary line text. Lorem ipsum dolor sit amet, consectetur adipiscit elit.</q-item-label>
+              </q-item-section>
+
+              <q-item-section
+                side
+                top
+              >
+                <q-item-label caption>meta</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// import Category from '../components/Category/Category.vue'
 export default {
   name: 'page1',
   components: {
-    // Category
   },
   data () {
     return {
-      drawer: false,
-      search: '',
-      loading: true,
-      toggle1: false,
-      list1: [
-        {
-          id: '1',
-          label: '系统管理',
-          children: [
-            {
-              id: '1-1',
-              label: '组织管理',
-              children: [
-                { id: '1-1-1', label: '用户管理' },
-                { id: '1-1-2', label: '机构管理' },
-                { id: '1-1-3', label: '公司管理' },
-                { id: '1-1-4', label: '岗位管理' }
-              ]
-            },
-            {
-              id: '1-2',
-              label: '权限管理',
-              children: [
-                { id: '1-2-1', label: '角色管理' },
-                { id: '1-2-2', label: '系统管理员' },
-                { id: '1-2-3', label: '安全审计' }
-              ]
-            },
-            {
-              id: '1-3',
-              label: '系统设置',
-              children: [
-                { id: '1-3-1', label: '菜单管理' },
-                { id: '1-3-2', label: '资源管理' },
-                { id: '1-3-3', label: '参数管理' },
-                { id: '1-3-4', label: '字典管理' },
-                { id: '1-3-5', label: '行政区划' }
-              ]
-            },
-            {
-              id: '1-4',
-              label: '系统监控',
-              children: [
-                { id: '1-4-1', label: '系统日志' },
-                { id: '1-4-2', label: '数据监控' },
-                { id: '1-4-3', label: '缓存管理' },
-                { id: '1-4-4', label: '服务器监控' },
-                { id: '1-4-5', label: '作业管理' }
-              ]
-            }
-          ]
-        },
-        { id: '2', label: '消息管理' },
-        { id: '3', label: '流程管理' },
-        { id: '4', label: '企业' },
-        { id: '5', label: '办公' },
-        { id: '6', label: '客户' },
-        { id: '7', label: '设置' }
-      ],
-      list: [],
-      value: '610423',
-      selected1: []
-    }
-  },
-  watch: {
-    // value () {
-    //   console.log(this.value)
-    // },
-    // selected1 () {
-    //   console.log(this.selected1)
-    // }
-  },
-  mounted () {
-    // this.onRequest()
-  },
-  methods: {
-    async onRequest () {
-      this.loading = true
-      await this.$fetchData({
-        url: '/api/tree',
-        method: 'GET'
-      }).then(response => {
-        const { result, data } = response.data
-        if (result && data) {
-          this.list = data
-        }
-      })
-      setTimeout(() => {
-        this.loading = false
-      }, 1000)
-    },
-    onFinish ({ selected, selectedOptions }) {
-      console.log(selected)
-      console.log(selectedOptions)
-      // console.log(this.value)
+      tab: 'mails'
     }
   }
 }
