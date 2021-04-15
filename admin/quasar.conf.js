@@ -21,6 +21,7 @@ module.exports = function (ctx) {
     boot: [
       'components-api',
       'directives-api',
+      'router-filters',
       'i18n',
       'axios'
     ],

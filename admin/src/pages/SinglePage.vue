@@ -5,7 +5,7 @@
       src="img/vther.jpg"
     />
     <div class="q-pa-md full-width row  justify-center  ">
-      <q-category-modal
+      <!-- <q-category-modal
         title="选择地址"
         v-model="value"
         :toggle.sync="toggle1"
@@ -16,10 +16,10 @@
         label="选择地址"
         color="primary"
         @click="toggle1 = true"
-      />
+      /> -->
     </div>
     <div class="q-pa-md full-width row  justify-center  ">
-      <q-input
+      <!-- <q-input
         outlined
         dense
         no-error-icon
@@ -35,7 +35,7 @@
             color="primary"
           />
         </template>
-      </q-input>
+      </q-input> -->
     </div>
     <div class="q-pa-md full-width row  justify-center  ">
       <!-- <Category
@@ -45,10 +45,10 @@
         @finish="onFinish"
       >
       </Category> -->
-      <q-btn
+      <!-- <q-btn
         @click="drawer=!drawer"
         label="切换"
-      />
+      /> -->
     </div>
     <!-- <q-drawer
       side="right"
