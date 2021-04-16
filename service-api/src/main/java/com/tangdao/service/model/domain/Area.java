@@ -17,10 +17,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@Table(
-		columns = { 
-		@Column(attrName = "id", isPK = true),
-		@Column(attrName = "areaName", isTreeName = true) })
+@Table(columns = { @Column(attrName = "id", isPK = true), @Column(attrName = "areaName", isTreeName = true) })
 @TableName("sys_area")
 public class Area extends TreeEntity<Area> {
 
@@ -32,7 +29,7 @@ public class Area extends TreeEntity<Area> {
 	private String areaName;
 
 	private String areaType;
-	
+
 	private String status;
 
 	private String remarks;
