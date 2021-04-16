@@ -1,33 +1,40 @@
 <template>
   <div class="q-pa-md">
-    {{retData}}
+    <!-- {{retData}} -->
     <q-markup-table>
       <thead>
         <tr>
           <th class="text-left wd-120">Dessert (100g serving)</th>
-          <!-- <th class="text-right">Calories</th>
-          <th class="text-right">Fat (g)</th>
-          <th class="text-right">Carbs (g)</th>
-          <th class="text-right">Protein (g)</th> -->
+          <th class="text-left">Level</th>
         </tr>
       </thead>
       <tbody>
-        <test-item
-          v-for="item in retData"
-          :item="item"
+        <tr
+          v-for="(item,index) in retData"
           :key="item.id"
-        />
+          :id="item.id"
+          v-show="item.show || true"
+        >
+          <td :style="item.level?`padding-left:${item.level?item.level*10:0}px`:null">
+            <q-btn
+              :icon="item.show?'arrow_drop_down':'arrow_right'"
+              :label="item.name"
+              flat
+              color="primary"
+              @click="expandRow(item, index)"
+            />
+          </td>
+          <td>{{item.level}}</td>
+        </tr>
       </tbody>
     </q-markup-table>
   </div>
 </template>
 
 <script>
-import TestItem from './TestItem.vue'
 export default {
   name: 'Test',
   components: {
-    TestItem
   },
   data () {
     return {
@@ -53,17 +60,40 @@ export default {
     onRequestData (node) {
       return this.data.filter(item => { return item.pid === node.id })
     },
-    expandRow (node) {
-      const children = this.onRequestData(node)
-      this.$set(node, 'children', children)
-      this.$nextTick(() => {
-        // 展开
-        console.log(this.retData)
-      })
+    expandRow (node, index) {
+      if (!node.children) {
+        const children = this.onRequestData(node)
+        if (children && children.length > 0) {
+          if (!node.level) {
+            this.$set(node, 'level', 1)
+          }
+          children.map((item, cindex) => {
+            item.level = node.level + 1
+            this.retData.splice((index + cindex + 1), 0, item)
+          })
+          this.$set(node, 'children', children)
+          this.$set(node, 'show', true)
+        }
+      } else {
+        this.$set(node, 'show', !node.show)
+        const temps = []
+        const travel = (node) => {
+          node.children.map(item => {
+            temps.push({ id: item.id, show: item.show })
+            if (item.children && item.children.length > 0) {
+              travel(item)
+            }
+          })
+        }
+        travel(node)
+        temps.map(item => {
+          document.getElementById(item.id).style = 'display:' + (node.show ? '' : 'none')
+        })
+      }
     }
   }
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass" >
 </style>
