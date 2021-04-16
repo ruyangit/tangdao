@@ -102,7 +102,7 @@
               <q-icon
                 left
                 name="paid"
-                class="text-grey-8"
+                class="text-grey-6"
                 size="38px"
               />
               <div class="text-center">
@@ -115,7 +115,7 @@
               <q-icon
                 left
                 name="local_grocery_store"
-                class="text-grey-8"
+                class="text-grey-6"
                 size="38px"
               />
               <div class="text-center">
@@ -128,7 +128,7 @@
               <q-icon
                 left
                 name="donut_large"
-                class="text-grey-8"
+                class="text-grey-6"
                 size="38px"
               />
               <div class="text-center">
@@ -141,7 +141,7 @@
               <q-icon
                 left
                 name="all_inbox"
-                class="text-grey-8"
+                class="text-grey-6"
                 size="38px"
               />
               <div class="text-center">
