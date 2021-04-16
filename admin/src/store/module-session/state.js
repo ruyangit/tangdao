@@ -62,6 +62,12 @@ export default function () {
         path: 'server'
       },
       {
+        id: 'profile',
+        name: '个人信息',
+        icon: 'account_box',
+        path: 'profile'
+      },
+      {
         id: 'icons',
         name: '字体图标',
         icon: 'font_download',

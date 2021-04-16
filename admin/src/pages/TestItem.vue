@@ -22,7 +22,8 @@ export default {
     }
   },
   render (h) {
-    return h([h('tr', { id: 1 }, 'td'), h('tr', { id: 2 }, 'td')])
+    // return h([h('tr', { id: 1 }, 'td'), h('tr', { id: 2 }, 'td')])
+    return h('tr', {}, 'abcd')
   }
 }
 </script>
