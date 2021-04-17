@@ -75,7 +75,7 @@
               </div>
               <q-space />
               <div class="row wrap content-end q-col-gutter-lg">
-                <div>
+                <!-- <div>
                   <p class="q-mb-sm">Due Date</p>
                   <q-btn
                     flat
@@ -90,7 +90,7 @@
                     rounded
                   />
                   <p>67%</p>
-                </div>
+                </div> -->
               </div>
             </div>
           </q-card-section>

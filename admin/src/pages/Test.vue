@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <!-- {{retData}} -->
-    <q-markup-table>
+    <q-markup-table class="my-table">
       <thead>
         <tr>
           <th class="text-left wd-120">Dessert (100g serving)</th>
@@ -15,14 +15,23 @@
           :id="item.id"
           v-show="item.show || true"
         >
-          <td :style="item.level?`padding-left:${item.level?item.level*10:0}px`:null">
-            <q-btn
-              :icon="item.show?'arrow_drop_down':'arrow_right'"
-              :label="item.name"
-              flat
-              color="primary"
-              @click="expandRow(item, index)"
-            />
+          <td class="relative-position">
+            <div
+              :style="`width:${item.level?item.level*20:20}px; text-align:right;`"
+              class="relative-position float-left"
+            >
+              <q-icon
+                :name="item.show?'arrow_drop_down':'arrow_right'"
+                size="20px"
+                color="primary"
+                class="cursor-pointer"
+                @click="expandRow(item, index)"
+              />
+            </div>
+            <span
+              class="absolute"
+              style="top:14px;"
+            >{{item.name}}</span>
           </td>
           <td>{{item.level}}</td>
         </tr>
@@ -79,16 +88,30 @@ export default {
         const temps = []
         const travel = (node) => {
           node.children.map(item => {
-            temps.push({ id: item.id, show: item.show })
+            temps.push(item)
             if (item.children && item.children.length > 0) {
               travel(item)
             }
           })
         }
         travel(node)
-        temps.map(item => {
-          document.getElementById(item.id).style = 'display:' + (node.show ? '' : 'none')
+        temps.forEach(temp => {
+          document.getElementById(temp.id).style = 'display:' + (node.show ? '' : 'none')
+          // if (temp && !temp.show) {
+          //   temp.children && temp.children.forEach(item => {
+          //     document.getElementById(item.id).style = 'display:' + (temp.show ? '' : 'none')
+          //   })
+          // } else {
+          //   console.log(temp)
+          // }
         })
+        // temps.map(item => {
+        //   if (!item.show) {
+        //     document.getElementById(item.id).style = 'display:' + (node.show ? '' : 'none')
+        //   } else {
+        //     console.log(item)
+        //   }
+        // })
       }
     }
   }

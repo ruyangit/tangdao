@@ -11,7 +11,7 @@
         </q-breadcrumbs>
         <div class="row">
           <div>
-            <div class="my-page-header-subtitle">我的工作台</div>
+            <div class="my-page-header-subtitle">数据分析</div>
             <!-- <div class="q-mt-sm text-caption">您好, admin</div> -->
           </div>
           <q-space />
@@ -153,6 +153,7 @@
               <q-markup-table
                 flat
                 bordered
+                class="my-table"
               >
                 <thead>
                   <tr>
