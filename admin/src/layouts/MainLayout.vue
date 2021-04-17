@@ -99,7 +99,7 @@ export default {
   },
   data () {
     return {
-      sidebar: 240,
+      sidebar: this.$q.screen.gt.md ? 240 : 200,
       sidebarMinimize: 55,
       sidebarVisibility: false,
       sidebarLeftOpen: true,

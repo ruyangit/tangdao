@@ -347,6 +347,37 @@
               <div class="col-6 col-md-3 q-pa-sm">系统角色</div>
             </q-card-section>
           </q-card>
+          <q-card
+            flat
+            class="q-mt-md"
+          >
+            <q-card-section>
+              <q-timeline color="secondary">
+                <!-- <q-timeline-entry heading>
+                  Timeline heading
+                </q-timeline-entry> -->
+
+                <q-timeline-entry
+                  title="Event Title"
+                  subtitle="February 22, 1986"
+                >
+                  <div>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  </div>
+                </q-timeline-entry>
+
+                <q-timeline-entry
+                  title="Event Title"
+                  subtitle="February 21, 1986"
+                >
+                  <div>
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                  </div>
+                </q-timeline-entry>
+
+              </q-timeline>
+            </q-card-section>
+          </q-card>
         </div>
       </div>
     </div>
