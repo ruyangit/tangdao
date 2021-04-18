@@ -52,7 +52,11 @@ export default {
         { id: '1-1', pid: '1', name: 'test-1-1', avg: 312 },
         { id: '1-1-1', pid: '1-1', name: 'test-1-1-1', avg: 122 },
         { id: '1-1-2', pid: '1-1', name: 'test-1-1-2', avg: 121 },
+        { id: '1-1-2-1', pid: '1-1-2', name: 'test-1-1-2-1', avg: 121 },
+        { id: '1-1-2-2', pid: '1-1-2', name: 'test-1-1-2-2', avg: 121 },
         { id: '1-2', pid: '1', name: 'test-1-2', avg: 123 },
+        { id: '1-2-1', pid: '1-2', name: 'test-1-2-1', avg: 123 },
+        { id: '1-2-2', pid: '1-2', name: 'test-1-2-2', avg: 123 },
         { id: '2', pid: '0', name: 'test-2', avg: 122 },
         { id: '2-1', pid: '2', name: 'test-2-1', avg: 112 },
         { id: '2-2', pid: '2', name: 'test-2-2', avg: 122 },
@@ -85,33 +89,24 @@ export default {
         }
       } else {
         this.$set(node, 'show', !node.show)
-        const temps = []
-        const travel = (node) => {
-          node.children.map(item => {
-            temps.push(item)
-            if (item.children && item.children.length > 0) {
-              travel(item)
+        const travel = (item) => {
+          item.children && item.children.map(ele => {
+            if (node.show) {
+              if (item.show) {
+                document.getElementById(ele.id).style = ''
+              }
+            } else {
+              document.getElementById(ele.id).style = 'display: none'
+            }
+            if (ele.children && ele.children.length > 0) {
+              travel(ele)
             }
           })
         }
-        travel(node)
-        temps.forEach(temp => {
-          document.getElementById(temp.id).style = 'display:' + (node.show ? '' : 'none')
-          // if (temp && !temp.show) {
-          //   temp.children && temp.children.forEach(item => {
-          //     document.getElementById(item.id).style = 'display:' + (temp.show ? '' : 'none')
-          //   })
-          // } else {
-          //   console.log(temp)
-          // }
+        node.children && node.children.forEach(item => {
+          document.getElementById(item.id).style = 'display:' + (node.show ? '' : 'none')
+          travel(item)
         })
-        // temps.map(item => {
-        //   if (!item.show) {
-        //     document.getElementById(item.id).style = 'display:' + (node.show ? '' : 'none')
-        //   } else {
-        //     console.log(item)
-        //   }
-        // })
       }
     }
   }
