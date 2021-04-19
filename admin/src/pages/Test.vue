@@ -162,21 +162,23 @@ export default {
     async onExpand () {
       if (this.retData && this.retData.length < 100) {
         const temp = []
-        this.retData && this.retData.map((item, index) => {
+        this.retData && this.retData.map(item => {
           if ((item.children && item.show === false) || (!item.children && item.treeLeaf === '0')) {
-            temp.push({ id: item.id, show: true, index })
+            temp.push({ id: item.id, show: true })
           }
         })
-        temp.forEach(item => {
-          var ele = document.getElementById('onc_' + item.id)
-          if (ele && item.show) {
-            console.log('onc_' + item.id)
-            ele.click()
-            // setTimeout(() => {
-            //   console.log('--')
-            // }, 100)
-          }
-        })
+        let p = Promise.resolve()
+        for (let i = 0; i < temp.length; i++) {
+          p = p.then(_ => new Promise(resolve =>
+            setTimeout(function () {
+              var ele = document.getElementById('onc_' + temp[i].id)
+              if (ele && temp[i].show) {
+                ele.click()
+              }
+              resolve()
+            }, 100)
+          ))
+        }
       } else {
         console.warn('展开数据过多：' + this.retData.length)
       }
