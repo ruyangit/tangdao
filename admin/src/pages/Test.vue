@@ -159,7 +159,7 @@ export default {
         })
       }
     },
-    onExpand () {
+    async onExpand () {
       if (this.retData && this.retData.length < 100) {
         const temp = []
         this.retData && this.retData.map((item, index) => {
@@ -170,11 +170,11 @@ export default {
         temp.forEach(item => {
           var ele = document.getElementById('onc_' + item.id)
           if (ele && item.show) {
-            console.log(ele)
+            console.log('onc_' + item.id)
+            ele.click()
             // setTimeout(() => {
-            //   console.log('onc_' + item.id)
-            //   ele.click()
-            // }, 1000)
+            //   console.log('--')
+            // }, 100)
           }
         })
       } else {
