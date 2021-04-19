@@ -1,108 +1,131 @@
 <template>
   <div class="q-pa-md">
-    {{retData}}
-    <q-card>
-      <q-card-section class="q-gutter-xs">
-        <q-btn
-          label="展开"
-          color="primary"
-          @click="onExpand"
-        />
-        <q-btn
-          label="折叠"
-          color="primary"
-          @click="onCollapse"
-        />
-        <q-btn
-          label="刷新"
-          color="primary"
-          @click="onRefresh"
-        />
-      </q-card-section>
-    </q-card>
-    <q-markup-table class="my-table q-mt-md">
-      <!-- <q-linear-progress indeterminate /> -->
-      <thead>
-        <tr>
-          <th class="text-left wd-120">Dessert (100g serving)</th>
-          <th class="text-left">Level</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(item,index) in retData"
-          :key="item.id"
-          :id="item.id"
-          v-show="item.show || true"
-        >
-          <td class="relative-position">
-            <div
-              :style="`width:${item.level?item.level*20:20}px; text-align:right;`"
-              class="relative-position float-left"
-            >
-              <q-icon
-                :name="item.show?'arrow_drop_down':'arrow_right'"
-                size="20px"
+    <!-- {{retData}} -->
+    <div class="my-table ">
+      <div class="my-search">
+        <div class="q-gutter-md row items-start">
+          <div class="text-h6">Area Record</div>
+          <q-space />
+          <q-btn
+            label="展开"
+            color="primary"
+            @click="onExpand"
+          />
+          <q-btn
+            label="折叠"
+            color="primary"
+            @click="onCollapse"
+          />
+          <q-btn
+            label="刷新"
+            color="primary"
+            @click="onRefresh"
+          />
+        </div>
+      </div>
+      <q-markup-table>
+        <!-- <q-linear-progress indeterminate /> -->
+        <thead>
+          <tr>
+            <th class="text-left wd-300">AreaName</th>
+            <th class="text-left wd-250">AreaNames</th>
+            <th class="text-left wd-80">Sort</th>
+            <th class="text-left wd-80">Leaf</th>
+            <th class="text-left wd-80">Loading</th>
+            <th class="text-left"></th>
+            <th class="text-left wd-150">CreateDate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="(item,index) in retData"
+            :key="item.id"
+            :id="item.id"
+            v-show="item.show || true"
+          >
+            <td class="relative-position">
+              <div
+                :style="`width:${item.level?item.level*20:20}px; text-align:right;`"
+                class="relative-position float-left"
+              >
+                <div
+                  class="item-circle"
+                  v-if="item.treeLeaf==='1'"
+                >
+                </div>
+                <q-icon
+                  :id="`onc_${item.id}`"
+                  :name="item.show?'arrow_drop_down':'arrow_right'"
+                  size="20px"
+                  color="primary"
+                  class="cursor-pointer"
+                  @click="expandRow(item, index)"
+                  v-else
+                />
+              </div>
+              <span
+                class="absolute"
+                style="top:10px;"
+              >（{{item.id}}）{{item.areaName}}</span>
+            </td>
+            <td>{{item.treeNames}}</td>
+            <td>{{item.treeSort}}</td>
+            <td>{{item.treeLeaf}}</td>
+            <td>
+              <q-spinner-oval
                 color="primary"
-                class="cursor-pointer"
-                @click="expandRow(item, index)"
+                size="10px"
+                v-show="item.loading || false"
               />
-            </div>
-            <span
-              class="absolute"
-              style="top:14px;"
-            >{{item.name}}</span>
-          </td>
-          <td>{{item.level}}</td>
-        </tr>
-      </tbody>
-    </q-markup-table>
+            </td>
+            <td>{{item.remarks}}</td>
+            <td>{{item.createDate}}</td>
+          </tr>
+        </tbody>
+      </q-markup-table>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Test',
-  components: {
-  },
   data () {
     return {
       loading: false,
-      data: [
-        { id: '1', pid: '0', name: 'test-1', avg: 122 },
-        { id: '1-1', pid: '1', name: 'test-1-1', avg: 312 },
-        { id: '1-1-1', pid: '1-1', name: 'test-1-1-1', avg: 122 },
-        { id: '1-1-2', pid: '1-1', name: 'test-1-1-2', avg: 121 },
-        { id: '1-1-2-1', pid: '1-1-2', name: 'test-1-1-2-1', avg: 121 },
-        { id: '1-1-2-2', pid: '1-1-2', name: 'test-1-1-2-2', avg: 121 },
-        { id: '1-2', pid: '1', name: 'test-1-2', avg: 123 },
-        { id: '1-2-1', pid: '1-2', name: 'test-1-2-1', avg: 123 },
-        { id: '1-2-2', pid: '1-2', name: 'test-1-2-2', avg: 123 },
-        { id: '2', pid: '0', name: 'test-2', avg: 122 },
-        { id: '2-1', pid: '2', name: 'test-2-1', avg: 112 },
-        { id: '2-2', pid: '2', name: 'test-2-2', avg: 122 },
-        { id: '2-3', pid: '2', name: 'test-2-3', avg: 152 },
-        { id: '2-4', pid: '2', name: 'test-2-4', avg: 142 }
-      ],
       retData: []
     }
   },
   mounted () {
-    this.retData = this.onRequestData({ id: '0' })
+    this.onRefresh()
   },
   methods: {
-    onRefresh () {
+    async onRefresh () {
+      // this.retData = this.$options.data().data.filter(item => { return item.pid === '0' })
+      this.retData = await this.onRequestData({ id: '0' })
     },
-    onRequestData (node) {
-      this.loading = true
-      setTimeout(() => {
-        this.loading = false
-      }, 1000)
-      return this.data.filter(item => { return item.pid === node.id })
+    async onRequestData (node) {
+      this.$set(node, 'loading', true)
+      let _data
+      await this.$fetchData({
+        url: '/area/listData',
+        method: 'GET',
+        params: { pid: node.id }
+      }).then(response => {
+        const { result, data } = response.data
+        if (result && data) {
+          _data = data
+        }
+      }).catch(error => {
+        console.error(error)
+      })
+      this.$set(node, 'loading', false)
+      return _data
+      // return this.$options.data().data.filter(item => { return item.pid === node.id })
     },
-    expandRow (node, index) {
+    async expandRow (node, index) {
       if (!node.children) {
-        const children = this.onRequestData(node)
+        const children = await this.onRequestData(node)
         if (children && children.length > 0) {
           if (!node.level) {
             this.$set(node, 'level', 1)
@@ -137,34 +160,26 @@ export default {
       }
     },
     onExpand () {
-      this.retData && this.retData.forEach(item => {
-        if (!item.children) {
-          const children = this.onRequestData(item)
-          if (children && children.length > 0) {
-            this.$set(item, 'children', children)
+      if (this.retData && this.retData.length < 100) {
+        const temp = []
+        this.retData && this.retData.map((item, index) => {
+          if ((item.children && item.show === false) || (!item.children && item.treeLeaf === '0')) {
+            temp.push({ id: item.id, show: true, index })
           }
-        }
-      })
-      console.log(this.retData)
-      const _retData = []
-      // const travel = (item) => {
-      //   item.children && item.children.forEach(ele => {
-      //     ele.level = item.level + 1
-      //     _retData.push(ele)
-      //     if (ele.children && ele.children.length > 0) {
-      //       travel(ele)
-      //     }
-      //   })
-      // }
-      this.retData && this.retData.forEach(item => {
-        item.level = 1
-        _retData.push(item)
-        if (item.children && item.children.length > 0) {
-          // travel(item)
-        }
-      })
-      console.log(_retData)
-      this.retData = _retData
+        })
+        temp.forEach(item => {
+          var ele = document.getElementById('onc_' + item.id)
+          if (ele && item.show) {
+            console.log(ele)
+            // setTimeout(() => {
+            //   console.log('onc_' + item.id)
+            //   ele.click()
+            // }, 1000)
+          }
+        })
+      } else {
+        console.warn('展开数据过多：' + this.retData.length)
+      }
     },
     onCollapse () {
       const travel = (data) => {
@@ -187,5 +202,12 @@ export default {
 }
 </script>
 
-<style lang="sass" >
+<style lang="sass" scoped>
+.item-circle
+  width: 8px
+  height: 8px
+  float: right
+  border-radius: 100%
+  border: 2px solid #bbdefb
+  margin-right: 6px
 </style>

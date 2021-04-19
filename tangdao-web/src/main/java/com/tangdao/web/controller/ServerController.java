@@ -40,7 +40,7 @@ import oshi.software.os.OperatingSystem;
  * @since 2021年4月11日
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/server")
 public class ServerController extends BaseController {
 
 	@GetMapping("/rt")

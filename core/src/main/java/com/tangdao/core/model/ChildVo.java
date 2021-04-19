@@ -26,7 +26,7 @@ public class ChildVo implements Serializable {
 	private String pid;
 
 	private String label;
-
+	
 	private List<ChildVo> children;
 
 	public void addChild(ChildVo node) {

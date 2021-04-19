@@ -173,7 +173,7 @@ export default {
     async onRequest () {
       this.loading = true
       await this.$fetchData({
-        url: '/api/rt',
+        url: '/server/rt',
         method: 'GET'
       }).then(response => {
         const { result, data } = response.data

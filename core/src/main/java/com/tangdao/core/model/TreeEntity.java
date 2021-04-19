@@ -30,7 +30,9 @@ public abstract class TreeEntity<T> extends DataEntity<T> {
 	public String pid;
 	
 	public String pids;
-
+	
+	public String treeLeaf;
+	
 	public String treeNames;
 
 	public Integer treeSort;
