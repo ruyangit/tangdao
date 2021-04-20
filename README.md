@@ -1,4 +1,4 @@
-# 企业应用管理系统（Tangdao）
+# 权限管理系统（Tangdao）
 
 <p align="left">
   <a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html"><img alt="JDK" src="https://img.shields.io/badge/JDK-1.8.0_162-orange.svg"/></a>
