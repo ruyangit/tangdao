@@ -39,27 +39,67 @@ $ npm install
 $ npm install @quasar/cli -g
 $ quasar build
 
-```
-
-```
 开发运行
 $ quasar dev
 
 ```
 
-#### 使用说明
-```
-地址配置
-build:{
-  env: ctx.dev
-    ? { // so on dev we'll have
-      API_HOST: process.env.API_HOST || 'http://localhost:4001'
-    }
-    : { // and on build (production):
-      API_HOST: 'https://生产地址/gwapi/v2'
-  	}
+#### 开发工具设置（vs code）
+```json
+setting.json shift+ctrl+p
+
+{
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+    "javascript.format.placeOpenBraceOnNewLineForControlBlocks": false,
+    "javascript.format.placeOpenBraceOnNewLineForFunctions": false,
+    "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+    "typescript.format.placeOpenBraceOnNewLineForControlBlocks": false,
+    "typescript.format.placeOpenBraceOnNewLineForFunctions": false,
+    "vetur.format.defaultFormatter.html": "js-beautify-html",
+    "vetur.format.defaultFormatter.js": "vscode-typescript"
 }
 ```
+
+#### 一个部署案例（nginx）
+```bash
+server {
+    listen 80 http2;
+    server_name quasar.myapp.com;
+
+    root /home/user/quasar.myapp.com/public;
+
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options "nosniff";
+
+    index index.html;
+
+    charset utf-8;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    access_log off;
+    error_log  /var/log/nginx/quasar.myapp.com-error.log error;
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
+
+#### 更多自定义配置
+See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+
 
 #### References
 
