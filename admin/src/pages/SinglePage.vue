@@ -314,7 +314,6 @@ export default {
   & .footer
     width: 100%
     background: #5fc3fe
-    & .footer1
     & .footer2
       font-size: 10px
       letter-spacing: .3px
