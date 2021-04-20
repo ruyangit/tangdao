@@ -328,14 +328,10 @@ export default {
       this.dictTypeEdit = true
     },
     onEdit (data) {
-      this.dictTypeForm = {
-        id: data.id,
-        dictName: data.dictName,
-        dictType: data.dictType,
-        oldDictType: data.dictType,
-        status: data.status,
-        remarks: data.remarks
+      if (data) {
+        data.oldDictType = data.dictType
       }
+      this.dictTypeForm = data
       this.dictTypeEdit = true
     },
     async onSubmit () {

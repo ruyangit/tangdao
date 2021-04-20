@@ -1,95 +1,112 @@
 <template>
-  <div class="q-pa-md">
-    <!-- {{retData}} -->
-    <div class="my-table ">
-      <div class="my-search">
-        <div class="q-gutter-md row items-start">
-          <div class="text-h6">Area Record</div>
-          <q-space />
-          <q-btn
-            label="展开"
-            color="primary"
-            @click="onExpand"
+  <q-page class="my-page">
+    <div class="row items-center justify-between">
+      <div class="my-page-header q-pb-none">
+        <q-breadcrumbs align="left">
+          <q-breadcrumbs-el
+            label="首页"
+            to="/"
           />
-          <q-btn
-            label="折叠"
-            color="primary"
-            @click="onCollapse"
+          <q-breadcrumbs-el
+            label="系统管理"
+            to="/sys"
           />
-          <q-btn
-            label="刷新"
-            color="primary"
-            :loading="loading"
-            @click="onRefresh"
-          />
-        </div>
+          <q-breadcrumbs-el label="区域列表" />
+        </q-breadcrumbs>
       </div>
-      <q-markup-table>
-        <thead>
-          <tr>
-            <th class="text-left wd-300">AreaName</th>
-            <th class="text-left wd-250">AreaNames</th>
-            <th class="text-left wd-80">Sort</th>
-            <th class="text-left wd-80">Leaf</th>
-            <th class="text-left"></th>
-            <th class="text-left wd-150">CreateDate</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
-            v-for="(item,index) in retData"
-            :key="item.id"
-            :id="item.id"
-            v-show="item.show || true"
-          >
-            <td class="relative-position">
-              <div
-                :style="`width:${item.level?item.level*20:20}px; text-align:right;`"
-                class="relative-position float-left"
-              >
-                <q-spinner-oval
-                  color="primary"
-                  size="10px"
-                  style="margin-right: 6px"
-                  v-if="item.loading || false"
-                />
-                <template v-else>
-                  <div
-                    class="item-circle"
-                    v-if="item.treeLeaf==='1'"
-                  >
-                  </div>
-                  <q-icon
-                    :id="`onc_${item.id}`"
-                    :name="item.show?'arrow_drop_down':'arrow_right'"
-                    size="20px"
-                    color="primary"
-                    class="cursor-pointer"
-                    @click="expandRow(item, index)"
-                    v-else
-                  />
-                </template>
-              </div>
-              <span
-                class="absolute"
-                style="top:10px;"
-              >（{{item.id}}）{{item.areaName}}</span>
-            </td>
-            <td>{{item.treeNames}}</td>
-            <td>{{item.treeSort}}</td>
-            <td>{{item.treeLeaf}}</td>
-            <td>{{item.remarks}}</td>
-            <td>{{item.createDate}}</td>
-          </tr>
-        </tbody>
-      </q-markup-table>
     </div>
-  </div>
+
+    <div class="my-page-body">
+      <div class="my-table ">
+        <div class="my-search">
+          <div class="q-gutter-md row items-start">
+            <div class="text-h6">Area Record</div>
+            <q-space />
+            <q-btn
+              label="展开"
+              color="primary"
+              @click="onExpand"
+            />
+            <q-btn
+              label="折叠"
+              color="primary"
+              @click="onCollapse"
+            />
+            <q-btn
+              label="刷新"
+              color="primary"
+              :loading="loading"
+              @click="onRefresh"
+            />
+          </div>
+        </div>
+        <q-markup-table>
+          <thead>
+            <tr>
+              <th class="text-left wd-300">AreaName</th>
+              <th class="text-left wd-250">AreaNames</th>
+              <th class="text-left wd-80">Sort</th>
+              <th class="text-left wd-80">Leaf</th>
+              <th class="text-left"></th>
+              <th class="text-left wd-150">CreateDate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(item,index) in retData"
+              :key="item.id"
+              :id="item.id"
+              v-show="item.show || true"
+            >
+              <td class="relative-position">
+                <div
+                  :style="`width:${item.level?item.level*20:20}px; text-align:right;`"
+                  class="relative-position float-left"
+                >
+                  <q-spinner-oval
+                    color="primary"
+                    size="10px"
+                    style="margin-right: 6px"
+                    v-if="item.loading || false"
+                  />
+                  <template v-else>
+                    <div
+                      class="item-circle"
+                      v-if="item.treeLeaf==='1'"
+                    >
+                    </div>
+                    <q-icon
+                      :id="`onc_${item.id}`"
+                      :name="item.show?'arrow_drop_down':'arrow_right'"
+                      size="20px"
+                      color="primary"
+                      class="cursor-pointer"
+                      @click="expandRow(item, index)"
+                      v-else
+                    />
+                  </template>
+                </div>
+                <span
+                  class="absolute"
+                  style="top:10px;"
+                >（{{item.id}}）{{item.areaName}}</span>
+              </td>
+              <td>{{item.treeNames}}</td>
+              <td>{{item.treeSort}}</td>
+              <td>{{item.treeLeaf}}</td>
+              <td>{{item.remarks}}</td>
+              <td>{{item.createDate}}</td>
+            </tr>
+          </tbody>
+        </q-markup-table>
+      </div>
+    </div>
+  </q-page>
 </template>
 
 <script>
 export default {
-  name: 'Test',
+  name: 'AreaList',
   data () {
     return {
       loading: false,
@@ -220,4 +237,11 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+.item-circle
+  width: 8px
+  height: 8px
+  float: right
+  border-radius: 100%
+  border: 2px solid #bbdefb
+  margin-right: 6px
 </style>

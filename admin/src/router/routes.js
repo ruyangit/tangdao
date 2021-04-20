@@ -1,6 +1,10 @@
 
 const routes = [
   {
+    path: '/single',
+    component: () => import('pages/SinglePage.vue')
+  },
+  {
     path: '/403',
     component: () => import('pages/Error403.vue')
   },
@@ -21,7 +25,6 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', redirect: { name: 'overview' } },
-      { path: 'single', name: 'single-page', meta: { sidebar: true }, component: () => import('pages/SinglePage.vue') },
       { path: 'overview', name: 'overview', component: () => import('pages/Index.vue') },
       {
         path: 'sys',
@@ -32,6 +35,7 @@ const routes = [
           { path: 'user/form', name: 'userForm', component: () => import('pages/system/UserForm.vue') },
           { path: 'role', name: 'role', component: () => import('pages/system/RoleList.vue') },
           { path: 'config', name: 'config', component: () => import('pages/system/ConfigList.vue') },
+          { path: 'area', name: 'area', component: () => import('pages/system/AreaList.vue') },
           { path: 'dictType', name: 'dictType', component: () => import('src/pages/system/DictTypeList.vue') },
           { path: 'dictType/dictData/:dictType', name: 'dictTypeData', component: () => import('src/pages/system/DictDataList.vue') },
           { path: 'log', name: 'log', component: () => import('pages/system/LogList.vue') },

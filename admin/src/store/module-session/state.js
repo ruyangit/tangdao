@@ -40,6 +40,11 @@ export default function () {
             id: 'config',
             name: '配置列表',
             path: 'config'
+          },
+          {
+            id: 'area',
+            name: '区域列表',
+            path: 'area'
           }
         ]
       },

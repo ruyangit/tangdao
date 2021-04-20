@@ -41,20 +41,28 @@
               :style="`width:${item.level?item.level*20:20}px; text-align:right;`"
               class="relative-position float-left"
             >
-              <div
-                class="item-circle"
-                v-if="item.leaf"
-              >
-              </div>
-              <q-icon
-                :id="`onc_${item.id}`"
-                :name="item.show?'arrow_drop_down':'arrow_right'"
-                size="20px"
+              <q-spinner-oval
                 color="primary"
-                class="cursor-pointer"
-                @click="expandRow(item, index)"
-                v-else
+                size="10px"
+                style="margin-right: 6px"
+                v-if="item.loading || false"
               />
+              <template v-else>
+                <div
+                  class="item-circle"
+                  v-if="item.leaf"
+                >
+                </div>
+                <q-icon
+                  :id="`onc_${item.id}`"
+                  :name="item.show?'arrow_drop_down':'arrow_right'"
+                  size="20px"
+                  color="primary"
+                  class="cursor-pointer"
+                  @click="expandRow(item, index)"
+                  v-else
+                />
+              </template>
             </div>
             <span
               class="absolute"
@@ -102,6 +110,13 @@ export default {
       this.retData = this.$options.data().data.filter(item => { return item.pid === '0' })
     },
     onRequestData (node) {
+      this.$set(node, 'loading', true)
+      this.loading = true
+
+      setTimeout(_ => {
+        this.$set(node, 'loading', false)
+        this.loading = false
+      }, 500)
       return this.$options.data().data.filter(item => { return item.pid === node.id })
     },
     expandRow (node, index) {
@@ -140,24 +155,42 @@ export default {
         })
       }
     },
-    onExpand () {
+    async onExpand () {
       const temp = []
+      const temp_ = []
       this.retData && this.retData.map(item => {
-        if (item.children && item.show === false) {
-          temp.push({ id: item.id, show: true, leaf: item.leaf })
-        } else if (!item.children && !item.leaf) {
-          temp.push({ id: item.id, show: true, leaf: item.leaf })
+        if (!item.children && item.treeLeaf === '0') {
+          // load data
+          temp.push({ id: item.id, show: true })
+        } else if (item.children && item.show === false) {
+          // expand data
+          temp_.push({ id: item.id, show: true })
         }
       })
-      console.log(temp)
-      temp && temp.map(item => {
-        var ele = document.getElementById('onc_' + item.id)
-        if (ele && item.show) {
-          setTimeout(() => {
-            ele.click()
-          }, 200)
+      // 需要展开的数据
+      if (temp_.length > 0) {
+        this.pprf(temp_)
+      } else {
+        if (temp.length > 100) {
+          console.warn('展开数据过多：' + temp.length)
+        } else {
+          this.pprf(temp)
         }
-      })
+      }
+    },
+    pprf (nodes) {
+      let p = Promise.resolve()
+      for (let i = 0; i < nodes.length; i++) {
+        p = p.then(_ => new Promise(resolve =>
+          setTimeout(function () {
+            var ele = document.getElementById('onc_' + nodes[i].id)
+            if (ele && nodes[i].show) {
+              ele.click()
+            }
+            resolve()
+          }, 100)
+        ))
+      }
     },
     onCollapse () {
       const travel = (data) => {

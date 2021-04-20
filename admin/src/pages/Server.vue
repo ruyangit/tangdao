@@ -152,6 +152,12 @@
           </q-card>
         </div>
       </div>
+      <q-inner-loading :showing="loading">
+        <q-spinner-hourglass
+          size="sm"
+          color="primary"
+        />
+      </q-inner-loading>
     </div>
   </q-page>
 </template>
