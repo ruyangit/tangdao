@@ -5,15 +5,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.tangdao.scheduler</groupId>
-		<artifactId>tangdao-scheduler</artifactId>
+		<groupId>com.tangdao.message</groupId>
+		<artifactId>tangdao-message</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 
-	<artifactId>tangdao-scheduler-service-provider</artifactId>
+	<artifactId>tangdao-message-rabbitmq-service-provider</artifactId>
 
 	<dependencies>
-
+	
 	</dependencies>
 </project>

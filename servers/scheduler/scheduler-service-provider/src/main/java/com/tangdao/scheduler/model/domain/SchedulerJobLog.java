@@ -3,6 +3,7 @@
  */
 package com.tangdao.scheduler.model.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tangdao.core.model.DataEntity;
 
@@ -19,12 +20,15 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName
+@TableName("sys_job_log")
 public class SchedulerJobLog extends DataEntity<SchedulerJobLog> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	@TableId
+	private String id;
 
 }

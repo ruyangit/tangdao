@@ -25,8 +25,13 @@ public class Global {
 	// false
 	public static final Boolean FALSE = false;
 
+	//
+	public static final String ROOT = "";
+
 	// 0
 	public static final String ROOT_ID = "0";
+	
+	
 
 	/***
 	 * 默认字段名定义

@@ -71,6 +71,12 @@
 			<artifactId>tangdao-service-provider</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.tangdao.scheduler</groupId>
+			<artifactId>tangdao-scheduler-service-provider</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

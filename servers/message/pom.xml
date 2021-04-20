@@ -11,13 +11,16 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../../</relativePath>
 	</parent>
-	
-	<groupId>com.tangdao.scheduler</groupId>
-	<artifactId>tangdao-scheduler</artifactId>
+
+	<groupId>com.tangdao.message</groupId>
+	<artifactId>tangdao-message</artifactId>
 
 	<modules>
-		<module>scheduler-service-provider</module>
-		<module>scheduler-web</module>
+		<module>core</module>
+		<module>kafka-service-provider</module>
+		<module>kafka-web</module>
+		<module>rabbitmq-service-provider</module>
+		<module>rabbitmq-web</module>
 	</modules>
 
 	<dependencies>
@@ -28,7 +31,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-quartz</artifactId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
 	</dependencies>
 </project>
