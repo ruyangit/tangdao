@@ -146,13 +146,24 @@
     <div class="footer">
       <div class="footer1 row">
         <div class="container ">
-          <div class="row q-col-gutter-md">
-            <div class="col-12 col-sm-6 col-md-3">
-              <p>Content</p>
+          <div class="row q-col-gutter-md q-mt-md">
+            <div
+              class="col-12 col-sm-6 col-md-3"
+              v-for="i in 3"
+              :key="i"
+            >
+              <p class="text-subtitle2">Content - {{i}}</p>
+              <p class="q-mb-sm text-caption">content</p>
+              <p class="q-mb-sm text-caption">content</p>
+              <p class="q-mb-sm text-caption">content</p>
+              <p class="q-mb-sm text-caption">content</p>
             </div>
-            <div class="col-12 col-sm-6 col-md-3">b</div>
-            <div class="col-12 col-sm-6 col-md-3">c</div>
-            <div class="col-12 col-sm-6 col-md-3">d</div>
+            <div class="col-12 col-sm-6 col-md-3">
+              <q-img
+                src="~assets/ms-logo-full.svg"
+                style="width:100px;height:100px;"
+              />
+            </div>
           </div>
           <!-- <q-separator color="primary" /> -->
           <q-toolbar class="text-white q-pa-none q-mb-md q-mt-md">
