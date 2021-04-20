@@ -59,8 +59,73 @@
         <div class="col-12 col-md-9 q-mt-md">
           <div class="row q-col-gutter-md">
             <div
-              class="col-12 col-md-4 col-lg-3"
+              class="col-12 col-sm-6 col-md-4"
               v-for="(item,index) in products"
+              :key="index"
+            >
+              <q-card flat>
+                <q-img
+                  :src="item"
+                  style="width: 100%"
+                />
+
+                <q-card-section>
+                  <q-btn
+                    fab
+                    color="primary"
+                    icon="place"
+                    class="absolute"
+                    style="top: 0; right: 12px; transform: translateY(-50%);"
+                  />
+
+                  <div class="row no-wrap items-center">
+                    <div class="col text-h6 ellipsis">
+                      Demo
+                    </div>
+                    <div class="col-auto text-grey text-caption q-pt-md row no-wrap items-center">
+                      <q-icon name="place" />
+                      250 Star
+                    </div>
+                  </div>
+
+                  <!-- <q-rating
+                    v-model="stars"
+                    :max="5"
+                    size="32px"
+                  /> -->
+                </q-card-section>
+
+                <q-card-section class="q-pt-none">
+                  <div class="text-subtitle1">
+                    $・Italian, Cafe
+                  </div>
+                  <div class="text-caption text-grey">
+                    {{item}}
+                  </div>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions>
+                  <q-btn
+                    flat
+                    round
+                    icon="event"
+                  />
+                  <q-btn
+                    flat
+                    color="primary"
+                  >
+                    Reserve
+                  </q-btn>
+                </q-card-actions>
+              </q-card>
+            </div>
+          </div>
+          <div class="row q-col-gutter-md q-mt-md">
+            <div
+              class="col-12 col-sm-6 col-md-4"
+              v-for="(item,index) in products1"
               :key="index"
             >
               <q-card flat>
@@ -222,11 +287,17 @@ export default {
     return {
       tab: 'mails',
       products: [
-        'https://ruyangit.gitee.io/2021/index.png',
-        'https://cdn.quasar.dev/img/mountains.jpg',
-        'https://cdn.quasar.dev/img/parallax1.jpg',
-        'https://cdn.quasar.dev/img/parallax2.jpg',
-        'https://cdn.quasar.dev/img/quasar.jpg'
+        'https://ruyangit.gitee.io/2021/p/P_2021-04-20T05-38-19.242Z.png',
+        'https://ruyangit.gitee.io/2021/p/P_2021-04-20T05-38-31.705Z.png',
+        'https://ruyangit.gitee.io/2021/p/P_2021-04-20T05-39-09.300Z.png',
+        'https://ruyangit.gitee.io/2021/p/P_2021-04-20T05-39-18.638Z.png',
+        'https://ruyangit.gitee.io/2021/p/P_2021-04-20T05-38-55.716Z.png',
+        'https://ruyangit.gitee.io/2021/p/P_2021-04-20T05-39-47.292Z.png',
+        'https://ruyangit.gitee.io/2021/p/P_2021-04-20T05-39-33.058Z.png'
+
+      ],
+      products1: [
+        'https://ruyangit.gitee.io/2021/p/P_2021-04-20T05-40-09.538Z.png'
       ]
     }
   }
