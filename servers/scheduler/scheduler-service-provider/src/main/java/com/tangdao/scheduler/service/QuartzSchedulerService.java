@@ -31,6 +31,7 @@ public class QuartzSchedulerService {
 	public void startScheduler() {
 		try {
 			scheduler.start();
+//			scheduler.shutdown();
 		} catch (SchedulerException e) {
 			logger.error("定时任务初始化，异常：{}", e.getMessage());
 		}

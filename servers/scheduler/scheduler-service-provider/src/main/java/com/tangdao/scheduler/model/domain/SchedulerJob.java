@@ -40,6 +40,8 @@ public class SchedulerJob extends DataEntity<SchedulerJob> {
 	private String jobGroup;
 
 	private String jobCron;
+	
+	private String description;
 
 	private String executorStrategy;
 
